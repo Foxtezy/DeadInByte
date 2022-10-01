@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.deadinbyte.model;
+package ru.nsu.fit.dib.model;
 
 import javafx.geometry.Point2D;
 

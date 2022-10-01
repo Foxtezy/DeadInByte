@@ -1,9 +1,11 @@
-module ru.nsu.fit.dib.deadinbyte {
+module ru.nsu.fit.dib {
     requires javafx.controls;
     requires javafx.fxml;
-    requires lombok;
 
 
-    opens ru.nsu.fit.dib.deadinbyte to javafx.fxml;
-    exports ru.nsu.fit.dib.deadinbyte;
+    opens ru.nsu.fit.dib to javafx.fxml;
+    exports ru.nsu.fit.dib;
+    exports ru.nsu.fit.dib.controller;
+    exports ru.nsu.fit.dib.service;
+    opens ru.nsu.fit.dib.controller to javafx.fxml;
 }

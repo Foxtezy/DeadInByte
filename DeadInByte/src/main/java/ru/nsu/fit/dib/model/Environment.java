@@ -1,9 +1,6 @@
-package ru.nsu.fit.dib.deadinbyte.model;
+package ru.nsu.fit.dib.model;
 
 
-import lombok.Data;
-
-@Data
 public class Environment extends Body {
     /**
      * Коэффициент трения.

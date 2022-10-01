@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.deadinbyte;
+package ru.nsu.fit.dib;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
