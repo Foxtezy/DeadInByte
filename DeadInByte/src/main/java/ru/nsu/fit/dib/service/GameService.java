@@ -1,5 +1,5 @@
 package ru.nsu.fit.dib.service;
 
-public interface HelloService {
+public interface GameService {
     Integer plus(Integer x, Integer y);
 }
