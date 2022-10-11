@@ -1,3 +1,7 @@
+open module projectdib.main {
+    requires com.almasb.fxgl.all;
+}
+/*
 module ru.nsu.fit.dib.projectdib {
     requires javafx.controls;
     requires javafx.fxml;
@@ -7,3 +11,4 @@ module ru.nsu.fit.dib.projectdib {
     opens ru.nsu.fit.dib.projectdib to javafx.fxml;
     exports ru.nsu.fit.dib.projectdib;
 }
+ */

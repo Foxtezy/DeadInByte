@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.nsu.fit.dib</groupId>
-    <artifactId>Project-dib</artifactId>
+    <artifactId>projectdib</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Project-dib</name>
+    <name>projectdib</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
