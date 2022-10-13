@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 
-
 public class Factory implements EntityFactory {
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
