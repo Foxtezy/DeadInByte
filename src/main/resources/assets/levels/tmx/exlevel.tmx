@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="17">
+ <tileset firstgid="1" name="0x72_DungeonTilesetII_v1.4" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
+  <image source="../textures/0x72_DungeonTilesetII_v1.4.png" width="512" height="512"/>
+  <tile id="129" type="platform"/>
+ </tileset>
+ <layer id="1" name="Слой тайлов 1" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,130,130,130,0,130,130,130,130,130,130,0,130,130,130,0,
+0,130,130,130,0,130,130,130,130,130,130,0,130,130,130,0,
+0,130,130,130,130,130,130,130,130,130,130,0,130,130,130,0,
+0,130,130,130,0,130,130,130,130,130,130,0,130,130,130,0,
+0,130,130,130,0,130,130,130,130,130,130,0,130,130,130,0,
+0,130,130,130,0,130,130,130,130,130,130,0,130,130,130,0,
+0,130,130,130,0,130,130,130,130,130,130,0,130,130,130,0,
+0,0,0,0,0,0,0,130,130,0,0,0,0,130,0,0,
+0,0,0,130,130,130,130,130,130,130,130,130,130,130,130,0,
+0,0,0,130,130,130,130,130,130,130,130,130,130,130,130,0,
+0,0,0,130,130,130,130,130,130,130,130,130,130,130,130,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup color="#555500" id="3" name="Слой объектов 1">
+  <object id="5" type="platform" x="78.4482" y="48.4952" width="96" height="112"/>
+  <object id="7" type="platform" x="16" y="48" width="48" height="112"/>
+  <object id="8" type="platform" x="48.4952" y="175.439" width="192" height="48"/>
+  <object id="9" type="platform" x="192.555" y="47.0689" width="48" height="112"/>
+  <object id="12" type="platform" x="63.5209" y="77.6366" width="16" height="16"/>
+  <object id="13" type="platform" x="111.918" y="160.315" width="32" height="16"/>
+  <object id="15" type="platform" x="208.711" y="159.306" width="16" height="16"/>
+ </objectgroup>
+</map>
