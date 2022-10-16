@@ -14,14 +14,14 @@ public interface MovingInterface {
   void right();
 
   /**
-   * On moving forward
+   * On moving up
    */
-  void forward();
+  void up();
 
   /**
-   * On moving backward
+   * On moving down
    */
-  void backward();
+  void down();
 
   /**
    * On stop

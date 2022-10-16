@@ -13,7 +13,7 @@ import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
 
 public class PlayerMovingComponent extends Component implements MovingInterface {
 
-  private final PhysicsComponent physics = new PhysicsComponent();
+  private PhysicsComponent physics;
 
   private AnimatedTexture texture;
 
@@ -23,7 +23,7 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   private final AnimationChannel animWalkF;
   private final AnimationChannel animWalkB;
 
-  private final double speed = 100;
+  private final double speed = 250;
 
   public PlayerMovingComponent() {
     //resources.assets.textures
@@ -49,18 +49,17 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   public void onUpdate(double tpf) {
     AnimationChannel animation = texture.getAnimationChannel();
     double angle = physics.getLinearVelocity().angle(1, 0);
-    if (!physics.isMoving() && animation != animIdle) {
+    if (physics.getLinearVelocity().magnitude() < 10 && animation != animIdle) {
       texture.loopAnimationChannel(animIdle);
-    }
-    else if (angle <= -45 && angle >= -135 && animation != animWalkB) {
+      return;
+    } else if (angle <= -45 && angle >= -135 && animation != animWalkB) {
       texture.loopAnimationChannel(animWalkB);
-    }
-    else if (angle >= 45 && angle <= 135 && animation != animWalkF) {
+    } else if (angle >= 45 && angle <= 135 && animation != animWalkF) {
       texture.loopAnimationChannel(animWalkF);
-    }
-    else if (animation != animWalkLR){
+    } else if (animation != animWalkLR) {
       texture.loopAnimationChannel(animWalkLR);
     }
+    physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
 
   @Override
@@ -78,14 +77,14 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   }
 
   @Override
-  public void forward() {
+  public void up() {
     //да, тут должен быть именно минус
     physics.setVelocityY(-1 * speed);
     physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(speed));
   }
 
   @Override
-  public void backward() {
+  public void down() {
     //а тут плюс
     physics.setVelocityY(speed);
     physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(speed));
