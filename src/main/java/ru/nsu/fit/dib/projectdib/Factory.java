@@ -17,7 +17,7 @@ public class Factory implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder()
                 .from(data)
-                .type(App.EntityType.PLAYER)
+                .type(EntityType.PLAYER)
                 .viewWithBBox(new Rectangle(30, 30, Color.BLUE))
                 .collidable()
                 .build();
@@ -28,7 +28,7 @@ public class Factory implements EntityFactory {
     {
         return entityBuilder(data)
                 .from(data)
-                .type(App.EntityType.PLATFORM)
+                .type(EntityType.PLATFORM)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
                 .with(new CollidableComponent(true))
                 .build();
