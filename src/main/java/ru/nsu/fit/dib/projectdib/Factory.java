@@ -43,7 +43,6 @@ public class Factory implements EntityFactory{
                         .build();
         }
 
-
         public Entity newCoin(SpawnData data) {
                 return entityBuilder()
                         .type(EntityType.COIN)
@@ -52,6 +51,35 @@ public class Factory implements EntityFactory{
                         .build();
         }
 
+        public Entity newArrow (SpawnData data) {
+                Entity player = getGameWorld()
+                        .getSingleton(EntityType.PLAYER);
+                Point2D direction = getInput()
+                        .getMousePositionWorld()
+                        .subtract(player.getCenter());
+                return entityBuilder()
+                        .type (EntityType.ARROW)
+                        .viewWithBBox(new Rectangle(10,2,Color.FIREBRICK))
+                        .collidable()
+                        .with(new ProjectileComponent(direction, 200))
+                        .with(new OffscreenCleanComponent())
+                        .build();
+        }
+
+        public Entity newBullet (SpawnData data) {
+                Entity player = getGameWorld()
+                        .getSingleton(EntityType.PLAYER);
+                Point2D direction = getInput()
+                        .getMousePositionWorld()
+                        .subtract(player.getCenter());
+                return entityBuilder()
+                        .type (EntityType.BULLET)
+                        .viewWithBBox(new Rectangle(3,3,Color.BLACK))
+                        .collidable()
+                        .with(new ProjectileComponent(direction, 1000))
+                        .with(new OffscreenCleanComponent())
+                        .build();
+        }
         public Entity newEnemy(SpawnData data) {
                 Circle circle = new Circle(20, 20, 20, Color.RED);
                 circle.setStroke(Color.BROWN);
