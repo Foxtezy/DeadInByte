@@ -1,7 +1,14 @@
 package ru.nsu.fit.dib.projectdib;
 
+/**
+ * enumeration of Entities.
+ */
 public enum EntityType {
   PLAYER,
-  PLATFORM,
-  WALL
+  BOX,
+  TREE,
+  COIN,
+  ARROW,
+  BULLET,
+  ENEMY
 }
