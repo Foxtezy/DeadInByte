@@ -1,22 +1,21 @@
 package ru.nsu.fit.dib.projectdib;
 
-import java.awt.*;
-
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.scene.Viewport;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
-
-import javafx.scene.input.KeyCode;
-
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
+import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.Viewport;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import java.awt.*;
+import javafx.scene.input.KeyCode;
+
 public class App extends GameApplication {
+
   Factory factory;
   Viewport viewport;
   Config cfg;
@@ -31,34 +30,35 @@ public class App extends GameApplication {
     Config.setConfig("src/main/resources/cfg.ini");
     // Window mod
     switch (Config.WINDOW_MODE) {
-      case "Window":
-        {
-          settings.setWidth(Config.WINDOW_WIDTH);
-          settings.setHeight(Config.WINDOW_HEIGHT);
-          break;
-        }
-      case "Borderless":
-        {
-          System.out.print(Config.WINDOW_MODE);
-          Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-          int UserHeight = dimension.height;
-          int UserWidth = dimension.width;
-          settings.setHeight(UserHeight);
-          settings.setWidth(UserWidth);
-          break;
-        }
-      case "Full-screen":
-        {
-          settings.setWidth(Config.WINDOW_WIDTH);
-          settings.setHeight(Config.WINDOW_HEIGHT);
-          settings.setFullScreenAllowed(true);
-          settings.setFullScreenFromStart(true);
-          break;
-        }
+      case "Window": {
+        settings.setWidth(Config.WINDOW_WIDTH);
+        settings.setHeight(Config.WINDOW_HEIGHT);
+        break;
+      }
+      case "Borderless": {
+        System.out.print(Config.WINDOW_MODE);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        settings.setHeight(dimension.height);
+        settings.setWidth(dimension.width);
+        break;
+      }
+      case "Full-screen": {
+        settings.setWidth(Config.WINDOW_WIDTH);
+        settings.setHeight(Config.WINDOW_HEIGHT);
+        settings.setFullScreenAllowed(true);
+        settings.setFullScreenFromStart(true);
+        break;
+      }
+      default: {
+        settings.setWidth(600);
+        settings.setHeight(600);
+        break;
+      }
     }
     // Title
     settings.setTitle("DiB");
   }
+
   // Управление
   @Override
   protected void initInput() {

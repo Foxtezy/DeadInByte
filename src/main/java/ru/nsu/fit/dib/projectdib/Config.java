@@ -16,7 +16,7 @@ public class Config {
   static void setConfig(String filepath) {
     Properties props = new Properties();
     try {
-      props.load(new FileInputStream(new File(filepath)));
+      props.load(new FileInputStream(filepath));
 
       WINDOW_WIDTH = Integer.parseInt(props.getProperty("WINDOW_WIDTH", "1280"));
       WINDOW_HEIGHT = Integer.parseInt(props.getProperty("WINDOW_HEIGHT", "720"));
