@@ -33,4 +33,15 @@ public class Factory implements EntityFactory {
         .with(new CollidableComponent(true))
         .build();
   }
+  @Spawns("wall")
+  public Entity wall(SpawnData data) {
+    return entityBuilder(data)
+            .from(data)
+            .type(EntityType.WALL)
+            .bbox(
+                    new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+            .with(new CollidableComponent(true))
+            .collidable()
+            .build();
+  }
 }
