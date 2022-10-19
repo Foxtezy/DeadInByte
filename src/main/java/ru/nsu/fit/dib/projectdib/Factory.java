@@ -1,7 +1,6 @@
 package ru.nsu.fit.dib.projectdib;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
@@ -10,18 +9,22 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.dsl.components.RandomMoveComponent;
-
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-/** Class Factory for making Entities. */
+/**
+ * Class Factory for making Entities.
+ */
 public class Factory implements EntityFactory {
 
   /**
@@ -30,10 +33,35 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Player
    */
+  @Spawns("player")
   public Entity newPlayer(SpawnData data) {
     return entityBuilder()
+        .from(data)
         .type(EntityType.PLAYER)
         .viewWithBBox(new Rectangle(30, 30, Color.BLUE))
+        .collidable()
+        .build();
+  }
+
+  @Spawns("platform")
+  public Entity platform(SpawnData data) {
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.PLATFORM)
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
+        .build();
+  }
+
+  @Spawns("wall")
+  public Entity wall(SpawnData data) {
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.WALL)
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
         .collidable()
         .build();
   }

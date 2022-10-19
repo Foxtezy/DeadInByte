@@ -10,5 +10,7 @@ public enum EntityType {
   COIN,
   ARROW,
   BULLET,
-  ENEMY
+  ENEMY,
+  WALL,
+  PLATFORM
 }
