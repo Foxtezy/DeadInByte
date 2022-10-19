@@ -12,6 +12,8 @@ target/
 *.iml
 *.ipr
 .idea
+logs
+system
 DeadInByte/.idea
 
 ### Eclipse ###
