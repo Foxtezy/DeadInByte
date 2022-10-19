@@ -5,6 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ru.nsu.fit.dib</groupId>
+
   <artifactId>projectdib</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>projectdib</name>
@@ -61,6 +62,7 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.google.javascript</groupId>
       <artifactId>closure-compiler</artifactId>
