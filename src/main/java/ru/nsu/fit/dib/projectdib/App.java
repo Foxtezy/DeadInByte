@@ -2,6 +2,8 @@ package ru.nsu.fit.dib.projectdib;
 
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
@@ -12,9 +14,12 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.input.virtual.VirtualButton;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javafx.scene.input.KeyCode;
+import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
 
@@ -59,10 +64,43 @@ public class App extends GameApplication {
   // Управление
   @Override
   protected void initInput() {
-    onKey(KeyCode.W, () -> player.translateY(-2));
-    onKey(KeyCode.S, () -> player.translateY(2));
-    onKey(KeyCode.A, () -> player.translateX(-2));
-    onKey(KeyCode.D, () -> player.translateX(2));
+
+    getInput().addAction(new UserAction("Left") {
+      @Override
+      protected void onAction() {
+        player.getComponent(PlayerMovingComponent.class).left();
+      }
+
+    }, KeyCode.A, VirtualButton.LEFT);
+
+    getInput().addAction(new UserAction("Right") {
+      @Override
+      protected void onAction() {
+        player.getComponent(PlayerMovingComponent.class).right();
+      }
+
+    }, KeyCode.D, VirtualButton.RIGHT);
+
+    getInput().addAction(new UserAction("Up") {
+      @Override
+      protected void onAction() {
+        player.getComponent(PlayerMovingComponent.class).up();
+      }
+
+    }, KeyCode.W, VirtualButton.UP);
+
+    getInput().addAction(new UserAction("Down") {
+      @Override
+      protected void onAction() {
+        player.getComponent(PlayerMovingComponent.class).down();
+      }
+
+    }, KeyCode.S, VirtualButton.DOWN);
+  }
+
+  @Override
+  protected void initPhysics() {
+    getPhysicsWorld().setGravity(0, 0);
   }
 
   // Спавн существ

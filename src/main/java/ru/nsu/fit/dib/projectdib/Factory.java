@@ -16,11 +16,16 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import java.lang.module.ModuleFinder;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 /**
  * Class Factory for making Entities.
@@ -35,10 +40,15 @@ public class Factory implements EntityFactory {
    */
   @Spawns("player")
   public Entity newPlayer(SpawnData data) {
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
         .viewWithBBox(new Rectangle(30, 30, Color.BLUE))
+        .with(physics)
+        .with(new PlayerMovingComponent())
         .collidable()
         .build();
   }
