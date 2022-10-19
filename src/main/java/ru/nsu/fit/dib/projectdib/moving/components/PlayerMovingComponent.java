@@ -19,9 +19,9 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
 
   private AnimationChannel animIdle;
 
-  private final AnimationChannel animWalkLR;
-  private final AnimationChannel animWalkF;
-  private final AnimationChannel animWalkB;
+  private final AnimationChannel animWalkLeftRight;
+  private final AnimationChannel animWalkUp;
+  private final AnimationChannel animWalkBack;
 
   private final double speed = 250;
 
@@ -31,9 +31,9 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
 
     //animation settings
     animIdle = new AnimationChannel(image, 4, 32, 42, Duration.seconds(1), 1, 1);
-    animWalkLR = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 0, 3);
-    animWalkF = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 4, 7);
-    animWalkB = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 8, 11);
+    animWalkLeftRight = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 0, 3);
+    animWalkUp = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 4, 7);
+    animWalkBack = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 8, 11);
 
     texture = new AnimatedTexture(animIdle);
     texture.loop();
@@ -52,12 +52,12 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     if (physics.getLinearVelocity().magnitude() < 10 && animation != animIdle) {
       texture.loopAnimationChannel(animIdle);
       return;
-    } else if (angle <= -45 && angle >= -135 && animation != animWalkB) {
-      texture.loopAnimationChannel(animWalkB);
-    } else if (angle >= 45 && angle <= 135 && animation != animWalkF) {
-      texture.loopAnimationChannel(animWalkF);
-    } else if (animation != animWalkLR) {
-      texture.loopAnimationChannel(animWalkLR);
+    } else if (angle <= -45 && angle >= -135 && animation != animWalkBack) {
+      texture.loopAnimationChannel(animWalkBack);
+    } else if (angle >= 45 && angle <= 135 && animation != animWalkUp) {
+      texture.loopAnimationChannel(animWalkUp);
+    } else if (animation != animWalkLeftRight) {
+      texture.loopAnimationChannel(animWalkLeftRight);
     }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
