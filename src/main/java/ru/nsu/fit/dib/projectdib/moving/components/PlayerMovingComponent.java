@@ -17,61 +17,85 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
 
   private AnimatedTexture texture;
 
-  private AnimationChannel animIdle;
-
-  private final AnimationChannel animWalkLeftRight;
+  private final AnimationChannel animWalkRight;
+  private final AnimationChannel animWalkLeft;
   private final AnimationChannel animWalkUp;
-  private final AnimationChannel animWalkBack;
+  private final AnimationChannel animWalkDown;
 
   private final double speed = 250;
 
+  private final double scale = 0.15;
+
+  private boolean isMoving = false;
+
   public PlayerMovingComponent() {
     //resources.assets.textures
-    Image image = image("some.png");
+    Image image = image("player.png");
 
     //animation settings
-    animIdle = new AnimationChannel(image, 4, 32, 42, Duration.seconds(1), 1, 1);
-    animWalkLeftRight = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 0, 3);
-    animWalkUp = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 4, 7);
-    animWalkBack = new AnimationChannel(image, 4, 32, 42, Duration.seconds(0.66), 8, 11);
+    int frameWidth = (int) image.getWidth() / 4;
+    int frameHeight = (int) image.getHeight() / 4;
+    animWalkDown = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 0, 3);
+    animWalkUp = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 4, 6);
+    animWalkLeft = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 8, 11);
+    animWalkRight = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 12, 15);
 
-    texture = new AnimatedTexture(animIdle);
+    texture = new AnimatedTexture(animWalkUp);
     texture.loop();
+    texture.stop();
   }
 
   @Override
   public void onAdded() {
-    entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
+    entity.getTransformComponent().setScaleOrigin(new Point2D(15, 20));
     entity.getViewComponent().addChild(texture);
+    getEntity().setScaleUniform(scale);
   }
 
   @Override
   public void onUpdate(double tpf) {
     AnimationChannel animation = texture.getAnimationChannel();
-    double angle = physics.getLinearVelocity().angle(1, 0);
-    if (physics.getLinearVelocity().magnitude() < 10 && animation != animIdle) {
-      texture.loopAnimationChannel(animIdle);
-      return;
-    } else if (angle <= -45 && angle >= -135 && animation != animWalkBack) {
-      texture.loopAnimationChannel(animWalkBack);
-    } else if (angle >= 45 && angle <= 135 && animation != animWalkUp) {
-      texture.loopAnimationChannel(animWalkUp);
-    } else if (animation != animWalkLeftRight) {
-      texture.loopAnimationChannel(animWalkLeftRight);
+    double angleRight = physics.getLinearVelocity().angle(1, 0);
+    double angleUp = physics.getLinearVelocity().angle(0, -1);
+    double angleLeft = physics.getLinearVelocity().angle(-1, 0);
+    double angleDown = physics.getLinearVelocity().angle(0, 1);
+    if (physics.getLinearVelocity().magnitude() < 10) {
+      if (isMoving) {
+        texture.stop();
+        isMoving = false;
+      }
+    } else if (angleDown <= 45) {
+      if (animation != animWalkDown || !isMoving) {
+        texture.loopAnimationChannel(animWalkDown);
+        isMoving = true;
+      }
+    } else if (angleUp <= 45) {
+      if (animation != animWalkUp || !isMoving) {
+        texture.loopAnimationChannel(animWalkUp);
+        isMoving = true;
+      }
+    } else if (angleRight < 45) {
+      if (animation != animWalkRight || !isMoving) {
+        texture.loopAnimationChannel(animWalkRight);
+        isMoving = true;
+      }
+    } else {
+      if (animation != animWalkLeft || !isMoving) {
+        texture.loopAnimationChannel(animWalkLeft);
+        isMoving = true;
+      }
     }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
 
   @Override
   public void left() {
-    getEntity().setScaleX(-1);
     physics.setVelocityX(-1 * speed);
     physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(speed));
   }
 
   @Override
   public void right() {
-    getEntity().setScaleX(1);
     physics.setVelocityX(speed);
     physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(speed));
   }

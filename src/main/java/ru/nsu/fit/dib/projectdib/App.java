@@ -4,11 +4,11 @@ import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
-import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
+import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
@@ -33,6 +33,8 @@ public class App extends GameApplication {
 
   @Override
   protected void initSettings(GameSettings settings) {
+    settings.setDeveloperMenuEnabled(true);
+    settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig("src/main/resources/cfg.ini");
     // Window mod
     switch (Config.WINDOW_MODE) {
@@ -110,7 +112,7 @@ public class App extends GameApplication {
     factory = new Factory();
 
     getGameWorld().addEntityFactory(factory);
-    FXGL.setLevelFromMap("tmx/exlevel2.tmx");
+    FXGL.setLevelFromMap("tmx/level2.tmx");
 
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
