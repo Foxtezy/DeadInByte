@@ -77,6 +77,22 @@ public class Factory implements EntityFactory {
   }
 
   /**
+   * Entity Coin.
+   *
+   * @param data contain sets up typical properties such as the position
+   * @return entityBuilder for Coin
+   */
+  @Spawns("coin")
+  public Entity newCoin(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.COIN)
+        .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
+        .collidable()
+        .build();
+  }
+
+  /**
    * Entity Box.
    *
    * @param data contain sets up typical properties such as the position
@@ -100,20 +116,6 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .type(EntityType.TREE)
         .viewWithBBox(new Rectangle(30, 30, Color.FORESTGREEN))
-        .collidable()
-        .build();
-  }
-
-  /**
-   * Entity Coin.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Coin
-   */
-  public Entity newCoin(SpawnData data) {
-    return entityBuilder()
-        .type(EntityType.COIN)
-        .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
         .collidable()
         .build();
   }
