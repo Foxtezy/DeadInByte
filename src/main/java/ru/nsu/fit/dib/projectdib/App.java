@@ -102,6 +102,12 @@ public class App extends GameApplication {
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
+      @Override
+      protected void onCollisionBegin(Entity player, Entity coin) {
+        coin.removeFromWorld();
+      }
+    });
   }
 
   // Спавн существ
@@ -115,15 +121,5 @@ public class App extends GameApplication {
 
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-  }
-
-  //@Override
-  protected void collisionPhysics() {
-    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
-      @Override
-      protected void onCollisionBegin(Entity player, Entity coin) {
-        coin.removeFromWorld();
-      }
-    });
   }
 }
