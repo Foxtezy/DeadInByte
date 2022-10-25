@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="left-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="84">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="left-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="103">
  <tileset firstgid="1" name="0x72_DungeonTilesetII_v1.4" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
   <image source="0x72_DungeonTilesetII_v1.4.png" width="512" height="512"/>
  </tileset>
- <layer id="1" name="background" width="20" height="20">
+ <layer id="1" name="background" width="20" height="20" visible="0">
   <data encoding="csv">
 162,162,162,162,130,130,130,130,162,162,162,130,162,194,194,130,131,195,195,130,
 194,194,194,130,130,130,130,162,194,194,194,130,194,195,163,130,131,130,130,162,
@@ -27,88 +27,41 @@
 194,195,195,130,131,163,194,195,163,195,130,131,131,163,163,163,163,195,195,195
 </data>
  </layer>
+ <layer id="3" name="walls" width="20" height="20">
+  <data encoding="csv">
+257,227,227,227,227,227,227,227,227,227,227,227,227,227,227,227,227,227,227,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,627,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,627,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,627,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,627,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,627,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,627,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,258,
+257,627,627,627,627,627,627,627,0,0,0,0,0,0,627,627,627,627,627,258
+</data>
+ </layer>
  <objectgroup id="2" name="walls">
-  <object id="1" type="wall" gid="2" x="0" y="16" width="16" height="16"/>
-  <object id="2" type="wall" gid="2" x="16" y="16" width="16" height="16"/>
-  <object id="3" type="wall" gid="2" x="32" y="16" width="16" height="16"/>
-  <object id="4" type="wall" gid="2" x="48" y="16" width="16" height="16"/>
-  <object id="5" type="wall" gid="2" x="64" y="16" width="16" height="16"/>
-  <object id="6" type="wall" gid="2" x="80" y="16" width="16" height="16"/>
-  <object id="7" type="wall" gid="2" x="96" y="16" width="16" height="16"/>
-  <object id="8" type="wall" gid="2" x="112" y="16" width="16" height="16"/>
-  <object id="9" type="wall" gid="2" x="144" y="16" width="16" height="16"/>
-  <object id="10" type="wall" gid="2" x="128" y="16" width="16" height="16"/>
-  <object id="11" type="wall" gid="2" x="160" y="16" width="16" height="16"/>
-  <object id="12" type="wall" gid="2" x="176" y="16" width="16" height="16"/>
-  <object id="13" type="wall" gid="2" x="192" y="16" width="16" height="16"/>
-  <object id="14" type="wall" gid="2" x="208" y="16" width="16" height="16"/>
-  <object id="15" type="wall" gid="2" x="224" y="16" width="16" height="16"/>
-  <object id="16" type="wall" gid="2" x="240" y="16" width="16" height="16"/>
-  <object id="17" type="wall" gid="2" x="256" y="16" width="16" height="16"/>
-  <object id="18" type="wall" gid="2" x="272" y="16" width="16" height="16"/>
-  <object id="19" type="wall" gid="2" x="304" y="16" width="16" height="16"/>
-  <object id="20" type="wall" gid="2" x="288" y="16" width="16" height="16"/>
-  <object id="21" type="wall" gid="257" x="0" y="32" width="16" height="16"/>
-  <object id="22" type="wall" gid="257" x="0" y="16" width="16" height="16"/>
-  <object id="23" type="wall" gid="257" x="0" y="48" width="16" height="16"/>
-  <object id="24" type="wall" gid="257" x="0" y="64" width="16" height="16"/>
-  <object id="25" type="wall" gid="257" x="0" y="80" width="16" height="16"/>
-  <object id="26" type="wall" gid="257" x="0" y="96" width="16" height="16"/>
-  <object id="27" type="wall" gid="257" x="0" y="112" width="16" height="16"/>
-  <object id="28" type="wall" gid="257" x="0" y="128" width="16" height="16"/>
-  <object id="29" type="wall" gid="257" x="0" y="160" width="16" height="16"/>
-  <object id="30" type="wall" gid="257" x="0" y="176" width="16" height="16"/>
-  <object id="31" type="wall" gid="257" x="0" y="144" width="16" height="16"/>
-  <object id="32" type="wall" gid="257" x="0" y="192" width="16" height="16"/>
-  <object id="33" type="wall" gid="257" x="0" y="208" width="16" height="16"/>
-  <object id="34" type="wall" gid="257" x="0" y="224" width="16" height="16"/>
-  <object id="35" type="wall" gid="257" x="0" y="240" width="16" height="16"/>
-  <object id="36" type="wall" gid="257" x="0" y="256" width="16" height="16"/>
-  <object id="37" type="wall" gid="257" x="0" y="272" width="16" height="16"/>
-  <object id="38" type="wall" gid="257" x="0" y="288" width="16" height="16"/>
-  <object id="39" type="wall" gid="257" x="0" y="304" width="16" height="16"/>
-  <object id="40" type="wall" gid="258" x="304" y="16" width="16" height="16"/>
-  <object id="41" type="wall" gid="258" x="304" y="32" width="16" height="16"/>
-  <object id="42" type="wall" gid="258" x="304" y="48" width="16" height="16"/>
-  <object id="43" type="wall" gid="258" x="304" y="64" width="16" height="16"/>
-  <object id="44" type="wall" gid="258" x="304" y="80" width="16" height="16"/>
-  <object id="45" type="wall" gid="258" x="304" y="96" width="16" height="16"/>
-  <object id="46" type="wall" gid="258" x="304" y="112" width="16" height="16"/>
-  <object id="47" type="wall" gid="258" x="304" y="144" width="16" height="16"/>
-  <object id="48" type="wall" gid="258" x="304" y="160" width="16" height="16"/>
-  <object id="49" type="wall" gid="258" x="304" y="128" width="16" height="16"/>
-  <object id="50" type="wall" gid="258" x="304" y="176" width="16" height="16"/>
-  <object id="51" type="wall" gid="258" x="304" y="192" width="16" height="16"/>
-  <object id="52" type="wall" gid="258" x="304" y="208" width="16" height="16"/>
-  <object id="53" type="wall" gid="258" x="304" y="224" width="16" height="16"/>
-  <object id="54" type="wall" gid="258" x="304" y="256" width="16" height="16"/>
-  <object id="55" type="wall" gid="258" x="304" y="240" width="16" height="16"/>
-  <object id="56" type="wall" gid="258" x="304" y="272" width="16" height="16"/>
-  <object id="57" type="wall" gid="258" x="304" y="288" width="16" height="16"/>
-  <object id="58" type="wall" gid="258" x="304" y="304" width="16" height="16"/>
-  <object id="59" type="wall" gid="258" x="304" y="320" width="16" height="16"/>
-  <object id="60" type="wall" gid="257" x="0" y="320" width="16" height="16"/>
-  <object id="61" type="wall" gid="627" x="16" y="320" width="16" height="16"/>
-  <object id="62" type="wall" gid="627" x="32" y="320" width="16" height="16"/>
-  <object id="63" type="wall" gid="627" x="48" y="320" width="16" height="16"/>
-  <object id="64" type="wall" gid="627" x="64" y="320" width="16" height="16"/>
-  <object id="65" type="wall" gid="627" x="80" y="320" width="16" height="16"/>
-  <object id="66" type="wall" gid="627" x="96" y="320" width="16" height="16"/>
-  <object id="67" type="wall" gid="627" x="176" y="320" width="16" height="16"/>
-  <object id="68" type="wall" gid="627" x="192" y="320" width="16" height="16"/>
-  <object id="69" type="wall" gid="627" x="208" y="320" width="16" height="16"/>
-  <object id="70" type="wall" gid="627" x="224" y="320" width="16" height="16"/>
-  <object id="71" type="wall" gid="627" x="240" y="320" width="16" height="16"/>
-  <object id="72" type="wall" gid="627" x="256" y="320" width="16" height="16"/>
-  <object id="73" type="wall" gid="627" x="272" y="320" width="16" height="16"/>
-  <object id="74" type="wall" gid="627" x="288" y="320" width="16" height="16"/>
-  <object id="75" type="wall" gid="627" x="80" y="192" width="16" height="16"/>
-  <object id="76" type="wall" gid="627" x="128" y="128" width="16" height="16"/>
-  <object id="77" type="wall" gid="627" x="160" y="160" width="16" height="16"/>
-  <object id="78" type="wall" gid="627" x="144" y="224" width="16" height="16"/>
-  <object id="79" type="wall" gid="627" x="224" y="208" width="16" height="16"/>
-  <object id="80" type="wall" gid="627" x="240" y="96" width="16" height="16"/>
-  <object id="81" type="wall" gid="627" x="80" y="64" width="16" height="16"/>
-  <object id="82" type="wall" gid="627" x="192" y="272" width="16" height="16"/>
+  <object id="91" type="wall" x="0" y="0" width="16" height="320"/>
+  <object id="92" type="wall" x="304" y="0" width="16" height="320"/>
+  <object id="93" type="wall" x="16" y="0" width="288" height="16"/>
+  <object id="94" type="wall" x="16" y="304" width="112" height="16"/>
+  <object id="95" type="wall" x="224" y="304" width="80" height="16"/>
+  <object id="96" type="wall" x="240" y="256" width="16"/>
+  <object id="97" type="wall" x="80" y="240" width="16" height="16"/>
+  <object id="98" type="wall" x="192" y="192" width="16" height="16"/>
+  <object id="99" type="wall" x="192" y="112" width="16" height="16"/>
+  <object id="100" type="wall" x="96" y="160" width="16" height="16"/>
+  <object id="101" type="wall" x="112" y="80" width="16" height="16"/>
  </objectgroup>
 </map>

@@ -35,10 +35,14 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     //animation settings
     int frameWidth = (int) image.getWidth() / 4;
     int frameHeight = (int) image.getHeight() / 4;
-    animWalkDown = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 0, 3);
-    animWalkUp = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 4, 6);
-    animWalkLeft = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 8, 11);
-    animWalkRight = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 12, 15);
+    animWalkDown = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66),
+        0, 3);
+    animWalkUp = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66), 4,
+        6);
+    animWalkLeft = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66),
+        8, 11);
+    animWalkRight = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66),
+        12, 15);
 
     texture = new AnimatedTexture(animWalkUp);
     texture.loop();

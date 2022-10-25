@@ -46,7 +46,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-        .bbox(new HitBox(new Point2D(25,30), BoundingShape.box(150, 200)))
+        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .with(physics)
         .with(new PlayerMovingComponent())
         .collidable()
