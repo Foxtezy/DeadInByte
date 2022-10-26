@@ -103,14 +103,17 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+
   /**
    * Entity Coin.
    *
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Coin
    */
+  @Spawns("coin")
   public Entity newCoin(SpawnData data) {
     return entityBuilder()
+        .from(data)
         .type(EntityType.COIN)
         .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
         .collidable()

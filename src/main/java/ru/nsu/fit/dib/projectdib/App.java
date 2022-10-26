@@ -16,6 +16,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javafx.scene.input.KeyCode;
@@ -103,6 +104,12 @@ public class App extends GameApplication {
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
+      @Override
+      protected void onCollisionBegin(Entity player, Entity coin) {
+        coin.removeFromWorld();
+      }
+    });
   }
 
   // Спавн существ
