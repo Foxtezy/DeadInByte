@@ -46,7 +46,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-        .viewWithBBox(new Rectangle(30, 30, Color.BLUE))
+        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .with(physics)
         .with(new PlayerMovingComponent())
         .collidable()
@@ -71,24 +71,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.WALL)
         .bbox(
             new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-        .with(new CollidableComponent(true))
-        .collidable()
-        .build();
-  }
-
-  /**
-   * Entity Coin.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Coin
-   */
-  @Spawns("coin")
-  public Entity newCoin(SpawnData data) {
-    return entityBuilder()
-        .from(data)
-        .type(EntityType.COIN)
-        .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
-        .collidable()
+        .with(new PhysicsComponent())
         .build();
   }
 
@@ -116,6 +99,23 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .type(EntityType.TREE)
         .viewWithBBox(new Rectangle(30, 30, Color.FORESTGREEN))
+        .collidable()
+        .build();
+  }
+
+
+  /**
+   * Entity Coin.
+   *
+   * @param data contain sets up typical properties such as the position
+   * @return entityBuilder for Coin
+   */
+  @Spawns("coin")
+  public Entity newCoin(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.COIN)
+        .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
         .collidable()
         .build();
   }
