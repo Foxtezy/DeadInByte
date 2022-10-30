@@ -12,5 +12,9 @@ public enum EntityType {
   BULLET,
   ENEMY,
   WALL,
-  PLATFORM
+  PLATFORM,
+  CLOSED_DOOR,
+  OPENED_DOOR,
+  BUTTON,
+  DOOR_TRIGGER
 }
