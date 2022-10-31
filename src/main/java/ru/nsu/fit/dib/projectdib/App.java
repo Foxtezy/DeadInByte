@@ -111,9 +111,8 @@ public class App extends GameApplication {
             .forEach(btn -> {
               btn.removeComponent(CollidableComponent.class);
               var closedDoor = getGameWorld().getSingleton(EntityType.CLOSED_DOOR);
-              closedDoor.setOpacity(0);
-              closedDoor.removeComponent(PhysicsComponent.class);
-              //closedDoor.removeFromWorld();
+              closedDoor.removeFromWorld();
+              spawn("openedDoor", 144, 192);
             });
       }
     }, KeyCode.E, VirtualButton.B);
@@ -129,10 +128,9 @@ public class App extends GameApplication {
       }
     });
     onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
-      var closedDoor = getGameWorld().getSingleton(EntityType.CLOSED_DOOR);
-      closedDoor.setOpacity(1);
-      closedDoor.addComponent(new PhysicsComponent());
-      //spawn("closedDoor");
+      var openedDoor = getGameWorld().getSingleton(EntityType.OPENED_DOOR);
+      openedDoor.removeFromWorld();
+      spawn("closedDoor", 144, 192);
     });
   }
 

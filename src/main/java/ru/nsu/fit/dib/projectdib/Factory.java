@@ -191,18 +191,17 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.CLOSED_DOOR)
-        .viewWithBBox(
-            new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.BLACK))
+        .viewWithBBox(texture("closedDoor.png", 32, 32))
         .with(new PhysicsComponent())
         .build();
   }
 
+  @Spawns("openedDoor")
   public Entity newOpenedDoor(SpawnData data) {
     return entityBuilder()
         .from(data)
         .type(EntityType.OPENED_DOOR)
-        .viewWithBBox(
-            new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.BLACK))
+        .viewWithBBox(texture("openedDoor.png", 32, 32))
         .build();
   }
 
@@ -211,7 +210,8 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.DOOR_TRIGGER)
-        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new CollidableComponent(true))
         .build();
   }
