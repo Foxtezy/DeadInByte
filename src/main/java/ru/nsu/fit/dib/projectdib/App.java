@@ -19,6 +19,8 @@ import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
+import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -99,6 +101,16 @@ public class App extends GameApplication {
       }
 
     }, KeyCode.S, VirtualButton.DOWN);
+
+  getInput().addAction(new UserAction("Kick") {
+    protected void onActionBegin(){
+      Entity key = getGameWorld().getEntitiesByType(EntityType.BOX).get(0);
+
+      PhysicsComponent physics = key.getComponent(PhysicsComponent.class);
+      physics.applyForceToCenter(player.getCenter().subtract(key.getCenter()).normalize().multiply(1000));
+    }
+
+    }, KeyCode.E);
   }
 
   @Override
