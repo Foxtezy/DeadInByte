@@ -16,7 +16,7 @@ class GameObjectMapperTest {
         File file = new File("src/test/resources/input.txt");
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("");
-        char arr[][] = new char[10][10];
+        char[][] arr = new char[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 arr[i][j] = scanner.next().charAt(0);
