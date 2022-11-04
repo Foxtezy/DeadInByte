@@ -4,6 +4,7 @@ import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
@@ -171,6 +172,47 @@ public class Factory implements EntityFactory {
         .viewWithBBox(circle)
         .collidable()
         .with(new RandomMoveComponent(new Rectangle2D(0, 0, getAppWidth(), getAppHeight()), 50))
+        .build();
+  }
+
+  @Spawns("button")
+  public Entity newButton(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.BUTTON)
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
+        .build();
+  }
+
+  @Spawns("closedDoor")
+  public Entity newClosedDoor(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.CLOSED_DOOR)
+        .viewWithBBox(texture("closedDoor.png", 32, 32))
+        .with(new PhysicsComponent())
+        .build();
+  }
+
+  @Spawns("openedDoor")
+  public Entity newOpenedDoor(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.OPENED_DOOR)
+        .viewWithBBox(texture("openedDoor.png", 32, 32))
+        .build();
+  }
+
+  @Spawns("doorTrigger")
+  public Entity newDoorTrigger(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.DOOR_TRIGGER)
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
         .build();
   }
 }

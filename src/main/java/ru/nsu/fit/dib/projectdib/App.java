@@ -4,6 +4,7 @@ import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
@@ -14,11 +15,15 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.PhysicsComponent;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -99,6 +104,20 @@ public class App extends GameApplication {
       }
 
     }, KeyCode.S, VirtualButton.DOWN);
+    getInput().addAction(new UserAction("Use") {
+      @Override
+      protected void onActionBegin() {
+        getGameWorld().getEntitiesByType(EntityType.BUTTON)
+            .stream()
+            .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
+            .forEach(btn -> {
+              btn.removeComponent(CollidableComponent.class);
+              var closedDoor = getGameWorld().getSingleton(EntityType.CLOSED_DOOR);
+              closedDoor.removeFromWorld();
+              spawn("openedDoor", 144, 192);
+            });
+      }
+    }, KeyCode.E, VirtualButton.B);
   }
 
   @Override
@@ -109,6 +128,11 @@ public class App extends GameApplication {
       protected void onCollisionBegin(Entity player, Entity coin) {
         coin.removeFromWorld();
       }
+    });
+    onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
+      var openedDoor = getGameWorld().getSingleton(EntityType.OPENED_DOOR);
+      openedDoor.removeFromWorld();
+      spawn("closedDoor", 144, 192);
     });
   }
 
