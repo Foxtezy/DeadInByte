@@ -20,8 +20,10 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
