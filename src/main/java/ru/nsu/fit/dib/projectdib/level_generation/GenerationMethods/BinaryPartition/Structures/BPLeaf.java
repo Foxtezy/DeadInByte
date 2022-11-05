@@ -26,6 +26,7 @@ public class BPLeaf {
   public BPLeaf getLeftChild() {
     return leftChild;
   }
+
   public void setLeftChild(BPLeaf leftChild) {
     this.leftChild = leftChild;
   }
@@ -48,7 +49,7 @@ public class BPLeaf {
     P = blockHeight * blockWidth;
     if (P >= P_OVERBIG) {
       area.setSizeType(SizeType.OVERBIG);
-      finalBlock=false;
+      finalBlock = false;
       return;
     }
     if (side >= 9 && P >= P_BIG) {
@@ -58,16 +59,18 @@ public class BPLeaf {
     }
     if (side >= 5 && P >= P_MIDDLE) {
       area.setSizeType(SizeType.MIDDLE);
-      if (P/P_MIDDLE<2) finalBlock=true;
+      if (P / P_MIDDLE < 2) {
+        finalBlock = true;
+      }
       return;
     }
     if (side >= 3 && P >= P_SMALL) {
       area.setSizeType(SizeType.SMALL);
-      finalBlock=true;
+      finalBlock = true;
       return;
     }
     area.setSizeType(SizeType.OVERSMALL);
-    finalBlock=false;
+    finalBlock = false;
   }
 
   public Area getArea() {

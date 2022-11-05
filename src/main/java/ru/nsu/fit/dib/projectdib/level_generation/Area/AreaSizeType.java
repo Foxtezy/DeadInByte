@@ -1,8 +1,8 @@
 package ru.nsu.fit.dib.projectdib.level_generation.Area;
 
 public class AreaSizeType {
-  public enum SizeType
-  {
+
+  public enum SizeType {
     OVERBIG,
     BIG,
     MIDDLE,

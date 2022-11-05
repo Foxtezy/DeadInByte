@@ -5,18 +5,19 @@ import static java.lang.Math.abs;
 import java.awt.Point;
 
 public class Level {
-  private int seed;
+
   private final int width;
   private final int height;
   public int tileType = 20;
   public int[][] map;
+  private int seed;
 
   public Level(int seed, int width, int height) {
-    this.seed=seed;
+    this.seed = seed;
     this.width = width;
     this.height = height;
-    map = new int[width+1][height+1];
-    this.set(new Point(0,0),new Point(width, height));
+    map = new int[width + 1][height + 1];
+    this.set(new Point(0, 0), new Point(width, height));
   }
 
   /**
@@ -37,13 +38,17 @@ public class Level {
     for (int y = 0; y <= height; y++) {
       for (int x = 0; x <= width; x++) {
         char c = '.';
-        if (map[x][y] == 20) c = '#';
-        if (map[x][y] == 3) c = '@';
-        System.out.printf("%2c", c);
+        if (map[x][y] == 20) {
+          c = '#';
         }
-        System.out.println();
+        if (map[x][y] == 3) {
+          c = '@';
+        }
+        System.out.printf("%2c", c);
       }
+      System.out.println();
     }
+  }
 
   /**
    * change Tile types to Tile id

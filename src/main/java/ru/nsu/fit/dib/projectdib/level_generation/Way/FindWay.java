@@ -24,6 +24,7 @@ public class FindWay {
   WayPoint[][] wayMap;
   PriorityQueue<WayPoint> open;
   PriorityQueue<WayPoint> closed;
+
   public FindWay(int[][] map, int width, int height) {
     this.width = width;
     this.height = height;
@@ -46,51 +47,55 @@ public class FindWay {
     closed = new PriorityQueue<>();
 
     WayPoint node = start;
-    WayPoint lastnode=node;
+    WayPoint lastnode = node;
 
     open.add(node);
-    node.weight=0;
+    node.weight = 0;
     while (!open.isEmpty()) {
 
       node = open.element();
       open.remove(node);
       closed.add(node);
-      if (node == finish) break;
+      if (node == finish) {
+        break;
+      }
 
       int x = node.x;
       int y = node.y;
 
-      addToOpen(node,x+1,y);
-      addToOpen(node,x-1,y);
-      addToOpen(node,x,y+1);
-      addToOpen(node,x,y-1);
+      addToOpen(node, x + 1, y);
+      addToOpen(node, x - 1, y);
+      addToOpen(node, x, y + 1);
+      addToOpen(node, x, y - 1);
 
       lastnode = node;
     }
   }
-  public void printWay()
-  {
-    WayPoint node=finish;
-    while (true){
+
+  public void printWay() {
+    WayPoint node = finish;
+    while (true) {
       int x = node.x;
       int y = node.y;
       map[x][y] = 3;
-      if (node == start) break;
+      if (node == start) {
+        break;
+      }
       node = node.last;
     }
   }
-  private void addToOpen(WayPoint node, int x,int y)
-  {
-    if (x>=width || x<0 || y>=height || y<0) return;
+
+  private void addToOpen(WayPoint node, int x, int y) {
+    if (x >= width || x < 0 || y >= height || y < 0) {
+      return;
+    }
     if ((!open.contains(wayMap[x][y])) && (!closed.contains(wayMap[x][y]))) {
       wayMap[x][y].manhattanDistance(finish);
-      wayMap[x][y].reweight(map[x][y],node);
+      wayMap[x][y].reweight(map[x][y], node);
 
       open.add(wayMap[x][y]);
-    }
-    else
-    {
-      if (wayMap[x][y].reweight(map[x][y],node)) {
+    } else {
+      if (wayMap[x][y].reweight(map[x][y], node)) {
         if (closed.contains(wayMap[x][y])) {
           closed.remove(wayMap[x][y]);
           closed.add(wayMap[x][y]);
