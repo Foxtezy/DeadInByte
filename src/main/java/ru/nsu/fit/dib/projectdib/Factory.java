@@ -4,6 +4,7 @@ import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
@@ -46,7 +47,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-        .viewWithBBox(new Rectangle(30, 30, Color.BLUE))
+        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .with(physics)
         .with(new PlayerMovingComponent())
         .collidable()
@@ -72,7 +73,6 @@ public class Factory implements EntityFactory {
         .bbox(
             new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
-        .collidable()
         .build();
   }
 
@@ -104,14 +104,17 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+
   /**
    * Entity Coin.
    *
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Coin
    */
+  @Spawns("coin")
   public Entity newCoin(SpawnData data) {
     return entityBuilder()
+        .from(data)
         .type(EntityType.COIN)
         .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
         .collidable()
@@ -169,6 +172,47 @@ public class Factory implements EntityFactory {
         .viewWithBBox(circle)
         .collidable()
         .with(new RandomMoveComponent(new Rectangle2D(0, 0, getAppWidth(), getAppHeight()), 50))
+        .build();
+  }
+
+  @Spawns("button")
+  public Entity newButton(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.BUTTON)
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
+        .build();
+  }
+
+  @Spawns("closedDoor")
+  public Entity newClosedDoor(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.CLOSED_DOOR)
+        .viewWithBBox(texture("closedDoor.png", 32, 32))
+        .with(new PhysicsComponent())
+        .build();
+  }
+
+  @Spawns("openedDoor")
+  public Entity newOpenedDoor(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.OPENED_DOOR)
+        .viewWithBBox(texture("openedDoor.png", 32, 32))
+        .build();
+  }
+
+  @Spawns("doorTrigger")
+  public Entity newDoorTrigger(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.DOOR_TRIGGER)
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
         .build();
   }
 }

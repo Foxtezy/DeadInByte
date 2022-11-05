@@ -4,21 +4,27 @@ import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
-import static com.almasb.fxgl.dsl.FXGL.onKey;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
+import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.PhysicsComponent;
+
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPGraph;
 import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf;
@@ -47,6 +53,8 @@ public class App extends GameApplication {
 
   @Override
   protected void initSettings(GameSettings settings) {
+    settings.setDeveloperMenuEnabled(true);
+    settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig("src/main/resources/cfg.ini");
     // Window mod
     switch (Config.WINDOW_MODE) {
@@ -110,11 +118,36 @@ public class App extends GameApplication {
       }
 
     }, KeyCode.S, VirtualButton.DOWN);
+    getInput().addAction(new UserAction("Use") {
+      @Override
+      protected void onActionBegin() {
+        getGameWorld().getEntitiesByType(EntityType.BUTTON)
+            .stream()
+            .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
+            .forEach(btn -> {
+              btn.removeComponent(CollidableComponent.class);
+              var closedDoor = getGameWorld().getSingleton(EntityType.CLOSED_DOOR);
+              closedDoor.removeFromWorld();
+              spawn("openedDoor", 144, 192);
+            });
+      }
+    }, KeyCode.E, VirtualButton.B);
   }
 
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
+      @Override
+      protected void onCollisionBegin(Entity player, Entity coin) {
+        coin.removeFromWorld();
+      }
+    });
+    onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
+      var openedDoor = getGameWorld().getSingleton(EntityType.OPENED_DOOR);
+      openedDoor.removeFromWorld();
+      spawn("closedDoor", 144, 192);
+    });
   }
 
   // Спавн существ
@@ -124,7 +157,7 @@ public class App extends GameApplication {
     factory = new Factory();
 
     getGameWorld().addEntityFactory(factory);
-    FXGL.setLevelFromMap("tmx/exlevel2.tmx");
+    FXGL.setLevelFromMap("tmx/level2.tmx");
 
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
