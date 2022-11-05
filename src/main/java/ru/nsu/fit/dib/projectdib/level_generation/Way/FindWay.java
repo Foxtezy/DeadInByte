@@ -1,37 +1,22 @@
 package ru.nsu.fit.dib.projectdib.level_generation.Way;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
-
-import com.almasb.fxgl.core.collection.Array;
 import java.awt.Point;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.PriorityQueue;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
+import ru.nsu.fit.dib.projectdib.level_generation.Level;
 
 public class FindWay {
 
-  int width;
-  int height;
-  WayPoint start;
-  WayPoint finish;
-  int[][] map;
-  WayPoint[][] wayMap;
-  PriorityQueue<WayPoint> open;
-  PriorityQueue<WayPoint> closed;
+  private final Level level;
+  private WayPoint start;
+  private WayPoint finish;
+  private WayPoint[][] wayMap;
+  private PriorityQueue<WayPoint> open;
+  private PriorityQueue<WayPoint> closed;
 
-  public FindWay(int[][] map, int width, int height) {
-    this.width = width;
-    this.height = height;
-    this.map = map;
-    this.wayMap = new WayPoint[width][height];
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
+  public FindWay(Level level) {
+    this.level=level;
+    this.wayMap = new WayPoint[level.getWidth()][level.getHeight()];
+    for (int y = 0; y < level.getHeight(); y++) {
+      for (int x = 0; x < level.getWidth(); x++) {
         this.wayMap[x][y] = new WayPoint();
         this.wayMap[x][y].x = x;
         this.wayMap[x][y].y = y;
@@ -77,7 +62,7 @@ public class FindWay {
     while (true) {
       int x = node.x;
       int y = node.y;
-      map[x][y] = 3;
+      level.map[x][y] = 3;
       if (node == start) {
         break;
       }
@@ -86,16 +71,16 @@ public class FindWay {
   }
 
   private void addToOpen(WayPoint node, int x, int y) {
-    if (x >= width || x < 0 || y >= height || y < 0) {
+    if (x >= level.getWidth() || x < 0 || y >= level.getHeight() || y < 0) {
       return;
     }
     if ((!open.contains(wayMap[x][y])) && (!closed.contains(wayMap[x][y]))) {
       wayMap[x][y].manhattanDistance(finish);
-      wayMap[x][y].reweight(map[x][y], node);
+      wayMap[x][y].reweight(level.map[x][y], node);
 
       open.add(wayMap[x][y]);
     } else {
-      if (wayMap[x][y].reweight(map[x][y], node)) {
+      if (wayMap[x][y].reweight(level.map[x][y], node)) {
         if (closed.contains(wayMap[x][y])) {
           closed.remove(wayMap[x][y]);
           closed.add(wayMap[x][y]);

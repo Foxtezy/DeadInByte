@@ -1,16 +1,13 @@
 package ru.nsu.fit.dib.projectdib.level_generation;
 
-import static java.lang.Math.abs;
-
 import java.awt.Point;
 
 public class Level {
-
+  private final int seed;
   private final int width;
   private final int height;
   public int tileType = 20;
   public int[][] map;
-  private int seed;
 
   public Level(int seed, int width, int height) {
     this.seed = seed;
@@ -68,4 +65,13 @@ public class Level {
     }
   }
 
+  public int getSeed() {
+    return seed;
+  }
+  public int getWidth() {
+    return width;
+  }
+  public int getHeight() {
+    return height;
+  }
 }

@@ -13,32 +13,30 @@ import ru.nsu.fit.dib.projectdib.level_generation.Level;
 /**
  * Генерация с помощью бинарного разделения пространства на области
  */
-public class BinaryPartitionLG extends Level {
+public class BinaryPartitionLG {
 
   //RANDOM BOUNDS
   public static final int CUTTING_AXIS = 5;
   public static final int MIN_CUTTING_BLOCK_SIDE = 3;
   //RANDOM BOUNDS
-  int requiredNumberOfBigAreas;
-  int requiredNumberOfMiddleAreas;
-  int numberOfBigAreas;
-  int numberOfMiddleAreas;
-  Random rn;
+  private final Level level;
+  public final int requiredNumberOfBigAreas;
+  public final int requiredNumberOfMiddleAreas;
+  public int numberOfBigAreas;
+  public int numberOfMiddleAreas;
+  private final Random rn;
 
   /**
    * инциализация карты
    *
-   * @param seed                - сид мира
-   * @param width               - ширина карты
-   * @param height              - высота карты
+   * @param level               - уровень(карта)
    * @param numberOfBigAreas    - количество больших областей
    * @param numberOfMiddleAreas - количество мальеньких областей
    */
 
-  public BinaryPartitionLG(int seed, int width, int height, int numberOfBigAreas,
-      int numberOfMiddleAreas) {
-    super(seed, width, height);
-    this.rn = new Random(seed);
+  public BinaryPartitionLG(Level level, int numberOfBigAreas, int numberOfMiddleAreas) {
+    this.level = level;
+    this.rn = new Random(level.getSeed());
     this.requiredNumberOfBigAreas = numberOfBigAreas;
     this.requiredNumberOfMiddleAreas = numberOfMiddleAreas;
     this.numberOfBigAreas = 0;
@@ -152,13 +150,13 @@ public class BinaryPartitionLG extends Level {
     Point supportive1 = new Point(first.x, second.y);
     Point supportive2 = new Point(second.x, first.y);
     if (tree.getLeftChild() == null && tree.getRightChild() == null) {
-      tileType = 1;
-      set(first, second);
-      tileType = 20;
-      set(first, supportive1);
-      set(supportive1, second);
-      set(supportive2, second);
-      set(first, supportive2);
+      level.tileType = 1;
+      level.set(first, second);
+      level.tileType = 20;
+      level.set(first, supportive1);
+      level.set(supportive1, second);
+      level.set(supportive2, second);
+      level.set(first, supportive2);
     }
     if (tree.getLeftChild() != null) {
       printPartition(tree.getLeftChild());
