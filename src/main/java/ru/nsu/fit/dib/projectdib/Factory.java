@@ -71,7 +71,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.WALL)
         .bbox(
             new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-        .with(new CollidableComponent(true))
+        .with(new PhysicsComponent())
         .collidable()
         .build();
   }

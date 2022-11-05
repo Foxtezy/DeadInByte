@@ -17,18 +17,32 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import javafx.scene.input.KeyCode;
+import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPGraph;
+import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf;
+import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.BinaryPartitionLG;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
-
   Factory factory;
   Viewport viewport;
   private Entity player;
 
   public static void main(String[] args) {
-    launch(args);
+    //testing
+    String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
+    BinaryPartitionLG newlvl = new BinaryPartitionLG(99812,64,64,4,0);
+    BPLeaf tree = new BPLeaf(new Point(0,0), new Point(64,64));
+    newlvl.setPartition(tree);
+    BPGraph graph = new BPGraph(tree);
+    newlvl.tileType=20;
+    newlvl.printPartition(tree);
+    newlvl.print();
+    newlvl.tileType=20;
+    //testing
+    //launch(args);
   }
 
   @Override
