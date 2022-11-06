@@ -2,11 +2,16 @@ package ru.nsu.fit.dib.projectdib.mapperobjects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.loaderobjects.Chunk;
 
 public class GameObjectMapper {
 
-  private List<GameObject> walls;
+
+  private Map<Chunk, List<GameObject>> walls = new HashMap<>();
 
   private static final char WALL = 'W';
 
@@ -17,6 +22,12 @@ public class GameObjectMapper {
   private char[][] wallMap;
 
   private int lastId = 0;
+
+  private final int chunkSize;
+
+  public GameObjectMapper(int chunkSize) {
+    this.chunkSize = chunkSize;
+  }
 
   /**
    * Makes list of entities (walls).
@@ -31,8 +42,7 @@ public class GameObjectMapper {
    *            EDGES ARE NOT WALLS!!!!!
    * @return list of walls.
    */
-  public List<GameObject> makeWalls(char[][] map) {
-    walls = new ArrayList<>();
+  public Map<Chunk, List<GameObject>> makeWalls(char[][] map) {
     wallMap = Arrays.copyOf(map, map.length);
     markWalls();
     makeWall();
@@ -73,9 +83,17 @@ public class GameObjectMapper {
       wallMap[y][x] = BOUND;
       y++;
     }
-    GameObject gameObject = new GameObject(lastId + 1, "wall", sx, sy, 1, y - sy);
+    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx, sy, 1, y - sy);
     lastId++;
-    walls.add(gameObject);
+    addGameObject(gameObject);
+  }
+
+  private void addGameObject(GameObject gameObject) {
+    Chunk chunk = new Chunk(gameObject.x() / chunkSize, gameObject.y() / chunkSize);
+    if (!walls.containsKey(chunk)) {
+      walls.put(chunk, new ArrayList<>());
+    }
+    walls.get(chunk).add(gameObject);
   }
 
   private void makeEntity(int sy, int sx) {
@@ -94,9 +112,9 @@ public class GameObjectMapper {
       wallMap[y][x] = BOUND;
       x++;
     }
-    GameObject gameObject = new GameObject(lastId + 1, "wall", sx, sy, x - sx, 1);
+    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx, sy, x - sx, 1);
     lastId++;
-    walls.add(gameObject);
+    addGameObject(gameObject);
   }
 
   private boolean isWall(int y, int x) {

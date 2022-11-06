@@ -12,7 +12,7 @@ class GameObjectMapperTest {
 
     @Test
     public void test() throws FileNotFoundException {
-        GameObjectMapper gameObjectMapper = new GameObjectMapper();
+        GameObjectMapper gameObjectMapper = new GameObjectMapper(3);
         File file = new File("src/test/resources/input.txt");
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("");
