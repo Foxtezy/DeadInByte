@@ -2,17 +2,17 @@ package ru.nsu.fit.dib.projectdib.loaderobjects;
 
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 
 public class ChunkLoaderComponent extends Component {
 
-  ChunkLoader chunkLoader = new ChunkLoader();
+  private final ChunkLoader chunkLoader;
   private Chunk currentChunk;
 
   private final int chunkSize;
 
-  public ChunkLoaderComponent(int chunkSize) {
+  public ChunkLoaderComponent(int chunkSize, ChunkLoader chunkLoader) {
     this.chunkSize = chunkSize;
+    this.chunkLoader = chunkLoader;
   }
 
   @Override

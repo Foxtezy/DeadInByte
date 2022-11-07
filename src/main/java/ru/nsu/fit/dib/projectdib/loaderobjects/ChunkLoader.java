@@ -1,13 +1,27 @@
 package ru.nsu.fit.dib.projectdib.loaderobjects;
 
 
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import ru.nsu.fit.dib.projectdib.mapperobjects.GameObject;
 
 public class ChunkLoader {
 
   private final List<Chunk> loadedChunks = new LinkedList<>();
+
+
+  private final Map<Chunk, List<GameObject>> walls;
+
+  private final Map<Chunk, List<Entity>> loadedWalls = new HashMap<>();
+
+  public ChunkLoader(Map<Chunk, List<GameObject>> walls) {
+    this.walls = walls;
+  }
 
   public void updateChunks(Chunk currChunk) {
 
@@ -30,10 +44,30 @@ public class ChunkLoader {
       }
     }
 
-
-
-
+    removeChunks.forEach(this::removeChunk);
+    addChunks.forEach(this::addChunk);
   }
 
+  private void addChunk(Chunk chunk) {
+    if (!walls.containsKey(chunk)) {
+      return;
+    }
+    loadedWalls.put(chunk, new ArrayList<>());
+    List<GameObject> objectsList = walls.get(chunk);
+    for (GameObject object : objectsList) {
+      Entity e = FXGL.spawn(object.type().getName(), object.x(), object.y());
+      loadedWalls.get(chunk).add(e);
+    }
+  }
+
+  private void removeChunk(Chunk chunk) {
+    if (!loadedWalls.containsKey(chunk)) {
+      return;
+    }
+    List<Entity> entityList = loadedWalls.get(chunk);
+    for (Entity entity : entityList) {
+      FXGL.despawnWithScale(entity);
+    }
+  }
 
 }
