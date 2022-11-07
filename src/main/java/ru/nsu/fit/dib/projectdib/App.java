@@ -20,10 +20,8 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -32,6 +30,7 @@ public class App extends GameApplication {
   Factory factory;
   Viewport viewport;
   private Entity player;
+  private Entity openedDoor_144_192;
 
   public static void main(String[] args) {
     launch(args);
@@ -112,9 +111,8 @@ public class App extends GameApplication {
             .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
             .forEach(btn -> {
               btn.removeComponent(CollidableComponent.class);
-              var closedDoor = getGameWorld().getSingleton(EntityType.CLOSED_DOOR);
-              closedDoor.removeFromWorld();
-              spawn("openedDoor", 144, 192);
+              Spawns.closedDoor_144_192.removeFromWorld();
+              openedDoor_144_192 = spawn("openedDoor", 144, 192);
             });
       }
     }, KeyCode.E, VirtualButton.B);
@@ -130,9 +128,8 @@ public class App extends GameApplication {
       }
     });
     onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
-      var openedDoor = getGameWorld().getSingleton(EntityType.OPENED_DOOR);
-      openedDoor.removeFromWorld();
-      spawn("closedDoor", 144, 192);
+      openedDoor_144_192.removeFromWorld();
+      Spawns.closedDoor_144_192 = spawn("closedDoor", 144, 192);
     });
   }
 
@@ -147,5 +144,6 @@ public class App extends GameApplication {
 
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    Spawns.spawnInitialObjects();
   }
 }
