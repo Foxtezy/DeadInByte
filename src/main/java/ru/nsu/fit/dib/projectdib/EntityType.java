@@ -1,5 +1,7 @@
 package ru.nsu.fit.dib.projectdib;
 
+import com.almasb.fxgl.entity.Entity;
+
 /**
  * enumeration of Entities.
  */

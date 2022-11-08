@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib;
 
+import static com.almasb.fxgl.dsl.FXGL.getApp;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
@@ -15,13 +16,17 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.function.Predicate;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -106,10 +111,13 @@ public class App extends GameApplication {
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
-        getGameWorld().getEntitiesByType(EntityType.BUTTON)
+        getGameWorld().getClosestEntity(Spawns.button,
+                button -> button.distance(player) < 10)//getEntitiesByType(EntityType.BUTTON)
             .stream()
             .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
             .forEach(btn -> {
+              Entity but = buttons.getValue(Entity);
+              Entity door = doors.
               btn.removeComponent(CollidableComponent.class);
               Spawns.closedDoor_144_192.removeFromWorld();
               openedDoor_144_192 = spawn("openedDoor", 144, 192);

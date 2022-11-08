@@ -180,8 +180,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.BUTTON)
-        .bbox(
-            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .viewWithBBox(texture("button.png", 8, 8))
         .with(new CollidableComponent(true))
         .build();
   }
