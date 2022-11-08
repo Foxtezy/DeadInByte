@@ -24,7 +24,11 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import javafx.scene.input.KeyCode;
+import ru.nsu.fit.dib.projectdib.mapperobjects.GameObjectMapper;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
@@ -143,9 +147,11 @@ public class App extends GameApplication {
     factory = new Factory();
 
     getGameWorld().addEntityFactory(factory);
-    FXGL.setLevelFromMap("tmx/level2.tmx");
+    FXGL.setLevelFromMap("tmx/test_level.tmx");
 
-    this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+
+    this.player = spawn("player", 60, 60);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    viewport.setLazy(true);
   }
 }

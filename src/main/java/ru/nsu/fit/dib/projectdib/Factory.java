@@ -20,12 +20,18 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.module.ModuleFinder;
+import java.util.Scanner;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoader;
+import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoaderComponent;
+import ru.nsu.fit.dib.projectdib.mapperobjects.GameObjectMapper;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 /**
@@ -44,12 +50,32 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
+    ///////////
+    File file = new File("src/test/resources/input.txt");
+    Scanner scanner = null;
+    try {
+      scanner = new Scanner(file);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+    scanner.useDelimiter("");
+    char[][] arr = new char[20][20];
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < 20; j++) {
+        arr[i][j] = scanner.next().charAt(0);
+      }
+      scanner.next();
+    }
+    GameObjectMapper gameObjectMapper = new GameObjectMapper(64, 16);
+
+    //////////////
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .with(physics)
         .with(new PlayerMovingComponent())
+        .with(new ChunkLoaderComponent(64, new ChunkLoader(gameObjectMapper.makeWalls(arr))))
         .collidable()
         .build();
   }

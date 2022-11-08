@@ -3,11 +3,13 @@ package ru.nsu.fit.dib.projectdib.loaderobjects;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.mapperobjects.GameObject;
 
 public class ChunkLoader {
@@ -55,7 +57,9 @@ public class ChunkLoader {
     loadedWalls.put(chunk, new ArrayList<>());
     List<GameObject> objectsList = walls.get(chunk);
     for (GameObject object : objectsList) {
-      Entity e = FXGL.spawn(object.type().getName(), object.x(), object.y());
+      Entity e = FXGL.spawn(object.type().getName(),
+          new SpawnData(object.x(), object.y()).put("width", object.width())
+              .put("height", object.height()));
       loadedWalls.get(chunk).add(e);
     }
   }
@@ -66,7 +70,7 @@ public class ChunkLoader {
     }
     List<Entity> entityList = loadedWalls.get(chunk);
     for (Entity entity : entityList) {
-      FXGL.despawnWithScale(entity);
+      FXGL.despawnWithDelay(entity, Duration.ZERO);
     }
   }
 

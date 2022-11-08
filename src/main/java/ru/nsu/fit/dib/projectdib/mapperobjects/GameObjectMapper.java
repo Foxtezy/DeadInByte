@@ -25,8 +25,11 @@ public class GameObjectMapper {
 
   private final int chunkSize;
 
-  public GameObjectMapper(int chunkSize) {
+  private final int tileSize;
+
+  public GameObjectMapper(int chunkSize, int tileSize) {
     this.chunkSize = chunkSize;
+    this.tileSize = tileSize;
   }
 
   /**
@@ -79,21 +82,13 @@ public class GameObjectMapper {
   private void makeEntityDown(int sy, int sx) {
     int y = sy + 1;
     int x = sx;
-    while (wallMap[y][x] != BOUND) {
+    while (wallMap[y][x] == WALL) {
       wallMap[y][x] = BOUND;
       y++;
     }
-    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx, sy, 1, y - sy);
+    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx * tileSize, sy * tileSize, tileSize, (y - sy) * tileSize);
     lastId++;
     addGameObject(gameObject);
-  }
-
-  private void addGameObject(GameObject gameObject) {
-    Chunk chunk = new Chunk(gameObject.x() / chunkSize, gameObject.y() / chunkSize);
-    if (!walls.containsKey(chunk)) {
-      walls.put(chunk, new ArrayList<>());
-    }
-    walls.get(chunk).add(gameObject);
   }
 
   private void makeEntity(int sy, int sx) {
@@ -108,14 +103,24 @@ public class GameObjectMapper {
   private void makeEntityRight(int sy, int sx) {
     int y = sy;
     int x = sx + 1;
-    while (wallMap[y][x] != BOUND) {
+    while (wallMap[y][x] == WALL) {
       wallMap[y][x] = BOUND;
       x++;
     }
-    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx, sy, x - sx, 1);
+    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx * tileSize, sy * tileSize, (x - sx) * tileSize, tileSize);
     lastId++;
     addGameObject(gameObject);
   }
+
+  private void addGameObject(GameObject gameObject) {
+    Chunk chunk = new Chunk(gameObject.x() / chunkSize, gameObject.y() / chunkSize);
+    if (!walls.containsKey(chunk)) {
+      walls.put(chunk, new ArrayList<>());
+    }
+    walls.get(chunk).add(gameObject);
+  }
+
+
 
   private boolean isWall(int y, int x) {
     if (wallMap[y][x] == FLOOR) {

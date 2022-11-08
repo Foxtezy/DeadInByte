@@ -3,7 +3,7 @@ package ru.nsu.fit.dib.projectdib.mapperobjects;
 import java.util.Objects;
 import ru.nsu.fit.dib.projectdib.EntityType;
 
-public record GameObject(Integer id, EntityType type, Integer x, Integer y, Integer wight,
+public record GameObject(Integer id, EntityType type, Integer x, Integer y, Integer width,
                          Integer height) {
 
   @Override
