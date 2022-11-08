@@ -1,7 +1,6 @@
 package ru.nsu.fit.dib.projectdib.moving.components;
 
-import static com.almasb.fxgl.dsl.FXGL.image;
-
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -9,7 +8,11 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
+
+import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 public class PlayerMovingComponent extends Component implements MovingInterface {
 
@@ -59,16 +62,19 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   @Override
   public void onUpdate(double tpf) {
     AnimationChannel animation = texture.getAnimationChannel();
-    double angleRight = physics.getLinearVelocity().angle(1, 0);
-    double angleUp = physics.getLinearVelocity().angle(0, -1);
-    double angleLeft = physics.getLinearVelocity().angle(-1, 0);
-    double angleDown = physics.getLinearVelocity().angle(0, 1);
+    Point2D mouseVelocity = getInput().getVectorToMouse(getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
+    double angleRight = mouseVelocity.angle(1,0);
+    double angleUp = mouseVelocity.angle(0,-1);
+    double angleLeft = mouseVelocity.angle(-1,0);
+    double angleDown = mouseVelocity.angle(0,1);
+
     if (physics.getLinearVelocity().magnitude() < 10) {
       if (isMoving) {
         texture.stop();
         isMoving = false;
       }
-    } else if (angleDown <= 45) {
+    }
+    if (angleDown <= 45) {
       if (animation != animWalkDown || !isMoving) {
         texture.loopAnimationChannel(animWalkDown);
         isMoving = true;
@@ -89,6 +95,7 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
         isMoving = true;
       }
     }
+
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
 

@@ -14,7 +14,9 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
@@ -24,7 +26,9 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
@@ -118,6 +122,14 @@ public class App extends GameApplication {
             });
       }
     }, KeyCode.E, VirtualButton.B);
+
+    getInput().addAction(new UserAction("Shoot") {
+      @Override
+      protected void onActionBegin(){
+        //TODO change spawn point
+        spawn("arrow",player.getCenter());
+      }
+    }, MouseButton.PRIMARY);
   }
 
   @Override

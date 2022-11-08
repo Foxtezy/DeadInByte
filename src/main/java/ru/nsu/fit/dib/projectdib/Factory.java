@@ -127,15 +127,15 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Arrow
    */
+  @Spawns("arrow")
   public Entity newArrow(SpawnData data) {
     Entity player = getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter());
+    Point2D direction = getInput().getMousePositionWorld();
     return entityBuilder()
         .type(EntityType.ARROW)
-        .viewWithBBox(new Rectangle(10, 2, Color.FIREBRICK))
+        .viewWithBBox("arrow.png")
         .collidable()
-        .with(new ProjectileComponent(direction, 200))
-        .with(new OffscreenCleanComponent())
+        .with(new ProjectileComponent(direction, 300))
         .build();
   }
 
@@ -145,15 +145,13 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Bullet
    */
+  @Spawns("bullet")
   public Entity newBullet(SpawnData data) {
-    Entity player = getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter());
+    Point2D direction = getInput().getMousePositionWorld();
     return entityBuilder()
         .type(EntityType.BULLET)
-        .viewWithBBox(new Rectangle(3, 3, Color.BLACK))
-        .collidable()
-        .with(new ProjectileComponent(direction, 1000))
-        .with(new OffscreenCleanComponent())
+        .viewWithBBox(new Rectangle(10, 10, Color.BLACK))
+        .with(new ProjectileComponent(direction, 400))
         .build();
   }
 
@@ -163,6 +161,7 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Enemy
    */
+  @Spawns("enemy")
   public Entity newEnemy(SpawnData data) {
     Circle circle = new Circle(20, 20, 20, Color.RED);
     circle.setStroke(Color.BROWN);
