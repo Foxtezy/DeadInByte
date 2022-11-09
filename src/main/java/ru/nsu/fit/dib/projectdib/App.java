@@ -24,6 +24,7 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -104,6 +105,7 @@ public class App extends GameApplication {
       }
 
     }, KeyCode.S, VirtualButton.DOWN);
+
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -118,7 +120,7 @@ public class App extends GameApplication {
             });
       }
     }, KeyCode.E, VirtualButton.B);
-  }
+ }
 
   @Override
   protected void initPhysics() {

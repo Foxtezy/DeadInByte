@@ -66,8 +66,12 @@
   <object id="26" type="coin" x="49.2273" y="64.7158" width="15.0434" height="15.0434"/>
   <object id="28" type="coin" x="111.845" y="175.943" width="15.0434" height="15.0434"/>
   <object id="29" type="coin" x="191.276" y="207.116" width="15.0434" height="15.0434"/>
+
+  <object id="107" type="box" x="152" y="259" width="32" height="27"/>
+
   <object id="109" type="button" x="144" y="256" width="12" height="12"/>
   <object id="129" type="closedDoor" x="144" y="192" width="32" height="32"/>
   <object id="133" type="doorTrigger" x="144" y="96" width="32" height="48"/>
+
  </objectgroup>
 </map>
