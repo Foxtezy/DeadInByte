@@ -144,7 +144,7 @@ public class App extends GameApplication {
     factory = new Factory();
 
     getGameWorld().addEntityFactory(factory);
-    FXGL.setLevelFromMap("tmx/test_level.tmx");
+    FXGL.setLevelFromMap("tmx/level2.tmx");
 
 
     this.player = spawn("player", 60, 60);
