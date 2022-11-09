@@ -5,8 +5,10 @@ import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 
+
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.dsl.components.RandomMoveComponent;
@@ -95,8 +97,7 @@ public class Factory implements EntityFactory {
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WALL)
-        .bbox(
-            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
         .build();
   }
@@ -107,12 +108,21 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Box
    */
+  @Spawns("box")
   public Entity newBox(SpawnData data) {
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
     return entityBuilder()
-        .type(EntityType.BOX)
-        .view(new Rectangle(80, 80, Color.SADDLEBROWN))
-        .collidable()
-        .build();
+            .from(data)
+            .type(EntityType.BOX)
+            .viewWithBBox(FXGL.texture("chest.png", 40, 40))
+            .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
+            .with(physics)
+            .with(new BoxMovingComponent())
+            .collidable()
+            .build();
   }
 
   /**
