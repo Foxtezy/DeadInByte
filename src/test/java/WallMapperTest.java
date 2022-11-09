@@ -6,13 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import org.junit.jupiter.api.Test;
-import ru.nsu.fit.dib.projectdib.mapperobjects.GameObjectMapper;
+import ru.nsu.fit.dib.projectdib.mapperobjects.WallMapper;
 
-class GameObjectMapperTest {
+class WallMapperTest {
 
     @Test
     public void test() throws FileNotFoundException {
-        GameObjectMapper gameObjectMapper = new GameObjectMapper(64, 16);
         File file = new File("src/test/resources/input.txt");
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("");
@@ -31,8 +30,9 @@ class GameObjectMapperTest {
             System.out.println();
         }
         System.out.println();
-        System.out.println(gameObjectMapper.makeWalls(arr));
-        arr = gameObjectMapper.markWalls();
+        WallMapper wallMapper = new WallMapper(64, 16, arr);
+        System.out.println(wallMapper.getWalls());
+        arr = wallMapper.markWalls();
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 System.out.print(arr[i][j] + " ");

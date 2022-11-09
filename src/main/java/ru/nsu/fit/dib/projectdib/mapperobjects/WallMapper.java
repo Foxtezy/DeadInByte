@@ -8,7 +8,7 @@ import java.util.Map;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.loaderobjects.Chunk;
 
-public class GameObjectMapper {
+public class WallMapper {
 
 
   private Map<Chunk, List<GameObject>> walls = new HashMap<>();
@@ -27,11 +27,6 @@ public class GameObjectMapper {
 
   private final int tileSize;
 
-  public GameObjectMapper(int chunkSize, int tileSize) {
-    this.chunkSize = chunkSize;
-    this.tileSize = tileSize;
-  }
-
   /**
    * Makes list of entities (walls).
    *
@@ -43,14 +38,29 @@ public class GameObjectMapper {
    *            |* * * * *|
    *            |_ _ _ _ _|
    *            EDGES ARE NOT WALLS!!!!!
-   * @return list of walls.
    */
-  public Map<Chunk, List<GameObject>> makeWalls(char[][] map) {
+  public WallMapper(int chunkSize, int tileSize, char[][] map) {
+    this.chunkSize = chunkSize;
+    this.tileSize = tileSize;
     wallMap = Arrays.copyOf(map, map.length);
     markWalls();
     makeWall();
+  }
+
+  public int getChunkSize() {
+    return chunkSize;
+  }
+
+  public int getTileSize() {
+    return tileSize;
+  }
+
+  public Map<Chunk, List<GameObject>> getWalls() {
     return walls;
   }
+
+
+
 
   /**
    * Method public for testing.

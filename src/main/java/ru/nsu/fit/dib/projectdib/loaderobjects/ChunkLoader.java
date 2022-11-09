@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.mapperobjects.GameObject;
+import ru.nsu.fit.dib.projectdib.mapperobjects.WallMapper;
 
 public class ChunkLoader {
 
@@ -21,8 +22,16 @@ public class ChunkLoader {
 
   private final Map<Chunk, List<Entity>> loadedWalls = new HashMap<>();
 
-  public ChunkLoader(Map<Chunk, List<GameObject>> walls) {
-    this.walls = walls;
+  private final int chunkSize;
+
+
+  public ChunkLoader(WallMapper wallMapper) {
+    walls = wallMapper.getWalls();
+    chunkSize = wallMapper.getChunkSize();
+  }
+
+  public int getChunkSize() {
+    return chunkSize;
   }
 
   public void updateChunks(Chunk currChunk) {

@@ -19,16 +19,11 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.physics.PhysicsComponent;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 import javafx.scene.input.KeyCode;
-import ru.nsu.fit.dib.projectdib.mapperobjects.GameObjectMapper;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {

@@ -10,9 +10,9 @@ public class ChunkLoaderComponent extends Component {
 
   private final int chunkSize;
 
-  public ChunkLoaderComponent(int chunkSize, ChunkLoader chunkLoader) {
-    this.chunkSize = chunkSize;
+  public ChunkLoaderComponent(ChunkLoader chunkLoader) {
     this.chunkLoader = chunkLoader;
+    this.chunkSize = chunkLoader.getChunkSize();
   }
 
   @Override
