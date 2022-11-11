@@ -3,6 +3,10 @@ package ru.nsu.fit.dib.projectdib.loaderobjects;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 
+/**
+ * Компонент который нужно добавить к сущьности, которая будет прогружать чанки
+ * (в нашем случае это player)
+ */
 public class ChunkLoaderComponent extends Component {
 
   private final ChunkLoader chunkLoader;

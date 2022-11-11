@@ -11,7 +11,7 @@ import ru.nsu.fit.dib.projectdib.loaderobjects.Chunk;
 public class WallMapper {
 
 
-  private Map<Chunk, List<GameObject>> walls = new HashMap<>();
+  private Map<Chunk, List<PhysicalObject>> walls = new HashMap<>();
 
   private static final char WALL = 'W';
 
@@ -55,7 +55,7 @@ public class WallMapper {
     return tileSize;
   }
 
-  public Map<Chunk, List<GameObject>> getWalls() {
+  public Map<Chunk, List<PhysicalObject>> getWalls() {
     return walls;
   }
 
@@ -96,9 +96,9 @@ public class WallMapper {
       wallMap[y][x] = BOUND;
       y++;
     }
-    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx * tileSize, sy * tileSize, tileSize, (y - sy) * tileSize);
+    PhysicalObject physicalObject = new PhysicalObject(lastId + 1, EntityType.WALL, sx * tileSize, sy * tileSize, tileSize, (y - sy) * tileSize);
     lastId++;
-    addGameObject(gameObject);
+    addGameObject(physicalObject);
   }
 
   private void makeEntity(int sy, int sx) {
@@ -117,17 +117,17 @@ public class WallMapper {
       wallMap[y][x] = BOUND;
       x++;
     }
-    GameObject gameObject = new GameObject(lastId + 1, EntityType.WALL, sx * tileSize, sy * tileSize, (x - sx) * tileSize, tileSize);
+    PhysicalObject physicalObject = new PhysicalObject(lastId + 1, EntityType.WALL, sx * tileSize, sy * tileSize, (x - sx) * tileSize, tileSize);
     lastId++;
-    addGameObject(gameObject);
+    addGameObject(physicalObject);
   }
 
-  private void addGameObject(GameObject gameObject) {
-    Chunk chunk = new Chunk(gameObject.x() / chunkSize, gameObject.y() / chunkSize);
+  private void addGameObject(PhysicalObject physicalObject) {
+    Chunk chunk = new Chunk(physicalObject.x() / chunkSize, physicalObject.y() / chunkSize);
     if (!walls.containsKey(chunk)) {
       walls.put(chunk, new ArrayList<>());
     }
-    walls.get(chunk).add(gameObject);
+    walls.get(chunk).add(physicalObject);
   }
 
 

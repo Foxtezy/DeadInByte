@@ -10,15 +10,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.mapperobjects.GameObject;
+import ru.nsu.fit.dib.projectdib.mapperobjects.PhysicalObject;
 import ru.nsu.fit.dib.projectdib.mapperobjects.WallMapper;
 
+/**
+ * Класс отвечающий за загрузку и выгрузку чанков
+ */
 public class ChunkLoader {
 
   private final List<Chunk> loadedChunks = new LinkedList<>();
 
 
-  private final Map<Chunk, List<GameObject>> walls;
+  private final Map<Chunk, List<PhysicalObject>> walls;
 
   private final Map<Chunk, List<Entity>> loadedWalls = new HashMap<>();
 
@@ -64,8 +67,8 @@ public class ChunkLoader {
       return;
     }
     loadedWalls.put(chunk, new ArrayList<>());
-    List<GameObject> objectsList = walls.get(chunk);
-    for (GameObject object : objectsList) {
+    List<PhysicalObject> objectsList = walls.get(chunk);
+    for (PhysicalObject object : objectsList) {
       Entity e = FXGL.spawn(object.type().getName(),
           new SpawnData(object.x(), object.y()).put("width", object.width())
               .put("height", object.height()));
