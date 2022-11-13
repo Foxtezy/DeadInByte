@@ -35,7 +35,7 @@ public class App extends GameApplication {
   Factory factory;
   Viewport viewport;
   private Entity player;
-  private Entity openedDoor_144_192;
+  private Entity door1;
 
   public static void main(String[] args) {
     launch(args);
@@ -111,16 +111,18 @@ public class App extends GameApplication {
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
-        getGameWorld().getClosestEntity(Spawns.button,
-                button -> button.distance(player) < 10)//getEntitiesByType(EntityType.BUTTON)
+        getGameWorld()./*getClosestEntity(Spawns.button,
+                btn -> btn.distance(Spawns.door) < 10)*/getEntitiesByType(EntityType.BUTTON)
             .stream()
-            .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
+            .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn) &&
+                btn.distance(Spawn.door) < 150)
             .forEach(btn -> {
-              Entity but = buttons.getValue(Entity);
-              Entity door = doors.
               btn.removeComponent(CollidableComponent.class);
-              Spawns.closedDoor_144_192.removeFromWorld();
-              openedDoor_144_192 = spawn("openedDoor", 144, 192);
+              //door1 = Spawns.door;
+              door1 = spawn("openedDoor", Spawn.door.getX(), Spawn.door.getY());
+              Spawn.door.removeFromWorld();
+              //Spawns.door.removeFromWorld();
+              //door1 = spawn("openedDoor", 144, 192);
             });
       }
     }, KeyCode.E, VirtualButton.B);
@@ -136,8 +138,9 @@ public class App extends GameApplication {
       }
     });
     onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
-      openedDoor_144_192.removeFromWorld();
-      Spawns.closedDoor_144_192 = spawn("closedDoor", 144, 192);
+      //Spawns.door = door1;
+      Spawn.door = spawn("closedDoor", door1.getX(), door1.getY());
+      door1.removeFromWorld();
     });
   }
 
@@ -152,6 +155,6 @@ public class App extends GameApplication {
 
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    Spawns.spawnInitialObjects();
+    Spawn.spawnInitialObjects();
   }
 }

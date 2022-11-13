@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib;
 
+import static com.almasb.fxgl.dsl.FXGL.byID;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
@@ -180,8 +181,9 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.BUTTON)
-        .viewWithBBox(texture("button.png", 8, 8))
+        .viewWithBBox(texture("button.png", 16, 16))
         .with(new CollidableComponent(true))
+        .with("door", Spawn.door)
         .build();
   }
 
