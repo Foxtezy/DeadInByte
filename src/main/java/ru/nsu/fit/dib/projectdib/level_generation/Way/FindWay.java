@@ -1,4 +1,6 @@
 package ru.nsu.fit.dib.projectdib.level_generation.Way;
+import static java.lang.Math.abs;
+
 import java.awt.Point;
 import java.util.PriorityQueue;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
@@ -74,13 +76,16 @@ public class FindWay {
     if (x >= level.getWidth() || x < 0 || y >= level.getHeight() || y < 0) {
       return;
     }
+    int enc = 0;
+    if (node.last!=null && (abs(node.last.x - x)==2 || abs(node.last.y-y)==2)) enc=-1;
     if ((!open.contains(wayMap[x][y])) && (!closed.contains(wayMap[x][y]))) {
       wayMap[x][y].manhattanDistance(finish);
-      wayMap[x][y].reweight(level.map[x][y], node);
+
+      wayMap[x][y].reweight(level.map[x][y], node,enc);
 
       open.add(wayMap[x][y]);
     } else {
-      if (wayMap[x][y].reweight(level.map[x][y], node)) {
+      if (wayMap[x][y].reweight(level.map[x][y], node,enc)) {
         if (closed.contains(wayMap[x][y])) {
           closed.remove(wayMap[x][y]);
           closed.add(wayMap[x][y]);

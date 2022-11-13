@@ -28,10 +28,10 @@ public class WayPoint implements Comparable<WayPoint> {
     distance = abs(a.x - this.x) + abs(a.y - this.y);
   }
 
-  public boolean reweight(int map, WayPoint node) {
-    if (this.weight > node.weight + map) {
+  public boolean reweight(int map, WayPoint node,int encouragement) {
+    if (this.weight > node.weight + map+ encouragement) {
       this.last = node;
-      this.weight = node.weight + map;
+      this.weight = node.weight + map+encouragement;
       return true;
     }
     return false;
