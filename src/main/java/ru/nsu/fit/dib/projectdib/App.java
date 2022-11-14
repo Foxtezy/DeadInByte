@@ -35,7 +35,6 @@ public class App extends GameApplication {
   Factory factory;
   Viewport viewport;
   private Entity player;
-  private Entity door1;
 
   public static void main(String[] args) {
     launch(args);
@@ -111,19 +110,14 @@ public class App extends GameApplication {
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
-        getGameWorld()./*getClosestEntity(Spawns.button,
-                btn -> btn.distance(Spawns.door) < 10)*/getEntitiesByType(EntityType.BUTTON)
+        getGameWorld().getEntitiesByType(EntityType.BUTTON)
             .stream()
             .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
             .forEach(btn -> {
-              //btn.removeComponent(CollidableComponent.class);
-              //door1 = Spawns.door;
-              Entity door2 = btn.getObject("door");
-              Point2D p = door2.getPosition();
-              door2.removeFromWorld();
-              door1 = spawn("openedDoor", p);
-              //Spawns.door.removeFromWorld();
-              //door1 = spawn("openedDoor", 144, 192);
+              btn.removeComponent(CollidableComponent.class);
+              Entity closedDoor = btn.getObject("closedDoor");
+              Entity openedDoor = spawn("openedDoor", closedDoor.getPosition());
+              closedDoor.removeFromWorld();
             });
       }
     }, KeyCode.E, VirtualButton.B);
@@ -138,11 +132,14 @@ public class App extends GameApplication {
         coin.removeFromWorld();
       }
     });
-    onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
-      //Spawns.door = door1;
-      Spawn.door = spawn("closedDoor", door1.getX(), door1.getY());
-      door1.removeFromWorld();
-    });
+    getPhysicsWorld().addCollisionHandler(
+        new CollisionHandler(EntityType.PLAYER, EntityType.DOOR_TRIGGER) {
+          protected void onCollisionBegin(Entity player, Entity doorTrigger) {
+            Entity openedDoor = doorTrigger.getObject("openedDoor");
+            Entity closedDoor = spawn("closedDoor", openedDoor.getPosition());
+            openedDoor.removeFromWorld();
+          }
+        });
   }
 
   // Спавн существ

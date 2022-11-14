@@ -183,8 +183,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.BUTTON)
         .viewWithBBox(texture("button.png", 16, 16))
         .with(new CollidableComponent(true))
-        //.with("door", Spawn.door)
-        .with("door", data.get("door"))
+        .with("closedDoor", data.get("closedDoor"))
         .build();
   }
 
@@ -213,8 +212,9 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.DOOR_TRIGGER)
         .bbox(
-            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+            new HitBox(BoundingShape.box(32, 32)))
         .with(new CollidableComponent(true))
+        .with("openedDoor", data.get("openedDoor"))
         .build();
   }
 }

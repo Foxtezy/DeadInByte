@@ -9,28 +9,19 @@ import com.almasb.fxgl.entity.SpawnData;
 
 public class Spawn {
 
-  public static Entity button;
-  //public static SpawnData spawnData;
-  public static Entity door;
-
-  //public static Entity button;
   public static void spawnInitialObjects() {
-    //Map<Integer, Entity> doors = new HashMap<>();
-    //doors.put(1, spawn("closedDoor", 144, 192));
-    //Map<Integer, Entity > buttons = new HashMap<>();
-    //buttons.put(1, spawn("button", 144, 256));
-    door = spawn("closedDoor", 144, 192);
-    //data = null;
-    //data.put("closedDoor", door);
-    //SpawnData spawnData = new SpawnData();
-    //spawnData.put("door", door);
-    button = spawn("button", new SpawnData(144, 256).put("door", door));
-    //door = getGameWorld().create("closedDoor", new SpawnData(144, 192).put("door", "E"));
-    door = spawn("closedDoor", 32, 96);
-    button = spawn("button",  new SpawnData(64, 192).put("door", door));
-    //door = getGameWorld().create("closedDoor", new SpawnData(32, 96).put("door", "E"));
-    //button.<Entity>get("door");
-    //button = spawnData.get("door");
+    Entity closedDoor = spawn("closedDoor", 144, 192);
+    Entity openedDoor = getGameWorld().create("openedDoor", new SpawnData(144, 192));
+    Entity doorTrigger = spawn("doorTrigger", new SpawnData(144, 144)
+        .put("openedDoor", openedDoor));
+    Entity button = spawn("button", new SpawnData(144, 256)
+        .put("closedDoor", closedDoor));
+    closedDoor = spawn("closedDoor", 240, 80);
+    openedDoor = getGameWorld().create("openedDoor", new SpawnData(240, 80));
+    doorTrigger = spawn("doorTrigger", new SpawnData(240, 16)
+        .put("openedDoor", openedDoor));
+    button = spawn("button", new SpawnData(240, 144)
+        .put("closedDoor", closedDoor));
   }
 
 }
