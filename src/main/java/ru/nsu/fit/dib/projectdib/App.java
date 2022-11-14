@@ -114,13 +114,14 @@ public class App extends GameApplication {
         getGameWorld()./*getClosestEntity(Spawns.button,
                 btn -> btn.distance(Spawns.door) < 10)*/getEntitiesByType(EntityType.BUTTON)
             .stream()
-            .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn) &&
-                btn.distance(Spawn.door) < 150)
+            .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
             .forEach(btn -> {
-              btn.removeComponent(CollidableComponent.class);
+              //btn.removeComponent(CollidableComponent.class);
               //door1 = Spawns.door;
-              door1 = spawn("openedDoor", Spawn.door.getX(), Spawn.door.getY());
-              Spawn.door.removeFromWorld();
+              Entity door2 = btn.getObject("door");
+              Point2D p = door2.getPosition();
+              door2.removeFromWorld();
+              door1 = spawn("openedDoor", p);
               //Spawns.door.removeFromWorld();
               //door1 = spawn("openedDoor", 144, 192);
             });

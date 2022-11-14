@@ -24,11 +24,11 @@ public class Spawn {
     //data.put("closedDoor", door);
     //SpawnData spawnData = new SpawnData();
     //spawnData.put("door", door);
-    button = spawn("button", 144, 256);
-    door = getGameWorld().create("closedDoor", new SpawnData(144, 192).put("door", "E"));
+    button = spawn("button", new SpawnData(144, 256).put("door", door));
+    //door = getGameWorld().create("closedDoor", new SpawnData(144, 192).put("door", "E"));
     door = spawn("closedDoor", 32, 96);
-    button = spawn("button", 64, 192);
-    door = getGameWorld().create("closedDoor", new SpawnData(32, 96).put("door", "E"));
+    button = spawn("button",  new SpawnData(64, 192).put("door", door));
+    //door = getGameWorld().create("closedDoor", new SpawnData(32, 96).put("door", "E"));
     //button.<Entity>get("door");
     //button = spawnData.get("door");
   }

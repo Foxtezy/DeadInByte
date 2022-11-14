@@ -183,7 +183,8 @@ public class Factory implements EntityFactory {
         .type(EntityType.BUTTON)
         .viewWithBBox(texture("button.png", 16, 16))
         .with(new CollidableComponent(true))
-        .with("door", Spawn.door)
+        //.with("door", Spawn.door)
+        .with("door", data.get("door"))
         .build();
   }
 
