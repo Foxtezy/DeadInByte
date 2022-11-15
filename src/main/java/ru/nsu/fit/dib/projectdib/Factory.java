@@ -5,9 +5,12 @@ import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.geto;
 import static com.almasb.fxgl.dsl.FXGL.texture;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameController;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
+import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.components.KeepOnScreenComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
@@ -17,6 +20,8 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.pathfinding.CellMoveComponent;
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -28,6 +33,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
+import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 /**
@@ -50,8 +57,11 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.PLAYER)
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
+        .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())
+        .with(new CellMoveComponent(16, 16, 250))
+        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .collidable()
         .build();
   }
@@ -165,15 +175,19 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Enemy
    */
+  @Spawns("enemy")
   public Entity newEnemy(SpawnData data) {
-    Circle circle = new Circle(20, 20, 20, Color.RED);
+    Circle circle = new Circle(10, 10, 10, Color.RED);
     circle.setStroke(Color.BROWN);
     circle.setStrokeWidth(2.0);
     return entityBuilder()
         .type(EntityType.ENEMY)
         .viewWithBBox(circle)
+        //.anchorFromCenter()
         .collidable()
-        .with(new RandomMoveComponent(new Rectangle2D(0, 0, getAppWidth(), getAppHeight()), 50))
+        .with(new CellMoveComponent(16,16,50))
+        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+        .with(new PlayerChaseComponent())
         .build();
   }
 

@@ -9,6 +9,7 @@ import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
@@ -20,6 +21,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import java.awt.Button;
@@ -27,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.function.Predicate;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -153,5 +157,12 @@ public class App extends GameApplication {
     Spawn.spawnInitialObjects();
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 400, 400, 16, 16, (type) -> {
+      if (type == EntityType.WALL)
+        return CellState.NOT_WALKABLE;
+
+      return CellState.WALKABLE;
+    });
+    set("grid", grid);
   }
 }
