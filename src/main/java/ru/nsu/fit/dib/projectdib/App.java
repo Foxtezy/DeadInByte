@@ -150,9 +150,8 @@ public class App extends GameApplication {
 
     getGameWorld().addEntityFactory(factory);
     FXGL.setLevelFromMap("tmx/level2.tmx");
-
+    Spawn.spawnInitialObjects();
     this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    Spawn.spawnInitialObjects();
   }
 }
