@@ -116,16 +116,7 @@ public class App extends GameApplication {
 
 
     onBtn(MouseButton.PRIMARY, "shoot", () ->  player.getComponent(PlayerMovingComponent.class).shoot());
-  }
 
-
-    getInput().addAction(new UserAction("Shoot") {
-      @Override
-      protected void onActionBegin(){
-        //TODO change spawn point
-        spawn("arrow",player.getCenter());
-      }
-    }, MouseButton.PRIMARY);
   }
   @Override
   protected void initPhysics() {
