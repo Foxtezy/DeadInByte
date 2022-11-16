@@ -23,7 +23,6 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
-import java.lang.module.ModuleFinder;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
@@ -48,12 +47,32 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
+    //Код для тестирования динамической подгрузки объектов
+/*    File file = new File("src/test/resources/input.txt");
+    Scanner scanner = null;
+    try {
+      scanner = new Scanner(file);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+    scanner.useDelimiter("");
+    char[][] arr = new char[20][20];
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < 20; j++) {
+        arr[i][j] = scanner.next().charAt(0);
+      }
+      scanner.next();
+    }
+    WallMapper wallMapper = new WallMapper(64, 16, arr);*/
+
+    //////////////
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .with(physics)
         .with(new PlayerMovingComponent())
+        //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
         .build();
   }
