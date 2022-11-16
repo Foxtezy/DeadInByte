@@ -3,7 +3,9 @@ open module projectdib.main {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
-    exports ru.nsu.fit.dib.projectdib;
+    requires com.google.gson;
+  requires annotations;
+  exports ru.nsu.fit.dib.projectdib;
 }
 /*
 module ru.nsu.fit.dib.projectdib {
