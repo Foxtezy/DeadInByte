@@ -9,7 +9,9 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
@@ -18,6 +20,10 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+
+import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.scene.input.KeyCode;
@@ -108,9 +114,19 @@ public class App extends GameApplication {
       }
     }, KeyCode.E, VirtualButton.B);
 
+
     onBtn(MouseButton.PRIMARY, "shoot", () ->  player.getComponent(PlayerMovingComponent.class).shoot());
   }
 
+
+    getInput().addAction(new UserAction("Shoot") {
+      @Override
+      protected void onActionBegin(){
+        //TODO change spawn point
+        spawn("arrow",player.getCenter());
+      }
+    }, MouseButton.PRIMARY);
+  }
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);

@@ -170,6 +170,7 @@ public class Factory implements EntityFactory {
    */
   @Spawns("arrow")
   public Entity newArrow(SpawnData data) {
+
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
     Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
     return entityBuilder()
@@ -180,6 +181,7 @@ public class Factory implements EntityFactory {
             .with(new OffscreenCleanComponent())
             .collidable()
             .build();
+
   }
 
   /**
@@ -192,10 +194,12 @@ public class Factory implements EntityFactory {
   public Entity newBullet(SpawnData data) {
     Point2D direction = getInput().getMousePositionWorld();
     return entityBuilder()
+
             .type(EntityType.BULLET)
             .viewWithBBox(new Rectangle(10, 10, Color.BLACK))
             .with(new ProjectileComponent(direction, 400))
             .build();
+
   }
 
   /**
@@ -204,6 +208,7 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Enemy
    */
+  @Spawns("enemy")
   public Entity newEnemy(SpawnData data) {
     Circle circle = new Circle(20, 20, 20, Color.RED);
     circle.setStroke(Color.BROWN);
