@@ -9,6 +9,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.dsl.components.RandomMoveComponent;
@@ -94,6 +95,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.WALL)
         .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
+        .collidable()
         .build();
   }
 
@@ -112,7 +114,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
             .from(data)
             .type(EntityType.BOX)
-            .viewWithBBox(FXGL.texture("chest.png", 40, 40))
+            .viewWithBBox(FXGL.texture("box.png", 40, 40))
             .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
             .with(physics)
             .with(new BoxMovingComponent())
@@ -121,19 +123,27 @@ public class Factory implements EntityFactory {
   }
 
   /**
-   * Entity Tree.
+   * Entity Chest.
    *
    * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Tree
+   * @return entityBuilder for chest
    */
-  public Entity newTree(SpawnData data) {
-    return entityBuilder()
-        .type(EntityType.TREE)
-        .viewWithBBox(new Rectangle(30, 30, Color.FORESTGREEN))
-        .collidable()
-        .build();
-  }
+  @Spawns("chest")
+  public Entity newChest(SpawnData data) {
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
+    return entityBuilder()
+            .from(data)
+            .type(EntityType.CHEST)
+            .viewWithBBox(FXGL.texture("chest.png", 40, 40))
+            .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
+            .with(physics)
+            .with(new BoxMovingComponent())
+            .collidable()
+            .build();
+  }
 
   /**
    * Entity Coin.
@@ -151,6 +161,7 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+
   /**
    * Entity Arrow.
    *
@@ -159,14 +170,18 @@ public class Factory implements EntityFactory {
    */
   @Spawns("arrow")
   public Entity newArrow(SpawnData data) {
-    Entity player = getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld();
+
+    Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
+    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
     return entityBuilder()
-        .type(EntityType.ARROW)
-        .viewWithBBox("arrow.png")
-        .collidable()
-        .with(new ProjectileComponent(direction, 300))
-        .build();
+            .from(data)
+            .type(EntityType.ARROW)
+            .viewWithBBox(texture("arrow_picture.png",40,15))
+            .with(new ProjectileComponent(direction, 350))
+            .with(new OffscreenCleanComponent())
+            .collidable()
+            .build();
+
   }
 
   /**
@@ -179,10 +194,12 @@ public class Factory implements EntityFactory {
   public Entity newBullet(SpawnData data) {
     Point2D direction = getInput().getMousePositionWorld();
     return entityBuilder()
-        .type(EntityType.BULLET)
-        .viewWithBBox(new Rectangle(10, 10, Color.BLACK))
-        .with(new ProjectileComponent(direction, 400))
-        .build();
+
+            .type(EntityType.BULLET)
+            .viewWithBBox(new Rectangle(10, 10, Color.BLACK))
+            .with(new ProjectileComponent(direction, 400))
+            .build();
+
   }
 
   /**

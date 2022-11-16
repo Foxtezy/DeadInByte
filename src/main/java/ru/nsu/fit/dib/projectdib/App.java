@@ -1,11 +1,6 @@
 package ru.nsu.fit.dib.projectdib;
 
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGL.getInput;
-import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
-import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
-import static com.almasb.fxgl.dsl.FXGL.spawn;
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
@@ -32,6 +27,7 @@ import javafx.scene.input.MouseButton;
 
 import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPGraph;
 import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf;
 import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.BinaryPartitionLG;
@@ -60,7 +56,7 @@ public class App extends GameApplication {
     lvl.print();
     lvl.tileType=20;
     //testing
-    //launch(args);
+    launch(args);
   }
 
   @Override
@@ -99,38 +95,10 @@ public class App extends GameApplication {
   @Override
   protected void initInput() {
 
-    getInput().addAction(new UserAction("Left") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).left();
-      }
-
-    }, KeyCode.A, VirtualButton.LEFT);
-
-    getInput().addAction(new UserAction("Right") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).right();
-      }
-
-    }, KeyCode.D, VirtualButton.RIGHT);
-
-    getInput().addAction(new UserAction("Up") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).up();
-      }
-
-    }, KeyCode.W, VirtualButton.UP);
-
-    getInput().addAction(new UserAction("Down") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).down();
-      }
-
-    }, KeyCode.S, VirtualButton.DOWN);
-
+    onKey(KeyCode.A,"Left",() -> player.getComponent(PlayerMovingComponent.class).left() );
+    onKey(KeyCode.D,"Right",() -> player.getComponent(PlayerMovingComponent.class).right() );
+    onKey(KeyCode.W,"up",() -> player.getComponent(PlayerMovingComponent.class).up() );
+    onKey(KeyCode.S,"Down",() -> player.getComponent(PlayerMovingComponent.class).down() );
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -146,6 +114,11 @@ public class App extends GameApplication {
       }
     }, KeyCode.E, VirtualButton.B);
 
+
+    onBtn(MouseButton.PRIMARY, "shoot", () ->  player.getComponent(PlayerMovingComponent.class).shoot());
+  }
+
+
     getInput().addAction(new UserAction("Shoot") {
       @Override
       protected void onActionBegin(){
@@ -157,6 +130,15 @@ public class App extends GameApplication {
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.ARROW) {
+      @Override
+      protected void onCollisionBegin(Entity box, Entity arrow ) {box.removeFromWorld(); arrow.removeFromWorld();}
+    });
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ARROW, EntityType.WALL) {
+      @Override
+      protected void onCollisionBegin(Entity arrow, Entity wall ) {arrow.removeFromWorld();}
+    });
+
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
       @Override
       protected void onCollisionBegin(Entity player, Entity coin) {
