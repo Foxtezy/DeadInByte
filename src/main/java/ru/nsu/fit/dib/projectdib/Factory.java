@@ -175,7 +175,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
             .from(data)
             .type(EntityType.ARROW)
-            .viewWithBBox(texture("arrow.png",40,15))
+            .viewWithBBox(texture("arrow_picture.png",40,15))
             .with(new ProjectileComponent(direction, 350))
             .with(new OffscreenCleanComponent())
             .collidable()
