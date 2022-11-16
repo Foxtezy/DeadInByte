@@ -17,7 +17,8 @@ public enum EntityType {
   CLOSED_DOOR("closedDoor"),
   OPENED_DOOR("openedDoor"),
   BUTTON("button"),
-  DOOR_TRIGGER("doorTrigger");
+  DOOR_TRIGGER("doorTrigger"),
+  CHEST("chest");
 
   private final String name;
 

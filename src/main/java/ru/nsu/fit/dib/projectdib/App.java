@@ -50,7 +50,7 @@ public class App extends GameApplication {
     lvl.print();
     lvl.tileType=20;
     //testing
-    //launch(args);
+    launch(args);
   }
 
   @Override
@@ -108,12 +108,21 @@ public class App extends GameApplication {
       }
     }, KeyCode.E, VirtualButton.B);
 
-    onBtn(MouseButton.PRIMARY, "shoot", () ->  spawn("arrow" ,player.getPosition().getX()+30,player.getPosition().getY()+30));
+    onBtn(MouseButton.PRIMARY, "shoot", () ->  player.getComponent(PlayerMovingComponent.class).shoot());
   }
 
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.ARROW) {
+      @Override
+      protected void onCollisionBegin(Entity box, Entity arrow ) {box.removeFromWorld(); arrow.removeFromWorld();}
+    });
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ARROW, EntityType.WALL) {
+      @Override
+      protected void onCollisionBegin(Entity arrow, Entity wall ) {arrow.removeFromWorld();}
+    });
+
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
       @Override
       protected void onCollisionBegin(Entity player, Entity coin) {

@@ -95,6 +95,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.WALL)
         .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
+        .collidable()
         .build();
   }
 
@@ -160,6 +161,7 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+
   /**
    * Entity Arrow.
    *
@@ -169,13 +171,14 @@ public class Factory implements EntityFactory {
   @Spawns("arrow")
   public Entity newArrow(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getPosition().getX()+40,player.getPosition().getY()+40);
+    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
     return entityBuilder()
             .from(data)
             .type(EntityType.ARROW)
-            .viewWithBBox("arrow.png")
+            .viewWithBBox(texture("arrow.png",40,15))
+            .with(new ProjectileComponent(direction, 350))
+            .with(new OffscreenCleanComponent())
             .collidable()
-            .with(new ProjectileComponent(direction, 300))
             .build();
   }
 

@@ -1,14 +1,19 @@
 package ru.nsu.fit.dib.projectdib.moving.components;
 
 import static com.almasb.fxgl.dsl.FXGL.image;
+import static com.almasb.fxgl.dsl.FXGL.newLocalTimer;
 
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import com.almasb.fxgl.time.LocalTimer;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.Config;
 import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
 
 public class PlayerMovingComponent extends Component implements MovingInterface {
@@ -21,6 +26,8 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   private final AnimationChannel animWalkLeft;
   private final AnimationChannel animWalkUp;
   private final AnimationChannel animWalkDown;
+
+  private LocalTimer shootTimer = newLocalTimer();
 
   private final double speed = 250;
 
@@ -122,5 +129,10 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   public void stop() {
     physics.setVelocityY(0);
     physics.setVelocityX(0);
+  }
+  public void shoot() {
+    if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) return;
+    FXGL.spawn("arrow", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30));
+    shootTimer.capture();
   }
 }
