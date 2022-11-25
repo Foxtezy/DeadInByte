@@ -17,11 +17,42 @@ public class CryptRoom extends AbstractRoom {
 
   @Override
   public void makeRoom() {
-
+    makeGraves();
   }
 
   private void makeGraves() {
+    Point pointer = new Point(leftUp);
+    pointer.translate(1, 1);
+    while (true) {
+      makeGrave(pointer);
+      if (rightDown.y - pointer.y < 3) {
+        break;
+      }
+      pointer.translate(0, 5);
+    }
+    pointer = new Point(leftUp);
+    pointer.translate(rightDown.x - 3, 1);
+    while (true) {
+      makeGrave(pointer);
+      if (rightDown.y - pointer.y < 3) {
+        break;
+      }
+      pointer.translate(0, 5);
+    }
+  }
 
+  private void makeGrave(Point pointer) {
+    graveTile(pointer);
+    pointer.translate(1, 0);
+    graveTile(pointer);
+    pointer.translate(1, 0);
+    graveTile(pointer);
+    pointer.translate(-2, 1);
+    graveTile(pointer);
+    pointer.translate(1, 0);
+    graveTile(pointer);
+    pointer.translate(1, 0);
+    graveTile(pointer);
   }
 
   private void graveTile(Point point) {
