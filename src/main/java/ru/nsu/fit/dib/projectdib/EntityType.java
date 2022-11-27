@@ -18,13 +18,16 @@ public enum EntityType {
   OPENED_DOOR("openedDoor"),
   BUTTON("button"),
   DOOR_TRIGGER("doorTrigger"),
-  CHEST("chest");
+  CHEST("chest"),
+  BOW("bow"),
+  AK("ak");
 
   private final String name;
 
   EntityType(String name) {
     this.name = name;
   }
+
 
   public String getName() {
     return name;

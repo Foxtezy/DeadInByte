@@ -10,6 +10,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -20,6 +21,7 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.List;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -114,6 +116,28 @@ public class App extends GameApplication {
       }
     }, KeyCode.E, VirtualButton.B);
 
+    getInput().addAction(new UserAction("Take") {
+      @Override
+      protected void onActionBegin() {
+        getGameWorld().getEntitiesByType(EntityType.BOW)
+                .stream()
+             //   .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
+                .forEach(bow -> {
+                  spawn("playr", player.getCenter());
+                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("bow");
+                });
+
+        getGameWorld().getEntitiesByType(EntityType.AK)
+                .stream()
+           //     .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
+                .forEach(ak -> {
+                  spawn("playeb", player.getCenter().subtract(new Point2D(150,30)));
+                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("ak");
+                });
+  //      List<Entity> x = getGameWorld().getEntitiesByType(EntityType.AK);
+  //      x.get(0);
+      }
+    }, KeyCode.F, VirtualButton.X);
 
     onBtn(MouseButton.PRIMARY, "shoot", () ->  player.getComponent(PlayerMovingComponent.class).shoot());
 
@@ -123,7 +147,23 @@ public class App extends GameApplication {
     getPhysicsWorld().setGravity(0, 0);
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.ARROW) {
       @Override
-      protected void onCollisionBegin(Entity box, Entity arrow ) {box.removeFromWorld(); arrow.removeFromWorld();}
+      protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
+    });
+
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.ARROW) {
+      @Override
+      protected void onCollisionBegin(Entity chest, Entity arrow ) {
+        var hp = chest.getComponent(HealthIntComponent.class);
+
+        if (hp.getValue() > 1){
+          arrow.removeFromWorld();
+          hp.damage(1);
+          return;
+        }
+        arrow.removeFromWorld();
+        spawn("coin", chest.getCenter());
+        chest.removeFromWorld();
+        arrow.removeFromWorld();}
     });
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ARROW, EntityType.WALL) {
       @Override
@@ -152,7 +192,7 @@ public class App extends GameApplication {
     getGameWorld().addEntityFactory(factory);
     FXGL.setLevelFromMap("tmx/level2.tmx");
 
-
+    spawn("ak", 600, 600);
     this.player = spawn("player", 60, 60);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     viewport.setLazy(true);

@@ -2,7 +2,6 @@ package ru.nsu.fit.dib.projectdib;
 
 import javafx.util.Duration;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -15,6 +14,8 @@ public class Config {
   public static int WINDOW_WIDTH;
   public static String WINDOW_MODE;
   public static final javafx.util.Duration SHOOT_DELAY_ARROW = Duration.seconds(0.3);
+  public static final javafx.util.Duration SHOOT_DELAY_AK = Duration.seconds(0.1);
+
 
 
   static void setConfig(String filepath) {
