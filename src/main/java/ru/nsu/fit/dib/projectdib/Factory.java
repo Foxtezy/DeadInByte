@@ -1,39 +1,37 @@
 package ru.nsu.fit.dib.projectdib;
 
-import static com.almasb.fxgl.dsl.FXGL.byID;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.geto;
 import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameController;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.core.util.LazyValue;
-import com.almasb.fxgl.dsl.components.KeepOnScreenComponent;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.dsl.components.RandomMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
+import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
-import java.lang.module.ModuleFinder;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -60,7 +58,7 @@ public class Factory implements EntityFactory {
         .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())
-        .with(new CellMoveComponent(16, 16, 250))
+        .with(new CellMoveComponent(25, 25, 250))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .collidable()
         .build();
@@ -181,11 +179,12 @@ public class Factory implements EntityFactory {
     circle.setStroke(Color.BROWN);
     circle.setStrokeWidth(2.0);
     return entityBuilder()
+        .from(data)
         .type(EntityType.ENEMY)
         .viewWithBBox(circle)
-        //.anchorFromCenter()
+        .anchorFromCenter()
         .collidable()
-        .with(new CellMoveComponent(16,16,50))
+        .with(new CellMoveComponent(25,25,100))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with(new PlayerChaseComponent())
         .build();

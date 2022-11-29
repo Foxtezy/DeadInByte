@@ -16,6 +16,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -23,6 +24,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import java.awt.Button;
@@ -32,6 +34,7 @@ import java.util.function.Predicate;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
+import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
@@ -155,14 +158,17 @@ public class App extends GameApplication {
     getGameWorld().addEntityFactory(factory);
     FXGL.setLevelFromMap("tmx/level2.tmx");
     Spawn.spawnInitialObjects();
-    this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+    spawn("enemy", 48, 240);
+    this.player = spawn("player", getAppWidth() / 2, getAppHeight() / 2);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 400, 400, 16, 16, (type) -> {
-      if (type == EntityType.WALL)
-        return CellState.NOT_WALKABLE;
+    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
+        (type) -> {
+          if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
+            return CellState.NOT_WALKABLE;
+          }
 
-      return CellState.WALKABLE;
-    });
+          return CellState.WALKABLE;
+        });
     set("grid", grid);
   }
 }
