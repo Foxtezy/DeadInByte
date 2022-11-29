@@ -93,6 +93,16 @@ public class App extends GameApplication {
     settings.setTitle("DiB");
   }
 
+  public boolean skipOther = false;
+
+  public void setSkipOther(boolean skipOther) {
+    this.skipOther = skipOther;
+  }
+
+  public boolean isSkipOther() {
+    return skipOther;
+  }
+
   // Управление
   @Override
   protected void initInput() {
@@ -116,26 +126,37 @@ public class App extends GameApplication {
       }
     }, KeyCode.E, VirtualButton.B);
 
+
     getInput().addAction(new UserAction("Take") {
       @Override
       protected void onActionBegin() {
-        getGameWorld().getEntitiesByType(EntityType.BOW)
-                .stream()
-             //   .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
-                .forEach(bow -> {
-                  spawn("playr", player.getCenter());
-                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("bow");
-                });
 
+        if(!isSkipOther()){
         getGameWorld().getEntitiesByType(EntityType.AK)
                 .stream()
-           //     .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
+                .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
                 .forEach(ak -> {
-                  spawn("playeb", player.getCenter().subtract(new Point2D(150,30)));
+                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
                   player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("ak");
+                  ak.removeFromWorld();
+                  setSkipOther(true);
                 });
-  //      List<Entity> x = getGameWorld().getEntitiesByType(EntityType.AK);
-  //      x.get(0);
+
+        }
+        if(!isSkipOther()){
+        getGameWorld().getEntitiesByType(EntityType.BOW)
+                .stream()
+                .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
+                .forEach(bow -> {
+                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("bow");
+                  bow.removeFromWorld();
+                  setSkipOther(true);
+                });
+        }
+
+
+        setSkipOther(false);
       }
     }, KeyCode.F, VirtualButton.X);
 
@@ -145,27 +166,27 @@ public class App extends GameApplication {
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
-    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.ARROW) {
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.PROJECTILE) {
       @Override
       protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
     });
 
-    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.ARROW) {
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
       @Override
-      protected void onCollisionBegin(Entity chest, Entity arrow ) {
+      protected void onCollisionBegin(Entity chest, Entity projectile) {
         var hp = chest.getComponent(HealthIntComponent.class);
-
         if (hp.getValue() > 1){
-          arrow.removeFromWorld();
+          projectile.removeFromWorld();
           hp.damage(1);
           return;
         }
-        arrow.removeFromWorld();
+        projectile.removeFromWorld();
         spawn("coin", chest.getCenter());
         chest.removeFromWorld();
-        arrow.removeFromWorld();}
+        projectile.removeFromWorld();}
+
     });
-    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ARROW, EntityType.WALL) {
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PROJECTILE, EntityType.WALL) {
       @Override
       protected void onCollisionBegin(Entity arrow, Entity wall ) {arrow.removeFromWorld();}
     });

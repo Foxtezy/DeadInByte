@@ -20,6 +20,7 @@ import ru.nsu.fit.dib.projectdib.Config;
 
 import ru.nsu.fit.dib.projectdib.EntityType;
 
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -28,7 +29,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 public class PlayerMovingComponent extends Component implements MovingInterface {
 
   private PhysicsComponent physics;
-  private String currentWeapon;
+  public String currentWeapon;
   private AnimatedTexture texture;
 
   private final AnimationChannel animWalkRight;
@@ -78,7 +79,7 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     entity.getTransformComponent().setScaleOrigin(new Point2D(15, 20));
     entity.getViewComponent().addChild(texture);
     getEntity().setScaleUniform(scale);
-    currentWeapon = "bow";
+    setCurrentWeapon("bow");
   }
 
   @Override
@@ -156,12 +157,14 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     switch(currentWeapon){
       case("bow"):
         if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) return;
-        FXGL.spawn("arrow", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30).put("typeProj", "arrow"));
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.ARROW));
         shootTimer.capture();
         break;
       case("ak"):
         if(!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) return;;
-        FXGL.spawn("bullet", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30));
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET));
         shootTimer.capture();
         break;
       /*default:

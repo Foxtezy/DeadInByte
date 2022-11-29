@@ -6,6 +6,8 @@ import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static java.lang.Character.getName;
+import static java.lang.Character.toUpperCase;
 
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -30,6 +32,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -49,6 +52,7 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
     //Код для тестирования динамической подгрузки объектов
 /*    File file = new File("src/test/resources/input.txt");
     Scanner scanner = null;
@@ -71,9 +75,8 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-  //      .viewWithBBox(texture("weapon", 150,200))
+       //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
-
         .with(physics)
         .with(new PlayerMovingComponent())
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
@@ -194,28 +197,27 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Arrow
    */
-  @Spawns("arrow")
-  public Entity newArrow(SpawnData data) {
-
+  @Spawns("projectile")
+  public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
     Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
+    Projectiles projectile = data.get("typeProj");
     return entityBuilder()
-            .from(data)
-            .type(EntityType.ARROW)
-            .viewWithBBox(texture("arrow_picture.png",40,15))
-            .with(new ProjectileComponent(direction, 350))
-            .with(new OffscreenCleanComponent())
-            .collidable()
-            .build();
-
+        .from(data)
+        .type(EntityType.PROJECTILE)
+        .viewWithBBox(texture("projectile_" + projectile.getName() + ".png", 40, 15))
+        .with(new ProjectileComponent(direction, projectile.getSpeed()))
+        .with(new OffscreenCleanComponent())
+        .collidable()
+        .build();
   }
 
   @Spawns("bow")
   public Entity newBow(SpawnData data) {
     return entityBuilder(data)
         .from(data)
-        .type(WeaponType.BOW)
-        .viewWithBBox(texture("red_bow.png", 50, 15))
+        .type(EntityType.BOW)
+        .viewWithBBox(texture("red_bow.png", 15, 50))
         .bbox(new HitBox(BoundingShape.box(50,15)))
         .with(new CollidableComponent(true))
         .build();
@@ -225,33 +227,11 @@ public class Factory implements EntityFactory {
   public Entity newAK(SpawnData data) {
     return entityBuilder(data)
             .from(data)
-            .type(WeaponType.AK)
-         //   .viewWithBBox(texture("weapon_ak.png", 75, 20))
-            .bbox(new HitBox(BoundingShape.box(200,200)))
-             .with(new CollidableComponent(true))
+            .type(EntityType.AK)
+            .viewWithBBox(texture("weapon_ak.png", 75, 20))
+            .bbox(new HitBox(BoundingShape.box(75,20)))
+            .with(new CollidableComponent(true))
             .build();
-  }
-
-  /**
-   * Entity Bullet.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Bullet
-   */
-  @Spawns("bullet")
-  public Entity newBullet(SpawnData data) {
-
-    Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
-    return entityBuilder()
-            .from(data)
-            .type(EntityType.BULLET)
-            .viewWithBBox(new Rectangle(15,10,Color.BLACK))
-            .with(new ProjectileComponent(direction, 700))
-            .with(new OffscreenCleanComponent())
-            .collidable()
-            .build();
-
   }
 
   /**
