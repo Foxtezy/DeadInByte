@@ -63,5 +63,6 @@
   <object id="157" type="wall" x="176" y="208" width="128" height="16"/>
   <object id="164" type="wall" x="16" y="96" width="224" height="16"/>
   <object id="165" type="wall" x="272" y="96" width="32" height="16"/>
+
  </objectgroup>
 </map>

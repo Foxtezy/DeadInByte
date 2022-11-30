@@ -7,10 +7,15 @@ import static com.almasb.fxgl.dsl.FXGL.geto;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
-
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static java.lang.Character.getName;
+import static java.lang.Character.toUpperCase;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
@@ -28,11 +33,14 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
+import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 /**
@@ -51,18 +59,41 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
+    //Код для тестирования динамической подгрузки объектов
+/*    File file = new File("src/test/resources/input.txt");
+    Scanner scanner = null;
+    try {
+      scanner = new Scanner(file);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+    scanner.useDelimiter("");
+    char[][] arr = new char[20][20];
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < 20; j++) {
+        arr[i][j] = scanner.next().charAt(0);
+      }
+      scanner.next();
+    }
+    WallMapper wallMapper = new WallMapper(64, 16, arr);*/
+
+    //////////////
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
+       //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())
         .with(new CellMoveComponent(25, 25, 250))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+        //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
         .build();
   }
+
 
   @Spawns("platform")
   public Entity platform(SpawnData data) {
@@ -80,9 +111,9 @@ public class Factory implements EntityFactory {
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WALL)
-        .bbox(
-            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
+        .collidable()
         .build();
   }
 
@@ -92,27 +123,65 @@ public class Factory implements EntityFactory {
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Box
    */
+  @Spawns("box")
   public Entity newBox(SpawnData data) {
+    var hp = new HealthIntComponent(3);
+    var hpView = new ProgressBar(false);
+    hpView.setFill(Color.LIGHTGREEN);
+    hpView.setMaxValue(3);
+    hpView.setWidth(40);
+    hpView.setTranslateY(-10);
+    hpView.currentValueProperty().bind(hp.valueProperty());
+
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
     return entityBuilder()
-        .type(EntityType.BOX)
-        .view(new Rectangle(80, 80, Color.SADDLEBROWN))
-        .collidable()
-        .build();
+            .from(data)
+            .type(EntityType.BOX)
+            .viewWithBBox(FXGL.texture("box.png", 40, 40))
+            .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
+            .view(hpView)
+            .with(hp)
+            .with(physics)
+            .with(new BoxMovingComponent())
+            .collidable()
+            .build();
   }
 
   /**
-   * Entity Tree.
+   * Entity Chest.
    *
    * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Tree
+   * @return entityBuilder for chest
    */
-  public Entity newTree(SpawnData data) {
+  @Spawns("chest")
+  public Entity newChest(SpawnData data) {
+    var hp = new HealthIntComponent(3);
+    var hpView = new ProgressBar(false);
+    hpView.setFill(Color.LIGHTGREEN);
+    hpView.setMaxValue(3);
+    hpView.setWidth(40);
+    hpView.setTranslateY(-10);
+    hpView.currentValueProperty().bind(hp.valueProperty());
+
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
     return entityBuilder()
-        .type(EntityType.TREE)
-        .viewWithBBox(new Rectangle(30, 30, Color.FORESTGREEN))
-        .collidable()
-        .build();
+            .from(data)
+            .type(EntityType.CHEST)
+            .viewWithBBox(FXGL.texture("chest.png", 40, 40))
+            .view(hpView)
+            .with(hp)
+            .with(physics)
+            .with(new BoxMovingComponent())
+            .collidable()
+            .build();
   }
+
 
 
   /**
@@ -131,40 +200,48 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+
   /**
    * Entity Arrow.
    *
    * @param data contain sets up typical properties such as the position
    * @return entityBuilder for Arrow
    */
-  public Entity newArrow(SpawnData data) {
-    Entity player = getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter());
+  @Spawns("projectile")
+  public Entity newProjectile(SpawnData data) {
+    Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
+    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
+    Projectiles projectile = data.get("typeProj");
     return entityBuilder()
-        .type(EntityType.ARROW)
-        .viewWithBBox(new Rectangle(10, 2, Color.FIREBRICK))
-        .collidable()
-        .with(new ProjectileComponent(direction, 200))
+        .from(data)
+        .type(EntityType.PROJECTILE)
+        .viewWithBBox(texture("projectile_" + projectile.getName() + ".png", 40, 15))
+        .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())
+        .collidable()
         .build();
   }
 
-  /**
-   * Entity Bullet.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Bullet
-   */
-  public Entity newBullet(SpawnData data) {
-    Entity player = getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter());
-    return entityBuilder()
-        .type(EntityType.BULLET)
-        .viewWithBBox(new Rectangle(3, 3, Color.BLACK))
-        .collidable()
-        .with(new ProjectileComponent(direction, 1000))
-        .with(new OffscreenCleanComponent())
+  @Spawns("bow")
+  public Entity newBow(SpawnData data) {
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.BOW)
+        .viewWithBBox(texture("red_bow.png", 15, 50))
+        .bbox(new HitBox(BoundingShape.box(50,15)))
+        .with(new CollidableComponent(true))
         .build();
+  }
+
+  @Spawns("ak")
+  public Entity newAK(SpawnData data) {
+    return entityBuilder(data)
+            .from(data)
+            .type(EntityType.AK)
+            .viewWithBBox(texture("weapon_ak.png", 75, 20))
+            .bbox(new HitBox(BoundingShape.box(75,20)))
+            .with(new CollidableComponent(true))
+            .build();
   }
 
   /**

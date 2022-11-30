@@ -7,6 +7,7 @@ import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
@@ -17,6 +18,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -28,22 +30,52 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import java.awt.Button;
+
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.function.Predicate;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
+import java.util.List;
+
+import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+
+import com.almasb.fxgl.physics.PhysicsComponent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPGraph;
+import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf;
+import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.BinaryPartitionLG;
+import ru.nsu.fit.dib.projectdib.level_generation.Level;
+import ru.nsu.fit.dib.projectdib.level_generation.Way.FindWay;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
-
   Factory factory;
   Viewport viewport;
   private Entity player;
 
   public static void main(String[] args) {
+    //testing
+    String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
+    Level lvl= new Level(99812,64,64);
+    BinaryPartitionLG partition= new BinaryPartitionLG(lvl,4,0);
+    BPLeaf tree = new BPLeaf(new Point(0,0), new Point(64,64));
+    partition.setPartition(tree);
+    BPGraph graph = new BPGraph(tree);
+    lvl.tileType=20;
+    partition.printPartition(tree);
+    FindWay way=new FindWay(lvl);
+    way.findWay(new Point(1,1),new Point(40,35));
+    way.printWay();
+    lvl.print();
+    lvl.tileType=20;
+    //testing
     launch(args);
   }
 
@@ -79,41 +111,24 @@ public class App extends GameApplication {
     settings.setTitle("DiB");
   }
 
+  public boolean skipOther = false;
+
+  public void setSkipOther(boolean skipOther) {
+    this.skipOther = skipOther;
+  }
+
+  public boolean isSkipOther() {
+    return skipOther;
+  }
+
   // Управление
   @Override
   protected void initInput() {
 
-    getInput().addAction(new UserAction("Left") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).left();
-      }
-
-    }, KeyCode.A, VirtualButton.LEFT);
-
-    getInput().addAction(new UserAction("Right") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).right();
-      }
-
-    }, KeyCode.D, VirtualButton.RIGHT);
-
-    getInput().addAction(new UserAction("Up") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).up();
-      }
-
-    }, KeyCode.W, VirtualButton.UP);
-
-    getInput().addAction(new UserAction("Down") {
-      @Override
-      protected void onAction() {
-        player.getComponent(PlayerMovingComponent.class).down();
-      }
-
-    }, KeyCode.S, VirtualButton.DOWN);
+    onKey(KeyCode.A,"Left",() -> player.getComponent(PlayerMovingComponent.class).left() );
+    onKey(KeyCode.D,"Right",() -> player.getComponent(PlayerMovingComponent.class).right() );
+    onKey(KeyCode.W,"up",() -> player.getComponent(PlayerMovingComponent.class).up() );
+    onKey(KeyCode.S,"Down",() -> player.getComponent(PlayerMovingComponent.class).down() );
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -128,11 +143,72 @@ public class App extends GameApplication {
             });
       }
     }, KeyCode.E, VirtualButton.B);
-  }
 
+
+    getInput().addAction(new UserAction("Take") {
+      @Override
+      protected void onActionBegin() {
+
+        if(!isSkipOther()){
+        getGameWorld().getEntitiesByType(EntityType.AK)
+                .stream()
+                .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
+                .forEach(ak -> {
+                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("ak");
+                  ak.removeFromWorld();
+                  setSkipOther(true);
+                });
+
+        }
+        if(!isSkipOther()){
+        getGameWorld().getEntitiesByType(EntityType.BOW)
+                .stream()
+                .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
+                .forEach(bow -> {
+                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("bow");
+                  bow.removeFromWorld();
+                  setSkipOther(true);
+                });
+        }
+
+
+        setSkipOther(false);
+      }
+    }, KeyCode.F, VirtualButton.X);
+
+    onBtn(MouseButton.PRIMARY, "shoot", () ->  player.getComponent(PlayerMovingComponent.class).shoot());
+
+  }
   @Override
   protected void initPhysics() {
     getPhysicsWorld().setGravity(0, 0);
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.PROJECTILE) {
+      @Override
+      protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
+    });
+
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
+      @Override
+      protected void onCollisionBegin(Entity chest, Entity projectile) {
+        var hp = chest.getComponent(HealthIntComponent.class);
+        if (hp.getValue() > 1){
+          projectile.removeFromWorld();
+          hp.damage(1);
+          return;
+        }
+        projectile.removeFromWorld();
+        spawn("coin", chest.getCenter());
+        chest.removeFromWorld();
+        projectile.removeFromWorld();}
+
+    });
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PROJECTILE, EntityType.WALL) {
+      @Override
+      protected void onCollisionBegin(Entity arrow, Entity wall ) {arrow.removeFromWorld();}
+    });
+
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
       @Override
       protected void onCollisionBegin(Entity player, Entity coin) {
@@ -170,5 +246,10 @@ public class App extends GameApplication {
           return CellState.WALKABLE;
         });
     set("grid", grid);
+
+    spawn("ak", 600, 600);
+    this.player = spawn("player", 60, 60);
+    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    viewport.setLazy(true);
   }
 }
