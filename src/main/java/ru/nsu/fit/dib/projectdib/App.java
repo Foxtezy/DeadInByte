@@ -1,8 +1,16 @@
 package ru.nsu.fit.dib.projectdib;
 
+import static com.almasb.fxgl.dsl.FXGL.getApp;
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
+import static com.almasb.fxgl.dsl.FXGL.onCollisionOneTimeOnly;
+import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
@@ -16,11 +24,21 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import java.awt.Button;
 
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.function.Predicate;
+import javafx.geometry.Point2D;
+import javafx.scene.control.Control;
+import javafx.scene.input.KeyCode;
+import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import java.util.List;
 
 import javafx.geometry.Point2D;
@@ -119,9 +137,9 @@ public class App extends GameApplication {
             .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
             .forEach(btn -> {
               btn.removeComponent(CollidableComponent.class);
-              var closedDoor = getGameWorld().getSingleton(EntityType.CLOSED_DOOR);
+              Entity closedDoor = btn.getObject("closedDoor");
+              Entity openedDoor = spawn("openedDoor", closedDoor.getPosition());
               closedDoor.removeFromWorld();
-              spawn("openedDoor", 144, 192);
             });
       }
     }, KeyCode.E, VirtualButton.B);
@@ -197,11 +215,14 @@ public class App extends GameApplication {
         coin.removeFromWorld();
       }
     });
-    onCollisionOneTimeOnly(EntityType.PLAYER, EntityType.DOOR_TRIGGER, (player, trigger) -> {
-      var openedDoor = getGameWorld().getSingleton(EntityType.OPENED_DOOR);
-      openedDoor.removeFromWorld();
-      spawn("closedDoor", 144, 192);
-    });
+    getPhysicsWorld().addCollisionHandler(
+        new CollisionHandler(EntityType.PLAYER, EntityType.DOOR_TRIGGER) {
+          protected void onCollisionBegin(Entity player, Entity doorTrigger) {
+            Entity openedDoor = doorTrigger.getObject("openedDoor");
+            Entity closedDoor = spawn("closedDoor", openedDoor.getPosition());
+            openedDoor.removeFromWorld();
+          }
+        });
   }
 
   // Спавн существ
@@ -212,6 +233,19 @@ public class App extends GameApplication {
 
     getGameWorld().addEntityFactory(factory);
     FXGL.setLevelFromMap("tmx/level2.tmx");
+    Spawn.spawnInitialObjects();
+    spawn("enemy", 48, 240);
+    this.player = spawn("player", getAppWidth() / 2, getAppHeight() / 2);
+    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
+        (type) -> {
+          if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
+            return CellState.NOT_WALKABLE;
+          }
+
+          return CellState.WALKABLE;
+        });
+    set("grid", grid);
 
     spawn("ak", 600, 600);
     this.player = spawn("player", 60, 60);

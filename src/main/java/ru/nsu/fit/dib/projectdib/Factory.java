@@ -2,25 +2,32 @@ package ru.nsu.fit.dib.projectdib;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.geto;
 import static com.almasb.fxgl.dsl.FXGL.texture;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
+import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static java.lang.Character.getName;
 import static java.lang.Character.toUpperCase;
-
-
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.dsl.components.RandomMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.pathfinding.CellMoveComponent;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
+import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -28,10 +35,10 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
@@ -77,8 +84,11 @@ public class Factory implements EntityFactory {
         .type(EntityType.PLAYER)
        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
+        .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())
+        .with(new CellMoveComponent(25, 25, 250))
+        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
         .build();
@@ -242,14 +252,18 @@ public class Factory implements EntityFactory {
    */
   @Spawns("enemy")
   public Entity newEnemy(SpawnData data) {
-    Circle circle = new Circle(20, 20, 20, Color.RED);
+    Circle circle = new Circle(10, 10, 10, Color.RED);
     circle.setStroke(Color.BROWN);
     circle.setStrokeWidth(2.0);
     return entityBuilder()
+        .from(data)
         .type(EntityType.ENEMY)
         .viewWithBBox(circle)
+        .anchorFromCenter()
         .collidable()
-        .with(new RandomMoveComponent(new Rectangle2D(0, 0, getAppWidth(), getAppHeight()), 50))
+        .with(new CellMoveComponent(25,25,100))
+        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+        .with(new PlayerChaseComponent())
         .build();
   }
 
@@ -258,9 +272,9 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.BUTTON)
-        .bbox(
-            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .viewWithBBox(texture("button.png", 16, 16))
         .with(new CollidableComponent(true))
+        .with("closedDoor", data.get("closedDoor"))
         .build();
   }
 
@@ -289,8 +303,9 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.DOOR_TRIGGER)
         .bbox(
-            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+            new HitBox(BoundingShape.box(32, 32)))
         .with(new CollidableComponent(true))
+        .with("openedDoor", data.get("openedDoor"))
         .build();
   }
 }
