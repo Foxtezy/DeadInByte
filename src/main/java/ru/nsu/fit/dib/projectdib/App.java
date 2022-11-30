@@ -19,18 +19,12 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.physics.PhysicsComponent;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Toolkit;
 
 import javafx.scene.input.KeyCode;
-import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPGraph;
-import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf;
-import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.BinaryPartitionLG;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
-import ru.nsu.fit.dib.projectdib.level_generation.Way.FindWay;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 public class App extends GameApplication {
@@ -41,19 +35,10 @@ public class App extends GameApplication {
   public static void main(String[] args) {
     //testing
     String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
-    Level lvl= new Level(99812,64,64);
-    BinaryPartitionLG partition= new BinaryPartitionLG(lvl,4,0);
-    BPLeaf tree = new BPLeaf(new Point(0,0), new Point(64,64));
-    partition.setPartition(tree);
-    BPGraph graph = new BPGraph(tree);
-    lvl.tileType=20;
-    partition.printPartition(tree);
-    FindWay way=new FindWay(lvl);
-    way.findWay(new Point(1,1),new Point(40,35));
-    way.printWay();
+    Level lvl= new Level(3452,64,64,2,10);
+
     lvl.print();
-    lvl.tileType=20;
-    //testing
+    //testng
     //launch(args);
   }
 

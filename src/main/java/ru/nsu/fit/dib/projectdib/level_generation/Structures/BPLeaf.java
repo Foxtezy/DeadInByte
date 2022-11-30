@@ -1,11 +1,16 @@
-package ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures;
+package ru.nsu.fit.dib.projectdib.level_generation.Structures;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.BIG;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.MIDDLE;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.OVERBIG;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.OVERSMALL;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.SMALL;
 
 import java.awt.Point;
-import ru.nsu.fit.dib.projectdib.level_generation.Area.Area;
-import ru.nsu.fit.dib.projectdib.level_generation.Area.AreaSizeType.SizeType;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.Area;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
 
 public class BPLeaf {
 
@@ -48,28 +53,28 @@ public class BPLeaf {
     int side = min(blockHeight, blockWidth);
     P = blockHeight * blockWidth;
     if (P >= P_OVERBIG) {
-      area.setSizeType(SizeType.OVERBIG);
+      area.setSizeType(OVERBIG);
       finalBlock = false;
       return;
     }
-    if (side >= 9 && P >= P_BIG) {
-      area.setSizeType(SizeType.BIG);
+    if (side >= 12 && P >= P_BIG) {
+      area.setSizeType(BIG);
       return;
 
     }
-    if (side >= 5 && P >= P_MIDDLE) {
-      area.setSizeType(SizeType.MIDDLE);
+    if (side >= 6 && P >= P_MIDDLE) {
+      area.setSizeType(MIDDLE);
       if (P / P_MIDDLE < 2) {
         finalBlock = true;
       }
       return;
     }
-    if (side >= 3 && P >= P_SMALL) {
-      area.setSizeType(SizeType.SMALL);
+    if (side >= 4 && P >= P_SMALL) {
+      area.setSizeType(SMALL);
       finalBlock = true;
       return;
     }
-    area.setSizeType(SizeType.OVERSMALL);
+    area.setSizeType(OVERSMALL);
     finalBlock = false;
   }
 

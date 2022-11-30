@@ -1,9 +1,16 @@
 package ru.nsu.fit.dib.projectdib.level_generation.Way;
+
 import static java.lang.Math.abs;
+import static ru.nsu.fit.dib.projectdib.level_generation.BlockDensity.WALL;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
+import ru.nsu.fit.dib.projectdib.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
+import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
 
 public class FindWay {
 
@@ -13,9 +20,11 @@ public class FindWay {
   private WayPoint[][] wayMap;
   private PriorityQueue<WayPoint> open;
   private PriorityQueue<WayPoint> closed;
-
+  private int hallwayWidth;
+  private Room startRoom;
+  private Room finishRoom;
   public FindWay(Level level) {
-    this.level=level;
+    this.level = level;
     this.wayMap = new WayPoint[level.getWidth()][level.getHeight()];
     for (int y = 0; y < level.getHeight(); y++) {
       for (int x = 0; x < level.getWidth(); x++) {
@@ -26,7 +35,22 @@ public class FindWay {
     }
   }
 
-  public void findWay(Point pointStart, Point pointFinish) {
+  public WayPoint getFinish() {
+    return finish;
+  }
+
+  public Level getLevel() {
+    return level;
+  }
+
+  public void findWay(int hallwayWidth, Room startRoom, Room finishRoom) {
+    this.startRoom = startRoom;
+    this.finishRoom = finishRoom;
+    findWay(hallwayWidth, startRoom.getCentrePoint(), finishRoom.getCentrePoint());
+  }
+
+  public void findWay(int hallwayWidth, Point pointStart, Point pointFinish) {
+    this.hallwayWidth = hallwayWidth;
     this.start = wayMap[pointStart.x][pointStart.y];
     this.finish = wayMap[pointFinish.x][pointFinish.y];
 
@@ -59,17 +83,72 @@ public class FindWay {
     }
   }
 
-  public void printWay() {
+  public void printWay(BlockDensity block) {
     WayPoint node = finish;
     while (true) {
       int x = node.x;
       int y = node.y;
-      level.map[x][y] = 3;
-      if (node == start) {
+      int wayDensity = block.density;
+      level.map[x][y] = wayDensity;
+      if (hallwayWidth >= 2) {
+        level.map[x][y - 1] = wayDensity;
+      }
+      if (hallwayWidth >= 2) {
+        level.map[x - 1][y] = wayDensity;
+      }
+      if (hallwayWidth >= 2) {
+        level.map[x - 1][y - 1] = wayDensity;
+      }
+
+      if (hallwayWidth == 3) {
+        level.map[x][y + 1] = wayDensity;
+      }
+      if (hallwayWidth == 3) {
+        level.map[x + 1][y] = wayDensity;
+      }
+      if (hallwayWidth == 3) {
+        level.map[x + 1][y + 1] = wayDensity;
+      }
+      if (hallwayWidth == 3) {
+        level.map[x - 1][y + 1] = wayDensity;
+      }
+      if (hallwayWidth == 3) {
+        level.map[x + 1][y - 1] = wayDensity;
+      }
+      if (node == start || node.last == null) {
         break;
       }
       node = node.last;
     }
+  }
+
+  public List<Room> getRoomList() {
+    List<Room> reversedWay = new ArrayList<>();
+    WayPoint node = finish;
+    while (true) {
+      //
+      Point point = new Point(node.x, node.y);
+      int k = level.graph.nodesList.size();
+      for (int i = 0; i < k; i++) {
+        if (level.graph.nodesList.get(i).room.equals(point)) {
+          if (!reversedWay.contains(level.graph.nodesList.get(i).room)) {
+            reversedWay.add(level.graph.nodesList.get(i).room);
+          }
+          break;
+        }
+      }
+      //
+      if (node == start || node.last == null) {
+        break;
+      }
+      node = node.last;
+    }
+
+    ArrayList<Room> way = new ArrayList<>();
+    for (int i = reversedWay.size() - 1; i >= 0; i--) {
+      way.add(reversedWay.get(i));
+    }
+    return way;
   }
 
   private void addToOpen(WayPoint node, int x, int y) {
@@ -77,20 +156,72 @@ public class FindWay {
       return;
     }
     int enc = 0;
-    if (node.last!=null && (abs(node.last.x - x)==2 || abs(node.last.y-y)==2)) enc=-1;
+    if (node.last != null && (abs(node.last.x - x) == 2 || abs(node.last.y - y) == 2)) {
+      enc = -1;
+    }
+
+    //numberNeiboursIsWall
+    enc += numberNeighbourWalls(new Point(node.x - hallwayWidth / 2, node.y - hallwayWidth / 2));
+
+    if ((node.x + 1 >= 0 && node.x + 1 < level.getWidth()) &&
+        (node.y >= 0 && node.y < level.getHeight()) &&
+        level.map[node.x + 1][node.y] == WALL.density) {
+      enc += 2;
+    }
+    if ((node.x - 1 >= 0 && node.x - 1 < level.getWidth()) &&
+        (node.y >= 0 && node.y < level.getHeight()) &&
+        level.map[node.x - 1][node.y] == WALL.density) {
+      enc += 2;
+    }
+    if ((node.x >= 0 && node.x < level.getWidth()) &&
+        (node.y + 1 >= 0 && node.y + 1 < level.getHeight()) &&
+        level.map[node.x][node.y + 1] == WALL.density) {
+      enc += 2;
+    }
+    if ((node.x >= 0 && node.x < level.getWidth()) &&
+        (node.y - 1 >= 0 && node.y - 1 < level.getHeight()) &&
+        level.map[node.x][node.y - 1] == WALL.density) {
+      enc += 2;
+    }
+
     if ((!open.contains(wayMap[x][y])) && (!closed.contains(wayMap[x][y]))) {
       wayMap[x][y].manhattanDistance(finish);
 
-      wayMap[x][y].reweight(level.map[x][y], node,enc);
+      wayMap[x][y].reweight(level.map[x][y], node, enc);
 
       open.add(wayMap[x][y]);
     } else {
-      if (wayMap[x][y].reweight(level.map[x][y], node,enc)) {
+      if (wayMap[x][y].reweight(level.map[x][y], node, enc)) {
         if (closed.contains(wayMap[x][y])) {
           closed.remove(wayMap[x][y]);
           closed.add(wayMap[x][y]);
         }
       }
     }
+  }
+
+  private int numberNeighbourWalls(Point fst) {
+    int k = 0;
+    for (int x = 0; x < hallwayWidth; x++) {
+      for (int y = 0; y < hallwayWidth; y++) {
+        if (fst.x + x >= 0 && fst.x + x < level.getWidth() && fst.y + y >= 0
+            && fst.y + y < level.getHeight()) {
+          if (level.map[fst.x + x][fst.y + y] == WALL.density) {
+            k++;
+          }
+        } else {
+          k++;
+        }
+      }
+    }
+    return k;
+  }
+
+  public Room getStartRoom() {
+    return startRoom;
+  }
+
+  public Room getFinishRoom() {
+    return finishRoom;
   }
 }

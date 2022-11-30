@@ -1,46 +1,52 @@
-package ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition;
+package ru.nsu.fit.dib.projectdib.level_generation.AreaGeneration;
 
 import static java.lang.Math.abs;
-import static ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf.P_BIG;
-import static ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf.P_MIDDLE;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.OVERSMALL;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.BPLeaf.P_BIG;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.BPLeaf.P_MIDDLE;
+import static ru.nsu.fit.dib.projectdib.level_generation.BlockDensity.FLOOR;
+import static ru.nsu.fit.dib.projectdib.level_generation.BlockDensity.WALL;
 
 import java.awt.Point;
 import java.util.Random;
-import ru.nsu.fit.dib.projectdib.level_generation.Area.AreaSizeType.SizeType;
-import ru.nsu.fit.dib.projectdib.level_generation.GenerationMethods.BinaryPartition.Structures.BPLeaf;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.BPGraph;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.BPLeaf;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 
 /**
  * Генерация с помощью бинарного разделения пространства на области
  */
-public class BinaryPartitionLG {
+public class BinaryPartitionAG {
 
   //RANDOM BOUNDS
-  public static final int CUTTING_AXIS = 5;
-  public static final int MIN_CUTTING_BLOCK_SIDE = 3;
-  //RANDOM BOUNDS
-  private final Level level;
+  public static final int CUTTING_AXIS = 3;
+  public static final int MIN_CUTTING_BLOCK_SIDE = 4;
   public final int requiredNumberOfBigAreas;
   public final int requiredNumberOfMiddleAreas;
+  //RANDOM BOUNDS
+  private final Level level;
+  private final Random rn;
   public int numberOfBigAreas;
   public int numberOfMiddleAreas;
-  private final Random rn;
+  public BPGraph graph;
 
   /**
    * инциализация карты
    *
-   * @param level               - уровень(карта)
-   * @param numberOfBigAreas    - количество больших областей
-   * @param numberOfMiddleAreas - количество мальеньких областей
+   * @param level               уровень(карта)
+   * @param numberOfBigAreas    количество больших областей
+   * @param numberOfMiddleAreas количество мальеньких областей
    */
 
-  public BinaryPartitionLG(Level level, int numberOfBigAreas, int numberOfMiddleAreas) {
+  public BinaryPartitionAG(Level level, int numberOfBigAreas, int numberOfMiddleAreas) {
     this.level = level;
-    this.rn = new Random(level.getSeed());
+    this.rn = level.rn;
     this.requiredNumberOfBigAreas = numberOfBigAreas;
     this.requiredNumberOfMiddleAreas = numberOfMiddleAreas;
     this.numberOfBigAreas = 0;
     this.numberOfMiddleAreas = 0;
+    //printPartition(tree);
   }
 
   /**
@@ -61,7 +67,7 @@ public class BinaryPartitionLG {
       BPLeaf left = new BPLeaf(first, new Point(first.x + newX, second.y));
       BPLeaf right = new BPLeaf(new Point(first.x + newX, first.y), second);
       setChildren(tree, left, right);
-    } else if (blockHeight > MIN_CUTTING_BLOCK_SIDE) {
+    } else if (blockHeight > MIN_CUTTING_BLOCK_SIDE * 2) {
       //cut horizontally
       int newY = MIN_CUTTING_BLOCK_SIDE + rn.nextInt(blockHeight - MIN_CUTTING_BLOCK_SIDE * 2);
       BPLeaf left = new BPLeaf(first, new Point(second.x, first.y + newY));
@@ -94,7 +100,7 @@ public class BinaryPartitionLG {
   private void setChildren(BPLeaf tree, BPLeaf left, BPLeaf right) {
     finalizeBlock(left);
     finalizeBlock(right);
-    if (left.getSizeType() == SizeType.OVERSMALL || right.getSizeType() == SizeType.OVERSMALL) {
+    if (left.getSizeType() == OVERSMALL || right.getSizeType() == OVERSMALL) {
       tree.finalBlock = true;
       return;
     }
@@ -150,13 +156,11 @@ public class BinaryPartitionLG {
     Point supportive1 = new Point(first.x, second.y);
     Point supportive2 = new Point(second.x, first.y);
     if (tree.getLeftChild() == null && tree.getRightChild() == null) {
-      level.tileType = 1;
-      level.set(first, second);
-      level.tileType = 20;
-      level.set(first, supportive1);
-      level.set(supportive1, second);
-      level.set(supportive2, second);
-      level.set(first, supportive2);
+      level.set(FLOOR, first, second);
+      level.set(WALL, first, supportive1);
+      level.set(WALL, supportive1, second);
+      level.set(WALL, supportive2, second);
+      level.set(WALL, first, supportive2);
     }
     if (tree.getLeftChild() != null) {
       printPartition(tree.getLeftChild());
@@ -166,4 +170,7 @@ public class BinaryPartitionLG {
     }
   }
 
+  public void createRooms() {
+    rn.nextInt(10);
+  }
 }
