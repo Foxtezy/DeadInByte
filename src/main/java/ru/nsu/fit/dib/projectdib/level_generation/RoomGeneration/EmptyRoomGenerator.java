@@ -74,10 +74,10 @@ public class EmptyRoomGenerator {
       }
       Point fst;
       Point snd;
-      fst = new Point(area.getFirstPoint().x + 1 + rn.nextInt(1),
-          area.getFirstPoint().y + 1 + rn.nextInt(1));
-      snd = new Point(area.getSecondPoint().x - 1 - rn.nextInt(1),
-          area.getSecondPoint().y - 1 - rn.nextInt(1));
+      fst = new Point(area.getFirstPoint().x + 1 + rn.nextInt(2),
+          area.getFirstPoint().y + 1 + rn.nextInt(2));
+      snd = new Point(area.getSecondPoint().x - 1 - rn.nextInt(2),
+          area.getSecondPoint().y - 1 - rn.nextInt(2));
       level.set(FLOOR, fst, snd);
       area.setRoom(fst, snd);
     });

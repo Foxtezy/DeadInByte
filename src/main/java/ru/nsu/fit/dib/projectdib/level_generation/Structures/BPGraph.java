@@ -49,7 +49,7 @@ public class BPGraph {
         if (a != b) {
           Area fst = nodesList.get(a);
           Area snd = nodesList.get(b);
-          if (haveOnePoint(fst, snd) || rn.nextInt(10) > 6) {
+          if (haveOnePoint(fst, snd) || rn.nextInt(10) > 8) {
             edgeList.push(new Edge(fst, snd));
           }
         }
@@ -95,8 +95,6 @@ public class BPGraph {
         || (y1 == y2 && abs(x1 - x2) == 2)) {
       return true;
     }
-    //Проблема
-    //Нельзя разрешать углы!!!!!!
     return false;
   }
 

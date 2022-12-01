@@ -35,7 +35,7 @@ public class App extends GameApplication {
   public static void main(String[] args) {
     //testing
     String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
-    Level lvl= new Level(3452,64,64,2,10);
+    Level lvl= new Level(234535,64,64,1,15);
 
     lvl.print();
     //testng

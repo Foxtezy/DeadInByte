@@ -3,7 +3,6 @@ package ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration;
 import static java.lang.Math.abs;
 
 import java.awt.Point;
-import java.util.List;
 
 public class Room {
 
@@ -15,7 +14,6 @@ public class Room {
   private final int weight;
   private final int width;
   private final int height;
-  public List<Point> doors;
   private RoomType roomType;
 
   public Room(Point firstPoint, Point secondPoint) {

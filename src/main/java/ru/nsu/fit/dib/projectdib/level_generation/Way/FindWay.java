@@ -23,12 +23,14 @@ public class FindWay {
   private int hallwayWidth;
   private Room startRoom;
   private Room finishRoom;
-  public FindWay(Level level) {
+  public FindWay(Level level,int wallWeight) {
     this.level = level;
+
     this.wayMap = new WayPoint[level.getWidth()][level.getHeight()];
     for (int y = 0; y < level.getHeight(); y++) {
       for (int x = 0; x < level.getWidth(); x++) {
-        this.wayMap[x][y] = new WayPoint();
+        if (level.map[x][y]==WALL.density) this.wayMap[x][y] = new WayPoint(wallWeight);
+        else this.wayMap[x][y] = new WayPoint(level.map[x][y]);
         this.wayMap[x][y].x = x;
         this.wayMap[x][y].y = y;
       }
@@ -187,11 +189,11 @@ public class FindWay {
     if ((!open.contains(wayMap[x][y])) && (!closed.contains(wayMap[x][y]))) {
       wayMap[x][y].manhattanDistance(finish);
 
-      wayMap[x][y].reweight(level.map[x][y], node, enc);
+      wayMap[x][y].reweight(node, enc);
 
       open.add(wayMap[x][y]);
     } else {
-      if (wayMap[x][y].reweight(level.map[x][y], node, enc)) {
+      if (wayMap[x][y].reweight(node, enc)) {
         if (closed.contains(wayMap[x][y])) {
           closed.remove(wayMap[x][y]);
           closed.add(wayMap[x][y]);

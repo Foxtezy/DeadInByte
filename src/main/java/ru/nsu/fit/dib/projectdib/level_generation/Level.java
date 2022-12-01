@@ -69,8 +69,8 @@ public class Level {
 
     int k = graph.nodesList.size();
     for (int x = 0; x < k; x++) {
-      for (int y = 0; y < k; y++) {
-        FindWay finder = new FindWay(this);
+      for (int y = x+1; y < k; y++) {
+        FindWay finder = new FindWay(this,20000);
         finder.findWay(1, graph.nodesList.get(x).getRoom(), graph.nodesList.get(y).getRoom());
         finder.printWay(FLOOR);
 
@@ -89,8 +89,13 @@ public class Level {
     int k = graph.edgeList.size();
     for (int i = 0; i < k; i++) {
       Edge edge = graph.edgeList.pop();
-      //if (edge.getArea(0).room==null || edge.getArea(1).room==null) return;
-      FindWay finder = new FindWay(this);
+      FindWay finder;
+      if (edge.getArea(0).getSizeType()==SMALL && edge.getArea(1).getSizeType()==SMALL) {
+        finder = new FindWay(this, 50);
+      }
+      else {
+        finder = new FindWay(this, 500);
+      }
       if (edge.getArea(0).getRoom().getWeight() >= edge.getArea(1).getRoom().getWeight()) {
         finder.findWay(hallwayWidth, edge.getArea(0).getRoom().getCentrePoint(),
             edge.getArea(1).getRoom().getCentrePoint());
