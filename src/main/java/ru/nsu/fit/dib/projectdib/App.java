@@ -26,24 +26,30 @@ import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.tmxbuilder.LevelToTmx;
 
 public class App extends GameApplication {
   Factory factory;
   Viewport viewport;
   private Entity player;
 
-  public static void main(String[] args) {
-    //testing
-    String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
-    //Level lvl= new Level(234535,64,64,1,15);
+  private static String levelName;
 
-    //lvl.print();
-    //testng
+  public App() {
+
+  }
+
+  public static void main(String[] args) {
+    Level lvl= new Level(234535,64,64,1,15);
+    levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
     launch(args);
   }
 
@@ -198,8 +204,19 @@ public class App extends GameApplication {
   protected void initGame() {
     viewport = getGameScene().getViewport();
     factory = new Factory();
-
     getGameWorld().addEntityFactory(factory);
+    File file = new File("src/main/resources/assets/levels/" + "tmx/1b47e9a8-9f11-487d-ac17-16e4c90b1e66.tmx");
+    System.out.println(file.canRead());
+    System.out.println(file.canExecute());
+    System.out.println(file.canWrite());
+    FXGL.setLevelFromMap(levelName);
+    this.player = spawn("player", getAppWidth() / 2, getAppHeight() / 2);
+    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    viewport.setLazy(true);
+
+
+
+    /*
     FXGL.setLevelFromMap("tmx/level2.tmx");
     Spawn.spawnInitialObjects();
     spawn("enemy", 48, 240);
@@ -218,6 +235,6 @@ public class App extends GameApplication {
     spawn("ak", 600, 600);
     this.player = spawn("player", 60, 60);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    viewport.setLazy(true);
+    viewport.setLazy(true); */
   }
 }
