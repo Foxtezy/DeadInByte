@@ -15,9 +15,9 @@ public class LevelToTmx {
   }
 
   public static String levelToTmx(Level level) {
-    String tmxName = fileNameGenerator();
+    String tmxName = "level.tmx";
     String tmxPath = LevelToTmxConfig.pathToNewTmx + tmxName;
-    try (FileWriter tmxWriter = new FileWriter(tmxPath);
+    try (FileWriter tmxWriter = new FileWriter(tmxPath, false);
         FileReader bottomTmxReader = new FileReader(LevelToTmxConfig.pathToConfigBottom);
         FileReader topTmxReader = new FileReader(LevelToTmxConfig.pathToConfigTop)){
       topTmxReader.transferTo(tmxWriter);

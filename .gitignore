@@ -15,8 +15,6 @@ target/
 logs
 system
 DeadInByte/.idea
-src/main/resources/assets/levels/tmx/generated/*
-!src/main/resources/assets/levels/tmx/generated/.gitkeep
 
 ### Eclipse ###
 .apt_generated

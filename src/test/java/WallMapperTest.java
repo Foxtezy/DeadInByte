@@ -10,7 +10,7 @@ import ru.nsu.fit.dib.projectdib.mapperobjects.WallMapper;
 
 class WallMapperTest {
 
-    @Test
+    /*@Test
     public void test() throws FileNotFoundException {
         File file = new File("src/test/resources/input.txt");
         Scanner scanner = new Scanner(file);
@@ -39,5 +39,5 @@ class WallMapperTest {
             }
             System.out.println();
         }
-    }
+    }*/
 }
