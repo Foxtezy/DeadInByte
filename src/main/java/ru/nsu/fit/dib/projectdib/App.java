@@ -157,6 +157,20 @@ public class App extends GameApplication {
       protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
     });
 
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ENEMY, EntityType.PROJECTILE) {
+      @Override
+      protected void onCollisionBegin(Entity enemy, Entity projectile) {
+        var hp = enemy.getComponent(HealthIntComponent.class);
+        if (hp.getValue() > 1){
+          projectile.removeFromWorld();
+          hp.damage(1);
+          return;
+        }
+        projectile.removeFromWorld();
+        enemy.removeFromWorld();
+        projectile.removeFromWorld();}
+    });
+
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
       @Override
       protected void onCollisionBegin(Entity chest, Entity projectile) {
@@ -216,7 +230,7 @@ public class App extends GameApplication {
     set("grid", grid);
 
     spawn("ak", 600, 600);
-    this.player = spawn("player", 60, 60);
+    //this.player = spawn("player", 60, 60);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     viewport.setLazy(true);
   }
