@@ -36,7 +36,6 @@ public class App extends GameApplication {
   Factory factory;
   Viewport viewport;
   private Entity player;
-
   public static void main(String[] args) {
     //testing
     String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
@@ -105,6 +104,7 @@ public class App extends GameApplication {
             .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
             .forEach(btn -> {
               btn.removeComponent(CollidableComponent.class);
+              //spawn(btn.getString("closedDoor"));
               Entity closedDoor = btn.getObject("closedDoor");
               Entity openedDoor = spawn("openedDoor", closedDoor.getPosition());
               closedDoor.removeFromWorld();
@@ -205,6 +205,13 @@ public class App extends GameApplication {
             openedDoor.removeFromWorld();
           }
         });
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.ENEMY_TRIGGER) {
+      @Override
+      protected void onCollisionBegin(Entity player, Entity enemyTrigger) {
+        Spawn.enemySpawn();
+        enemyTrigger.removeComponent(CollidableComponent.class);
+        }
+    });
   }
 
   // Спавн существ
@@ -214,12 +221,14 @@ public class App extends GameApplication {
     factory = new Factory();
 
     getGameWorld().addEntityFactory(factory);
-    FXGL.setLevelFromMap("tmx/level2.tmx");
+    FXGL.setLevelFromMap("tmx/demo5.tmx");
+    //Entity closedDoor = spawn("closedDoor", )
     Spawn.spawnInitialObjects();
-    spawn("enemy", 48, 240);
-    this.player = spawn("player", getAppWidth() / 2, getAppHeight() / 2);
+   // spawn("ak", 600, 600);
+   // spawn("enemy", 48, 240);
+    this.player = spawn("player", 150, 1400);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
+    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 16, 16,
         (type) -> {
           if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
             return CellState.NOT_WALKABLE;
@@ -229,9 +238,9 @@ public class App extends GameApplication {
         });
     set("grid", grid);
 
-    spawn("ak", 600, 600);
-    //this.player = spawn("player", 60, 60);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+
+
+  //  viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     viewport.setLazy(true);
   }
 }

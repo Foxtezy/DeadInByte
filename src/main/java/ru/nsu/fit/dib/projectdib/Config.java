@@ -15,6 +15,7 @@ public class Config {
   public static String WINDOW_MODE;
   public static final javafx.util.Duration SHOOT_DELAY_ARROW = Duration.seconds(0.3);
   public static final javafx.util.Duration SHOOT_DELAY_AK = Duration.seconds(0.1);
+  public static final javafx.util.Duration UpdateTime = Duration.seconds(3);
 
 
 

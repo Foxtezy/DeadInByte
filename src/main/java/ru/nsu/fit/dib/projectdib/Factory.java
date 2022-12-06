@@ -82,13 +82,12 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-       //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
         .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
         .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())
-        .with(new CellMoveComponent(25, 25, 250))
-        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+        .with(new CellMoveComponent(16, 16, 250))
+        //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
         .build();
@@ -238,7 +237,7 @@ public class Factory implements EntityFactory {
     return entityBuilder(data)
             .from(data)
             .type(EntityType.AK)
-            .viewWithBBox(texture("weapon_ak.png", 75, 20))
+            .viewWithBBox(texture("weapon_ak.png", 150, 40))
             .bbox(new HitBox(BoundingShape.box(75,20)))
             .with(new CollidableComponent(true))
             .build();
@@ -266,12 +265,12 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.ENEMY)
-        .viewWithBBox(texture("skull.png", 50,50))
+        .viewWithBBox(texture("skull.png", 30,30))
         .anchorFromCenter()
         .collidable()
         .with(hp)
         .view(hpView)
-        .with(new CellMoveComponent(25,25,100))
+        .with(new CellMoveComponent(16,16,100))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with(new PlayerChaseComponent())
         .build();
@@ -330,4 +329,14 @@ public class Factory implements EntityFactory {
         .with("openedDoor", data.get("openedDoor"))
         .build();
   }
+
+  @Spawns("enemyTrigger")
+  public Entity newEnemyTrigger(SpawnData data) {
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.ENEMY_TRIGGER)
+        .bbox(new HitBox(BoundingShape.box(32, 32)))
+        .with(new CollidableComponent(true))
+        .build();
+    }
 }
