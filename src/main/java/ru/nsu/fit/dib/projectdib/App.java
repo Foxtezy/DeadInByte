@@ -261,7 +261,7 @@ public class App extends GameApplication {
     //Entity closedDoor = spawn("closedDoor", )
     Spawn.spawnInitialObjects();
    // spawn("ak", 600, 600);
-    spawn("enemy", 150, 1240);
+   // spawn("enemy", 150, 1240);
     this.player = spawn("player", 150, 1400);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 16, 16,

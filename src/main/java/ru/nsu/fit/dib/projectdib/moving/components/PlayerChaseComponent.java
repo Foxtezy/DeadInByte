@@ -65,9 +65,9 @@ public class PlayerChaseComponent extends Component {
     // var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
     int x = player.call("getCellX");
     int y = player.call("getCellY");
-/*    if (enemyPath.findPath(enemy.getCurrentCell().get().getX(), enemy.getCurrentCell().get().getY(), x - 2, y - 2).isEmpty()) {
-      enemy.stopMovement();
-  */
+    //if (enemyPath.findPath(enemy.getCurrentCell().get().getX(), enemy.getCurrentCell().get().getY(), x - 2, y - 2).isEmpty()) {
+    //  enemy.stopMovement();
+
       if (player.isColliding(enemy.getEntity())) {
         enemy.stopMovement();
       } else if (enemy.getGrid().get(x, y).isWalkable()) {

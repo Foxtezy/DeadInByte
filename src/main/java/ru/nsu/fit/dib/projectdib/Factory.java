@@ -93,7 +93,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
+        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(160, 235)))
         .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())
@@ -211,10 +211,10 @@ public class Factory implements EntityFactory {
   }
 
   /**
-   * Entity Arrow.
+   * Entity Projectile.
    *
    * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Arrow
+   * @return entityBuilder for Projectiles
    */
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
@@ -227,7 +227,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PROJECTILE)
-        .viewWithBBox(texture("projectile_" + projectile.getName() + ".png", 40, 15))
+        .viewWithBBox(texture("projectile_" + projectile.getName() + ".png", 30, 10))
         .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())
         .collidable()
@@ -301,14 +301,10 @@ public class Factory implements EntityFactory {
 
   @Spawns("explosion")
   public Entity newExplosion(SpawnData data) {
-    Image image = image("explosion.png");
-    AnimatedTexture texture =
-        new AnimatedTexture(
-            new AnimationChannel(image, 4, 960 / 5, 768 / 4, Duration.seconds(0.66), 0, 3));
     return entityBuilder()
             .from(data)
+            .with(new ExplosionComponent())
             .type(EntityType.EXPLOSION)
-            .viewWithBBox(texture("explosion.png", 16, 16))
             .build();
   }
 
