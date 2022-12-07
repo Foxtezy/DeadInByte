@@ -42,11 +42,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.moving.components.ExplosionComponent;
-import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.moving.components.*;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
 /** Class Factory for making Entities. */
 public class Factory implements EntityFactory {
@@ -205,7 +202,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.COIN)
-        .viewWithBBox(new Circle(5, 5, 5, Color.YELLOW))
+        .viewWithBBox(texture("coin.png",20,20))
         .collidable()
         .build();
   }
@@ -282,7 +279,7 @@ public class Factory implements EntityFactory {
         .collidable()
         .with(hp)
         .view(hpView)
-        .with(new CellMoveComponent(16,16,100))
+        .with(new CellMoveComponent(16, 16, 100))
         .with(move)
         .with(new PlayerChaseComponent(move))
         .build();
@@ -293,8 +290,10 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.BUTTON)
-        .viewWithBBox(texture("button.png", 16, 16))
+        // .viewWithBBox(texture("button.png", 16, 16))
+        .bbox(BoundingShape.box(16, 16))
         .with(new CollidableComponent(true))
+
         .with("closedDoor", data.get("closedDoor"))
         .build();
   }
@@ -302,10 +301,10 @@ public class Factory implements EntityFactory {
   @Spawns("explosion")
   public Entity newExplosion(SpawnData data) {
     return entityBuilder()
-            .from(data)
-            .with(new ExplosionComponent())
-            .type(EntityType.EXPLOSION)
-            .build();
+        .from(data)
+        .with(new ExplosionComponent())
+        .type(EntityType.EXPLOSION)
+        .build();
   }
 
   @Spawns("closedDoor")
@@ -313,8 +312,9 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.CLOSED_DOOR)
-        .viewWithBBox(texture("closedDoor.png", 32, 32))
+        .viewWithBBox(texture("closedDoor.png", 48, 48))
         .with(new PhysicsComponent())
+        .collidable()
         .build();
   }
 
@@ -323,7 +323,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.OPENED_DOOR)
-        .viewWithBBox(texture("openedDoor.png", 32, 32))
+        .viewWithBBox(texture("openedDoor.png", 48, 48))
         .build();
   }
 

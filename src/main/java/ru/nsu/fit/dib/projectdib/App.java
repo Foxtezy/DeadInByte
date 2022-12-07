@@ -210,6 +210,10 @@ public class App extends GameApplication {
       @Override
       protected void onCollisionBegin(Entity arrow, Entity wall ) {arrow.removeFromWorld();}
     });
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PROJECTILE, EntityType.CLOSED_DOOR) {
+      @Override
+      protected void onCollisionBegin(Entity arrow, Entity closedDoor ) {arrow.removeFromWorld();}
+    });
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.ENEMY) {
       @Override
       protected void onCollisionBegin(Entity player, Entity enemy) {
@@ -258,8 +262,9 @@ public class App extends GameApplication {
 
     getGameWorld().addEntityFactory(factory);
     FXGL.setLevelFromMap("tmx/demo5.tmx");
-    //Entity closedDoor = spawn("closedDoor", )
     Spawn.spawnInitialObjects();
+    //Entity closedDoor = spawn("closedDoor", )
+
    // spawn("ak", 600, 600);
    // spawn("enemy", 150, 1240);
     this.player = spawn("player", 150, 1400);

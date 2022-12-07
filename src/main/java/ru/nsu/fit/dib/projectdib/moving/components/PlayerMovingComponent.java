@@ -56,6 +56,7 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   public PlayerMovingComponent() {
     //resources.assets.textures
     Image image = image("player.png");
+    Image weapon = image(this.currentWeapon);
 
     //animation settings
     int frameWidth = (int) image.getWidth() / 4;
@@ -157,13 +158,13 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     switch(currentWeapon){
       case("bow"):
         if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) return;
-        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+13,getEntity().getPosition().getY()+30)
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+40)
                 .put("typeProj", Projectiles.ARROW));
         shootTimer.capture();
         break;
       case("ak"):
         if(!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) return;
-        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX(),getEntity().getPosition().getY()+30)
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+40)
                 .put("typeProj", Projectiles.BULLET));
         shootTimer.capture();
         break;

@@ -9,15 +9,15 @@ import com.almasb.fxgl.entity.SpawnData;
 public class Spawn {
 
   public static void spawnInitialObjects() {
-    Entity closedDoor = spawn("closedDoor", 256, 928);
-    Entity openedDoor = getGameWorld().create("openedDoor", new SpawnData(256, 928));
+    Entity closedDoor = spawn("closedDoor", 240, 912);
+    Entity openedDoor = getGameWorld().create("openedDoor", new SpawnData(240, 912));
     Entity doorTrigger =
-        spawn("doorTrigger", new SpawnData(272, 880).put("openedDoor", openedDoor));
-    Entity button = spawn("button", new SpawnData(64, 1080).put("closedDoor", closedDoor));
+        spawn("doorTrigger", new SpawnData(240, 864).put("openedDoor", openedDoor));
+    Entity button = spawn("button", new SpawnData(64, 1104).put("closedDoor", closedDoor));
 
-    Entity closedDoor2 = spawn("closedDoor", 384, 1280);
-   getGameWorld().create("openedDoor", new SpawnData(384, 1280));
-    spawn("button", new SpawnData(384, 1220).put("closedDoor", closedDoor2));
+    Entity closedDoor2 = spawn("closedDoor", 368, 1264);
+   getGameWorld().create("openedDoor", new SpawnData(368, 1264));
+    spawn("button", new SpawnData(384, 1232).put("closedDoor", closedDoor2));
     spawn("enemyTrigger", 240, 192);
     getGameWorld().create("enemy", new SpawnData(48, 48));
     //getGameWorld().create("enemy", new SpawnData(208, 64));
