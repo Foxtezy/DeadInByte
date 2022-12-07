@@ -14,10 +14,12 @@ import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
+import com.almasb.fxgl.dsl.components.RandomAStarMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
@@ -32,6 +34,8 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
+import java.util.Map;
+import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -259,9 +263,8 @@ public class Factory implements EntityFactory {
     hpView.setTranslateY(-10);
     hpView.currentValueProperty().bind(hp.valueProperty());
 
-    Circle circle = new Circle(10, 10, 10, Color.RED);
-    circle.setStroke(Color.BROWN);
-    circle.setStrokeWidth(2.0);
+    AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
+
     return entityBuilder()
         .from(data)
         .type(EntityType.ENEMY)
@@ -271,8 +274,8 @@ public class Factory implements EntityFactory {
         .with(hp)
         .view(hpView)
         .with(new CellMoveComponent(16,16,100))
-        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-        .with(new PlayerChaseComponent())
+        .with(move)
+        .with(new PlayerChaseComponent(move))
         .build();
   }
 

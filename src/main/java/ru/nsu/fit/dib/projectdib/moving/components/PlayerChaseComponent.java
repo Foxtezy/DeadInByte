@@ -31,7 +31,8 @@ import ru.nsu.fit.dib.projectdib.data.Projectiles;
 
 public class PlayerChaseComponent extends Component {
 
-  private static AStarMoveComponent enemy;
+
+  private final AStarMoveComponent enemy;
   private static AStarPathfinder enemyPath =
       new AStarPathfinder(
           AStarGrid.fromWorld(
@@ -49,6 +50,10 @@ public class PlayerChaseComponent extends Component {
               }));
 
   private LocalTimer updateTime = newLocalTimer();
+
+  public PlayerChaseComponent(AStarMoveComponent enemy) {
+    this.enemy = enemy;
+  }
 
   @Override
   public void onUpdate(double tpf) {
