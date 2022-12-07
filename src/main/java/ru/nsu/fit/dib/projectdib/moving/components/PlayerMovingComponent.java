@@ -162,15 +162,11 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
         shootTimer.capture();
         break;
       case("ak"):
-        if(!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) return;;
+        if(!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) return;
         FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
                 .put("typeProj", Projectiles.BULLET));
         shootTimer.capture();
         break;
-      /*default:
-        currentWeapon = "bow";
-        break;
-      */
     }
 
   }

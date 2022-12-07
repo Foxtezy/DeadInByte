@@ -8,6 +8,7 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.app.ApplicationMode;
@@ -26,9 +27,13 @@ import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
+import com.almasb.fxgl.time.LocalTimer;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
 
@@ -154,7 +159,7 @@ public class App extends GameApplication {
     getPhysicsWorld().setGravity(0, 0);
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.PROJECTILE) {
       @Override
-      protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
+      protected void onCollisionBegin(Entity box, Entity arrow ) { box.removeFromWorld(); arrow.removeFromWorld();}
     });
 
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ENEMY, EntityType.PROJECTILE) {
@@ -168,29 +173,60 @@ public class App extends GameApplication {
         }
         projectile.removeFromWorld();
         enemy.removeFromWorld();
-        projectile.removeFromWorld();}
+        Entity explosion = spawn("explosion", enemy.getCenter().subtract(70,100));
+        getGameTimer().runOnceAfter(
+                () -> {
+                  explosion.removeFromWorld();
+                },
+                Duration.seconds(Config.ExplosionTimer));
+      }
     });
 
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
+      Projectiles type = Projectiles.ARROW.getProjectile(EntityType.PROJECTILE.getName());
       @Override
       protected void onCollisionBegin(Entity chest, Entity projectile) {
         var hp = chest.getComponent(HealthIntComponent.class);
+
         if (hp.getValue() > 1){
           projectile.removeFromWorld();
-          hp.damage(1);
+          hp.damage(type.getDamage());
+          if(hp.getValue() < 1){
+            projectile.removeFromWorld();
+            spawn("coin", chest.getCenter());
+            chest.removeFromWorld();
+            projectile.removeFromWorld();
+            return;
+          }
           return;
         }
-        projectile.removeFromWorld();
         spawn("coin", chest.getCenter());
         chest.removeFromWorld();
-        projectile.removeFromWorld();}
+        projectile.removeFromWorld();
+      }
 
     });
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PROJECTILE, EntityType.WALL) {
       @Override
       protected void onCollisionBegin(Entity arrow, Entity wall ) {arrow.removeFromWorld();}
     });
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.ENEMY) {
+      @Override
+      protected void onCollisionBegin(Entity player, Entity enemy) {
+        var hp = player.getComponent(HealthIntComponent.class);
+        if (hp.getValue() > 1){
+          hp.damage(5);
 
+        }
+        Entity explosion = spawn("explosion", player.getCenter().subtract(150,200));
+        enemy.removeFromWorld();
+        getGameTimer().runOnceAfter(
+                () -> {
+                  explosion.removeFromWorld();
+                },
+                Duration.seconds(Config.ExplosionTimer));
+        }
+    });
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
       @Override
       protected void onCollisionBegin(Entity player, Entity coin) {
@@ -225,7 +261,7 @@ public class App extends GameApplication {
     //Entity closedDoor = spawn("closedDoor", )
     Spawn.spawnInitialObjects();
    // spawn("ak", 600, 600);
-   // spawn("enemy", 48, 240);
+    spawn("enemy", 150, 1240);
     this.player = spawn("player", 150, 1400);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 16, 16,
