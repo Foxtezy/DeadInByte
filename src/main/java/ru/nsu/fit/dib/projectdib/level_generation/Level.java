@@ -42,13 +42,16 @@ public class Level {
     //строим дерево
     BinaryPartitionAG partition = new BinaryPartitionAG(this, numberOfBigAreas,
         numberOfMiddleAreas);
+
     tree = new BPLeaf(new Point(0, 0), new Point(64, 64));
     partition.setPartition(tree);
+
     //граф
     graph = new BPGraph(tree, this);
     //Рисуем комнаты и коридоры
     EmptyRoomGenerator generator = new EmptyRoomGenerator(graph, this);
     generator.generateRoom(BIG);
+
     graph.addEdges(BIG, rn);
     generateHallways(3);
     generator.generateRoom(MIDDLE);
@@ -60,6 +63,7 @@ public class Level {
     //проверка на возможность входа во все комнаты и выбор старта и финиша + список комнат,
     // которые посетит игрок при минимальном пути.
     checkingEntrance();
+    print();
     //Здесь будет вызываться RoomGenerator
     //
   }
@@ -79,7 +83,7 @@ public class Level {
         }
       }
     }
-    best.printWay(WAY);
+    //best.printWay(WAY);
     start = best.getFinishRoom();
     finish = best.getFinishRoom();
     roomList = best.getRoomList();

@@ -83,7 +83,7 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.PLAYER)
        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
-        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(150, 200)))
+        .bbox(new HitBox(new Point2D(25, 110), BoundingShape.box(150, 150)))
         .anchorFromCenter()
         .with(physics)
         .with(new PlayerMovingComponent())

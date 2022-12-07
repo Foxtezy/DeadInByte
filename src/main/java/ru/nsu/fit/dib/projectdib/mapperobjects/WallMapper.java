@@ -37,11 +37,19 @@ public class WallMapper {
   public WallMapper(int chunkSize, int tileSize, int[][] map) {
     this.chunkSize = chunkSize;
     this.tileSize = tileSize;
-    wallMap = Arrays.copyOf(map, map.length);
+    wallMap = Arrays.copyOf(invert(map), map.length);
     markWalls();
     makeWall();
   }
 
+  private int[][] invert(int [][] map)
+  {
+    int[][] newMap =new int[map.length][map.length-1];
+    for (int x=0;x<map.length-1;x++)
+      for (int y=0;y<map[y].length-1;y++)
+        newMap[x][y]=map[y][x];
+    return newMap;
+  }
   public int getChunkSize() {
     return chunkSize;
   }

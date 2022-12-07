@@ -8,29 +8,21 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
-import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.io.FileSystemService;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Random;
-import java.util.function.Function;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -52,6 +44,7 @@ public class App extends GameApplication {
 
   @Override
   protected void initSettings(GameSettings settings) {
+    settings.setFileSystemWriteAllowed(false);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig("src/main/resources/cfg.ini");
@@ -202,14 +195,17 @@ public class App extends GameApplication {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
+
     Level lvl= new Level(2345,64,64,1,15);
     String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
+    FileSystemService fs = getFileSystemService();
     FXGL.setLevelFromMap(levelName);
     WallMapper wallMapper = new WallMapper(128, 16, lvl.map);
+
     this.player = spawn("player", lvl.start.getCentrePoint().x, lvl.start.getCentrePoint().y);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-    viewport.setZoom(1.5);
+    viewport.setZoom(1.7);
     viewport.setLazy(true);
 
 
