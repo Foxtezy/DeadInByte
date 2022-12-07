@@ -19,6 +19,7 @@ public class Spawn {
     Entity openedDoor2 = getGameWorld().create("openedDoor", new SpawnData(384, 1280));
     Entity button2 = spawn("button", new SpawnData(384, 1220).put("closedDoor", closedDoor2));
     Entity enemyTrigger = spawn("enemyTrigger", 240, 192);
+    Entity enemy = getGameWorld().create("enemy", new SpawnData(48, 48));
   }
 
   public static void enemySpawn() {
