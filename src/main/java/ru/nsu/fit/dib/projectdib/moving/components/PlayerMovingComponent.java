@@ -56,7 +56,6 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   public PlayerMovingComponent() {
     //resources.assets.textures
     Image image = image("player.png");
-    Image weapon = image(this.currentWeapon);
 
     //animation settings
     int frameWidth = (int) image.getWidth() / 4;
