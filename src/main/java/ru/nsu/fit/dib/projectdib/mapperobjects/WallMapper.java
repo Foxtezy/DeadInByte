@@ -14,7 +14,7 @@ public class WallMapper {
 
   private Map<Chunk, List<PhysicalObject>> walls = new HashMap<>();
 
-  private static final int WALL = BlockDensity.WALL.density - 1;
+  private static final int WALL = BlockDensity.WALL.density + 1;
 
   private static final int FLOOR = BlockDensity.FLOOR.density;
 
@@ -37,17 +37,17 @@ public class WallMapper {
   public WallMapper(int chunkSize, int tileSize, int[][] map) {
     this.chunkSize = chunkSize;
     this.tileSize = tileSize;
-    wallMap = Arrays.copyOf(invert(map), map.length);
+    wallMap = invert(map);
     markWalls();
     makeWall();
   }
 
   private int[][] invert(int [][] map)
   {
-    int[][] newMap =new int[map.length][map.length-1];
-    for (int x=0;x<map.length-1;x++)
-      for (int y=0;y<map[y].length-1;y++)
-        newMap[x][y]=map[y][x];
+    int[][] newMap = new int[map.length][map.length];
+    for (int x = 0; x < map.length; x++)
+      for (int y = 0; y < map[x].length; y++)
+        newMap[x][y] = map[y][x];
     return newMap;
   }
   public int getChunkSize() {
@@ -82,12 +82,13 @@ public class WallMapper {
   private void makeWall() {
     for (int y = 0; y < wallMap.length; y++) {
       for (int x = 0; x < wallMap[y].length; x++) {
-        if (isWall(y, x)) {
+        if (wallMap[y][x] == WALL) {
           wallMap[y][x] = BOUND;
           makeEntity(y, x);
         }
       }
     }
+    int x = 10;
   }
 
   private void makeEntityDown(int sy, int sx) {

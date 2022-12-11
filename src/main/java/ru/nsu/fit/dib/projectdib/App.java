@@ -198,14 +198,13 @@ public class App extends GameApplication {
 
     Level lvl= new Level(2345,64,64,1,15);
     String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
-    FileSystemService fs = getFileSystemService();
     FXGL.setLevelFromMap(levelName);
-    WallMapper wallMapper = new WallMapper(128, 16, lvl.map);
 
+    WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
     this.player = spawn("player", lvl.start.getCentrePoint().x, lvl.start.getCentrePoint().y);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-    viewport.setZoom(1.7);
+    viewport.setZoom(1.0);
     viewport.setLazy(true);
 
 
