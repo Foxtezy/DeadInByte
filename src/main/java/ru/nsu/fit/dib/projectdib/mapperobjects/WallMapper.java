@@ -133,6 +133,28 @@ public class WallMapper {
       walls.put(chunk, new ArrayList<>());
     }
     walls.get(chunk).add(physicalObject);
+    for (int c = 1; ; c++) {
+      if (physicalObject.x() + c * chunkSize >= physicalObject.width()) {
+        break;
+      }
+      Chunk chunkw = new Chunk((physicalObject.x() / chunkSize) + c, physicalObject.y() / chunkSize);
+      if (!walls.containsKey(chunkw)) {
+        walls.put(chunkw, new ArrayList<>());
+      }
+      walls.get(chunkw).add(physicalObject);
+    }
+
+    for (int c = 1; ; c++) {
+      if (physicalObject.y() + c * chunkSize >= physicalObject.height()) {
+        break;
+      }
+      Chunk chunkh = new Chunk(physicalObject.x() / chunkSize, (physicalObject.y() / chunkSize) + c);
+      if (!walls.containsKey(chunkh)) {
+        walls.put(chunkh, new ArrayList<>());
+      }
+      walls.get(chunkh).add(physicalObject);
+    }
+
   }
 
 
