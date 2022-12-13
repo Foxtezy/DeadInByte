@@ -84,7 +84,7 @@ public class Level implements Serializable {
         }
       }
     }
-    //best.printWay(WAY);
+    best.printWay(WAY);
     start = best.getFinishRoom();
     finish = best.getFinishRoom();
     roomList = best.getRoomList();

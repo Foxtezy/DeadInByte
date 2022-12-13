@@ -33,6 +33,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -206,12 +207,13 @@ public class App extends GameApplication {
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
 
-    Level lvl= new Level(21341,64,64,1,15);
+    Level lvl= new Level(new Random().nextInt(),64,64,1,15);
     String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
     FXGL.setLevelFromMap(levelName);
     WallMapper wallMapper;
+    Level oldLevel;
     try {
-      Level oldLevel = deSerialize();
+      oldLevel = deSerialize();
       wallMapper = new WallMapper(256, 16, oldLevel.map);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -221,7 +223,7 @@ public class App extends GameApplication {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    this.player = spawn("player", lvl.start.getCentrePoint().x, lvl.start.getCentrePoint().y);
+    this.player = spawn("player", oldLevel.start.getCentrePoint().x * 16, oldLevel.start.getCentrePoint().y * 16);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.0);
