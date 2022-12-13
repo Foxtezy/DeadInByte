@@ -215,6 +215,7 @@ public class App extends GameApplication {
     try {
       oldLevel = deSerialize();
       wallMapper = new WallMapper(256, 16, oldLevel.map);
+      this.player = spawn("player", oldLevel.start.getCentrePoint().x * 16, oldLevel.start.getCentrePoint().y * 16);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -223,7 +224,6 @@ public class App extends GameApplication {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    this.player = spawn("player", oldLevel.start.getCentrePoint().x * 16, oldLevel.start.getCentrePoint().y * 16);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.0);
