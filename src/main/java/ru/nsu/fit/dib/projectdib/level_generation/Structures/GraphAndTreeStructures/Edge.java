@@ -1,11 +1,12 @@
 package ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.Area;
 
-public class Edge {
+public class Edge implements Serializable {
 
   private final List<Area> areaList;
   private Integer weight = 0;

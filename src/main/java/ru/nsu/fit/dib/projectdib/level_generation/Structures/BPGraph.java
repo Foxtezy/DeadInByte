@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.level_generation.Structures;
 import static java.lang.Math.abs;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +14,7 @@ import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructu
 import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 
-public class BPGraph {
+public class BPGraph implements Serializable {
 
   public List<Area> nodesList;
   public List<Edge> traversedEdges;

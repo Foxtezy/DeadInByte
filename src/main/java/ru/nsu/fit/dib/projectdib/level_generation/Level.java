@@ -8,6 +8,7 @@ import static ru.nsu.fit.dib.projectdib.level_generation.BlockDensity.WALL;
 import static ru.nsu.fit.dib.projectdib.level_generation.BlockDensity.WAY;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 import ru.nsu.fit.dib.projectdib.level_generation.AreaGeneration.BinaryPartitionAG;
@@ -18,7 +19,7 @@ import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.EmptyRoomGenera
 import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
 import ru.nsu.fit.dib.projectdib.level_generation.Way.FindWay;
 
-public class Level {
+public class Level implements Serializable {
 
   public final Random rn;
   public final BPGraph graph;
