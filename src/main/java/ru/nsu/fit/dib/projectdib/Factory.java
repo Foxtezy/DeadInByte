@@ -134,10 +134,10 @@ public class Factory implements EntityFactory {
    */
   @Spawns("box")
   public Entity newBox(SpawnData data) {
-    var hp = new HealthIntComponent(3);
+    var hp = new HealthIntComponent(1);
     var hpView = new ProgressBar(false);
     hpView.setFill(Color.LIGHTGREEN);
-    hpView.setMaxValue(3);
+    hpView.setMaxValue(1);
     hpView.setWidth(40);
     hpView.setTranslateY(-10);
     hpView.currentValueProperty().bind(hp.valueProperty());
@@ -279,7 +279,7 @@ public class Factory implements EntityFactory {
         .collidable()
         .with(hp)
         .view(hpView)
-        .with(new CellMoveComponent(16, 16, 100))
+        .with(new CellMoveComponent(16, 16, 150))
         .with(move)
         .with(new PlayerChaseComponent(move))
         .build();

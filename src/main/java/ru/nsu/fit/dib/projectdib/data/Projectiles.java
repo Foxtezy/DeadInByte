@@ -1,7 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data;
 
 public enum Projectiles {
-        ARROW("arrow", 250, 3),
+        ARROW("arrow", 250, 2),
         BULLET("bullet", 500, 1);
 
 
