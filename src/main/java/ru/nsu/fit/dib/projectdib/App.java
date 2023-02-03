@@ -55,6 +55,7 @@ public class App extends GameApplication {
 
   @Override
   protected void initSettings(GameSettings settings) {
+    settings.setTitle("RDPLS-D2");
     settings.setFileSystemWriteAllowed(false);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
@@ -82,8 +83,6 @@ public class App extends GameApplication {
         settings.setHeight(600);
       }
     }
-    // Title
-    settings.setTitle("DiB");
   }
 
   public boolean skipOther = false;
@@ -200,7 +199,6 @@ public class App extends GameApplication {
         });
   }
 
-  // Спавн существ
   @Override
   protected void initGame() {
     viewport = getGameScene().getViewport();
@@ -215,7 +213,8 @@ public class App extends GameApplication {
     try {
       oldLevel = deSerialize();
       wallMapper = new WallMapper(256, 16, oldLevel.map);
-      this.player = spawn("player", oldLevel.start.getCentrePoint().x * 16, oldLevel.start.getCentrePoint().y * 16);
+      oldLevel.print();
+      this.player = spawn("player", (oldLevel.start.getCentrePoint().x - 1) * 16, (oldLevel.start.getCentrePoint().y - 1) * 16);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -226,7 +225,7 @@ public class App extends GameApplication {
     }
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-    viewport.setZoom(1.0);
+    viewport.setZoom(1.2);
     viewport.setLazy(true);
 
 
@@ -261,7 +260,7 @@ public class App extends GameApplication {
     oos.close();
   }
 
-  private Level deSerialize() throws Exception{
+  private Level deSerialize() throws Exception {
     FileInputStream fis = new FileInputStream("level.out");
     ObjectInputStream oin = new ObjectInputStream(fis);
     return (Level) oin.readObject();

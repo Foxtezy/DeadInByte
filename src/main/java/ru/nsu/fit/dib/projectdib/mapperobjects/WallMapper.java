@@ -163,7 +163,7 @@ public class WallMapper {
       return false;
     }
     try {
-      if (wallMap[y + 1][x] > FLOOR && wallMap[y][x + 1] != FLOOR && wallMap[y - 1][x] > FLOOR
+      if (wallMap[y + 1][x] > FLOOR && wallMap[y][x + 1] > FLOOR && wallMap[y - 1][x] > FLOOR
           && wallMap[y][x - 1] > FLOOR) {
         return false;
       }
