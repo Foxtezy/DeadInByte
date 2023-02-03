@@ -3,12 +3,13 @@ package ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStruct
 import static java.lang.Math.abs;
 
 import java.awt.Point;
+import java.io.Serializable;
 import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
 
 /**
  * Отдельная область на карте, в которой генерируется помещение
  */
-public class Area {
+public class Area implements Serializable {
 
   private final Point firstPoint;
   private final Point secondPoint;

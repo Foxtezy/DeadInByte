@@ -9,10 +9,11 @@ import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTree
 import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.SMALL;
 
 import java.awt.Point;
+import java.io.Serializable;
 import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.Area;
 import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
 
-public class BPLeaf {
+public class BPLeaf implements Serializable {
 
   public static final int P_BIG = 300;
   public static final int P_MIDDLE = 100;

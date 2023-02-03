@@ -3,8 +3,9 @@ package ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration;
 import static java.lang.Math.abs;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Room {
+public class Room implements Serializable {
 
   private final Point firstPoint;
   private final Point firstPointWithWalls;

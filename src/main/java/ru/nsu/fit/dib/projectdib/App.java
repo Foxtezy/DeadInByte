@@ -8,29 +8,41 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.level.LevelLoader;
+import com.almasb.fxgl.entity.level.tiled.TMXLevelLoader;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
-import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.io.FileSystemService;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
+import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoader;
+import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoaderComponent;
+import ru.nsu.fit.dib.projectdib.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.tmxbuilder.LevelToTmx;
 
 public class App extends GameApplication {
   Factory factory;
@@ -38,17 +50,13 @@ public class App extends GameApplication {
   private Entity player;
 
   public static void main(String[] args) {
-    //testing
-    String p="src/main/resources/assets/levels/texture_pallettes/new_palette.json";
-    //Level lvl= new Level(234535,64,64,1,15);
-
-    //lvl.print();
-    //testng
     launch(args);
   }
 
   @Override
   protected void initSettings(GameSettings settings) {
+    settings.setTitle("RDPLS-D2");
+    settings.setFileSystemWriteAllowed(false);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig("src/main/resources/cfg.ini");
@@ -75,8 +83,6 @@ public class App extends GameApplication {
         settings.setHeight(600);
       }
     }
-    // Title
-    settings.setTitle("DiB");
   }
 
   public boolean skipOther = false;
@@ -193,13 +199,38 @@ public class App extends GameApplication {
         });
   }
 
-  // Спавн существ
   @Override
   protected void initGame() {
     viewport = getGameScene().getViewport();
     factory = new Factory();
-
     getGameWorld().addEntityFactory(factory);
+
+    Level lvl= new Level(new Random().nextInt(),64,64,1,15);
+    String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
+    FXGL.setLevelFromMap(levelName);
+    WallMapper wallMapper;
+    Level oldLevel;
+    try {
+      oldLevel = deSerialize();
+      wallMapper = new WallMapper(256, 16, oldLevel.map);
+      oldLevel.print();
+      this.player = spawn("player", (oldLevel.start.getCentrePoint().x - 1) * 16, (oldLevel.start.getCentrePoint().y - 1) * 16);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    try {
+      serialize(lvl);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+    player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
+    viewport.setZoom(1.2);
+    viewport.setLazy(true);
+
+
+
+    /*
     FXGL.setLevelFromMap("tmx/level2.tmx");
     Spawn.spawnInitialObjects();
     spawn("enemy", 48, 240);
@@ -218,6 +249,20 @@ public class App extends GameApplication {
     spawn("ak", 600, 600);
     this.player = spawn("player", 60, 60);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    viewport.setLazy(true);
+    viewport.setLazy(true); */
+  }
+
+  private void serialize(Level lvl) throws IOException {
+    FileOutputStream fos = new FileOutputStream("level.out");
+    ObjectOutputStream oos = new ObjectOutputStream(fos);
+    oos.writeObject(lvl);
+    oos.flush();
+    oos.close();
+  }
+
+  private Level deSerialize() throws Exception {
+    FileInputStream fis = new FileInputStream("level.out");
+    ObjectInputStream oin = new ObjectInputStream(fis);
+    return (Level) oin.readObject();
   }
 }

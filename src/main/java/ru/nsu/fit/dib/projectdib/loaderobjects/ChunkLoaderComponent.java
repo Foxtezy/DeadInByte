@@ -23,6 +23,7 @@ public class ChunkLoaderComponent extends Component {
   public void onAdded() {
     Point2D position = entity.getPosition();
     currentChunk = new Chunk((int) position.getX() / chunkSize, (int) position.getY() / chunkSize);
+    chunkLoader.updateChunks(currentChunk);
   }
 
   @Override

@@ -41,7 +41,7 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
 
   private final double speed = 250;
 
-  private final double scale = 0.15;
+  private final double scale = 0.07;
 
   private boolean isMoving = false;
 

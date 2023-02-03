@@ -30,7 +30,6 @@ public class BinaryPartitionAG {
   public int numberOfBigAreas;
   public int numberOfMiddleAreas;
   public BPGraph graph;
-
   /**
    * инциализация карты
    *
@@ -46,7 +45,6 @@ public class BinaryPartitionAG {
     this.requiredNumberOfMiddleAreas = numberOfMiddleAreas;
     this.numberOfBigAreas = 0;
     this.numberOfMiddleAreas = 0;
-    //printPartition(tree);
   }
 
   /**
@@ -55,7 +53,6 @@ public class BinaryPartitionAG {
    * @param tree - текущая вершина
    */
   public void setPartition(BPLeaf tree) {
-
     Point first = tree.getFirstPoint();
     Point second = tree.getSecondPoint();
     int blockWidth = abs(first.x - second.x);
@@ -88,6 +85,7 @@ public class BinaryPartitionAG {
         }
       }
     }
+    //printPartition(tree);
   }
 
   /**
