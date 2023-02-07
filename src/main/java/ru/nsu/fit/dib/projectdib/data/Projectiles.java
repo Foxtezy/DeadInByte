@@ -14,5 +14,5 @@ public enum Projectiles {
         }
         public String getName() {return name;}
         public Integer getSpeed() {return speed;}
- //       public Projectiles getProjectile(String name){return Projectiles.}
+
 }
