@@ -38,6 +38,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
@@ -79,6 +80,8 @@ public class Factory implements EntityFactory {
     WallMapper wallMapper = new WallMapper(64, 16, arr);*/
 
     //////////////
+    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 250.0, "player.png");
+
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
@@ -86,7 +89,7 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(new Point2D(25, 110), BoundingShape.box(160, 160)))
         .anchorFromCenter()
         .with(physics)
-        .with(new PlayerMovingComponent())
+        .with(new PlayerMovingComponent(specs))
         .with(new CellMoveComponent(25, 25, 250))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))

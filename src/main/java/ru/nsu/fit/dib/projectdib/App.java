@@ -31,6 +31,7 @@ import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 import ru.nsu.fit.dib.projectdib.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoader;
@@ -98,6 +99,7 @@ public class App extends GameApplication {
     onKey(KeyCode.D,"Right",() -> player.getComponent(PlayerMovingComponent.class).right() );
     onKey(KeyCode.W,"up",() -> player.getComponent(PlayerMovingComponent.class).up() );
     onKey(KeyCode.S,"Down",() -> player.getComponent(PlayerMovingComponent.class).down() );
+    onKey(KeyCode.X, "SwapWeapon", () -> player.getComponent(PlayerMovingComponent.class).swapWeapons());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -123,8 +125,8 @@ public class App extends GameApplication {
                 .stream()
                 .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
                 .forEach(ak -> {
-                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
-                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("ak");
+                spawn(player.getComponent(PlayerMovingComponent.class).getSpecification().getMainWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).getSpecification().setMainWeapon("ak");
                   ak.removeFromWorld();
                   setSkipOther(true);
                 });
@@ -135,14 +137,12 @@ public class App extends GameApplication {
                 .stream()
                 .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
                 .forEach(bow -> {
-                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
-                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("bow");
+                  spawn(player.getComponent(PlayerMovingComponent.class).getSpecification().getMainWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).getSpecification().setMainWeapon("bow");
                   bow.removeFromWorld();
                   setSkipOther(true);
                 });
         }
-
-
         setSkipOther(false);
       }
     }, KeyCode.F, VirtualButton.X);
