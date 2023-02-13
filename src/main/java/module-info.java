@@ -6,6 +6,7 @@ open module projectdib.main {
     requires com.google.gson;
   requires annotations;
   exports ru.nsu.fit.dib.projectdib;
+  exports ru.nsu.fit.dib.projectdib.UI;
 }
 /*
 module ru.nsu.fit.dib.projectdib {

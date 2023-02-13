@@ -66,7 +66,6 @@ public class Level implements Serializable {
     checkingEntrance();
     //print();
     //Здесь будет вызываться RoomGenerator
-    //
   }
 
   private void checkingEntrance() {
