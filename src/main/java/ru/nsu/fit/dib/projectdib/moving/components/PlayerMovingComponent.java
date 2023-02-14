@@ -20,6 +20,7 @@ import ru.nsu.fit.dib.projectdib.Config;
 
 import ru.nsu.fit.dib.projectdib.EntityType;
 
+import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.moving.MovingInterface;
 
@@ -29,7 +30,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 public class PlayerMovingComponent extends Component implements MovingInterface {
 
   private PhysicsComponent physics;
-  public String currentWeapon;
+  //public String currentWeapon;
   private AnimatedTexture texture;
 
   private final AnimationChannel animWalkRight;
@@ -39,23 +40,23 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
 
   private LocalTimer shootTimer = newLocalTimer();
 
-  private final double speed = 250;
+//  private final double speed = 250;
+  private double speed;
+  private HeroSpecs specification;
+  private String currentWeapon;
 
   private final double scale = 0.07;
 
   private boolean isMoving = false;
 
-  public String getCurrentWeapon() {
-    return currentWeapon;
-  }
 
-  public void setCurrentWeapon(String currentWeapon) {
-    this.currentWeapon = currentWeapon;
-  }
 
-  public PlayerMovingComponent() {
+  public PlayerMovingComponent(HeroSpecs specs) {
+    this.specification = specs;
+    this.speed = specification.getSpeed();
+    this.currentWeapon = specification.getMainWeapon();
     //resources.assets.textures
-    Image image = image("player.png");
+    Image image = image(specification.getPlayerImage());
 
     //animation settings
     int frameWidth = (int) image.getWidth() / 4;
@@ -79,7 +80,7 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     entity.getTransformComponent().setScaleOrigin(new Point2D(15, 20));
     entity.getViewComponent().addChild(texture);
     getEntity().setScaleUniform(scale);
-    setCurrentWeapon("bow");
+    //setCurrentWeapon("bow");
   }
 
   @Override
@@ -154,7 +155,8 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     physics.setVelocityX(0);
   }
   public void shoot() {
-    switch(currentWeapon){
+
+    switch(specification.getMainWeapon()){
       case("bow"):
         if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) return;
         FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
@@ -173,5 +175,13 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
       */
     }
 
+
   }
+  public void swapWeapons() {
+    String change = specification.getMainWeapon();
+    specification.setMainWeapon(specification.getSecondWeapon());
+    specification.setSecondWeapon(change);
+  }
+
+  public HeroSpecs getSpecification(){return specification;}
 }
