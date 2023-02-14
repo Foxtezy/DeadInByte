@@ -14,6 +14,21 @@ import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructu
 import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 
+/**
+ * Граф, созданный на основе Binary-Partition-дерева.
+ * node-ы этого дерева - области(area) на карте, ключающие в себя комнаты(room)
+ * Area:
+ * ##########
+ * ##########
+ * ###    ###
+ * ##########
+ * ##########
+ *
+ * Room:
+ * ######
+ * #    #
+ * ######
+ */
 public class BPGraph implements Serializable {
 
   public List<Area> nodesList;
