@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 
 import java.awt.Point;
 import java.io.Serializable;
+import javafx.geometry.Point2D;
 
 public class Room implements Serializable {
 

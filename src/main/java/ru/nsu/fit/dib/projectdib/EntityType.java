@@ -22,7 +22,8 @@ public enum EntityType {
   CHEST("chest"),
   BOW("bow"),
   AK("ak"),
-  EXPLOSION("explosion");
+  EXPLOSION("explosion"),
+  ENEMY_TRIGGER("enemyTrigger");
 
   private final String name;
 

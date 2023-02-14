@@ -69,6 +69,8 @@ public class Level implements Serializable {
     //
   }
 
+  //public static BPGraph getGraph() {return graph;}
+
   private void checkingEntrance() {
     FindWay best = null;
 

@@ -120,6 +120,17 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+  @Spawns("enemyTrigger")
+  public Entity enemyTrigger(SpawnData data) {
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.ENEMY_TRIGGER)
+        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
+        .with("enemyNumber", data.get("enemyNumber"))
+        .build();
+  }
+
   /**
    * Entity Box.
    *
@@ -274,9 +285,9 @@ public class Factory implements EntityFactory {
         .collidable()
         .with(hp)
         .view(hpView)
-        .with(new CellMoveComponent(25,25,100))
-        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-        .with(new PlayerChaseComponent())
+        //.with(new CellMoveComponent(25,25,100))
+        //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+        //.with(new PlayerChaseComponent())
         .build();
   }
 

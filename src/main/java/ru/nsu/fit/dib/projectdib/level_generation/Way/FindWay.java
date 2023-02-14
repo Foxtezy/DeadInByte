@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static ru.nsu.fit.dib.projectdib.level_generation.BlockDensity.WALL;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -11,6 +12,7 @@ import java.util.Queue;
 import ru.nsu.fit.dib.projectdib.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.BPGraph;
 
 public class FindWay {
 

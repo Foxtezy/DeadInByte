@@ -8,17 +8,26 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static javax.swing.UIManager.put;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.BIG;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.MIDDLE;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.OVERBIG;
+import static ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.SMALL;
 
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -34,6 +43,13 @@ import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 import ru.nsu.fit.dib.projectdib.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
+import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
+import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.RoomGenerator;
+import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.RoomType;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.BPGraph;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.Area;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
+import ru.nsu.fit.dib.projectdib.level_generation.Structures.GraphAndTreeStructures.Edge;
 import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.mapperobjects.WallMapper;
@@ -206,6 +222,39 @@ public class App extends GameApplication {
             openedDoor.removeFromWorld();
           }
         });
+    getPhysicsWorld().addCollisionHandler(
+        new CollisionHandler(EntityType.PLAYER, EntityType.ENEMY_TRIGGER) {
+          protected void onCollisionBegin(Entity player, Entity enemyTrigger) {
+            int enemyNumber = enemyTrigger.getInt("enemyNumber");
+            if (enemyNumber == 1) {
+              enemySpawn(enemyTrigger);
+            } else if (enemyNumber == 2) {
+              enemySpawn(enemyTrigger);
+              enemySpawn(enemyTrigger);
+            } else if (enemyNumber == 3) {
+              enemySpawn(enemyTrigger);
+              enemySpawn(enemyTrigger);
+              enemySpawn(enemyTrigger);
+            } else if (enemyNumber == 4) {
+              enemySpawn(enemyTrigger);
+              enemySpawn(enemyTrigger);
+              enemySpawn(enemyTrigger);
+              enemySpawn(enemyTrigger);
+            }
+            enemyTrigger.removeComponent(CollidableComponent.class);
+          }
+    });
+  }
+
+  private void enemySpawn(Entity enemyTrigger) {
+    spawn("enemy", enemyTrigger.getCenter());
+  }
+  private void enemyTriggerSpawn(int i, Level lvl, int enemyNumber) {
+    spawn("enemyTrigger", new SpawnData(lvl.graph.nodesList.get(i).getRoom().getFirstPoint().x * 16,
+        lvl.graph.nodesList.get(i).getRoom().getFirstPoint().y * 16)
+        .put("width", lvl.graph.nodesList.get(i).getRoom().getWidth() * 16)
+        .put("height", lvl.graph.nodesList.get(i).getRoom().getHeight() * 16)
+        .put("enemyNumber", enemyNumber));
   }
 
   @Override
@@ -219,12 +268,30 @@ public class App extends GameApplication {
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
     lvl.print();
+    int k = lvl.graph.nodesList.size();
+    for (int i = 0; i < k; i++) {
+      if (lvl.graph.nodesList.get(i).getRoom() == lvl.start) { continue;}
+      if (lvl.graph.nodesList.get(i).getSizeType() == SMALL) {
+        enemyTriggerSpawn(i, lvl, 1);
+      } else if (lvl.graph.nodesList.get(i).getSizeType() == MIDDLE) {
+        enemyTriggerSpawn(i, lvl, 2);
+      } else if (lvl.graph.nodesList.get(i).getSizeType() == BIG) {
+        enemyTriggerSpawn(i, lvl, 3);
+      } else if (lvl.graph.nodesList.get(i).getSizeType() == OVERBIG) {
+        enemyTriggerSpawn(i, lvl, 4);
+      }
+    }
+    //spawn("enemyTrigger", new SpawnData(lvl.finish.getFirstPoint().x,lvl.finish.getFirstPoint().y)
+      //  .put("width", lvl.finish.getWidth())
+        //.put("height", lvl.finish.getHeight()));
+    //BPGraph graph = Level.getGraph();
+    //graph.nodesList.forEach(area -> spawn("enemy"));
+    //lvl.roomList.forEach(area -> spawn("enemy"));
     this.player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
-
 
 
     /*
