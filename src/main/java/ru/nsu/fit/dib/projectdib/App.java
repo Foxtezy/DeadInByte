@@ -26,6 +26,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.ui.FontType;
+import com.almasb.fxgl.ui.UI;
 import com.almasb.fxgl.ui.UIController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -35,10 +36,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
+import java.util.stream.IntStream;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.UI.GameUIController;
 import ru.nsu.fit.dib.projectdib.UI.ScenesFactory;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoader;
@@ -55,22 +59,26 @@ public class App extends GameApplication {
   public static void main(String[] args) {
     launch(args);
   }
+  UIController uiController;
   @Override
   protected void initUI(){
-
-    GameScene gs = getGameScene();
+    uiController = new GameUIController(FXGL.getGameScene());
+    //UI ui = getAssetLoader().loadUI(Asset.FXML_MAIN_UI, uiController);
+    //FXGL.getGameScene().addUI(ui);
   }
   @Override
   protected void initSettings(GameSettings settings) {
     settings.setTitle("RDPLS-D2");
     settings.setManualResizeEnabled(true);
     settings.setPreserveResizeRatio(true);
-
     settings.setFileSystemWriteAllowed(false);
     settings.setSceneFactory(new ScenesFactory());
     settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
+    settings.setFontGame("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
+    settings.setFontUI("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
+    settings.setFontText("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
     Config.setConfig("src/main/resources/cfg.ini");
     // Window mod
     switch (Config.WINDOW_MODE) {
@@ -218,8 +226,11 @@ public class App extends GameApplication {
     getGameWorld().addEntityFactory(factory);
 
     Level lvl= new Level(new Random().nextInt(),64,64,1,15);
+    //
     //EnemySpawner spawner=new EnemySpawner(lvl.graph);
     //spawner.spawn(int level);
+    //onCo
+    //
     String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
     FXGL.setLevelFromMap(levelName);
     WallMapper wallMapper;
@@ -241,6 +252,7 @@ public class App extends GameApplication {
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
+
 
 
 

@@ -1,11 +1,11 @@
-package ru.nsu.fit.dib.projectdib.UI;
+package ru.nsu.fit.dib.projectdib.UI.UIElements;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-class WrappedImageView extends ImageView {
+public class WrappedImageView extends ImageView {
 
-  WrappedImageView(Image image) {
+  public WrappedImageView(Image image) {
     super(image);
     setPreserveRatio(false);
   }

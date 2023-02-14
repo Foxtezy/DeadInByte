@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.UI;
+package ru.nsu.fit.dib.projectdib.UI.UIElements;
 
 import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;

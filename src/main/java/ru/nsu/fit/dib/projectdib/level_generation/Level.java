@@ -52,7 +52,6 @@ public class Level implements Serializable {
     //Рисуем комнаты и коридоры
     EmptyRoomGenerator generator = new EmptyRoomGenerator(graph, this);
     generator.generateRoom(BIG);
-
     graph.addEdges(BIG, rn);
     generateHallways(3);
     generator.generateRoom(MIDDLE);

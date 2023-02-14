@@ -6,31 +6,15 @@ import static java.lang.Math.min;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.texture.AnimatedTexture;
-import com.almasb.fxgl.texture.AnimationChannel;
-import com.almasb.fxgl.ui.FXGLButton;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
 import javafx.animation.Animation;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.SplitPane.Divider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -38,13 +22,15 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.UI.UIElements.ImageButton;
+import ru.nsu.fit.dib.projectdib.UI.UIElements.SpriteAnimation;
+import ru.nsu.fit.dib.projectdib.UI.UIElements.WrappedImageView;
 
 //fx:controller="ru.nsu.fit.dib.projectdib.UI.Controller"
-public class StartMenu extends FXGLMenu {
+public class MainMenu extends FXGLMenu {
 
-  public StartMenu(MenuType type) {
+  public MainMenu(MenuType type) {
     super(type);
     Pane canvas = getContentRoot();
     canvas.setStyle("-fx-background-color: #121218;");
@@ -101,7 +87,7 @@ public class StartMenu extends FXGLMenu {
     images.getChildren().addAll(forest, campfire);
     //======================================[     Fonts     ]=======================================
 
-    Font font = Font.loadFont("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf", 80);
+    Font font = Font.loadFont("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf", 65);
     Font bigFont = Font.loadFont("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf",
         140);
     //=====================================[    GameName    ]=======================================
@@ -126,18 +112,31 @@ public class StartMenu extends FXGLMenu {
 
     Image unpushed = new Image("assets/UI/images/menu_button1k.png", 1020, 180, true, false);
     Image pushed = new Image("assets/UI/images/menu_selected_button1k.png", 1020, 180, true, false);
-
+    //===Start===
     ImageButton start = new ImageButton("Start", font, pushed, unpushed);
-    start.setOnMouseClicked(event -> FXGL.getGameController());
-
+    //===Multipalyer
     ImageButton multiplayer = new ImageButton("Multiplayer", font, pushed, unpushed);
-
+    //===Settings===
     ImageButton settings = new ImageButton("Settings", font, pushed, unpushed);
     //ImageView x = new ImageView(new Image("assets/UI/images/menu_button1k.png"));
 
     ui.setAlignment(Pos.CENTER);
     Rectangle space = new Rectangle(10, 140, Paint.valueOf("transparent"));
     ui.getChildren().addAll(space, start, multiplayer, settings);
+    //=====================================[ Buttons Handlers ]=====================================
+    //===Multiplayer===
+    multiplayer.setOnMouseClicked(event -> {
+      ImageButton connect = new ImageButton("Connect", font, pushed, unpushed);
+      ImageButton server = new ImageButton("Create server", font, pushed, unpushed);
+      ui.getChildren().removeAll(start, multiplayer, settings);
+      ui.getChildren().addAll(connect, server);
+    });
+    //===Start===
+    start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
+    //===Settings===
+    settings.setOnMouseClicked(event -> {});
+    //============================================================================================
+
   }
 
   WrappedImageView initializeAnimationImageView(String url, double requestedWidth,

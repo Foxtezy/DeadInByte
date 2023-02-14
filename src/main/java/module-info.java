@@ -7,6 +7,7 @@ open module projectdib.main {
   requires annotations;
   exports ru.nsu.fit.dib.projectdib;
   exports ru.nsu.fit.dib.projectdib.UI;
+  exports ru.nsu.fit.dib.projectdib.UI.UIElements;
 }
 /*
 module ru.nsu.fit.dib.projectdib {
