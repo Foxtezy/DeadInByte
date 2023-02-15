@@ -21,8 +21,9 @@ public enum EntityType {
   DOOR_TRIGGER("doorTrigger"),
   CHEST("chest"),
   BOW("bow"),
-  AK("ak");
-
+  AK("ak"),
+  GUN("gun"),
+  SHOTGUN("shotgun");
   private final String name;
 
   EntityType(String name) {
