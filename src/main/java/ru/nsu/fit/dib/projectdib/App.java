@@ -123,6 +123,7 @@ public class App extends GameApplication {
     onKey(KeyCode.D,"Right",() -> player.getComponent(PlayerMovingComponent.class).right() );
     onKey(KeyCode.W,"up",() -> player.getComponent(PlayerMovingComponent.class).up() );
     onKey(KeyCode.S,"Down",() -> player.getComponent(PlayerMovingComponent.class).down() );
+    onKey(KeyCode.X, "SwapWeapon", () -> player.getComponent(PlayerMovingComponent.class).swapWeapons());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -183,6 +184,20 @@ public class App extends GameApplication {
       protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
     });
 
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ENEMY, EntityType.PROJECTILE) {
+      @Override
+      protected void onCollisionBegin(Entity enemy, Entity projectile) {
+        var hp = enemy.getComponent(HealthIntComponent.class);
+        if (hp.getValue() > 1){
+          projectile.removeFromWorld();
+          hp.damage(1);
+          return;
+        }
+        projectile.removeFromWorld();
+        enemy.removeFromWorld();
+        projectile.removeFromWorld();}
+    });
+
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
       @Override
       protected void onCollisionBegin(Entity chest, Entity projectile) {
@@ -226,11 +241,6 @@ public class App extends GameApplication {
     getGameWorld().addEntityFactory(factory);
 
     Level lvl= new Level(new Random().nextInt(),64,64,1,15);
-    //
-    //EnemySpawner spawner=new EnemySpawner(lvl.graph);
-    //spawner.spawn(int level);
-    //onCo
-    //
     String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
     FXGL.setLevelFromMap(levelName);
     WallMapper wallMapper;
@@ -252,7 +262,6 @@ public class App extends GameApplication {
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
-
 
 
 
