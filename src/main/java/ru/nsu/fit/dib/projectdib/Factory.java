@@ -80,7 +80,7 @@ public class Factory implements EntityFactory {
     WallMapper wallMapper = new WallMapper(64, 16, arr);*/
 
     //////////////
-    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 250.0, "player.png");
+    //HeroSpecs specs = new HeroSpecs("1", "shotgun", "ak",10, 250.0, "player.png");
 
     return entityBuilder()
         .from(data)
@@ -89,7 +89,7 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(new Point2D(25, 110), BoundingShape.box(160, 160)))
         .anchorFromCenter()
         .with(physics)
-        .with(new PlayerMovingComponent(specs))
+        .with(new PlayerMovingComponent(data.get("specification")))
         .with(new CellMoveComponent(25, 25, 250))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
@@ -213,7 +213,7 @@ public class Factory implements EntityFactory {
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
+    Point2D direction = getInput().getMousePositionWorld().subtract(new Point2D(data.get("vert_deflection"),data.get("vert_deflection"))).subtract(player.getCenter().subtract(new Point2D(60,90)));
     Projectiles projectile = data.get("typeProj");
     return entityBuilder()
         .from(data)
@@ -224,7 +224,6 @@ public class Factory implements EntityFactory {
         .collidable()
         .build();
   }
-
   @Spawns("bow")
   public Entity newBow(SpawnData data) {
     return entityBuilder(data)
@@ -243,6 +242,27 @@ public class Factory implements EntityFactory {
             .type(EntityType.AK)
             .viewWithBBox(texture("weapon_ak.png", 75, 20))
             .bbox(new HitBox(BoundingShape.box(75,20)))
+            .with(new CollidableComponent(true))
+            .build();
+  }
+
+  @Spawns("gun")
+  public Entity newGun(SpawnData data) {
+    return entityBuilder(data)
+            .from(data)
+            .type(EntityType.GUN)
+            .viewWithBBox(texture("gun.png", 25, 20))
+            .bbox(new HitBox(BoundingShape.box(25,20)))
+            .with(new CollidableComponent(true))
+            .build();
+  }
+  @Spawns("shotgun")
+  public Entity newShotgun(SpawnData data) {
+    return entityBuilder(data)
+            .from(data)
+            .type(EntityType.SHOTGUN)
+            .viewWithBBox(texture("shotgun.png", 80, 50))
+            .bbox(new HitBox(BoundingShape.box(80,50)))
             .with(new CollidableComponent(true))
             .build();
   }

@@ -160,19 +160,43 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
       case("bow"):
         if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) return;
         FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
-                .put("typeProj", Projectiles.ARROW));
+                .put("typeProj", Projectiles.ARROW)
+                .put("vert_deflection", 0.0));
         shootTimer.capture();
         break;
       case("ak"):
         if(!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) return;;
         FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
-                .put("typeProj", Projectiles.BULLET));
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", 0.0));
         shootTimer.capture();
         break;
-      /*default:
-        currentWeapon = "bow";
+      case("gun"):
+        if(!shootTimer.elapsed(Config.SHOOT_DELAY_GUN)) return;;
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", 0.0));
+        shootTimer.capture();
         break;
-      */
+      case("shotgun"):
+        if(!shootTimer.elapsed(Config.SHOOT_DELAY_SHOTGUN)) return;;
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", 0.0));
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", 25.0));
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", 50.0));
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", -25.0));
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
+                .put("typeProj", Projectiles.BULLET)
+                .put("vert_deflection", -50.0));
+        shootTimer.capture();
+        break;
     }
 
 

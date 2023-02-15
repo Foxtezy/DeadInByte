@@ -22,6 +22,8 @@ public enum EntityType {
   CHEST("chest"),
   BOW("bow"),
   AK("ak"),
+  GUN("gun"),
+  SHOTGUN("shotgun"),
   EXPLOSION("explosion");
 
   private final String name;

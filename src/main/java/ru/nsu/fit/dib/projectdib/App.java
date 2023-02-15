@@ -14,11 +14,16 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.io.FileSystemService;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -143,6 +148,29 @@ public class App extends GameApplication {
                   setSkipOther(true);
                 });
         }
+        if(!isSkipOther()){
+          getGameWorld().getEntitiesByType(EntityType.GUN)
+                  .stream()
+                  .filter(gun -> gun.hasComponent(CollidableComponent.class) && gun.isColliding(player))
+                  .forEach(gun -> {
+                    spawn(player.getComponent(PlayerMovingComponent.class).getSpecification().getMainWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                    player.getComponent(PlayerMovingComponent.class).getSpecification().setMainWeapon("gun");
+                    gun.removeFromWorld();
+                    setSkipOther(true);
+                  });
+        }
+        if(!isSkipOther()){
+          getGameWorld().getEntitiesByType(EntityType.SHOTGUN)
+                  .stream()
+                  .filter(shotgun -> shotgun.hasComponent(CollidableComponent.class) && shotgun.isColliding(player))
+                  .forEach(shotgun -> {
+                    spawn(player.getComponent(PlayerMovingComponent.class).getSpecification().getMainWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                    player.getComponent(PlayerMovingComponent.class).getSpecification().setMainWeapon("shotgun");
+                    shotgun.removeFromWorld();
+                    setSkipOther(true);
+                  });
+        }
+
         setSkipOther(false);
       }
     }, KeyCode.F, VirtualButton.X);
@@ -219,34 +247,12 @@ public class App extends GameApplication {
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
     lvl.print();
-    this.player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16);
+    HeroSpecs specs = new HeroSpecs("1", "shotgun", "ak",10, 250.0, "player.png");
+    this.player = FXGL.spawn("player", new SpawnData((lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16).put("specification", specs));
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
 
-
-
-    /*
-    FXGL.setLevelFromMap("tmx/level2.tmx");
-    Spawn.spawnInitialObjects();
-    spawn("enemy", 48, 240);
-    this.player = spawn("player", getAppWidth() / 2, getAppHeight() / 2);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
-        (type) -> {
-          if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-            return CellState.NOT_WALKABLE;
-          }
-
-          return CellState.WALKABLE;
-        });
-    set("grid", grid);
-
-    spawn("ak", 600, 600);
-    //this.player = spawn("player", 60, 60);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    viewport.setLazy(true); */
   }
-
 }
