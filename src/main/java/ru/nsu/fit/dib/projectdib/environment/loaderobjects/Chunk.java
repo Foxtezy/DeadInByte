@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Чанки - структура хранения объектов в определенной области определенного размера на карте.
+ */
 public class Chunk {
+
   private final int x;
   private final int y;
 
@@ -50,14 +54,14 @@ public class Chunk {
   public List<Chunk> neighboringChunks() {
     List<Chunk> neighborList = new ArrayList<>();
     neighborList.add(this);
-    neighborList.add(new Chunk(x-1, y-1));
-    neighborList.add(new Chunk(x-1, y));
-    neighborList.add(new Chunk(x, y-1));
-    neighborList.add(new Chunk(x+1, y));
-    neighborList.add(new Chunk(x, y+1));
-    neighborList.add(new Chunk(x+1, y+1));
-    neighborList.add(new Chunk(x-1, y+1));
-    neighborList.add(new Chunk(x+1, y-1));
+    neighborList.add(new Chunk(x - 1, y - 1));
+    neighborList.add(new Chunk(x - 1, y));
+    neighborList.add(new Chunk(x, y - 1));
+    neighborList.add(new Chunk(x + 1, y));
+    neighborList.add(new Chunk(x, y + 1));
+    neighborList.add(new Chunk(x + 1, y + 1));
+    neighborList.add(new Chunk(x - 1, y + 1));
+    neighborList.add(new Chunk(x + 1, y - 1));
     return neighborList;
   }
 

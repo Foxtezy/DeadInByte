@@ -31,24 +31,51 @@ import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAn
  */
 public class BPGraph implements Serializable {
 
-  public List<Area> nodesList;
-  public List<Edge> traversedEdges;
-  public Stack<Edge> edgeList;
+  public List<Area> getAreaList() {
+    return areaList;
+  }
+
+  public void setAreaList(
+      List<Area> areaList) {
+    this.areaList = areaList;
+  }
+
+  public List<Edge> getEdgesList() {
+    return edgesList;
+  }
+
+  public void setEdgesList(
+      List<Edge> edgesList) {
+    this.edgesList = edgesList;
+  }
+
+  public Stack<Edge> getEdgeStack() {
+    return edgeStack;
+  }
+
+  public void setEdgeStack(
+      Stack<Edge> edgeStack) {
+    this.edgeStack = edgeStack;
+  }
+
+  private List<Area> areaList;
+  private List<Edge> edgesList;
+  private Stack<Edge> edgeStack;
   private int numberPoints = 0;
 
   public BPGraph(BPLeaf tree, Level level) {
-    nodesList = new ArrayList<>();
-    edgeList = new Stack<>();
+    areaList = new ArrayList<>();
+    edgeStack = new Stack<>();
     addLeafs(tree);
-    nodesList.sort(Comparator.comparing(Area::compare));
-    traversedEdges = new ArrayList<>();
+    areaList.sort(Comparator.comparing(Area::compare));
+    edgesList = new ArrayList<>();
   }
 
   private void addLeafs(BPLeaf tree) {
     BPLeaf left = tree.getLeftChild();
     BPLeaf right = tree.getRightChild();
     if (left == null && right == null) {
-      nodesList.add(tree.getArea());
+      areaList.add(tree.getArea());
       numberPoints++;
     }
     if (left == null || right == null) {
@@ -59,19 +86,19 @@ public class BPGraph implements Serializable {
   }
 
   public void addEdges(SizeType type, Random rn) {
-    for (int a = 0; a < nodesList.size() && nodesList.get(a).getSizeType().size >= type.size; a++) {
-      for (int b = 0; b < nodesList.size() && nodesList.get(b).getSizeType().size >= type.size;
+    for (int a = 0; a < areaList.size() && areaList.get(a).getSizeType().size >= type.size; a++) {
+      for (int b = 0; b < areaList.size() && areaList.get(b).getSizeType().size >= type.size;
           b++) {
         if (a != b) {
-          Area fst = nodesList.get(a);
-          Area snd = nodesList.get(b);
+          Area fst = areaList.get(a);
+          Area snd = areaList.get(b);
           if (haveOnePoint(fst, snd) || rn.nextInt(10) > 8) {
-            edgeList.push(new Edge(fst, snd));
+            edgeStack.push(new Edge(fst, snd));
           }
         }
       }
     }
-    edgeList.sort(Comparator.comparing(Edge::compare));
+    edgeStack.sort(Comparator.comparing(Edge::compare));
   }
 
   private Boolean haveOnePoint(Area fst, Area snd) {

@@ -9,6 +9,9 @@ import ru.nsu.fit.dib.projectdib.environment.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.JS0NHashMap;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 
+/**
+ * Класс, преврящающий сгенерированный уровень в .tmx файл.
+ */
 public class LevelToTmx {
 
   private LevelToTmx() {
@@ -19,7 +22,7 @@ public class LevelToTmx {
     String tmxPath = LevelToTmxConfig.pathToNewTmx + tmxName;
     try (FileWriter tmxWriter = new FileWriter(tmxPath, false);
         FileReader bottomTmxReader = new FileReader(LevelToTmxConfig.pathToConfigBottom);
-        FileReader topTmxReader = new FileReader(LevelToTmxConfig.pathToConfigTop)){
+        FileReader topTmxReader = new FileReader(LevelToTmxConfig.pathToConfigTop)) {
       topTmxReader.transferTo(tmxWriter);
       tmxWriter.write("\n");
 
@@ -41,8 +44,7 @@ public class LevelToTmx {
       for (int x = 0; x <= level.getWidth(); x++) {
         if (level.map[x][y] == BlockDensity.WALL.density) {
           tmxWriter.write(js0NHashMap.get("WALL").toString());
-        }
-        else {
+        } else {
           tmxWriter.write(js0NHashMap.get("FLOOR").toString());
         }
         if (y == level.getHeight() && x == level.getWidth()) {

@@ -4,6 +4,9 @@ import static java.lang.Math.abs;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Тайл с определенным весом. Именно из него строится Map.
+ */
 public class WayPoint implements Comparable<WayPoint> {
 
   public int x = 0;

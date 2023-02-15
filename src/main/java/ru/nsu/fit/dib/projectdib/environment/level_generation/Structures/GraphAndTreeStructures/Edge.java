@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.Area;
 
+/**
+ * Ребро BP графа.
+ *
+ */
 public class Edge implements Serializable {
 
   private final List<Area> areaList;

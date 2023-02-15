@@ -11,6 +11,9 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
+/**
+ * Структура для хранения названия тайла и его индефикатора.
+ */
 public class JS0NHashMap {
 
   String pathName;

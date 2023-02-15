@@ -2,6 +2,11 @@ package ru.nsu.fit.dib.projectdib.environment.level_generation.RoomGeneration;
 
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 
+/**
+ * Генератор комнат.
+ * Генерирует обстановку комнаты согласно типу.
+ * Пока только пустая...
+ */
 public class RoomGenerator {
 
   int seed;

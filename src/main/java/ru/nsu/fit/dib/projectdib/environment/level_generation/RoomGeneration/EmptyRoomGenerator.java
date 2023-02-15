@@ -10,6 +10,9 @@ import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAn
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.BPGraph;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 
+/**
+ * Генератор пустых комнат. Генерирует пустю комнату в каждой Area.
+ */
 public class EmptyRoomGenerator {
 
   private BPGraph graph;
@@ -32,7 +35,7 @@ public class EmptyRoomGenerator {
 
   private void generateGigRooms() {
 
-    graph.nodesList.forEach(area -> {
+    graph.getAreaList().forEach(area -> {
       if (area.getSizeType() != BIG) {
         return;
       }
@@ -50,7 +53,7 @@ public class EmptyRoomGenerator {
   }
 
   private void generateMiddleRooms() {
-    graph.nodesList.forEach(area -> {
+    graph.getAreaList().forEach(area -> {
       if (area.getSizeType() != MIDDLE) {
         return;
       }
@@ -68,7 +71,7 @@ public class EmptyRoomGenerator {
   }
 
   private void generateSmallRooms() {
-    graph.nodesList.forEach(area -> {
+    graph.getAreaList().forEach(area -> {
       if (area.getSizeType() != SizeType.SMALL) {
         return;
       }

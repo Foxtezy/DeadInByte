@@ -8,30 +8,26 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.Chunk;
 
+/**
+ * Создает colliders(physical walls).
+ */
 public class WallMapper {
 
 
-  private Map<Chunk, List<PhysicalObject>> walls = new HashMap<>();
-
   private static final int WALL = BlockDensity.WALL.density + 1;
-
   private static final int FLOOR = BlockDensity.FLOOR.density;
-
   private static final int BOUND = BlockDensity.WALL.density;
-
-  private int[][] wallMap;
-
-  private int lastId = 0;
-
   private final int chunkSize;
-
   private final int tileSize;
+  private Map<Chunk, List<PhysicalObject>> walls = new HashMap<>();
+  private int[][] wallMap;
+  private int lastId = 0;
 
   /**
    * Makes list of entities (walls).
    *
-   * @param map generated map (with bounds on the edges) _ _ _ _ _ |* * * * *| |*       *| |*
-   *            *| |* * * * *| |_ _ _ _ _| EDGES ARE NOT WALLS!!!!!
+   * @param map generated map (with bounds on the edges) _ _ _ _ _ |* * * * *| |*       *| |* *| |*
+   *            * * * *| |_ _ _ _ _| EDGES ARE NOT WALLS!!!!!
    */
   public WallMapper(int chunkSize, int tileSize, int[][] map) {
     this.chunkSize = chunkSize;
@@ -41,14 +37,16 @@ public class WallMapper {
     makeWall();
   }
 
-  private int[][] invert(int [][] map)
-  {
+  private int[][] invert(int[][] map) {
     int[][] newMap = new int[map.length][map.length];
-    for (int x = 0; x < map.length; x++)
-      for (int y = 0; y < map[x].length; y++)
+    for (int x = 0; x < map.length; x++) {
+      for (int y = 0; y < map[x].length; y++) {
         newMap[x][y] = map[y][x];
+      }
+    }
     return newMap;
   }
+
   public int getChunkSize() {
     return chunkSize;
   }
@@ -136,7 +134,8 @@ public class WallMapper {
       if (physicalObject.x() + c * chunkSize >= physicalObject.width()) {
         break;
       }
-      Chunk chunkw = new Chunk((physicalObject.x() / chunkSize) + c, physicalObject.y() / chunkSize);
+      Chunk chunkw = new Chunk((physicalObject.x() / chunkSize) + c,
+          physicalObject.y() / chunkSize);
       if (!walls.containsKey(chunkw)) {
         walls.put(chunkw, new ArrayList<>());
       }
@@ -147,7 +146,8 @@ public class WallMapper {
       if (physicalObject.y() + c * chunkSize >= physicalObject.height()) {
         break;
       }
-      Chunk chunkh = new Chunk(physicalObject.x() / chunkSize, (physicalObject.y() / chunkSize) + c);
+      Chunk chunkh = new Chunk(physicalObject.x() / chunkSize,
+          (physicalObject.y() / chunkSize) + c);
       if (!walls.containsKey(chunkh)) {
         walls.put(chunkh, new ArrayList<>());
       }

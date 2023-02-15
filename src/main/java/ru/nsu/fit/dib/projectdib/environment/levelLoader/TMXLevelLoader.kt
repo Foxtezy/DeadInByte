@@ -31,11 +31,11 @@ private const val TILED_VERSION_LATEST = "1.2.3"
 class TMXLevelLoader
 @JvmOverloads constructor(
 
-        /**
-         * If true, tile layers will be loaded in parallel, but each layer will use its own image cache.
-         * Setting to true _may_ improve loading performance if there are many large tiles.
-         */
-        private val isParallel: Boolean = false
+    /**
+     * If true, tile layers will be loaded in parallel, but each layer will use its own image cache.
+     * Setting to true _may_ improve loading performance if there are many large tiles.
+     */
+    private val isParallel: Boolean = false
 ) : LevelLoader {
 
     private val log = get<TMXLevelLoader>()
@@ -55,7 +55,11 @@ class TMXLevelLoader
 
             val objectEntities = createObjectLayerEntities(map, tilesetLoader, world)
 
-            val level = Level(map.width * map.tilewidth, map.height * map.tileheight, tileLayerEntities + objectEntities)
+            val level = Level(
+                map.width * map.tilewidth,
+                map.height * map.tileheight,
+                tileLayerEntities + objectEntities
+            )
 
             map.properties.forEach { (key, value) ->
 
@@ -82,83 +86,93 @@ class TMXLevelLoader
         val stream = if (isParallel) layers.parallelStream() else layers.stream()
 
         return stream
-                .map { layer ->
+            .map { layer ->
 
-                    // to avoid any concurrency issues (if running in parallel) we duplicate loader for each layer
-                    val tilesetLoader = if (isParallel) loader.copy() else loader
+                // to avoid any concurrency issues (if running in parallel) we duplicate loader for each layer
+                val tilesetLoader = if (isParallel) loader.copy() else loader
 
-                    Entity().also {
-                        it.type = "TiledMapLayer"
-                        it.setProperty("layer", layer)
+                Entity().also {
+                    it.type = "TiledMapLayer"
+                    it.setProperty("layer", layer)
 
-                        when (map.orientation) {
-                            "orthogonal" -> {
-                                it.viewComponent.addChild(tilesetLoader.loadView(layer.name))
-                            }
+                    when (map.orientation) {
+                        "orthogonal" -> {
+                            it.viewComponent.addChild(tilesetLoader.loadView(layer.name))
+                        }
 
-                            "hexagonal" -> {
-                                it.viewComponent.addChild(tilesetLoader.loadViewHex(layer.name))
-                            }
+                        "hexagonal" -> {
+                            it.viewComponent.addChild(tilesetLoader.loadViewHex(layer.name))
+                        }
 
-                            else -> {
-                                log.warning("Unknown map orientation: ${map.orientation}")
-                            }
+                        else -> {
+                            log.warning("Unknown map orientation: ${map.orientation}")
                         }
                     }
                 }
-                .collect(Collectors.toList())
+            }
+            .collect(Collectors.toList())
     }
 
-    private fun createObjectLayerEntities(map: TiledMap, tilesetLoader: TilesetLoader, world: GameWorld): List<Entity> {
+    private fun createObjectLayerEntities(
+        map: TiledMap,
+        tilesetLoader: TilesetLoader,
+        world: GameWorld
+    ): List<Entity> {
         log.debug("Creating object layer entities")
 
         return map.layers.filter { it.type == "objectgroup" }
-                .flatMap { it.objects }
-                .map { tiledObject ->
-                    val data = SpawnData(
-                            tiledObject.x.toDouble(),
-                            // it appears that if object has non-zero gid then its y is flipped
-                            (tiledObject.y - if (tiledObject.gid == 0) 0 else tiledObject.height).toDouble()
-                    )
+            .flatMap { it.objects }
+            .map { tiledObject ->
+                val data = SpawnData(
+                    tiledObject.x.toDouble(),
+                    // it appears that if object has non-zero gid then its y is flipped
+                    (tiledObject.y - if (tiledObject.gid == 0) 0 else tiledObject.height).toDouble()
+                )
 
-                    // make data available when inside factory's spawn methods
-                    data.run {
-                        put("name", tiledObject.name)
-                        put("type", tiledObject.type)
-                        put("width", tiledObject.width)
-                        put("height", tiledObject.height)
-                        put("rotation", tiledObject.rotation)
-                        put("id", tiledObject.id)
-                        put("gid", tiledObject.gid)
+                // make data available when inside factory's spawn methods
+                data.run {
+                    put("name", tiledObject.name)
+                    put("type", tiledObject.type)
+                    put("width", tiledObject.width)
+                    put("height", tiledObject.height)
+                    put("rotation", tiledObject.rotation)
+                    put("id", tiledObject.id)
+                    put("gid", tiledObject.gid)
 
-                        // parse text data if present
-                        tiledObject.textData?.let {
-                            put("text", it.text)
-                            put("color", it.color)
-                        }
-
-                        tiledObject.properties.forEach {
-                            put(it.key, it.value)
-                        }
+                    // parse text data if present
+                    tiledObject.textData?.let {
+                        put("text", it.text)
+                        put("color", it.color)
                     }
 
-                    // we populate the entity properties in case the factory didn't make use of them
-                    world.create(tiledObject.type, data).also { e ->
-                        data.data.forEach {
-                            e.setProperty(it.key, it.value)
-                        }
-
-                        e.addComponent(IDComponent(tiledObject.name, tiledObject.id))
-
-                        e.setPosition(data.x, data.y)
-                        e.rotation = tiledObject.rotation.toDouble()
-
-                        // non-zero gid means view is read from the tileset
-                        if (tiledObject.gid != 0) {
-                            e.viewComponent.addChild(tilesetLoader.loadView(tiledObject.gid, tiledObject.isFlippedHorizontal, tiledObject.isFlippedVertical))
-                        }
+                    tiledObject.properties.forEach {
+                        put(it.key, it.value)
                     }
                 }
+
+                // we populate the entity properties in case the factory didn't make use of them
+                world.create(tiledObject.type, data).also { e ->
+                    data.data.forEach {
+                        e.setProperty(it.key, it.value)
+                    }
+
+                    e.addComponent(IDComponent(tiledObject.name, tiledObject.id))
+
+                    e.setPosition(data.x, data.y)
+                    e.rotation = tiledObject.rotation.toDouble()
+
+                    // non-zero gid means view is read from the tileset
+                    if (tiledObject.gid != 0) {
+                        e.viewComponent.addChild(
+                            tilesetLoader.loadView(
+                                tiledObject.gid,
+                                tiledObject.isFlippedHorizontal,
+                                tiledObject.isFlippedVertical
+                            )
+                        )
+                    }
+                }
+            }
     }
 
     fun parse(inputStream: InputStream): TiledMap {
@@ -186,7 +200,9 @@ class TMXLevelLoader
                 val start = event.asStartElement()
 
                 when (start.name.localPart) {
-                    "map" -> { parseMap(map, start) }
+                    "map" -> {
+                        parseMap(map, start)
+                    }
 
                     "tileset" -> {
                         currentTileset = Tileset()
@@ -409,8 +425,8 @@ class TMXLevelLoader
         // Bit 32 (31th) is used for storing whether the tile is horizontally flipped,
         // Bit 31 (30th) is used for the vertically flipped
         val FLIPPED_HORIZONTALLY_FLAG = (1 shl 31).toUInt()
-        val FLIPPED_VERTICALLY_FLAG   = (1 shl 30).toUInt()
-        val FLIPPED_DIAGONALLY_FLAG   = (1 shl 29).toUInt()
+        val FLIPPED_VERTICALLY_FLAG = (1 shl 30).toUInt()
+        val FLIPPED_DIAGONALLY_FLAG = (1 shl 29).toUInt()
 
 
 
@@ -418,7 +434,8 @@ class TMXLevelLoader
         obj.isFlippedVertical = gidUInt and FLIPPED_VERTICALLY_FLAG != 0.toUInt()
 
         // get rid of the metadata, leaving us with gid
-        val gid = (gidUInt and (FLIPPED_HORIZONTALLY_FLAG or FLIPPED_VERTICALLY_FLAG or FLIPPED_DIAGONALLY_FLAG).inv()).toInt()
+        val gid =
+            (gidUInt and (FLIPPED_HORIZONTALLY_FLAG or FLIPPED_VERTICALLY_FLAG or FLIPPED_DIAGONALLY_FLAG).inv()).toInt()
 
         obj.gid = gid
 
@@ -503,9 +520,9 @@ class TMXLevelLoader
         val data = start.getString("points")
 
         val points = data.split(" +".toRegex())
-                .flatMap { it.split(",") }
-                .map { it.toDouble() }
-                .toDoubleArray()
+            .flatMap { it.split(",") }
+            .map { it.toDouble() }
+            .toDoubleArray()
 
         // https://github.com/AlmasB/FXGL/issues/575
         val polygon = Polygon(*points)

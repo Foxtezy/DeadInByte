@@ -10,6 +10,9 @@ import ru.nsu.fit.dib.projectdib.environment.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.RoomGeneration.Room;
 
+/**
+ * Поиск пути алгоритмом A*
+ */
 public class FindWay {
 
   private final Level level;
@@ -128,11 +131,11 @@ public class FindWay {
     while (true) {
       //
       Point point = new Point(node.x, node.y);
-      int k = level.graph.nodesList.size();
+      int k = level.graph.getAreaList().size();
       for (int i = 0; i < k; i++) {
-        if (level.graph.nodesList.get(i).room.equals(point)) {
-          if (!reversedWay.contains(level.graph.nodesList.get(i).room)) {
-            reversedWay.add(level.graph.nodesList.get(i).room);
+        if (level.graph.getAreaList().get(i).room.equals(point)) {
+          if (!reversedWay.contains(level.graph.getAreaList().get(i).room)) {
+            reversedWay.add(level.graph.getAreaList().get(i).room);
           }
           break;
         }

@@ -14,9 +14,8 @@ import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.BPGraph
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Way.FindWay;
 
 /**
- * Основной класс генератора. Содержит в себе ВСЁ.
- * Получить комнату:
- * level->graph->area->room
+ * Основной класс генератора. Содержит в себе все объекты для генерации уровня.
+ *
  */
 public class Level implements Serializable {
 
@@ -69,11 +68,11 @@ public class Level implements Serializable {
   private void checkingEntrance() {
     FindWay best = null;
 
-    int k = graph.nodesList.size();
+    int k = graph.getAreaList().size();
     for (int x = 0; x < k; x++) {
       for (int y = x+1; y < k; y++) {
         FindWay finder = new FindWay(this,20000);
-        finder.findWay(1, graph.nodesList.get(x).getRoom(), graph.nodesList.get(y).getRoom());
+        finder.findWay(1, graph.getAreaList().get(x).getRoom(), graph.getAreaList().get(y).getRoom());
         finder.printWay(BlockDensity.FLOOR);
 
         if (best == null || finder.getFinish().wayLength > best.getFinish().wayLength) {
@@ -88,9 +87,9 @@ public class Level implements Serializable {
   }
 
   private void generateHallways(int hallwayWidth) {
-    int k = graph.edgeList.size();
+    int k = graph.getEdgeStack().size();
     for (int i = 0; i < k; i++) {
-      Edge edge = graph.edgeList.pop();
+      Edge edge = graph.getEdgeStack().pop();
       FindWay finder;
       if (edge.getArea(0).getSizeType()== SizeType.SMALL && edge.getArea(1).getSizeType()== SizeType.SMALL) {
         finder = new FindWay(this, 50);
@@ -106,7 +105,7 @@ public class Level implements Serializable {
             edge.getArea(0).getRoom().getCentrePoint());
       }
       finder.printWay(BlockDensity.FLOOR);
-      graph.traversedEdges.add(edge);
+      graph.getEdgesList().add(edge);
     }
   }
 

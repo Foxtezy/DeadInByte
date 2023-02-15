@@ -1,5 +1,8 @@
 package ru.nsu.fit.dib.projectdib.environment.level_generation;
 
+/**
+ * Плотность блока. Главным образом влияет на построение карты.
+ */
 public enum BlockDensity {
   FLOOR(4),
   WAY(3),

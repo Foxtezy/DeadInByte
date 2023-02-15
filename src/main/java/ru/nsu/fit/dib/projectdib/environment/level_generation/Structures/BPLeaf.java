@@ -8,6 +8,10 @@ import java.io.Serializable;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.Area;
 
+/**
+ * Binary-Partition tree.
+ *
+ */
 public class BPLeaf implements Serializable {
 
   public static final int P_BIG = 300;

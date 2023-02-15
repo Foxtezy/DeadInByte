@@ -1,5 +1,8 @@
 package ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area;
 
+/**
+ * Типы областей по размеру.
+ */
 public enum SizeType {
   OVERBIG(4),
   BIG(3),

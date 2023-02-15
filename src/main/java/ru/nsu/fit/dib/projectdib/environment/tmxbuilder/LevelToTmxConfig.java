@@ -1,5 +1,8 @@
 package ru.nsu.fit.dib.projectdib.environment.tmxbuilder;
 
+/**
+ * Настройки класса LevelToTMX
+ */
 public interface LevelToTmxConfig {
 
   String pathToConfigTop = "src/main/resources/tmx_configs/tmx_config_top.txt";

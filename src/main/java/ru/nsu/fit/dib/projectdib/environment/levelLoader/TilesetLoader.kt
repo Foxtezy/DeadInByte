@@ -49,25 +49,33 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
             val tilex = gid % tileset.columns
             val tiley = gid / tileset.columns
 
-            sourceImage = loadImage(tileset.image, tileset.transparentcolor, tileset.imagewidth, tileset.imageheight)
+            sourceImage = loadImage(
+                tileset.image,
+                tileset.transparentcolor,
+                tileset.imagewidth,
+                tileset.imageheight
+            )
 
             srcx = tilex * w + tileset.margin + tilex * tileset.spacing
             srcy = tiley * h + tileset.margin + tiley * tileset.spacing
         } else {
             // tileset is a collection of images
             val tile = tileset.tiles.find { it.id == gid }
-                    ?: throw IllegalArgumentException("Tile with id=$gid not found")
+                ?: throw IllegalArgumentException("Tile with id=$gid not found")
 
-            sourceImage = loadImage(tile.image, tile.transparentcolor, tile.imagewidth, tile.imageheight)
+            sourceImage =
+                loadImage(tile.image, tile.transparentcolor, tile.imagewidth, tile.imageheight)
 
             srcx = 0
             srcy = 0
         }
 
-        buffer.pixelWriter.setPixels(0, 0,
-                w, h, sourceImage.pixelReader,
-                srcx,
-                srcy)
+        buffer.pixelWriter.setPixels(
+            0, 0,
+            w, h, sourceImage.pixelReader,
+            srcx,
+            srcy
+        )
 
         return ImageView(buffer).also {
             it.scaleX = if (isFlippedHorizontal) -1.0 else 1.0
@@ -81,8 +89,8 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
         val layer = map.getLayerByName(layerName)
 
         val buffer = WritableImage(
-                layer.width * map.tilewidth,
-                layer.height * map.tileheight
+            layer.width * map.tilewidth,
+            layer.height * map.tileheight
         )
 
         log.debug("Created buffer with size ${buffer.width}x${buffer.height}")
@@ -96,15 +104,16 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
             // Bit 31 (30th) is used for vertically flipped,
             // Bit 30 (29th) is used for diagonally flipped
             val FLIPPED_HORIZONTALLY_FLAG = 1L shl 31
-            val FLIPPED_VERTICALLY_FLAG   = 1L shl 30
-            val FLIPPED_DIAGONALLY_FLAG   = 1L shl 29
+            val FLIPPED_VERTICALLY_FLAG = 1L shl 30
+            val FLIPPED_DIAGONALLY_FLAG = 1L shl 29
 
             val isFlippedHorizontal = tempGid and FLIPPED_HORIZONTALLY_FLAG != 0L
             val isFlippedVertical = tempGid and FLIPPED_VERTICALLY_FLAG != 0L
             val isFlippedDiagonal = tempGid and FLIPPED_DIAGONALLY_FLAG != 0L
 
             // get rid of the metadata, leaving us with gid
-            var gid = (tempGid and (FLIPPED_HORIZONTALLY_FLAG or FLIPPED_VERTICALLY_FLAG or FLIPPED_DIAGONALLY_FLAG).inv()).toInt()
+            var gid =
+                (tempGid and (FLIPPED_HORIZONTALLY_FLAG or FLIPPED_VERTICALLY_FLAG or FLIPPED_DIAGONALLY_FLAG).inv()).toInt()
 
             // empty tile
             if (gid == 0)
@@ -127,7 +136,12 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
             var srcy: Int
 
             if (tileset.isSpriteSheet) {
-                sourceImage = loadImage(tileset.image, tileset.transparentcolor, tileset.imagewidth, tileset.imageheight)
+                sourceImage = loadImage(
+                    tileset.image,
+                    tileset.transparentcolor,
+                    tileset.imagewidth,
+                    tileset.imageheight
+                )
 
                 // image source
                 val tilex = gid % tileset.columns
@@ -138,7 +152,14 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
 
                 // If a tile of the sprite sheet needs to be flipped, crop the sub-texture
                 if (isFlippedHorizontal or isFlippedVertical or isFlippedDiagonal) {
-                    sourceImage = Texture(sourceImage).subTexture(Rectangle2D(srcx.toDouble(), srcy.toDouble(), w.toDouble(), h.toDouble())).image
+                    sourceImage = Texture(sourceImage).subTexture(
+                        Rectangle2D(
+                            srcx.toDouble(),
+                            srcy.toDouble(),
+                            w.toDouble(),
+                            h.toDouble()
+                        )
+                    ).image
                     srcx = 0
                     srcy = 0
                 }
@@ -147,9 +168,10 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
 
                 // tileset is a collection of images
                 val tile = tileset.tiles.find { it.id == gid }
-                        ?: throw IllegalArgumentException("Tile with id=$gid not found")
+                    ?: throw IllegalArgumentException("Tile with id=$gid not found")
 
-                sourceImage = loadImage(tile.image, tile.transparentcolor, tile.imagewidth, tile.imageheight)
+                sourceImage =
+                    loadImage(tile.image, tile.transparentcolor, tile.imagewidth, tile.imageheight)
 
                 srcx = 0
                 srcy = 0
@@ -167,10 +189,12 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
                 log.warning("Diagonally flipped tiles are not currently supported")
             }
 
-            buffer.pixelWriter.setPixels(x * map.tilewidth, y * map.tileheight,
-                    w, h, sourceImage.pixelReader,
-                    srcx,
-                    srcy)
+            buffer.pixelWriter.setPixels(
+                x * map.tilewidth, y * map.tileheight,
+                w, h, sourceImage.pixelReader,
+                srcx,
+                srcy
+            )
         }
 
         return ImageView(buffer)
@@ -183,8 +207,8 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
         val layer = map.getLayerByName(layerName)
 
         val bufferBottom = WritableImage(
-                layer.width * map.tilewidth + 100,
-                layer.height * map.tileheight + 100
+            layer.width * map.tilewidth + 100,
+            layer.height * map.tileheight + 100
         )
 
         log.debug("Created buffer with size ${bufferBottom.width}x${bufferBottom.height}")
@@ -220,7 +244,12 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
             val srcy: Int
 
             if (tileset.isSpriteSheet) {
-                sourceImage = loadImage(tileset.image, tileset.transparentcolor, tileset.imagewidth, tileset.imageheight)
+                sourceImage = loadImage(
+                    tileset.image,
+                    tileset.transparentcolor,
+                    tileset.imagewidth,
+                    tileset.imageheight
+                )
 
                 // image source
                 val tilex = gid % tileset.columns
@@ -232,9 +261,10 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
 
                 // tileset is a collection of images
                 val tile = tileset.tiles.find { it.id == gid }
-                        ?: throw IllegalArgumentException("Tile with id=$gid not found")
+                    ?: throw IllegalArgumentException("Tile with id=$gid not found")
 
-                sourceImage = loadImage(tile.image, tile.transparentcolor, tile.imagewidth, tile.imageheight)
+                sourceImage =
+                    loadImage(tile.image, tile.transparentcolor, tile.imagewidth, tile.imageheight)
 
                 srcx = 0
                 srcy = 0
@@ -245,7 +275,8 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
             val offsetX = -(map.hexsidelength + 6) * x
 
             val offsetY = if (map.staggerindex == "even" && isColumnEven
-                    || map.staggerindex == "odd" && !isColumnEven)
+                || map.staggerindex == "odd" && !isColumnEven
+            )
                 map.tileheight / 2
             else
                 0
@@ -263,7 +294,8 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
             }
 
             if (map.staggerindex == "odd" && isColumnEven
-                    || map.staggerindex == "even" && !isColumnEven) {
+                || map.staggerindex == "even" && !isColumnEven
+            ) {
 
                 for (dy in 0 until h) {
                     for (dx in 0 until w) {
@@ -271,9 +303,9 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
 
                         if (c != Color.TRANSPARENT) {
                             bufferBottom.pixelWriter.setColor(
-                                    x * map.tilewidth + offsetX + dx,
-                                    y * map.tileheight + offsetY + dy,
-                                    c
+                                x * map.tilewidth + offsetX + dx,
+                                y * map.tileheight + offsetY + dy,
+                                c
                             )
                         }
                     }
@@ -288,9 +320,9 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
 
                             if (c != Color.TRANSPARENT) {
                                 bufferBottom.pixelWriter.setColor(
-                                        x * map.tilewidth + offsetX + dx,
-                                        y * map.tileheight + offsetY + dy,
-                                        c
+                                    x * map.tilewidth + offsetX + dx,
+                                    y * map.tileheight + offsetY + dy,
+                                    c
                                 )
                             }
                         }
@@ -319,7 +351,12 @@ class TilesetLoader(private val map: TiledMap, private val path: String) {
         throw IllegalArgumentException("Tileset for gid=$gid not found")
     }
 
-    private fun loadImage(tilesetImageName: String, transparentcolor: String, w: Int, h: Int): Image {
+    private fun loadImage(
+        tilesetImageName: String,
+        transparentcolor: String,
+        w: Int,
+        h: Int
+    ): Image {
         val imageName = tilesetImageName.substring(tilesetImageName.lastIndexOf("/") + 1)
 
         if (imageName in imageCache) {
