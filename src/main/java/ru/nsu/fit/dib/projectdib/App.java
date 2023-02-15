@@ -40,6 +40,8 @@ import java.util.stream.IntStream;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
+import ru.nsu.fit.dib.projectdib.levelLoader.LevelSetter;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.UI.GameUIController;
@@ -59,26 +61,13 @@ public class App extends GameApplication {
   public static void main(String[] args) {
     launch(args);
   }
-  UIController uiController;
-  @Override
-  protected void initUI(){
-    uiController = new GameUIController(FXGL.getGameScene());
-    //UI ui = getAssetLoader().loadUI(Asset.FXML_MAIN_UI, uiController);
-    //FXGL.getGameScene().addUI(ui);
-  }
+
   @Override
   protected void initSettings(GameSettings settings) {
     settings.setTitle("RDPLS-D2");
-    settings.setManualResizeEnabled(true);
-    settings.setPreserveResizeRatio(true);
     settings.setFileSystemWriteAllowed(false);
-    settings.setSceneFactory(new ScenesFactory());
-    settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
-    settings.setFontGame("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
-    settings.setFontUI("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
-    settings.setFontText("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
     Config.setConfig("src/main/resources/cfg.ini");
     // Window mod
     switch (Config.WINDOW_MODE) {
@@ -148,8 +137,8 @@ public class App extends GameApplication {
                 .stream()
                 .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
                 .forEach(ak -> {
-                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
-                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("ak");
+                spawn(player.getComponent(PlayerMovingComponent.class).getSpecification().getMainWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).getSpecification().setMainWeapon("ak");
                   ak.removeFromWorld();
                   setSkipOther(true);
                 });
@@ -160,14 +149,12 @@ public class App extends GameApplication {
                 .stream()
                 .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
                 .forEach(bow -> {
-                  spawn(player.getComponent(PlayerMovingComponent.class).getCurrentWeapon(), player.getCenter().subtract(new Point2D(80,100)));
-                  player.getComponent(PlayerMovingComponent.class).setCurrentWeapon("bow");
+                  spawn(player.getComponent(PlayerMovingComponent.class).getSpecification().getMainWeapon(), player.getCenter().subtract(new Point2D(80,100)));
+                  player.getComponent(PlayerMovingComponent.class).getSpecification().setMainWeapon("bow");
                   bow.removeFromWorld();
                   setSkipOther(true);
                 });
         }
-
-
         setSkipOther(false);
       }
     }, KeyCode.F, VirtualButton.X);
@@ -181,6 +168,20 @@ public class App extends GameApplication {
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOX, EntityType.PROJECTILE) {
       @Override
       protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
+    });
+
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ENEMY, EntityType.PROJECTILE) {
+      @Override
+      protected void onCollisionBegin(Entity enemy, Entity projectile) {
+        var hp = enemy.getComponent(HealthIntComponent.class);
+        if (hp.getValue() > 1){
+          projectile.removeFromWorld();
+          hp.damage(1);
+          return;
+        }
+        projectile.removeFromWorld();
+        enemy.removeFromWorld();
+        projectile.removeFromWorld();}
     });
 
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
@@ -226,28 +227,11 @@ public class App extends GameApplication {
     getGameWorld().addEntityFactory(factory);
 
     Level lvl= new Level(new Random().nextInt(),64,64,1,15);
-    //
-    //EnemySpawner spawner=new EnemySpawner(lvl.graph);
-    //spawner.spawn(int level);
-    //onCo
-    //
-    String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
-    FXGL.setLevelFromMap(levelName);
-    WallMapper wallMapper;
-    Level oldLevel;
-    try {
-      oldLevel = deSerialize();
-      wallMapper = new WallMapper(256, 16, oldLevel.map);
-      oldLevel.print();
-      this.player = spawn("player", (oldLevel.start.getCentrePoint().x - 1) * 16, (oldLevel.start.getCentrePoint().y - 1) * 16);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    try {
-      serialize(lvl);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
+    LevelSetter.setLevelFromMap(levelName, getGameWorld());
+    WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
+    lvl.print();
+    this.player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
@@ -273,22 +257,9 @@ public class App extends GameApplication {
     set("grid", grid);
 
     spawn("ak", 600, 600);
-    this.player = spawn("player", 60, 60);
+    //this.player = spawn("player", 60, 60);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     viewport.setLazy(true); */
   }
 
-  private void serialize(Level lvl) throws IOException {
-    FileOutputStream fos = new FileOutputStream("level.out");
-    ObjectOutputStream oos = new ObjectOutputStream(fos);
-    oos.writeObject(lvl);
-    oos.flush();
-    oos.close();
-  }
-
-  private Level deSerialize() throws Exception {
-    FileInputStream fis = new FileInputStream("level.out");
-    ObjectInputStream oin = new ObjectInputStream(fis);
-    return (Level) oin.readObject();
-  }
 }
