@@ -247,19 +247,12 @@ public class App extends GameApplication {
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
     lvl.print();
-    this.player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16);
+    HeroSpecs specs = new HeroSpecs("1", "shotgun", "ak",10, 250.0, "player.png");
+    this.player = FXGL.spawn("player", new SpawnData((lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16).put("specification", specs));
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
 
-
-
-    FXGL.setLevelFromMap("tmx/level2.tmx");
-    Spawn.spawnInitialObjects();
-    //spawn("enemy", 48, 240);
-    HeroSpecs specs = new HeroSpecs("1", "shotgun", "ak",10, 250.0, "player.png");
-    this.player = FXGL.spawn("player", new SpawnData((lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16).put("specification", specs) );
   }
-
 }
