@@ -7,8 +7,10 @@ open module projectdib.main {
   requires annotations;
   requires kotlin.stdlib;
   exports ru.nsu.fit.dib.projectdib;
-  exports ru.nsu.fit.dib.projectdib.UI;
-  exports ru.nsu.fit.dib.projectdib.UI.UIElements;
+  exports ru.nsu.fit.dib.projectdib.ui;
+  exports ru.nsu.fit.dib.projectdib.ui.UIElements;
+  exports ru.nsu.fit.dib.projectdib.data;
+  exports ru.nsu.fit.dib.projectdib.init_app;
 }
 /*
 module ru.nsu.fit.dib.projectdib {

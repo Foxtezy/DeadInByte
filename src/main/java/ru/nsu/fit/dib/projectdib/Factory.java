@@ -1,16 +1,13 @@
 package ru.nsu.fit.dib.projectdib;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
+
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 
-import static java.lang.Character.getName;
 import static java.lang.Character.toUpperCase;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGLForKtKt;
+
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
@@ -20,10 +17,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
-import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -36,13 +30,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
-import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.BoxMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
 
 /**
  * Class Factory for making Entities.
@@ -80,7 +73,7 @@ public class Factory implements EntityFactory {
     WallMapper wallMapper = new WallMapper(64, 16, arr);*/
 
     //////////////
-    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 250.0, "player.png");
+    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 150.0, "player.png");
 
     return entityBuilder()
         .from(data)
