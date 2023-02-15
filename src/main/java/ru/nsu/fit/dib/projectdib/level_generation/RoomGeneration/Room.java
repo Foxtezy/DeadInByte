@@ -5,6 +5,15 @@ import static java.lang.Math.abs;
 import java.awt.Point;
 import java.io.Serializable;
 
+/**
+ * Комната занимает некоторую область на карте (x2-x1)*tileX + (y2-y1)*tileY
+ * tileX, tileY - длина и ширина тайла
+ * x1,y1 - координаты первой точки
+ * x2, y2 - координаты 2й точки
+ * координаты точки можно получить с помощью:
+ * getFirstPoint()
+ * getSecondPoint()
+ */
 public class Room implements Serializable {
 
   private final Point firstPoint;
