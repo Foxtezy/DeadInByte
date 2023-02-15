@@ -17,13 +17,19 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
 
+/**
+ * Инициализатор игры.
+ */
 public class GameInitializer {
+
   private Factory factory;
   private Viewport viewport;
   private Entity player;
-  public GameInitializer(){
+
+  public GameInitializer() {
   }
-  public void run(){
+
+  public void run() {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
@@ -40,7 +46,8 @@ public class GameInitializer {
     viewport.setZoom(3);
     viewport.setLazy(true);
   }
-  public Entity getPlayer(){
+
+  public Entity getPlayer() {
     return player;
   }
 }

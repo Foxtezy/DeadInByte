@@ -10,12 +10,12 @@ import java.util.Properties;
  * Config.class retrieves settings data from the .ini file.
  */
 public class Config {
+
+  public static final javafx.util.Duration SHOOT_DELAY_ARROW = Duration.seconds(0.3);
+  public static final javafx.util.Duration SHOOT_DELAY_AK = Duration.seconds(0.1);
   public static int WINDOW_HEIGHT;
   public static int WINDOW_WIDTH;
   public static String WINDOW_MODE;
-  public static final javafx.util.Duration SHOOT_DELAY_ARROW = Duration.seconds(0.3);
-  public static final javafx.util.Duration SHOOT_DELAY_AK = Duration.seconds(0.1);
-
 
   public static void setConfig(String filepath) {
     Properties props = new Properties();

@@ -16,11 +16,17 @@ import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
 
+/**
+ * Инициализатор действий со входными данными (например, с клавиатуры)
+ */
 public class InputListener {
+
   public boolean skipOther = false;
   private Entity player;
-  public InputListener(){
+
+  public InputListener() {
   }
+
   public boolean isSkipOther() {
     return skipOther;
   }
@@ -28,15 +34,18 @@ public class InputListener {
   public void setSkipOther(boolean skipOther) {
     this.skipOther = skipOther;
   }
-  public void initialize(Entity player){
-    this.player=player;
+
+  public void initialize(Entity player) {
+    this.player = player;
   }
-  public void run(){
+
+  public void run() {
     onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerMovingComponent.class).left());
     onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerMovingComponent.class).right());
     onKey(KeyCode.W, "up", () -> player.getComponent(PlayerMovingComponent.class).up());
     onKey(KeyCode.S, "Down", () -> player.getComponent(PlayerMovingComponent.class).down());
-    onKey(KeyCode.X, "SwapWeapon", () -> player.getComponent(PlayerMovingComponent.class).swapWeapons());
+    onKey(KeyCode.X, "SwapWeapon",
+        () -> player.getComponent(PlayerMovingComponent.class).swapWeapons());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {

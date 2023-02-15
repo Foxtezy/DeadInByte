@@ -78,7 +78,7 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-       //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
+        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
         .bbox(new HitBox(new Point2D(25, 110), BoundingShape.box(160, 160)))
         .anchorFromCenter()
         .with(physics)
@@ -107,7 +107,8 @@ public class Factory implements EntityFactory {
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WALL)
-        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
         .collidable()
         .build();
@@ -134,16 +135,16 @@ public class Factory implements EntityFactory {
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
     return entityBuilder()
-            .from(data)
-            .type(EntityType.BOX)
-            .viewWithBBox(FXGL.texture("box.png", 40, 40))
-            .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
-            .view(hpView)
-            .with(hp)
-            .with(physics)
-            .with(new BoxMovingComponent())
-            .collidable()
-            .build();
+        .from(data)
+        .type(EntityType.BOX)
+        .viewWithBBox(FXGL.texture("box.png", 40, 40))
+        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
+        .view(hpView)
+        .with(hp)
+        .with(physics)
+        .with(new BoxMovingComponent())
+        .collidable()
+        .build();
   }
 
   /**
@@ -167,17 +168,16 @@ public class Factory implements EntityFactory {
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
     return entityBuilder()
-            .from(data)
-            .type(EntityType.CHEST)
-            .viewWithBBox(FXGL.texture("chest.png", 40, 40))
-            .view(hpView)
-            .with(hp)
-            .with(physics)
-            .with(new BoxMovingComponent())
-            .collidable()
-            .build();
+        .from(data)
+        .type(EntityType.CHEST)
+        .viewWithBBox(FXGL.texture("chest.png", 40, 40))
+        .view(hpView)
+        .with(hp)
+        .with(physics)
+        .with(new BoxMovingComponent())
+        .collidable()
+        .build();
   }
-
 
 
   /**
@@ -206,7 +206,8 @@ public class Factory implements EntityFactory {
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
+    Point2D direction = getInput().getMousePositionWorld()
+        .subtract(player.getCenter().subtract(new Point2D(60, 90)));
     Projectiles projectile = data.get("typeProj");
     return entityBuilder()
         .from(data)
@@ -224,7 +225,7 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.BOW)
         .viewWithBBox(texture("red_bow.png", 15, 50))
-        .bbox(new HitBox(BoundingShape.box(50,15)))
+        .bbox(new HitBox(BoundingShape.box(50, 15)))
         .with(new CollidableComponent(true))
         .build();
   }
@@ -232,12 +233,12 @@ public class Factory implements EntityFactory {
   @Spawns("ak")
   public Entity newAK(SpawnData data) {
     return entityBuilder(data)
-            .from(data)
-            .type(EntityType.AK)
-            .viewWithBBox(texture("weapon_ak.png", 75, 20))
-            .bbox(new HitBox(BoundingShape.box(75,20)))
-            .with(new CollidableComponent(true))
-            .build();
+        .from(data)
+        .type(EntityType.AK)
+        .viewWithBBox(texture("weapon_ak.png", 75, 20))
+        .bbox(new HitBox(BoundingShape.box(75, 20)))
+        .with(new CollidableComponent(true))
+        .build();
   }
 
   /**
@@ -262,12 +263,12 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.ENEMY)
-        .viewWithBBox(texture("skull.png", 50,50))
+        .viewWithBBox(texture("skull.png", 50, 50))
         .anchorFromCenter()
         .collidable()
         .with(hp)
         .view(hpView)
-        .with(new CellMoveComponent(25,25,100))
+        .with(new CellMoveComponent(25, 25, 100))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with(new PlayerChaseComponent())
         .build();
@@ -287,13 +288,14 @@ public class Factory implements EntityFactory {
   @Spawns("explosion")
   public Entity newExplosion(SpawnData data) {
     Image image = image("explosion.png");
-    AnimatedTexture texture = new AnimatedTexture(new AnimationChannel(image, 4, 960/5, 768/4, Duration.seconds(0.66),
+    AnimatedTexture texture = new AnimatedTexture(
+        new AnimationChannel(image, 4, 960 / 5, 768 / 4, Duration.seconds(0.66),
             0, 3));
     return entityBuilder()
-            .from(data)
-            .type(EntityType.EXPLOSION)
-            .viewWithBBox(texture("explosion.png", 16, 16))
-            .build();
+        .from(data)
+        .type(EntityType.EXPLOSION)
+        .viewWithBBox(texture("explosion.png", 16, 16))
+        .build();
   }
 
   @Spawns("closedDoor")

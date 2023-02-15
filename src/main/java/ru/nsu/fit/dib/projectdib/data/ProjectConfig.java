@@ -1,6 +1,10 @@
 package ru.nsu.fit.dib.projectdib.data;
 
+/**
+ * Настройки игры, не изменяемые пользователем.
+ */
 public interface ProjectConfig {
+
   String _player = "assets/textures/player.png";
   String _cfg = "src/main/resources/cfg.ini";
 

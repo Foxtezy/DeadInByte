@@ -27,28 +27,25 @@ import ru.nsu.fit.dib.projectdib.entity.moving.MovingInterface;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
+/**
+ * Описывает движение игрока.
+ */
 public class PlayerMovingComponent extends Component implements MovingInterface {
-
-  private PhysicsComponent physics;
-  //public String currentWeapon;
-  private AnimatedTexture texture;
 
   private final AnimationChannel animWalkRight;
   private final AnimationChannel animWalkLeft;
   private final AnimationChannel animWalkUp;
   private final AnimationChannel animWalkDown;
-
+  private final double scale = 0.07;
+  private PhysicsComponent physics;
+  //public String currentWeapon;
+  private AnimatedTexture texture;
   private LocalTimer shootTimer = newLocalTimer();
-
-//  private final double speed = 250;
+  //  private final double speed = 250;
   private double speed;
   private HeroSpecs specification;
   private String currentWeapon;
-
-  private final double scale = 0.07;
-
   private boolean isMoving = false;
-
 
 
   public PlayerMovingComponent(HeroSpecs specs) {
@@ -86,11 +83,12 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   @Override
   public void onUpdate(double tpf) {
     AnimationChannel animation = texture.getAnimationChannel();
-    Point2D mouseVelocity = getInput().getVectorToMouse(getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
-    double angleRight = mouseVelocity.angle(1,0);
-    double angleUp = mouseVelocity.angle(0,-1);
-    double angleLeft = mouseVelocity.angle(-1,0);
-    double angleDown = mouseVelocity.angle(0,1);
+    Point2D mouseVelocity = getInput().getVectorToMouse(
+        getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
+    double angleRight = mouseVelocity.angle(1, 0);
+    double angleUp = mouseVelocity.angle(0, -1);
+    double angleLeft = mouseVelocity.angle(-1, 0);
+    double angleDown = mouseVelocity.angle(0, 1);
 
     if (physics.getLinearVelocity().magnitude() < 10) {
       if (isMoving) {
@@ -154,19 +152,27 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     physics.setVelocityY(0);
     physics.setVelocityX(0);
   }
+
   public void shoot() {
 
-    switch(specification.getMainWeapon()){
-      case("bow"):
-        if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) return;
-        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
-                .put("typeProj", Projectiles.ARROW));
+    switch (specification.getMainWeapon()) {
+      case ("bow"):
+        if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) {
+          return;
+        }
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX() + 20,
+            getEntity().getPosition().getY() + 30)
+            .put("typeProj", Projectiles.ARROW));
         shootTimer.capture();
         break;
-      case("ak"):
-        if(!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) return;;
-        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX()+20,getEntity().getPosition().getY()+30)
-                .put("typeProj", Projectiles.BULLET));
+      case ("ak"):
+        if (!shootTimer.elapsed(Config.SHOOT_DELAY_AK)) {
+          return;
+        }
+        ;
+        FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX() + 20,
+            getEntity().getPosition().getY() + 30)
+            .put("typeProj", Projectiles.BULLET));
         shootTimer.capture();
         break;
       /*default:
@@ -177,11 +183,14 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
 
 
   }
+
   public void swapWeapons() {
     String change = specification.getMainWeapon();
     specification.setMainWeapon(specification.getSecondWeapon());
     specification.setSecondWeapon(change);
   }
 
-  public HeroSpecs getSpecification(){return specification;}
+  public HeroSpecs getSpecification() {
+    return specification;
+  }
 }

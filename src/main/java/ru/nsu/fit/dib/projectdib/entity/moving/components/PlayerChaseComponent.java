@@ -23,6 +23,9 @@ import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 
+/**
+ * Описывает движение..врагов? Пояснить.
+ */
 public class PlayerChaseComponent extends Component {
 
   private static AStarMoveComponent enemy;

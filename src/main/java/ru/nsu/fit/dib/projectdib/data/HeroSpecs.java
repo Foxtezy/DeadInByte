@@ -1,5 +1,8 @@
 package ru.nsu.fit.dib.projectdib.data;
 
+/**
+ * Статы персонажа.
+ */
 public class HeroSpecs {
         private String name;
         private String mainWeapon;

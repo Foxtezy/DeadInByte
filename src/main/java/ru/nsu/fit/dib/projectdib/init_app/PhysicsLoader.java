@@ -8,11 +8,15 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import ru.nsu.fit.dib.projectdib.EntityType;
 
+/**
+ * Загразчик физики.
+ */
 public class PhysicsLoader {
-  public PhysicsLoader(){
+
+  public PhysicsLoader() {
 
   }
-  public void run(){
+  public void run() {
 
     getPhysicsWorld().setGravity(0, 0);
     getPhysicsWorld().addCollisionHandler(

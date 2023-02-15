@@ -13,20 +13,22 @@ import ru.nsu.fit.dib.projectdib.ui.ScenesFactory;
  * Загружает пользовательские и остальные настройки игры.
  */
 public class SettingsLoader {
+
   private final GameSettings settings;
 
   /**
    * Коструктор загрузчика. Требует FXGLSettings.
+   *
    * @param settings - настройки игры.
    */
-  public SettingsLoader(GameSettings settings){
-    this.settings=settings;
+  public SettingsLoader(GameSettings settings) {
+    this.settings = settings;
   }
 
   /**
    * Загружает настройки.
    */
-  public void run(){
+  public void run() {
     settings.setTitle("RDPLS-D2");
     settings.setManualResizeEnabled(true);
     settings.setPreserveResizeRatio(true);
