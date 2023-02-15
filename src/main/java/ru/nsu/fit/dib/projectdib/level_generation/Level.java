@@ -19,6 +19,11 @@ import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.EmptyRoomGenera
 import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
 import ru.nsu.fit.dib.projectdib.level_generation.Way.FindWay;
 
+/**
+ * Основной класс генератора. Содержит в себе ВСЁ.
+ * Получить комнату:
+ * level->graph->area->room
+ */
 public class Level implements Serializable {
 
   public final Random rn;

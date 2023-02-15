@@ -7,7 +7,7 @@ import java.io.Serializable;
 import ru.nsu.fit.dib.projectdib.level_generation.RoomGeneration.Room;
 
 /**
- * Отдельная область на карте, в которой генерируется помещение
+ * Отдельная область на карте, в которой генерируется помещение(room)
  */
 public class Area implements Serializable {
 
