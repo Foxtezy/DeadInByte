@@ -65,9 +65,16 @@ public class App extends GameApplication {
   @Override
   protected void initSettings(GameSettings settings) {
     settings.setTitle("RDPLS-D2");
+    settings.setManualResizeEnabled(true);
+    settings.setPreserveResizeRatio(true);
     settings.setFileSystemWriteAllowed(false);
+    settings.setSceneFactory(new ScenesFactory());
+    settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
+    settings.setFontGame("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
+    settings.setFontUI("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
+    settings.setFontText("file:/F:/DeadInByte/src/main/resources/assets/UI/DustyPro.ttf");
     Config.setConfig("src/main/resources/cfg.ini");
     // Window mod
     switch (Config.WINDOW_MODE) {
@@ -112,6 +119,7 @@ public class App extends GameApplication {
     onKey(KeyCode.D,"Right",() -> player.getComponent(PlayerMovingComponent.class).right() );
     onKey(KeyCode.W,"up",() -> player.getComponent(PlayerMovingComponent.class).up() );
     onKey(KeyCode.S,"Down",() -> player.getComponent(PlayerMovingComponent.class).down() );
+    onKey(KeyCode.X, "SwapWeapon", () -> player.getComponent(PlayerMovingComponent.class).swapWeapons());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
