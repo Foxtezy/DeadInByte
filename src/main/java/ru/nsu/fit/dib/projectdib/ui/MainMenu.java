@@ -33,7 +33,9 @@ import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
 
-//fx:controller="ru.nsu.fit.dib.projectdib.UI.Controller"
+/**
+ * Главное меню.
+ */
 public class MainMenu extends FXGLMenu {
 
   public MainMenu(MenuType type) {
@@ -102,7 +104,7 @@ public class MainMenu extends FXGLMenu {
     //======================================[     Fonts     ]=======================================
 
     Font font = Font.loadFont(_fontDustyPro, 65);
-    Font bigFont = Font.loadFont(_fontDustyPro,140);
+    Font bigFont = Font.loadFont(_fontDustyPro, 140);
     //=====================================[    GameName    ]=======================================
 
     AnchorPane name = new AnchorPane();
@@ -129,14 +131,18 @@ public class MainMenu extends FXGLMenu {
     Image pushedReturn = new Image(_returnSelectedButton, 132, 132, true,
         false);
     //==============================================================================================
-    ImageButton start = new ImageButton("Start", font, pushed, unpushed);
-    ImageButton multiplayer = new ImageButton("Multiplayer", font, pushed, unpushed);
-    ImageButton settings = new ImageButton("Settings", font, pushed, unpushed);
+    ImageButton start = new ImageButton("Start", font, "#5ae8a8", "#2b2944", pushed, unpushed);
+    ImageButton multiplayer = new ImageButton("Multiplayer", font, "#5ae8a8", "#2b2944", pushed,
+        unpushed);
+    ImageButton settings = new ImageButton("Settings", font, "#5ae8a8", "#2b2944", pushed,
+        unpushed);
     //==============================================================================================
-    ImageButton connect = new ImageButton("Connect", font, pushed, unpushed);
-    ImageButton server = new ImageButton("Create server", font, pushed, unpushed);
+    ImageButton connect = new ImageButton("Connect", font, "#5ae8a8", "#2b2944", pushed, unpushed);
+    ImageButton server = new ImageButton("Create server", font, "#5ae8a8", "#2b2944", pushed,
+        unpushed);
     //==============================================================================================
-    ImageButton returnButton = new ImageButton("", font, pushedReturn, unpushedReturn);
+    ImageButton returnButton = new ImageButton("", font, "#5ae8a8", "#2b2944", pushedReturn,
+        unpushedReturn);
     //==============================================================================================
     ui.setAlignment(Pos.CENTER);
     Rectangle space = new Rectangle(10, 140, Paint.valueOf("transparent"));
@@ -149,9 +155,9 @@ public class MainMenu extends FXGLMenu {
     //===Multiplayer===
     multiplayer.setOnMouseClicked(event -> {
       globalAnchor.getChildren().add(returnButton);
-      ui.getChildren().removeAll(tree.getParentARChildren());
+      ui.getChildren().removeAll(tree.getParentANChildren());
       tree.changeActiveNode(multiplayer);
-      ui.getChildren().addAll(tree.getARChildren());
+      ui.getChildren().addAll(tree.getANChildren());
     });
     //===Start===
     start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
@@ -160,12 +166,12 @@ public class MainMenu extends FXGLMenu {
     });
     //===Return===
     returnButton.setOnMouseClicked(event -> {
-      ui.getChildren().removeAll(tree.getParentARChildren());
+      ui.getChildren().removeAll(tree.getParentANChildren());
       tree.changeActiveNode(tree.getRoot());
-      if (tree.getRoot() == tree.getParent()) {
+      if (tree.getRoot() == tree.getParentAN()) {
         globalAnchor.getChildren().remove(returnButton);
       }
-      ui.getChildren().addAll(tree.getARChildren());
+      ui.getChildren().addAll(tree.getANChildren());
     });
     AnchorPane.setBottomAnchor(returnButton, 100d);
     AnchorPane.setRightAnchor(returnButton, 120d);
@@ -173,7 +179,7 @@ public class MainMenu extends FXGLMenu {
 
   }
 
-  WrappedImageView initializeAnimationImageView(String url, double requestedWidth,
+  private WrappedImageView initializeAnimationImageView(String url, double requestedWidth,
       double requestedHeight, boolean preserveRatio, boolean smooth, Duration duration, int columns,
       int count, int offsetX, int offsetY) {
     Image img = new Image(url, requestedWidth, requestedHeight, preserveRatio, smooth);

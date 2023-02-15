@@ -5,6 +5,9 @@ import com.almasb.fxgl.app.scene.IntroScene;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
 
+/**
+ * Фабрика для UI сцен. Назначение - определение пользовательских меню.
+ */
 public class ScenesFactory extends SceneFactory {
 
   @Override
@@ -18,7 +21,7 @@ public class ScenesFactory extends SceneFactory {
   }
 
   @Override
-  public IntroScene newIntro(){
+  public IntroScene newIntro() {
     return new IntroMenu();
   }
 

@@ -7,34 +7,40 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class ImageButton  extends StackPane {
+/**
+ * Кнопка-картинка. Желательно конечно сделать ее более общей, однако пока что анимация наведения
+ * задана по умолчанию.
+ */
+public class ImageButton extends StackPane {
+
   ImageView iv;
   Text text;
 
-  public ImageButton(String name, Font font, final Image pushed, final Image unpushed) {
+  public ImageButton(String name, Font font, String unpushedColor, String pushedColor,
+      final Image pushed, final Image unpushed) {
     iv = new ImageView(unpushed);
     iv.autosize();
     iv.setPreserveRatio(true);
     text = new Text(name);
-    text.setStyle("-fx-fill: #ffffff");
+    text.setStyle("-fx-fill: " + unpushedColor + ";");
     text.setFont(font);
 
-    this.setOnMouseEntered(event-> {
+    this.setOnMouseEntered(event -> {
       iv.setImage(pushed);
       text.setStyle("-fx-scale-x: 1.1;"
-              + "-fx-scale-y: 1.1;"
-              + "-fx-scale-z: 1.1;"
-              + "-fx-fill: #2b2944");
+          + "-fx-scale-y: 1.1;"
+          + "-fx-scale-z: 1.1;"
+          + "-fx-fill: " + pushedColor + ";");
       iv.setStyle("-fx-scale-x: 1.1;"
           + "-fx-scale-y: 1.1;"
           + "-fx-scale-z: 1.1;");
     });
-    this.setOnMouseExited(event-> {
+    this.setOnMouseExited(event -> {
       iv.setImage(unpushed);
       text.setStyle("-fx-scale-x: 1.0;"
           + "-fx-scale-y: 1.0;"
           + "-fx-scale-z: 1.0;"
-          + "-fx-fill: #ffffff");
+          + "-fx-fill: " + unpushedColor + ";");
       iv.setStyle("-fx-scale-x: 1.0;"
           + "-fx-scale-y: 1.0;"
           + "-fx-scale-z: 1.0;");
@@ -42,9 +48,10 @@ public class ImageButton  extends StackPane {
 
     super.setCenterShape(true);
     super.setAlignment(Pos.CENTER);
-    super.getChildren().addAll(iv,text);
+    super.getChildren().addAll(iv, text);
   }
-  public void setImage(Image image){
+
+  private void setImage(Image image) {
     iv.setImage(image);
   }
 }

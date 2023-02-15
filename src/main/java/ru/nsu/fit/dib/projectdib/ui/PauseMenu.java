@@ -4,6 +4,9 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Меню паузы.
+ */
 public class PauseMenu extends FXGLMenu {
 
   public PauseMenu(@NotNull MenuType type) {

@@ -3,8 +3,16 @@ package ru.nsu.fit.dib.projectdib.ui.UIElements;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Картинка, меняющая размер. Подробнее о методах - см. ImageView
+ */
 public class WrappedImageView extends ImageView {
 
+  /**
+   * Конструктор
+   *
+   * @param image - картинка
+   */
   public WrappedImageView(Image image) {
     super(image);
     setPreserveRatio(false);
