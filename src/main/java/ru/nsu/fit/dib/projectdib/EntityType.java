@@ -23,7 +23,9 @@ public enum EntityType {
   BOW("bow"),
   AK("ak"),
   GUN("gun"),
-  SHOTGUN("shotgun");
+  SHOTGUN("shotgun"),
+  EXPLOSION("explosion");
+
   private final String name;
 
   EntityType(String name) {

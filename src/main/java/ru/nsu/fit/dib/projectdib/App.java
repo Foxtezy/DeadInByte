@@ -19,8 +19,6 @@ import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.entity.level.LevelLoader;
-import com.almasb.fxgl.entity.level.tiled.TMXLevelLoader;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.io.FileSystemService;
@@ -30,18 +28,16 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
+import ru.nsu.fit.dib.projectdib.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.loaderobjects.ChunkLoaderComponent;
@@ -190,6 +186,20 @@ public class App extends GameApplication {
       protected void onCollisionBegin(Entity box, Entity arrow ) {spawn("coin", box.getCenter());  box.removeFromWorld(); arrow.removeFromWorld();}
     });
 
+    getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ENEMY, EntityType.PROJECTILE) {
+      @Override
+      protected void onCollisionBegin(Entity enemy, Entity projectile) {
+        var hp = enemy.getComponent(HealthIntComponent.class);
+        if (hp.getValue() > 1){
+          projectile.removeFromWorld();
+          hp.damage(1);
+          return;
+        }
+        projectile.removeFromWorld();
+        enemy.removeFromWorld();
+        projectile.removeFromWorld();}
+    });
+
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
       @Override
       protected void onCollisionBegin(Entity chest, Entity projectile) {
@@ -231,31 +241,17 @@ public class App extends GameApplication {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
-    /*
 
     Level lvl= new Level(new Random().nextInt(),64,64,1,15);
-    String levelName = "tmx/" + LevelToTmx.levelToTmx(lvl);
-    FXGL.setLevelFromMap(levelName);
-    WallMapper wallMapper;
-    Level oldLevel;
-    try {
-      oldLevel = deSerialize();
-      wallMapper = new WallMapper(256, 16, oldLevel.map);
-      oldLevel.print();
-      this.player = spawn("player", (oldLevel.start.getCentrePoint().x - 1) * 16, (oldLevel.start.getCentrePoint().y - 1) * 16);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    try {
-      serialize(lvl);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
+    LevelSetter.setLevelFromMap(levelName, getGameWorld());
+    WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
+    lvl.print();
+    this.player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16);
     viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
-*/
 
 
 
@@ -263,36 +259,7 @@ public class App extends GameApplication {
     Spawn.spawnInitialObjects();
     //spawn("enemy", 48, 240);
     HeroSpecs specs = new HeroSpecs("1", "shotgun", "ak",10, 250.0, "player.png");
-    this.player = FXGL.spawn("player", new SpawnData(getAppWidth() / 2, getAppHeight() / 2).put("specification", specs) );
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
-        (type) -> {
-          if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-            return CellState.NOT_WALKABLE;
-          }
-
-          return CellState.WALKABLE;
-        });
-    set("grid", grid);
-
-    spawn("ak", 600, 600);
-   // this.player = spawn("player", 60, 60);
-    spawn("gun", 600, 700);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    viewport.setLazy(true);
+    this.player = FXGL.spawn("player", new SpawnData((lvl.start.getCentrePoint().x - 1) * 16, (lvl.start.getCentrePoint().y - 1) * 16).put("specification", specs) );
   }
 
-  private void serialize(Level lvl) throws IOException {
-    FileOutputStream fos = new FileOutputStream("level.out");
-    ObjectOutputStream oos = new ObjectOutputStream(fos);
-    oos.writeObject(lvl);
-    oos.flush();
-    oos.close();
-  }
-
-  private Level deSerialize() throws Exception {
-    FileInputStream fis = new FileInputStream("level.out");
-    ObjectInputStream oin = new ObjectInputStream(fis);
-    return (Level) oin.readObject();
-  }
 }
