@@ -29,11 +29,15 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
@@ -271,15 +275,25 @@ public class Factory implements EntityFactory {
    */
   @Spawns("enemy")
   public Entity newEnemy(SpawnData data) {
+    var hp = new HealthIntComponent(10);
+    var hpView = new ProgressBar(false);
+    hpView.setFill(Color.LIGHTGREEN);
+    hpView.setMaxValue(10);
+    hpView.setWidth(40);
+    hpView.setTranslateY(-10);
+    hpView.currentValueProperty().bind(hp.valueProperty());
+
     Circle circle = new Circle(10, 10, 10, Color.RED);
     circle.setStroke(Color.BROWN);
     circle.setStrokeWidth(2.0);
     return entityBuilder()
         .from(data)
         .type(EntityType.ENEMY)
-        .viewWithBBox(circle)
+        .viewWithBBox(texture("skull.png", 50,50))
         .anchorFromCenter()
         .collidable()
+        .with(hp)
+        .view(hpView)
         .with(new CellMoveComponent(25,25,100))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with(new PlayerChaseComponent())
@@ -295,6 +309,18 @@ public class Factory implements EntityFactory {
         .with(new CollidableComponent(true))
         .with("closedDoor", data.get("closedDoor"))
         .build();
+  }
+
+  @Spawns("explosion")
+  public Entity newExplosion(SpawnData data) {
+    Image image = image("explosion.png");
+    AnimatedTexture texture = new AnimatedTexture(new AnimationChannel(image, 4, 960/5, 768/4, Duration.seconds(0.66),
+            0, 3));
+    return entityBuilder()
+            .from(data)
+            .type(EntityType.EXPLOSION)
+            .viewWithBBox(texture("explosion.png", 16, 16))
+            .build();
   }
 
   @Spawns("closedDoor")

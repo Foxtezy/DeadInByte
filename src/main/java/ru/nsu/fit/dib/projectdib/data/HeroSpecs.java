@@ -1,6 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HeroSpecs {
@@ -11,13 +12,40 @@ public class HeroSpecs {
   private String playerImage;
   private List<Entity> inventory;
 
-  private int HP;
-  private double Str;
-  private double Dex;
-  private double Phys;
-  private double Int;
-  private double Wis;
-  private double Char;
+  private int healthPoints;
+  private double strength;
+  private double dexterity;
+  private double physique;
+  private double intelligence;
+  private double wisdom;
+  private double charisma;
+
+  public HeroSpecs(
+      String name,
+      String firstWeapon,
+      String secondWeapon,
+      int hp,
+      Double speed,
+      String playerImage,
+      double strength,
+      double dexterity,
+      double physique,
+      double intelligence,
+      double wisdom,
+      double charisma) {
+    this.name = name;
+    this.mainWeapon = firstWeapon;
+    this.secondWeapon = secondWeapon;
+    this.healthPoints = hp;
+    this.speed = speed;
+    this.playerImage = playerImage;
+    this.strength = strength;
+    this.dexterity = dexterity;
+    this.physique = physique;
+    this.intelligence = intelligence;
+    this.wisdom = wisdom;
+    this.charisma = charisma;
+  }
 
   public HeroSpecs(
       String name,
@@ -29,7 +57,7 @@ public class HeroSpecs {
     this.name = name;
     this.mainWeapon = firstWeapon;
     this.secondWeapon = secondWeapon;
-    this.HP = hp;
+    this.healthPoints = hp;
     this.speed = speed;
     this.playerImage = playerImage;
   }
@@ -50,32 +78,64 @@ public class HeroSpecs {
     return secondWeapon;
   }
 
-  public int getHP() {
-    return HP;
+  public int getHealthPoints() {
+    return healthPoints;
   }
 
-  public double getStr() {
-    return Str;
+  public double getStrength() {
+    return strength;
   }
 
-  public double getDex() {
-    return Dex;
+  public double getDexterity() {
+    return dexterity;
   }
 
-  public double getPhys() {
-    return Phys;
+  public double getPhysique() {
+    return physique;
   }
 
-  public double getInt() {
-    return Int;
+  public double getIntelligence() {
+    return intelligence;
   }
 
-  public double getWis() {
-    return Wis;
+  public double getWisdom() {
+    return wisdom;
   }
 
-  public double getChar() {
-    return Char;
+  public double getCharisma() {
+    return charisma;
+  }
+
+  public void setHealthPoints(int healthPoints) {
+    this.healthPoints = healthPoints;
+  }
+
+  public void setStrength(double strength) {
+    this.strength = strength;
+  }
+
+  public void setDexterity(double dexterity) {
+    this.dexterity = dexterity;
+  }
+
+  public void setPhysique(double physique) {
+    this.physique = physique;
+  }
+
+  public void setIntelligence(double intelligence) {
+    this.intelligence = intelligence;
+  }
+
+  public void setWisdom(double wisdom) {
+    this.wisdom = wisdom;
+  }
+
+  public void setCharisma(double charisma) {
+    this.charisma = charisma;
+  }
+
+  public List<Entity> getInventory() {
+    return new ArrayList<>(inventory);
   }
 
   public void setMainWeapon(String newWeapon) {
