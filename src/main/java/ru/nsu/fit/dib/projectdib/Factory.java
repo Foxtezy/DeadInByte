@@ -53,26 +53,6 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
-
-    //Код для тестирования динамической подгрузки объектов
-/*    File file = new File("src/test/resources/input.txt");
-    Scanner scanner = null;
-    try {
-      scanner = new Scanner(file);
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-    scanner.useDelimiter("");
-    char[][] arr = new char[20][20];
-    for (int i = 0; i < 20; i++) {
-      for (int j = 0; j < 20; j++) {
-        arr[i][j] = scanner.next().charAt(0);
-      }
-      scanner.next();
-    }
-    WallMapper wallMapper = new WallMapper(64, 16, arr);*/
-
-    //////////////
     HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 150.0, "player.png");
 
     return entityBuilder()

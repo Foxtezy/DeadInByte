@@ -60,26 +60,5 @@ public class App extends GameApplication {
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
-    /*
-    FXGL.setLevelFromMap("tmx/level2.tmx");
-    Spawn.spawnInitialObjects();
-    spawn("enemy", 48, 240);
-    this.player = spawn("player", getAppWidth() / 2, getAppHeight() / 2);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
-        (type) -> {
-          if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-            return CellState.NOT_WALKABLE;
-          }
-
-          return CellState.WALKABLE;
-        });
-    set("grid", grid);
-
-    spawn("ak", 600, 600);
-    //this.player = spawn("player", 60, 60);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    viewport.setLazy(true);
-    */
   }
 }
