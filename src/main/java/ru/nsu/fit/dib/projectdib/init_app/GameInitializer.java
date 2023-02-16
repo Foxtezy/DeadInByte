@@ -41,9 +41,10 @@ public class GameInitializer {
     //lvl.print();
     player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16,
         (lvl.start.getCentrePoint().y - 1) * 16);
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-    viewport.setZoom(3);
+    viewport.setZoom(6);
+    viewport.bindToEntity(player, viewport.getWidth() / 2, viewport.getHeight() / 2);
     viewport.setLazy(true);
   }
 

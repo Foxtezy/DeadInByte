@@ -4,9 +4,13 @@ package ru.nsu.fit.dib.projectdib.data;
  * Настройки игры, не изменяемые пользователем.
  */
 public interface ProjectConfig {
-
-  String _player = "assets/textures/player.png";
+  //Config
   String _cfg = "src/main/resources/cfg.ini";
+  //PlayerConfig
+  String _player = "assets/textures/HeroesMovementSpriteSheet.png";
+  int _player_numberColumns = 13;
+  int _player_width = 160;
+  int _player_height = 320;
 
 
   //UIConfig
@@ -17,5 +21,4 @@ public interface ProjectConfig {
   String _menuSelectedButton = "assets/UI/elements/menu_selected_button1k.png";
   String _returnButton = "assets/UI/elements/return_button1k.png";
   String _returnSelectedButton = "assets/UI/elements/return_selected_button1k.png";
-
 }

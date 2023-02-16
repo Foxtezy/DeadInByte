@@ -4,7 +4,9 @@ package ru.nsu.fit.dib.projectdib.entity.moving.components;
 import static com.almasb.fxgl.dsl.FXGL.image;
 import static com.almasb.fxgl.dsl.FXGL.newLocalTimer;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 
 import com.almasb.fxgl.entity.component.Component;
@@ -26,17 +28,29 @@ import ru.nsu.fit.dib.projectdib.entity.moving.MovingInterface;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static java.lang.Math.abs;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_numberColumns;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
 
 /**
  * Описывает движение игрока.
  */
 public class PlayerMovingComponent extends Component implements MovingInterface {
 
+  /*
   private final AnimationChannel animWalkRight;
   private final AnimationChannel animWalkLeft;
   private final AnimationChannel animWalkUp;
   private final AnimationChannel animWalkDown;
+   */
   private final double scale = 0.07;
+  AnimationChannel animationMovement;
+  AnimationChannel animationStanding;
+  AnimationChannel animationWaiting;
+  AnimationChannel animationBack;
+  boolean stateCanged = true;
   private PhysicsComponent physics;
   //public String currentWeapon;
   private AnimatedTexture texture;
@@ -47,17 +61,26 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
   private String currentWeapon;
   private boolean isMoving = false;
 
-
   public PlayerMovingComponent(HeroSpecs specs) {
     this.specification = specs;
     this.speed = specification.getSpeed();
     this.currentWeapon = specification.getMainWeapon();
     //resources.assets.textures
     Image image = image(specification.getPlayerImage());
-
     //animation settings
-    int frameWidth = (int) image.getWidth() / 4;
-    int frameHeight = (int) image.getHeight() / 4;
+    Image img = new Image(_player);
+    animationMovement = new AnimationChannel(img,
+        _player_numberColumns, _player_width, _player_height, Duration.millis(600), 5, 8);
+    animationStanding = new AnimationChannel(img,
+        _player_numberColumns, _player_width, _player_height, Duration.millis(300), 0, 1);
+    animationWaiting = new AnimationChannel(img,
+        _player_numberColumns, _player_width, _player_height, Duration.millis(450), 2, 4);
+    animationBack = new AnimationChannel(img,
+        _player_numberColumns, _player_width, _player_height, Duration.millis(600), 9, 12);
+    texture = new AnimatedTexture(animationStanding);
+    texture.loop();
+
+    /*
     animWalkDown = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66),
         0, 3);
     animWalkUp = new AnimationChannel(image, 4, frameWidth, frameHeight, Duration.seconds(0.66),
@@ -70,32 +93,43 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
     texture = new AnimatedTexture(animWalkUp);
     texture.loop();
     texture.stop();
+    */
   }
 
   @Override
   public void onAdded() {
     entity.getTransformComponent().setScaleOrigin(new Point2D(15, 20));
     entity.getViewComponent().addChild(texture);
-    getEntity().setScaleUniform(scale);
+    entity.setScaleUniform(scale);
     //setCurrentWeapon("bow");
   }
 
   @Override
   public void onUpdate(double tpf) {
-    AnimationChannel animation = texture.getAnimationChannel();
+    if (isMoving && !isMoving() || !isMoving && isMoving()){
+      stateCanged=true;
+      isMoving=isMoving();
+    }
     Point2D mouseVelocity = getInput().getVectorToMouse(
         getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
-    double angleRight = mouseVelocity.angle(1, 0);
-    double angleUp = mouseVelocity.angle(0, -1);
-    double angleLeft = mouseVelocity.angle(-1, 0);
-    double angleDown = mouseVelocity.angle(0, 1);
-
-    if (physics.getLinearVelocity().magnitude() < 10) {
-      if (isMoving) {
-        texture.stop();
-        isMoving = false;
-      }
+    //Поворот
+    if (mouseVelocity.angle(1, 0) <= 90) {
+      texture.setScaleX(1);
+    } else {
+      texture.setScaleX(-1);
     }
+    //Изменилось ли состояние
+    if (stateCanged) {
+      //texture.loopAnimationChannel(isMoving() ? animationMovement : animationStanding);
+      AnimationChannel animation = texture.getAnimationChannel();
+      //Движется или нет
+      if (isMoving()) {
+        texture.loopAnimationChannel(animationMovement);
+      } else {
+        texture.loopAnimationChannel(animationStanding);
+      }
+      stateCanged = false;
+      /*
     if (angleDown <= 45) {
       if (animation != animWalkDown || !isMoving) {
         texture.loopAnimationChannel(animWalkDown);
@@ -117,13 +151,18 @@ public class PlayerMovingComponent extends Component implements MovingInterface 
         isMoving = true;
       }
     }
-
+*/
+    }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
+  }
+
+  private boolean isMoving() {
+    return FXGLMath.abs(physics.getVelocityX()) > 0 || FXGLMath.abs(physics.getVelocityY()) > 0;
   }
 
   @Override
   public void left() {
-    physics.setVelocityX(-1 * speed);
+    physics.setVelocityX(-speed);
     physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(speed));
   }
 
