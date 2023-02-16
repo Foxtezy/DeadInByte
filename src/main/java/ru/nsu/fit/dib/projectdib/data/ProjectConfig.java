@@ -14,7 +14,7 @@ public interface ProjectConfig {
 
 
   //UIConfig
-  String _fontDustyPro = "file:/F:/DeadInByte/src/main/resources/assets/UI/fonts/DustyPro.ttf";
+  String _fontDustyPro = "assets/UI/fonts/DustyPro.ttf";
   String _forestAnimationUI = "assets/UI/elements/forest1k.png";
   String _campfireAnimationUI = "assets/UI/elements/campfire1k.png";
   String _menuButton = "assets/UI/elements/menu_button1k.png";

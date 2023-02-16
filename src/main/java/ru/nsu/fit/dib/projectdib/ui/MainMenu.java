@@ -11,6 +11,7 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._returnSelectedButton
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import java.io.InputStream;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.geometry.Pos;
@@ -102,9 +103,9 @@ public class MainMenu extends FXGLMenu {
     images.setAlignment(Pos.CENTER);
     images.getChildren().addAll(forest, campfire);
     //======================================[     Fonts     ]=======================================
-
-    Font font = Font.loadFont(_fontDustyPro, 65);
-    Font bigFont = Font.loadFont(_fontDustyPro, 140);
+    ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+    Font font = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 65);
+    Font bigFont = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 140);
     //=====================================[    GameName    ]=======================================
 
     AnchorPane name = new AnchorPane();
