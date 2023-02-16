@@ -21,12 +21,9 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
-<<<<<<< HEAD
 import com.almasb.fxgl.io.FileSystemService;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
-=======
->>>>>>> origin/develop
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -244,7 +241,6 @@ public class App extends GameApplication {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
-    /*
 
     Level lvl= new Level(new Random().nextInt(),64,64,1,15);
     String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
@@ -256,35 +252,6 @@ public class App extends GameApplication {
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     viewport.setZoom(1.2);
     viewport.setLazy(true);
-*/
 
-
-
-    FXGL.setLevelFromMap("tmx/level2.tmx");
-    Spawn.spawnInitialObjects();
-    //spawn("enemy", 48, 240);
-    HeroSpecs specs = new HeroSpecs("1", "shotgun", "ak",10, 250.0, "player.png");
-    this.player = FXGL.spawn("player", new SpawnData(getAppWidth() / 2, getAppHeight() / 2).put("specification", specs) );
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
-        (type) -> {
-          if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-            return CellState.NOT_WALKABLE;
-          }
-
-          return CellState.WALKABLE;
-        });
-    set("grid", grid);
-
-    spawn("ak", 600, 600);
-<<<<<<< HEAD
-   // this.player = spawn("player", 60, 60);
-    spawn("gun", 600, 700);
-=======
-    //this.player = spawn("player", 60, 60);
->>>>>>> origin/develop
-    viewport.bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
-    viewport.setLazy(true);
   }
-
 }

@@ -22,13 +22,10 @@ public enum EntityType {
   CHEST("chest"),
   BOW("bow"),
   AK("ak"),
-<<<<<<< HEAD
   GUN("gun"),
-  SHOTGUN("shotgun");
-=======
+  SHOTGUN("shotgun"),
   EXPLOSION("explosion");
 
->>>>>>> origin/develop
   private final String name;
 
   EntityType(String name) {
