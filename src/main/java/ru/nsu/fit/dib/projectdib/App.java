@@ -1,5 +1,7 @@
 package ru.nsu.fit.dib.projectdib;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import ru.nsu.fit.dib.projectdib.init_app.GameInitializer;
@@ -51,7 +53,6 @@ public class App extends GameApplication {
     PhysicsLoader physicsLoader = new PhysicsLoader();
     physicsLoader.run();
   }
-
   /**
    * Инициализация игры.
    */

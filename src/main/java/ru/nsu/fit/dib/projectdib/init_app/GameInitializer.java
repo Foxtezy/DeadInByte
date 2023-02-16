@@ -37,13 +37,17 @@ public class GameInitializer {
     Level lvl = new Level(new Random().nextInt(), 64, 64, 1, 15);
     String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
-    WallMapper wallMapper = new WallMapper(256, 16, lvl.map);
+    WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print();
     player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16,
-        (lvl.start.getCentrePoint().y - 1) * 16);
-
+        (lvl.start.getCentrePoint().y - 1) * 160);
+    player.setScaleUniform(0.75);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-    viewport.setZoom(6);
+    viewport.setWidth(getAppWidth());
+    viewport.setHeight(getAppHeight());
+    viewport.setZoom(0.75);
+    viewport.focusOn(player);
+    viewport.setBounds(0,0,64*160,64*160);
     viewport.bindToEntity(player, viewport.getWidth() / 2, viewport.getHeight() / 2);
     viewport.setLazy(true);
   }

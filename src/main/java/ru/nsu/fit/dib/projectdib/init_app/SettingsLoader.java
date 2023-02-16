@@ -29,12 +29,13 @@ public class SettingsLoader {
    * Загружает настройки.
    */
   public void run() {
+    settings.setScaleAffectedOnResize(true);
     settings.setTitle("RDPLS-D2");
     settings.setManualResizeEnabled(true);
     settings.setPreserveResizeRatio(true);
     settings.setFileSystemWriteAllowed(false);
     settings.setSceneFactory(new ScenesFactory());
-    settings.setMainMenuEnabled(true);
+    //settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig(_cfg);

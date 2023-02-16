@@ -53,17 +53,17 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
-    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 150.0, "player.png");
+    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
 
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
         //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
-        .bbox(new HitBox(new Point2D(25, 110), BoundingShape.box(160, 160)))
+        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
         .anchorFromCenter()
         .with(physics)
-        .with(new PlayerMovingComponent(specs))
-        .with(new CellMoveComponent(25, 25, 250))
+        .with(new PlayerMovingComponent(specs,new Point2D(50,180)))
+        .with(new CellMoveComponent(30, 30, 85))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
