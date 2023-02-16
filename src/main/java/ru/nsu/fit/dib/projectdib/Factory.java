@@ -1,16 +1,13 @@
 package ru.nsu.fit.dib.projectdib;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
+
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 
-import static java.lang.Character.getName;
 import static java.lang.Character.toUpperCase;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGLForKtKt;
+
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
@@ -20,10 +17,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
-import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -36,13 +30,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
-import ru.nsu.fit.dib.projectdib.moving.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.moving.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.BoxMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
 
 /**
  * Class Factory for making Entities.
@@ -60,32 +53,12 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
-
-    //Код для тестирования динамической подгрузки объектов
-/*    File file = new File("src/test/resources/input.txt");
-    Scanner scanner = null;
-    try {
-      scanner = new Scanner(file);
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-    scanner.useDelimiter("");
-    char[][] arr = new char[20][20];
-    for (int i = 0; i < 20; i++) {
-      for (int j = 0; j < 20; j++) {
-        arr[i][j] = scanner.next().charAt(0);
-      }
-      scanner.next();
-    }
-    WallMapper wallMapper = new WallMapper(64, 16, arr);*/
-
-    //////////////
-    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 250.0, "player.png");
+    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 150.0, "player.png");
 
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
-       //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
+        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
         .bbox(new HitBox(new Point2D(25, 110), BoundingShape.box(160, 160)))
         .anchorFromCenter()
         .with(physics)
@@ -114,7 +87,8 @@ public class Factory implements EntityFactory {
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WALL)
-        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .bbox(
+            new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .with(new PhysicsComponent())
         .collidable()
         .build();
@@ -141,16 +115,16 @@ public class Factory implements EntityFactory {
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
     return entityBuilder()
-            .from(data)
-            .type(EntityType.BOX)
-            .viewWithBBox(FXGL.texture("box.png", 40, 40))
-            .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
-            .view(hpView)
-            .with(hp)
-            .with(physics)
-            .with(new BoxMovingComponent())
-            .collidable()
-            .build();
+        .from(data)
+        .type(EntityType.BOX)
+        .viewWithBBox(FXGL.texture("box.png", 40, 40))
+        .bbox(new HitBox(new Point2D(25, 30), BoundingShape.box(20, 10)))
+        .view(hpView)
+        .with(hp)
+        .with(physics)
+        .with(new BoxMovingComponent())
+        .collidable()
+        .build();
   }
 
   /**
@@ -174,17 +148,16 @@ public class Factory implements EntityFactory {
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
     return entityBuilder()
-            .from(data)
-            .type(EntityType.CHEST)
-            .viewWithBBox(FXGL.texture("chest.png", 40, 40))
-            .view(hpView)
-            .with(hp)
-            .with(physics)
-            .with(new BoxMovingComponent())
-            .collidable()
-            .build();
+        .from(data)
+        .type(EntityType.CHEST)
+        .viewWithBBox(FXGL.texture("chest.png", 40, 40))
+        .view(hpView)
+        .with(hp)
+        .with(physics)
+        .with(new BoxMovingComponent())
+        .collidable()
+        .build();
   }
-
 
 
   /**
@@ -213,7 +186,8 @@ public class Factory implements EntityFactory {
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld().subtract(player.getCenter().subtract(new Point2D(60,90)));
+    Point2D direction = getInput().getMousePositionWorld()
+        .subtract(player.getCenter().subtract(new Point2D(60, 90)));
     Projectiles projectile = data.get("typeProj");
     return entityBuilder()
         .from(data)
@@ -231,7 +205,7 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.BOW)
         .viewWithBBox(texture("red_bow.png", 15, 50))
-        .bbox(new HitBox(BoundingShape.box(50,15)))
+        .bbox(new HitBox(BoundingShape.box(50, 15)))
         .with(new CollidableComponent(true))
         .build();
   }
@@ -239,12 +213,12 @@ public class Factory implements EntityFactory {
   @Spawns("ak")
   public Entity newAK(SpawnData data) {
     return entityBuilder(data)
-            .from(data)
-            .type(EntityType.AK)
-            .viewWithBBox(texture("weapon_ak.png", 75, 20))
-            .bbox(new HitBox(BoundingShape.box(75,20)))
-            .with(new CollidableComponent(true))
-            .build();
+        .from(data)
+        .type(EntityType.AK)
+        .viewWithBBox(texture("weapon_ak.png", 75, 20))
+        .bbox(new HitBox(BoundingShape.box(75, 20)))
+        .with(new CollidableComponent(true))
+        .build();
   }
 
   /**
@@ -269,12 +243,12 @@ public class Factory implements EntityFactory {
     return entityBuilder()
         .from(data)
         .type(EntityType.ENEMY)
-        .viewWithBBox(texture("skull.png", 50,50))
+        .viewWithBBox(texture("skull.png", 50, 50))
         .anchorFromCenter()
         .collidable()
         .with(hp)
         .view(hpView)
-        .with(new CellMoveComponent(25,25,100))
+        .with(new CellMoveComponent(25, 25, 100))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with(new PlayerChaseComponent())
         .build();
@@ -294,13 +268,14 @@ public class Factory implements EntityFactory {
   @Spawns("explosion")
   public Entity newExplosion(SpawnData data) {
     Image image = image("explosion.png");
-    AnimatedTexture texture = new AnimatedTexture(new AnimationChannel(image, 4, 960/5, 768/4, Duration.seconds(0.66),
+    AnimatedTexture texture = new AnimatedTexture(
+        new AnimationChannel(image, 4, 960 / 5, 768 / 4, Duration.seconds(0.66),
             0, 3));
     return entityBuilder()
-            .from(data)
-            .type(EntityType.EXPLOSION)
-            .viewWithBBox(texture("explosion.png", 16, 16))
-            .build();
+        .from(data)
+        .type(EntityType.EXPLOSION)
+        .viewWithBBox(texture("explosion.png", 16, 16))
+        .build();
   }
 
   @Spawns("closedDoor")
