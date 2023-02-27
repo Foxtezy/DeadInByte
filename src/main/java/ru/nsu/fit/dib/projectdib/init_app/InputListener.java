@@ -3,18 +3,29 @@ package ru.nsu.fit.dib.projectdib.init_app;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.onBtn;
+import static com.almasb.fxgl.dsl.FXGL.onBtnDown;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
+import static com.almasb.fxgl.dsl.FXGL.onKeyUp;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
+import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
+import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -40,6 +51,26 @@ public class InputListener {
   }
 
   public void run() {
+    ClientTaskManager clientTaskManager = new ClientTaskManager();
+    onKeyUp(KeyCode.P,()->{
+      Point2D p1 = player.getPosition().add(new Point2D(5,5));
+      List<NewEntity> nel = new ArrayList<>();
+      nel.add(new NewEntity(1, "box", new SpawnData(p1)));
+      clientTaskManager.spawnEntities(nel);
+      System.out.println(clientTaskManager.getIdHashTable().get(1)+" spawned");
+      System.out.println("with ID"+clientTaskManager.getIdHashTable().get(1).getComponent(
+          IDComponent.class).getId());
+    });
+    onKeyUp(KeyCode.L,()->{
+      Point2D p2 = clientTaskManager.getIdHashTable().get(1).getPosition().add(new Point2D(5,5));
+      List<EntityState> nes = new ArrayList<>();
+      nes.add(new EntityState(1,p2, 0.0));
+      clientTaskManager.updateEntities(nes);
+      System.out.println(clientTaskManager.getIdHashTable().get(1)+" moved");
+      System.out.println("with ID"+clientTaskManager.getIdHashTable().get(1).getComponent(
+          IDComponent.class).getId());
+    });
+
     onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerMovingComponent.class).left());
     onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerMovingComponent.class).right());
     onKey(KeyCode.W, "up", () -> player.getComponent(PlayerMovingComponent.class).up());
