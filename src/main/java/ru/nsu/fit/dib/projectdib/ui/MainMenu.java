@@ -12,6 +12,8 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import java.io.InputStream;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.geometry.Pos;
@@ -30,6 +32,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.connecting.runners.ServerConnectionRunner;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
@@ -164,6 +167,18 @@ public class MainMenu extends FXGLMenu {
     start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
     //===Settings===
     settings.setOnMouseClicked(event -> {
+    });
+    //==Server==
+    server.setOnMouseClicked(event -> {
+      DatagramSocket s;
+      try {
+        s = new DatagramSocket();
+      } catch (SocketException e) {
+        throw new RuntimeException(e);
+      }
+      System.out.println(s.getPort());
+      ServerConnectionRunner sr = new ServerConnectionRunner(s);
+      sr.startConnection();
     });
     //===Return===
     returnButton.setOnMouseClicked(event -> {
