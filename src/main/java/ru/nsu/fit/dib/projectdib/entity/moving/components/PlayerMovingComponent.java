@@ -53,7 +53,8 @@ public class PlayerMovingComponent extends CreatureComponent implements MovingIn
   private HeroSpecs specification;
   private String currentWeapon;
   private boolean isMoving = false;
-
+  
+  private Point2D mouseVelocity;
   public PlayerMovingComponent(HeroSpecs specs,Point2D localAnchor) {
     int heroNumber=1;
     this.localAnchor=localAnchor;
@@ -104,7 +105,7 @@ public class PlayerMovingComponent extends CreatureComponent implements MovingIn
       stateCanged = false;
     }
 
-    Point2D mouseVelocity = getInput().getVectorToMouse(
+    mouseVelocity = getInput().getVectorToMouse(
         getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
     //Поворот
     if (mouseVelocity.angle(1, 0) <= 90) {
@@ -187,7 +188,11 @@ public class PlayerMovingComponent extends CreatureComponent implements MovingIn
 
 
   }
-
+  
+  public Point2D getMouseVelocity() {
+    return mouseVelocity;
+  }
+  
   public void swapWeapons() {
     String change = specification.getMainWeapon();
     specification.setMainWeapon(specification.getSecondWeapon());

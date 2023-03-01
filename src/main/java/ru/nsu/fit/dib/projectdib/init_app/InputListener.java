@@ -64,7 +64,7 @@ public class InputListener {
     onKeyUp(KeyCode.L,()->{
       Point2D p2 = clientTaskManager.getIdHashTable().get(1).getPosition().add(new Point2D(5,5));
       List<EntityState> nes = new ArrayList<>();
-      nes.add(new EntityState(1,p2, 0.0));
+      nes.add(new EntityState(1,p2, new Point2D(0,0)));
       clientTaskManager.updateEntities(nes);
       System.out.println(clientTaskManager.getIdHashTable().get(1)+" moved");
       System.out.println("with ID"+clientTaskManager.getIdHashTable().get(1).getComponent(
