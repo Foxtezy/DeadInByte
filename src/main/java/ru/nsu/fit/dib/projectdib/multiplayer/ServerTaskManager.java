@@ -12,6 +12,7 @@ import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
@@ -19,6 +20,9 @@ public class ServerTaskManager {
 	private Map<Integer, Entity> idServerHashTable;
 	private List<NewEntity> listNewEntities;
 	private List<EntityState> listEntityState;
+	//Вынес Executor и UpdateTask, чтобы было создано только по 1 экземпляру
+	private ExecutorService executorService = Executors.newFixedThreadPool(1);
+	private UpdateTask updateTask = new UpdateTask();
 	
 	public ServerTaskManager() {
 		idServerHashTable = new HashMap<>();
@@ -35,16 +39,20 @@ public class ServerTaskManager {
 		idServerHashTable.put(newId, spawned);
 	}
 	
-	private void updateListEntityState() {
-		listEntityState.parallelStream().forEach(entState -> {
-			int id = entState.getId();
-			entState.setCoordinate(idServerHashTable.get(id).getPosition());
-			entState.setAngle(idServerHashTable.get(id).getComponent(PlayerMovingComponent.class).getMouseVelocity());
-		});
-	}
 	
-	public GameStatePacket makePacket() {
-		this.updateListEntityState();
+	private class UpdateTask implements Callable<List<EntityState>> {
+		@Override
+		public List<EntityState> call() throws Exception {
+			listEntityState.parallelStream().forEach(entState -> {
+				int id = entState.getId();
+				entState.setCoordinate(idServerHashTable.get(id).getPosition());
+				entState.setAngle(idServerHashTable.get(id).getComponent(PlayerMovingComponent.class).getMouseVelocity());
+			});
+			return listEntityState;
+		}
+	}
+		public GameStatePacket makePacket() {
+		Future<List<EntityState>> updatedListEntityState = executorService.submit(updateTask);
 		GameStatePacket packet = new GameStatePacket(listNewEntities, listEntityState);
 		listNewEntities.clear();
 		return packet;
