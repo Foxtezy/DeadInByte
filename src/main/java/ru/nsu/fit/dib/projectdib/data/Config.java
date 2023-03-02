@@ -16,7 +16,7 @@ public class Config {
   public static int WINDOW_HEIGHT;
   public static int WINDOW_WIDTH;
   public static String WINDOW_MODE;
-
+  public static Integer KARMA;
   public static void setConfig(String filepath) {
     Properties props = new Properties();
     try {
@@ -25,6 +25,7 @@ public class Config {
       WINDOW_WIDTH = Integer.parseInt(props.getProperty("WINDOW_WIDTH", "1280"));
       WINDOW_HEIGHT = Integer.parseInt(props.getProperty("WINDOW_HEIGHT", "720"));
       WINDOW_MODE = props.getProperty("WINDOW_MODE", "Window");
+      KARMA = Integer.parseInt(props.getProperty("KARMA", "0"));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

@@ -11,6 +11,7 @@ open module projectdib.main {
   exports ru.nsu.fit.dib.projectdib.ui.UIElements;
   exports ru.nsu.fit.dib.projectdib.data;
   exports ru.nsu.fit.dib.projectdib.init_app;
+  exports ru.nsu.fit.dib.projectdib.entity.moving.components;
 }
 /*
 module ru.nsu.fit.dib.projectdib {

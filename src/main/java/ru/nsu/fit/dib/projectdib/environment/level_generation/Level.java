@@ -127,11 +127,17 @@ public class Level implements Serializable {
     for (int y = 0; y <= height; y++) {
       for (int x = 0; x <= width; x++) {
         char c = '.';
-        if (map[x][y] == BlockDensity.WALL.density) {
-          c = '#';
+        if (start.getCentrePoint().x==x && start.getCentrePoint().y==y || finish.getCentrePoint().x==x && finish.getCentrePoint().y==y){
+          c='O';
         }
-        if (map[x][y] == 3) {
-          c = '@';
+        else
+        {
+          if (map[x][y] == BlockDensity.WALL.density) {
+            c = '#';
+          }
+          if (map[x][y] == 3) {
+            c = '@';
+          }
         }
         System.out.printf("%2c", c);
       }

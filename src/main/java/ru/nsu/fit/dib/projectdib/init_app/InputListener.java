@@ -8,7 +8,6 @@ import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.onKeyUp;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
-import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -17,12 +16,18 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Objects;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.CreatureComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
@@ -52,31 +57,35 @@ public class InputListener {
 
   public void run() {
     ClientTaskManager clientTaskManager = new ClientTaskManager();
-    onKeyUp(KeyCode.P,()->{
-      Point2D p1 = player.getPosition().add(new Point2D(5,5));
+    onKeyUp(KeyCode.P, () -> {
+      Point2D p1 = player.getPosition().add(new Point2D(5, 5));
       List<NewEntity> nel = new ArrayList<>();
       nel.add(new NewEntity(1, "box", new SpawnData(p1)));
       clientTaskManager.spawnEntities(nel);
-      System.out.println(clientTaskManager.getIdHashTable().get(1)+" spawned");
-      System.out.println("with ID"+clientTaskManager.getIdHashTable().get(1).getComponent(
+      System.out.println(clientTaskManager.getIdHashTable().get(1) + " spawned");
+      System.out.println("with ID" + clientTaskManager.getIdHashTable().get(1).getComponent(
           IDComponent.class).getId());
     });
-    onKeyUp(KeyCode.L,()->{
-      Point2D p2 = clientTaskManager.getIdHashTable().get(1).getPosition().add(new Point2D(5,5));
+    onKeyUp(KeyCode.L, () -> {
+      Point2D p2 = clientTaskManager.getIdHashTable().get(1).getPosition().add(new Point2D(5, 5));
       List<EntityState> nes = new ArrayList<>();
-      nes.add(new EntityState(1,p2, 0.0));
+      nes.add(new EntityState(1, p2, 0.0));
       clientTaskManager.updateEntities(nes);
-      System.out.println(clientTaskManager.getIdHashTable().get(1)+" moved");
-      System.out.println("with ID"+clientTaskManager.getIdHashTable().get(1).getComponent(
+      System.out.println(clientTaskManager.getIdHashTable().get(1) + " moved");
+      System.out.println("with ID" + clientTaskManager.getIdHashTable().get(1).getComponent(
           IDComponent.class).getId());
     });
-
-    onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerMovingComponent.class).left());
-    onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerMovingComponent.class).right());
-    onKey(KeyCode.W, "up", () -> player.getComponent(PlayerMovingComponent.class).up());
-    onKey(KeyCode.S, "Down", () -> player.getComponent(PlayerMovingComponent.class).down());
-    onKey(KeyCode.X, "SwapWeapon",
-        () -> player.getComponent(PlayerMovingComponent.class).swapWeapons());
+    //==============================================================================================
+    onKey(KeyCode.W, "Up", () -> player.getComponent(PlayerComponent.class).up());
+    onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerComponent.class).left());
+    onKey(KeyCode.S, "Down", () -> player.getComponent(PlayerComponent.class).down());
+    onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerComponent.class).right());
+    onKey(KeyCode.R, "Unbind", () -> {
+      Creature hero = player.getComponent(PlayerComponent.class).getHero();
+      hero.getActiveWeapon().getComponent().getEntity().xProperty().unbind();
+      hero.getActiveWeapon().getComponent().getEntity().yProperty().unbind();
+    });
+    onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(PlayerComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -91,43 +100,50 @@ public class InputListener {
             });
       }
     }, KeyCode.E, VirtualButton.B);
+
     getInput().addAction(new UserAction("Take") {
       @Override
       protected void onActionBegin() {
 
-        if (!isSkipOther()) {
-          getGameWorld().getEntitiesByType(EntityType.AK)
-              .stream()
-              .filter(ak -> ak.hasComponent(CollidableComponent.class) && ak.isColliding(player))
-              .forEach(ak -> {
-                spawn(player.getComponent(PlayerMovingComponent.class).getSpecification()
-                    .getMainWeapon(), player.getCenter().subtract(new Point2D(80, 100)));
-                player.getComponent(PlayerMovingComponent.class).getSpecification()
-                    .setMainWeapon("ak");
-                ak.removeFromWorld();
-                setSkipOther(true);
-              });
+        Creature hero = player.getComponent(PlayerComponent.class).getHero();
+        List<Entity> list = new ArrayList<>(
+            getGameWorld().getEntitiesByType(EntityType.WEAPON).stream()
+                .filter(weapon -> weapon.hasComponent(CollidableComponent.class)
+                    && weapon.isColliding(player)).toList());
 
+        if (!hero.getActiveWeapon().getName().equals("hand")) {
+          Entity weaponEntity = hero.getActiveWeapon().getComponent().getEntity();
+          weaponEntity.xProperty().unbind();
+          weaponEntity.yProperty().unbind();
         }
-        if (!isSkipOther()) {
-          getGameWorld().getEntitiesByType(EntityType.BOW)
-              .stream()
-              .filter(bow -> bow.hasComponent(CollidableComponent.class) && bow.isColliding(player))
-              .forEach(bow -> {
-                spawn(player.getComponent(PlayerMovingComponent.class).getSpecification()
-                    .getMainWeapon(), player.getCenter().subtract(new Point2D(80, 100)));
-                player.getComponent(PlayerMovingComponent.class).getSpecification()
-                    .setMainWeapon("bow");
-                bow.removeFromWorld();
-                setSkipOther(true);
-              });
+        hero.getWeaponsList().forEach(weapon -> {
+          if (!Objects.equals(weapon.getName(), "hand")) {
+            list.remove(weapon.getComponent().getEntity());
+          }
+        });
+        if (list.size() >= 1) {
+          Entity weaponEntity = list.get(0);
+          Weapon weapon = weaponEntity.getComponent(WeaponComponent.class).getWeapon();
+          hero.changeWeapon(weapon);
+          weaponEntity.xProperty().bind(player.xProperty());
+          weaponEntity.yProperty().bind(player.yProperty());
+        } else {
+          hero.changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
         }
-        setSkipOther(false);
       }
     }, KeyCode.F, VirtualButton.X);
-
-    onBtn(MouseButton.PRIMARY, "shoot",
-        () -> player.getComponent(PlayerMovingComponent.class).shoot());
-
+    getInput().addAction(new UserAction("Swap weapons") {
+      @Override
+      protected void onActionBegin() {
+        Creature hero = player.getComponent(PlayerComponent.class).getHero();
+        if (!hero.getActiveWeapon().getName().equals("hand")) {
+          hero.getActiveWeapon().getComponent().getEntity().setVisible(false);
+        }
+        Weapon weapon = hero.getNextWeapon();
+        if (!weapon.getName().equals("hand")) {
+          weapon.getComponent().getEntity().setVisible(true);
+        }
+      }
+    }, KeyCode.Q, VirtualButton.B);
   }
 }

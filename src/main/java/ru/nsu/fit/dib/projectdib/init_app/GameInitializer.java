@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.Random;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.moving.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
@@ -51,9 +57,30 @@ public class GameInitializer {
     String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
-    //lvl.print();
-    player = spawn("player", (lvl.start.getCentrePoint().x - 1) * 16,
-        (lvl.start.getCentrePoint().y - 1) * 160);
+    //lvl.print()
+
+    double x = (lvl.start.getCentrePoint().x) * 160;
+    double y = (lvl.start.getCentrePoint().y) * 160;
+    SpawnData sd = new SpawnData(x,y);
+    sd.put("creature", RandomCharacterSystem.NewCharacter());
+    player = spawn("player", sd);
+
+    Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getActiveWeapon();
+    //List<> list  = player.getViewComponent().visibleProperty();
+    //player.getViewComponent().getChildren().remove(player);
+    SpawnData wsd = new SpawnData(x, y);
+    wsd.put("weapon",myWeapon);
+    Entity weapon = spawn("weapon",wsd);
+    weapon.getComponent(WeaponComponent.class).getWeapon();
+
+    SpawnData wsd2 = new SpawnData(x, y);
+    wsd2.put("weapon", WeaponFactory.getWeapon(Weapons.Sword));
+    spawn("weapon",wsd2);
+
+    //player.getComponent(PlayerComponent.class).getHero().getActiveWeapon().getComponent().getEntity();
+    weapon.xProperty().bind(player.xProperty());
+    weapon.yProperty().bind(player.yProperty());
+
     player.setScaleUniform(0.75);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //FXGL.getGameWorld().getEntities().add(1,player);
