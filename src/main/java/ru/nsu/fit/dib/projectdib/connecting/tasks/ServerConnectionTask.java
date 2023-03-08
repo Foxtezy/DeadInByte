@@ -3,27 +3,39 @@ package ru.nsu.fit.dib.projectdib.connecting.tasks;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import ru.nsu.fit.dib.projectdib.connecting.ServerConnection;
 
-public class ServerConnectionTask implements Runnable {
+/**
+ * Задание которое должно выполняться в CompletableFuture
+ * Используется собственный interrupt для завершения
+ */
+public class ServerConnectionTask implements Supplier<List<SocketAddress>> {
 
   private final DatagramSocket ds;
 
-  private final List<SocketAddress> socketAddressList;
+  private volatile boolean interrupt = false;
 
-  public ServerConnectionTask(DatagramSocket ds, List<SocketAddress> socketAddressList) {
+  private final List<SocketAddress> socketAddressList = new ArrayList<>();
+
+  public ServerConnectionTask(DatagramSocket ds) {
     this.ds = ds;
-    this.socketAddressList = socketAddressList;
+  }
+
+  public void interrupt() {
+    this.interrupt = true;
   }
 
   @Override
-  public void run() {
+  public List<SocketAddress> get() {
     ServerConnection serverConnection = new ServerConnection(ds);
-    while (!Thread.interrupted()) {
+    while (!interrupt) {
       try {
         socketAddressList.add(serverConnection.accept(1000));
       } catch (SocketTimeoutException ignored) {}
     }
+    return socketAddressList;
   }
 }

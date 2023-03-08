@@ -11,10 +11,10 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._returnSelectedButton
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
-import java.io.InputStream;
-import java.net.DatagramSocket;
-import java.net.SocketException;
+import java.net.SocketAddress;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import javafx.animation.Animation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -32,7 +32,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.connecting.runners.ServerConnectionRunner;
+import ru.nsu.fit.dib.projectdib.connecting.ConnectionInfo;
+import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
@@ -41,6 +42,8 @@ import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
  * Главное меню.
  */
 public class MainMenu extends FXGLMenu {
+
+  private final ConnectionInfo connectionInfo = new ConnectionInfo();
 
   public MainMenu(MenuType type) {
     super(type);
@@ -169,17 +172,9 @@ public class MainMenu extends FXGLMenu {
     settings.setOnMouseClicked(event -> {
     });
     //==Server==
-    server.setOnMouseClicked(event -> {
-      DatagramSocket s;
-      try {
-        s = new DatagramSocket();
-      } catch (SocketException e) {
-        throw new RuntimeException(e);
-      }
-      System.out.println(s.getPort());
-      ServerConnectionRunner sr = new ServerConnectionRunner(s);
-      sr.startConnection();
-    });
+    AtomicReference<CompletableFuture<List<SocketAddress>>> serverConnectionFuture = new AtomicReference<>();
+    ServerConnectionTask serverConnectionTask = new ServerConnectionTask(connectionInfo.getDatagramSocket());
+    server.setOnMouseClicked(event -> serverConnectionFuture.set(CompletableFuture.supplyAsync(serverConnectionTask)));
     //===Return===
     returnButton.setOnMouseClicked(event -> {
       ui.getChildren().removeAll(tree.getParentANChildren());
