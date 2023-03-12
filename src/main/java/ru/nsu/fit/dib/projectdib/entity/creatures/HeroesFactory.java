@@ -14,7 +14,8 @@ public class HeroesFactory {
   public static Creature getHero(HeroType heroType) {
     List<Integer> specsList = RandomSystem.generateCreatureSpecs();
     return switch (heroType) {
-      case Elf -> new Creature.CreatureBuilder(CreatureRarity.mediocre, "GigaElf", 0)
+      case Elf -> new Creature.CreatureBuilder(CreatureRarity.mediocre, "GigaElf")
+          .setID(0)
           .setSpecs(
               RandomSystem.d(10),
               specsList.get(3), specsList.get(0), specsList.get(2),
@@ -22,14 +23,16 @@ public class HeroesFactory {
           .setStartWeapon(WeaponFactory.getWeapon(Weapons.Bow))
           .setSkill(WeaponType.shooting, 2)
           .build();
-      case JonnyS -> new Creature.CreatureBuilder(CreatureRarity.masterful, "Jonny", 3)
+      case JonnyS -> new Creature.CreatureBuilder(CreatureRarity.masterful, "Jonny")
+          .setID(3)
           .setSpecs(
               RandomSystem.d(10),
               specsList.get(4), specsList.get(0), specsList.get(1),
               specsList.get(3), specsList.get(5), specsList.get(2))
           .setStartWeapon(WeaponFactory.getWeapon(Weapons.AK47))
           .setSkill(WeaponType.shooting, 2).build();
-      case Knight -> new Creature.CreatureBuilder(CreatureRarity.ordinary, "Knight", 1)
+      case Knight -> new Creature.CreatureBuilder(CreatureRarity.ordinary, "Knight")
+          .setID(1)
           .setSpecs(
               RandomSystem.d(10),
               specsList.get(1), specsList.get(2), specsList.get(0),
@@ -37,7 +40,8 @@ public class HeroesFactory {
           .setStartWeapon(WeaponFactory.getWeapon(Weapons.Sword))
           .setSkill(WeaponType.melee, 2)
           .build();
-      case Wizard -> new Creature.CreatureBuilder(CreatureRarity.special, "Wizard", 2)
+      case Wizard -> new Creature.CreatureBuilder(CreatureRarity.special, "Wizard")
+          .setID(2)
           .setSpecs(
               RandomSystem.d(6),
               specsList.get(3), specsList.get(0), specsList.get(2),

@@ -4,6 +4,8 @@ import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.SpecsModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponSkillsModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponRarity;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponSize;
@@ -74,20 +76,20 @@ public class Weapon {
   }
 
   public int getAttack() {
-    return RandomSystem.d(20) + user.getSkills(weaponType) +
+    return RandomSystem.d(20) + user.getModule(WeaponSkillsModule.class).getSkills(weaponType) +
         switch (weaponType) {
-          case melee -> user.getStrengthModifier();
-          case shooting -> user.getAgilityModifier();
-          case magic -> Math.max(user.getWisdomModifier(), user.getIntelligenceModifier());
-          case fencing, throwing -> Math.max(user.getStrengthModifier(), user.getAgilityModifier());
+          case melee -> user.getModule(SpecsModule.class).getStrengthModifier();
+          case shooting -> user.getModule(SpecsModule.class).getAgilityModifier();
+          case magic -> Math.max(user.getModule(SpecsModule.class).getWisdomModifier(), user.getModule(SpecsModule.class).getIntelligenceModifier());
+          case fencing, throwing -> Math.max(user.getModule(SpecsModule.class).getStrengthModifier(), user.getModule(SpecsModule.class).getAgilityModifier());
         };
   }
 
   public int getDamage() {
     return RandomSystem.getRandInt(minDamage, maxDamage) + switch (weaponType) {
-      case melee, shooting -> user.getStrengthModifier();
-      case fencing, throwing -> Math.max(user.getStrengthModifier(), user.getAgilityModifier());
-      case magic -> Math.max(user.getWisdomModifier(), user.getIntelligenceModifier());
+      case melee, shooting -> user.getModule(SpecsModule.class).getStrengthModifier();
+      case fencing, throwing -> Math.max(user.getModule(SpecsModule.class).getStrengthModifier(), user.getModule(SpecsModule.class).getAgilityModifier());
+      case magic -> Math.max(user.getModule(SpecsModule.class).getWisdomModifier(), user.getModule(SpecsModule.class).getIntelligenceModifier());
     };
   }
 

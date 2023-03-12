@@ -40,6 +40,7 @@ import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 
 /**
@@ -60,7 +61,7 @@ public class Factory implements EntityFactory {
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
     PlayerComponent playerComponent = new PlayerComponent(creature,new Point2D(50,180));
-    creature.setComponent(playerComponent);
+    creature.getModule(JFXModule.class).setComponent(playerComponent);
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
         .from(data)

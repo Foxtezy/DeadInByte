@@ -13,6 +13,7 @@ import java.util.Random;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
@@ -52,7 +53,7 @@ public class GameInitializer {
     sd.put("creature", RandomCharacterSystem.NewCharacter());
     player = spawn("player", sd);
 
-    Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getActiveWeapon();
+    Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getModule(WeaponModule.class).getActiveWeapon();
     SpawnData wsd = new SpawnData(x, y);
     wsd.put("weapon",myWeapon);
     Entity weapon = spawn("weapon",wsd);

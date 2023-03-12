@@ -24,6 +24,7 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
@@ -81,8 +82,8 @@ public class InputListener {
     onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
       Creature hero = player.getComponent(PlayerComponent.class).getHero();
-      hero.getActiveWeapon().getComponent().getEntity().xProperty().unbind();
-      hero.getActiveWeapon().getComponent().getEntity().yProperty().unbind();
+      hero.getModule(WeaponModule.class).getActiveWeapon().getComponent().getEntity().xProperty().unbind();
+      hero.getModule(WeaponModule.class).getActiveWeapon().getComponent().getEntity().yProperty().unbind();
     });
     onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(PlayerComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
@@ -110,7 +111,7 @@ public class InputListener {
                 .filter(weapon -> weapon.hasComponent(CollidableComponent.class)
                     && weapon.isColliding(player)).toList());
         //Удаляем все оружие игрока из списка
-        hero.getWeaponsList().forEach(weapon -> {
+        hero.getModule(WeaponModule.class).getWeaponsList().forEach(weapon -> {
           if (!Objects.equals(weapon.getName(), "hand")) {
             list.remove(weapon.getComponent().getEntity());
           }
@@ -120,9 +121,9 @@ public class InputListener {
           Entity weaponEntity = list.get(0);
 
           Weapon weapon = weaponEntity.getComponent(WeaponComponent.class).getWeapon();
-          hero.changeWeapon(weapon);
+          hero.getModule(WeaponModule.class).changeWeapon(weapon);
         } else {
-          hero.changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
+          hero.getModule(WeaponModule.class).changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
         }
       }
     }, KeyCode.F, VirtualButton.X);
@@ -130,10 +131,10 @@ public class InputListener {
       @Override
       protected void onActionBegin() {
         Creature hero = player.getComponent(PlayerComponent.class).getHero();
-        if (!hero.getActiveWeapon().getName().equals("hand")) {
-          hero.getActiveWeapon().getComponent().getEntity().setVisible(false);
+        if (!hero.getModule(WeaponModule.class).getActiveWeapon().getName().equals("hand")) {
+          hero.getModule(WeaponModule.class).getActiveWeapon().getComponent().getEntity().setVisible(false);
         }
-        Weapon weapon = hero.getNextWeapon();
+        Weapon weapon = hero.getModule(WeaponModule.class).getNextWeapon();
         if (!weapon.getName().equals("hand")) {
           weapon.getComponent().getEntity().setVisible(true);
         }

@@ -1,197 +1,61 @@
 package ru.nsu.fit.dib.projectdib.entity.creatures;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
-import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
-import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.HPModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.SpecsModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponSkillsModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 public final class Creature {
-
-  private final CreatureRarity rarity;  // Редкость персонажа [0;1]
-  private final String name;            // Имя
-  private final int imageID;            // ID внешности
-  private final int level;                  // Уровень
-  private final int hp;                     // Здоровье
-  private final int strength;               // Сила
-  private final int agility;                // Ловскость
-  private final int durability;             // Выносливость
-  private final int intelligence;           // Интеллект
-  private final int wisdom;                 // Мудрость
-  private final int charisma;               // Харизма
-  private final HashMap<WeaponType, Integer> skills;
-  private int currentHP;              // Текущее здоровье
-  private int activeWeapon;
-  private int weaponSize;
-  private List<Weapon> weapons;
-  private boolean alive;
-
-  public void setComponent(PlayerComponent component) {
-    this.component = component;
+  private HashMap<Class<? extends CreatureModule>, ? extends CreatureModule > modules;
+  public <T extends CreatureModule> T getModule(Class<T> type){
+    return (T) modules.get(type);
   }
-
-  private PlayerComponent component;
-
+  private final CreatureRarity rarity;  // Редкость персонажа
+  private final String name;            // Имя
+  private final int level;              // Уровень
   public Creature(CreatureBuilder creatureBuilder) {
+    modules = creatureBuilder.modules;
     this.rarity = creatureBuilder.rarity;
     this.name = creatureBuilder.name;
-    this.imageID = creatureBuilder.imageID;
     this.level = creatureBuilder.level;
-    this.hp = creatureBuilder.hp;
-    this.currentHP = this.hp;
-    this.strength = creatureBuilder.strength;
-    this.agility = creatureBuilder.agility;
-    this.durability = creatureBuilder.durability;
-    this.intelligence = creatureBuilder.intelligence;
-    this.wisdom = creatureBuilder.wisdom;
-    this.charisma = creatureBuilder.charisma;
-    this.activeWeapon = 0;
-    this.weaponSize = 2;
-    this.weapons = new ArrayList<>();
-    for (int i = 0; i < weaponSize; i++) {
-      weapons.add(WeaponFactory.getWeapon(Weapons.Hand));
+    if (modules.containsKey(WeaponModule.class)){
+      getModule(WeaponModule.class).setWeaponModuleUser(this);
     }
-    changeWeapon(creatureBuilder.startWeapon);
-    this.alive = true;
-    this.skills = creatureBuilder.skills;
-    //linkedEntities = new ArrayList<>();
   }
-
-  /*
-  private final List<Entity> linkedEntities;
-  public List<Entity> getLinkedEntities() {
-    return linkedEntities;
-  }
-*/
-  public int getActiveWeaponNumber() {
-    return activeWeapon;
-  }
-
-  public List<Weapon> getWeaponsList() {
-    return new ArrayList<>(weapons);
-  }
-
-  public Weapon changeWeapon(Weapon weapon) {
-    Weapon x = weapons.remove(activeWeapon);
-    weapons.add(activeWeapon, weapon);
-    x.setUser(null);
-    weapon.setUser(this);
-    return x;
-  }
-
-  public Weapon getActiveWeapon() {
-    return weapons.get(activeWeapon);
-  }
-
-  public Weapon getNextWeapon() {
-    if (activeWeapon == weapons.size() - 1) {
-      activeWeapon = 0;
-    } else {
-      activeWeapon++;
-    }
-    return weapons.get(activeWeapon);
-  }
-
   public boolean hit(Creature creature) {
-    return creature.getDamage(this, getActiveWeapon().getDamageType(),
-        getActiveWeapon().getDamage());
+    return creature.getDamage(this, getModule(WeaponModule.class).getActiveWeapon().getDamageType(),
+        getModule(WeaponModule.class).getActiveWeapon().getDamage());
   }
-
   private boolean getDamage(Creature from, DamageType damageType, int damage) {
-    return changeHP(damage);
+    return getModule(HPModule.class).changeHP(damage);
   }
-
-  public int getCurrentHP() {
-    return currentHP;
-  }
-
-  public boolean changeHP(int damage) {
-    if (currentHP > damage) {
-      currentHP -= damage;
-    } else {
-      currentHP = 0;
-      alive = false;
-    }
-    return alive;
-  }
-
-  public void setSkill(WeaponType weaponType, int value) {
-    skills.remove(weaponType);
-    skills.put(weaponType, value);
-  }
-
-  public int getSkills(WeaponType weaponType) {
-    return skills.get(weaponType);
-  }
-
-  public int getStrengthModifier() {
-    return strength / 2 - 5;
-  }
-
-  public int getAgilityModifier() {
-    return agility / 2 - 5;
-  }
-
-  public int getDurabilityModifier() {
-    return durability / 2 - 5;
-  }
-
-  public int getIntelligenceModifier() {
-    return intelligence / 2 - 5;
-  }
-
-  public int getWisdomModifier() {
-    return wisdom / 2 - 5;
-  }
-
-  public int getCharismaModifier() {
-    return charisma / 2 - 5;
-  }
-
   public String getName() {
     return name;
   }
-
-  public int getImageID() {
-    return imageID;
-  }
-
   public CreatureRarity getRarity() {
     return rarity;
   }
-
   public Double getSpeed() {
-    return (double) (getAgilityModifier() * 80);
+    return (double) 200 + getModule(SpecsModule.class).getAgility() * 20;
   }
-  public PlayerComponent getComponent() {
-    return component;
-  }
-
   public static class CreatureBuilder {
-
+    private final HashMap<Class<? extends CreatureModule>, CreatureModule> modules;
     private final CreatureRarity rarity;       // Редкость персонажа [0;1]
     private final String name;
-    private final int imageID;
     private int level = 1;
     private HashMap<WeaponType, Integer> skills;
-    private int hp;           // Здоровье
-    private int strength;     // Сила
-    private int agility;      // Ловскость
-    private int durability;   // Выносливость
-    private int intelligence; // Интеллект
-    private int wisdom;       // Мудрость
-    private int charisma;     // Харизма
-    private Weapon startWeapon;
 
-    public CreatureBuilder(CreatureRarity rarity, String name, int level, int imageID) {
+    public CreatureBuilder(CreatureRarity rarity, String name, int level) {
+      modules = new HashMap<>();
       this.rarity = rarity;
       this.name = name;
-      this.imageID = imageID;
       this.level = level;
 
       this.skills = new HashMap<>(Map.of(
@@ -202,10 +66,10 @@ public final class Creature {
           WeaponType.magic, 0));
     }
 
-    public CreatureBuilder(CreatureRarity rarity, String name, int imageID) {
+    public CreatureBuilder(CreatureRarity rarity, String name) {
+      modules = new HashMap<>();
       this.rarity = rarity;
       this.name = name;
-      this.imageID = imageID;
       this.skills = new HashMap<>(Map.of(
           WeaponType.throwing, 0,
           WeaponType.melee, 0,
@@ -221,24 +85,27 @@ public final class Creature {
     }
 
     public CreatureBuilder setSpecs(int hp, int strength, int agility, int durability,
-        int intelligence,
-        int wisdom, int charisma) {
-      this.hp = hp + durability;
-      this.strength = strength;
-      this.agility = agility;
-      this.durability = durability;
-      this.intelligence = intelligence;
-      this.wisdom = wisdom;
-      this.charisma = charisma;
+        int intelligence, int wisdom, int charisma) {
+      SpecsModule specsModule = new SpecsModule(strength,agility,durability,intelligence,wisdom,charisma);
+      modules.put(SpecsModule.class, specsModule);
+      HPModule hpModule = new HPModule(hp,specsModule);
+      modules.put(HPModule.class,specsModule);
       return this;
     }
 
     public CreatureBuilder setStartWeapon(Weapon weapon) {
-      startWeapon = weapon;
+      WeaponModule module = new WeaponModule(weapon);
+      modules.put(WeaponModule.class, module);
       return this;
     }
-
+    public CreatureBuilder setID(int imageID){
+      JFXModule module = new JFXModule(imageID);
+      modules.put(JFXModule.class,module);
+      return this;
+    }
     public Creature build() {
+      WeaponSkillsModule module = new WeaponSkillsModule(skills);
+      modules.put(WeaponSkillsModule.class,module);
       return new Creature(this);
     }
   }

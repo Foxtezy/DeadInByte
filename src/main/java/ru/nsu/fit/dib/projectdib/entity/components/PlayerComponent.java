@@ -22,6 +22,7 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -52,7 +53,7 @@ public class PlayerComponent extends CreatureComponent implements MovingInterfac
   public PlayerComponent(Creature hero,Point2D localAnchor) {
     this.localAnchor=localAnchor;
     this.hero=hero;
-    int heroNumber=hero.getImageID();
+    int heroNumber=hero.getModule(JFXModule.class).getImageID();
     //animation settings
     Image img = new Image(_player);
     animationMovement = new AnimationChannel(img,
@@ -119,24 +120,24 @@ public class PlayerComponent extends CreatureComponent implements MovingInterfac
   }
   @Override
   public void left() {
-    physics.setVelocityX(hero.getSpeed());
+    physics.setVelocityX(-hero.getSpeed());
     //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
   }
   @Override
   public void right() {
-    physics.setVelocityX(-hero.getSpeed());
+    physics.setVelocityX(hero.getSpeed());
     //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
   }
   @Override
   public void up() {
     //да, тут должен быть именно минус
-    physics.setVelocityY(hero.getSpeed());
+    physics.setVelocityY(-hero.getSpeed());
     //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
   }
   @Override
   public void down() {
     //а тут плюс
-    physics.setVelocityY(-hero.getSpeed());
+    physics.setVelocityY(hero.getSpeed());
     //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
   }
   @Override
