@@ -33,16 +33,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.data.Config;
-import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
-import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerComponent;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 
 /**
@@ -62,6 +59,8 @@ public class Factory implements EntityFactory {
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
+    PlayerComponent playerComponent = new PlayerComponent(creature,new Point2D(50,180));
+    creature.setComponent(playerComponent);
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
         .from(data)
@@ -70,7 +69,7 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
         .anchorFromCenter()
         .with(physics)
-        .with(new PlayerComponent(creature,new Point2D(50,180)))
+        .with(playerComponent)
         .with(new CellMoveComponent(30, 30, 85))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))

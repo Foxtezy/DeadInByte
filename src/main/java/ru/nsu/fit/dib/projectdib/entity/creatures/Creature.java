@@ -1,12 +1,10 @@
 package ru.nsu.fit.dib.projectdib.entity.creatures;
 
-import com.almasb.fxgl.entity.Entity;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
@@ -32,6 +30,12 @@ public final class Creature {
   private int weaponSize;
   private List<Weapon> weapons;
   private boolean alive;
+
+  public void setComponent(PlayerComponent component) {
+    this.component = component;
+  }
+
+  private PlayerComponent component;
 
   public Creature(CreatureBuilder creatureBuilder) {
     this.rarity = creatureBuilder.rarity;
@@ -163,6 +167,9 @@ public final class Creature {
 
   public Double getSpeed() {
     return (double) (getAgilityModifier() * 80);
+  }
+  public PlayerComponent getComponent() {
+    return component;
   }
 
   public static class CreatureBuilder {

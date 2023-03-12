@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.init_app;
+package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
@@ -22,9 +22,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.CreatureComponent;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerComponent;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
@@ -110,23 +109,18 @@ public class InputListener {
             getGameWorld().getEntitiesByType(EntityType.WEAPON).stream()
                 .filter(weapon -> weapon.hasComponent(CollidableComponent.class)
                     && weapon.isColliding(player)).toList());
-
-        if (!hero.getActiveWeapon().getName().equals("hand")) {
-          Entity weaponEntity = hero.getActiveWeapon().getComponent().getEntity();
-          weaponEntity.xProperty().unbind();
-          weaponEntity.yProperty().unbind();
-        }
+        //Удаляем все оружие игрока из списка
         hero.getWeaponsList().forEach(weapon -> {
           if (!Objects.equals(weapon.getName(), "hand")) {
             list.remove(weapon.getComponent().getEntity());
           }
         });
+
         if (list.size() >= 1) {
           Entity weaponEntity = list.get(0);
+
           Weapon weapon = weaponEntity.getComponent(WeaponComponent.class).getWeapon();
           hero.changeWeapon(weapon);
-          weaponEntity.xProperty().bind(player.xProperty());
-          weaponEntity.yProperty().bind(player.yProperty());
         } else {
           hero.changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
         }

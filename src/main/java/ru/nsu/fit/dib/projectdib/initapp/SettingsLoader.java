@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.init_app;
+package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.onKey;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.onKeyUp;
@@ -6,10 +6,8 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._cfg;
 
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.dsl.FXGL;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javafx.scene.input.KeyCode;
 import ru.nsu.fit.dib.projectdib.data.Config;
 import ru.nsu.fit.dib.projectdib.ui.ScenesFactory;
 

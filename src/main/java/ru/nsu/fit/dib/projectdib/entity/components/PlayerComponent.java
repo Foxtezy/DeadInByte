@@ -1,16 +1,13 @@
-package ru.nsu.fit.dib.projectdib.entity.moving.components;
+package ru.nsu.fit.dib.projectdib.entity.components;
 
-import static com.almasb.fxgl.dsl.FXGL.getInput;
+
 import static com.almasb.fxgl.dsl.FXGL.image;
 import static com.almasb.fxgl.dsl.FXGL.newLocalTimer;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_numberColumns;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
 
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.SpawnData;
+
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
@@ -18,37 +15,44 @@ import com.almasb.fxgl.time.LocalTimer;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
+
+import ru.nsu.fit.dib.projectdib.data.Config;
+
 import ru.nsu.fit.dib.projectdib.EntityType;
-import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
 
-public class CreatureComponent extends Component {
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
+import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 
+import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_numberColumns;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
 
+/**
+ * Описывает движение игрока.
+ */
+public class PlayerComponent extends CreatureComponent implements MovingInterface {
   private final double scale = 0.07;
   AnimationChannel animationMovement;
   AnimationChannel animationStanding;
   AnimationChannel animationWaiting;
   AnimationChannel animationBack;
   Point2D localAnchor;
-  boolean stateCanged = true;
+  boolean stateChanged = true;
   private PhysicsComponent physics;
   //public String currentWeapon;
   private AnimatedTexture texture;
   private LocalTimer shootTimer = newLocalTimer();
-  //  private final double speed = 250;
-  private double speed;
-  private HeroSpecs specification;
-  private String currentWeapon;
+  //  private final double hero.getSpeed( = 250;
+  private Creature hero;
   private boolean isMoving = false;
 
-  public void MovingComponent(HeroSpecs specs,Point2D localAnchor) {
-    int heroNumber=2;
+  public PlayerComponent(Creature hero,Point2D localAnchor) {
     this.localAnchor=localAnchor;
-    this.specification = specs;
-    this.speed = specification.getSpeed();
-    this.currentWeapon = specification.getMainWeapon();
-    //resources.assets.textures
-    Image image = image(specification.getPlayerImage());
+    this.hero=hero;
+    int heroNumber=hero.getImageID();
     //animation settings
     Image img = new Image(_player);
     animationMovement = new AnimationChannel(img,
@@ -63,7 +67,6 @@ public class CreatureComponent extends Component {
     texture.loop();
     texture.setPreserveRatio(true);
   }
-
   @Override
   public void onAdded() {
     entity.getTransformComponent().setScaleOrigin(new Point2D(15, 20));
@@ -71,15 +74,14 @@ public class CreatureComponent extends Component {
     entity.setScaleUniform(scale);
     //setCurrentWeapon("bow");
   }
-
   @Override
   public void onUpdate(double tpf) {
     if (isMoving && !isMoving() || !isMoving && isMoving()){
-      stateCanged=true;
+      stateChanged =true;
       isMoving=isMoving();
     }
     //Изменилось ли состояние
-    if (stateCanged) {
+    if (stateChanged) {
       //texture.loopAnimationChannel(isMoving() ? animationMovement : animationStanding);
       AnimationChannel animation = texture.getAnimationChannel();
       //Движется или нет
@@ -88,16 +90,16 @@ public class CreatureComponent extends Component {
       } else {
         texture.loopAnimationChannel(animationStanding);
       }
-      stateCanged = false;
+      stateChanged = false;
     }
 
     Point2D mouseVelocity = getInput().getVectorToMouse(
         getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
     //Поворот
     if (mouseVelocity.angle(1, 0) <= 90) {
-      rotate(PlayerComponent.SIDE.RIGHT);
+      rotate(SIDE.RIGHT);
     } else {
-      rotate(PlayerComponent.SIDE.LEFT);
+      rotate(SIDE.LEFT);
     }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
@@ -105,8 +107,8 @@ public class CreatureComponent extends Component {
     LEFT,
     RIGHT
   }
-  public void rotate(PlayerComponent.SIDE side){
-    if (side== PlayerComponent.SIDE.RIGHT) {
+  public void rotate(SIDE side){
+    if (side==SIDE.RIGHT) {
       texture.setScaleX(1);
     } else {
       texture.setScaleX(-1);
@@ -115,4 +117,48 @@ public class CreatureComponent extends Component {
   private boolean isMoving() {
     return FXGLMath.abs(physics.getVelocityX()) > 0 || FXGLMath.abs(physics.getVelocityY()) > 0;
   }
+  @Override
+  public void left() {
+    physics.setVelocityX(hero.getSpeed());
+    //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
+  }
+  @Override
+  public void right() {
+    physics.setVelocityX(-hero.getSpeed());
+    //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
+  }
+  @Override
+  public void up() {
+    //да, тут должен быть именно минус
+    physics.setVelocityY(hero.getSpeed());
+    //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
+  }
+  @Override
+  public void down() {
+    //а тут плюс
+    physics.setVelocityY(-hero.getSpeed());
+    //physics.setLinearVelocity(physics.getLinearVelocity().normalize().multiply(hero.getSpeed()));
+  }
+  @Override
+  public void stop() {
+    physics.setVelocityY(0);
+    physics.setVelocityX(0);
+  }
+  public void attack() {
+    if (!shootTimer.elapsed(Config.SHOOT_DELAY_ARROW)) {
+      return;
+    }
+    FXGL.spawn("projectile", new SpawnData(getEntity().getPosition().getX() + localAnchor.getX(),
+        getEntity().getPosition().getY() + localAnchor.getY())
+        .put("typeProj", Projectiles.ARROW));
+    shootTimer.capture();
+
+  }
+  public Creature getHero(){
+    return hero;
+  }
+  /*
+  public Point2D getVectorView(){
+    return getInput().getVectorToMouse(getEntity().getPosition());
+  }*/
 }

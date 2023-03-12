@@ -1,10 +1,9 @@
 package ru.nsu.fit.dib.projectdib.entity.weapons;
 
-import com.almasb.fxgl.entity.Entity;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponRarity;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponSize;
@@ -14,6 +13,11 @@ public class Weapon {
 
   public WeaponComponent component;
   protected int impactSpeed;
+
+  public Creature getUser() {
+    return user;
+  }
+
   protected Creature user;
   protected int weaponID;
   protected WeaponSize weaponSize;
@@ -21,7 +25,17 @@ public class Weapon {
   protected DamageType damageType;
   protected int minDamage;
   protected int maxDamage;
+
+  public WeaponSize getWeaponSize() {
+    return weaponSize;
+  }
+
   protected double distance;
+
+  public int getImpactSpeed() {
+    return impactSpeed;
+  }
+
   protected double radius;
   protected int rollbackTime;
   private WeaponRarity rarity;// Редкость персонажа [0;1]
@@ -39,6 +53,8 @@ public class Weapon {
     this.radius = weaponBuilder.radius;
     this.rollbackTime = weaponBuilder.rollbackTime;
     this.impactSpeed = weaponBuilder.impactSpeed;
+    this.angle=weaponBuilder.angle;
+    this.imgRadius=weaponBuilder.imgRadius;
   }
 
   public WeaponComponent getComponent() {
@@ -107,7 +123,7 @@ public class Weapon {
     this.maxDamage = maxDamage;
   }
 
-  protected double getDistance() {
+  public double getDistance() {
     return distance;
   }
 
@@ -115,7 +131,7 @@ public class Weapon {
     this.distance = distance;
   }
 
-  protected double getRadius() {
+  public double getRadius() {
     return radius;
   }
 
@@ -160,6 +176,14 @@ public class Weapon {
   public int getImageHeight() {
     return weaponSize.getHeight();
   }
+  private final double angle;
+  public Double getAngle() {
+    return angle;
+  }
+  private final double imgRadius;
+  public Double getImageRadius() {
+    return imgRadius;
+  }
 
   public static class WeaponBuilder {
 
@@ -191,12 +215,15 @@ public class Weapon {
       return this;
     }
 
-    public WeaponBuilder setView(int weaponID, WeaponSize weaponSize) {
+    public WeaponBuilder setView(int weaponID, WeaponSize weaponSize, double angle, double imgRadius) {
       this.weaponID = weaponID;
       this.weaponSize = weaponSize;
+      this.angle=angle;
+      this.imgRadius=imgRadius;
       return this;
     }
-
+    private double angle;
+    private double imgRadius;
     public WeaponBuilder setDamage(int minDamage, int maxDamage) {
       this.minDamage = minDamage;
       this.maxDamage = maxDamage;
