@@ -11,11 +11,14 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._returnSelectedButton
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
-import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +32,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
@@ -159,6 +163,23 @@ public class MainMenu extends FXGLMenu {
       ui.getChildren().removeAll(tree.getParentANChildren());
       tree.changeActiveNode(multiplayer);
       ui.getChildren().addAll(tree.getANChildren());
+    });
+    //===Create server===
+    server.setOnMouseClicked(event -> {
+      Stage stage = new Stage();
+      stage.setTitle("Server");
+      StackPane ip = new StackPane();
+      Text text;
+      try {
+        text = new Text(InetAddress.getLocalHost().toString());
+      } catch (UnknownHostException e) {
+        throw new RuntimeException(e);
+      }
+      ip.getChildren().add(text);
+      Scene newScene = new Scene(ip,450, 450);
+      stage.setScene(newScene);
+      stage.show();
+      ((Node)(event.getSource())).getScene().getWindow().hide();
     });
     //===Start===
     start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
