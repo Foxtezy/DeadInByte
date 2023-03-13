@@ -1,5 +1,7 @@
-package ru.nsu.fit.dib.projectdib.init_app;
+package ru.nsu.fit.dib.projectdib.initapp;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.onKey;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.onKeyUp;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._cfg;
 
 import com.almasb.fxgl.app.ApplicationMode;

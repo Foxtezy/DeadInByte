@@ -27,15 +27,22 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.data.HeroSpecs;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 
 /**
  * Class Factory for making Entities.
@@ -50,11 +57,13 @@ public class Factory implements EntityFactory {
    */
   @Spawns("player")
   public Entity newPlayer(SpawnData data) {
+    Creature creature = data.get("creature");
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
-    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
-
+    PlayerComponent playerComponent = new PlayerComponent(creature,new Point2D(50,180));
+    creature.getModule(JFXModule.class).setComponent(playerComponent);
+    //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
@@ -62,7 +71,7 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
         .anchorFromCenter()
         .with(physics)
-        .with(new PlayerMovingComponent(specs,new Point2D(50,180)))
+        .with(playerComponent)
         .with(new CellMoveComponent(30, 30, 85))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
@@ -198,7 +207,7 @@ public class Factory implements EntityFactory {
         .collidable()
         .build();
   }
-
+  /*
   @Spawns("bow")
   public Entity newBow(SpawnData data) {
     return entityBuilder(data)
@@ -220,7 +229,50 @@ public class Factory implements EntityFactory {
         .with(new CollidableComponent(true))
         .build();
   }
+    @Spawns("player")
+  public Entity newPlayer(SpawnData data) {
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
+    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
 
+    return entityBuilder()
+        .from(data)
+        .type(EntityType.PLAYER)
+        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
+        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
+        .anchorFromCenter()
+        .with(physics)
+        .with(new PlayerMovingComponent(specs,new Point2D(50,180)))
+        .with(new CellMoveComponent(30, 30, 85))
+        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+        //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
+        .collidable()
+        .build();
+  }
+  */
+  @Spawns("weapon")
+  public Entity Weapon(SpawnData data) {
+    Weapon weapon = data.get("weapon");
+    ImageView iv = imageViewFromSpriteSheet(weapon.getModule(TextureModule.class).getTexturePath(),weapon.getModule(TextureModule.class).getWeaponID(),
+        weapon.getModule(TextureModule.class).getImageWidht(),weapon.getModule(TextureModule.class).getImageHeight(), ProjectConfig._WEAPON_COLUMNS);
+    //iv.setRotate(90);
+    WeaponComponent weaponComponent = new WeaponComponent(weapon);
+    weapon.getModule(TextureModule.class).setComponent(weaponComponent);
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.WEAPON)
+        .viewWithBBox(iv)
+        .bbox(new HitBox(BoundingShape.box(75, 20)))
+        .with(new CollidableComponent(true))
+        .with(weaponComponent)
+        .build();
+  }
+  ImageView imageViewFromSpriteSheet(String path, int number, int spriteWidth, int spriteHeight,int columns){
+    ImageView iv = new ImageView(new Image(path));
+    iv.setViewport(new Rectangle2D(spriteWidth*(number%columns),spriteHeight*(number/columns),spriteWidth,spriteHeight));
+    return iv;
+  }
   /**
    * Entity Enemy.
    *

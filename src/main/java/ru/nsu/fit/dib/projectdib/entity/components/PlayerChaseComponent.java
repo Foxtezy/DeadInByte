@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.entity.moving.components;
+package ru.nsu.fit.dib.projectdib.entity.components;
 
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;

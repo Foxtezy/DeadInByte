@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.entity.moving.components;
+package ru.nsu.fit.dib.projectdib.entity.components;
 
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.image;
@@ -95,9 +95,9 @@ public class CreatureComponent extends Component {
         getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
     //Поворот
     if (mouseVelocity.angle(1, 0) <= 90) {
-      rotate(PlayerMovingComponent.SIDE.RIGHT);
+      rotate(PlayerComponent.SIDE.RIGHT);
     } else {
-      rotate(PlayerMovingComponent.SIDE.LEFT);
+      rotate(PlayerComponent.SIDE.LEFT);
     }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
@@ -105,8 +105,8 @@ public class CreatureComponent extends Component {
     LEFT,
     RIGHT
   }
-  public void rotate(PlayerMovingComponent.SIDE side){
-    if (side== PlayerMovingComponent.SIDE.RIGHT) {
+  public void rotate(PlayerComponent.SIDE side){
+    if (side== PlayerComponent.SIDE.RIGHT) {
       texture.setScaleX(1);
     } else {
       texture.setScaleX(-1);
