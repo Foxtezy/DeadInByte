@@ -13,9 +13,12 @@ public class ClientConnection {
 
   private final int port;
 
-  public ClientConnection(InetAddress host, int port) {
+  private final DatagramSocket ds;
+
+  public ClientConnection(InetAddress host, int port, DatagramSocket ds) {
     this.host = host;
     this.port = port;
+    this.ds = ds;
   }
 
   /**
@@ -27,8 +30,7 @@ public class ClientConnection {
     byte[] hello = "hello".getBytes();
     DatagramPacket outPack = new DatagramPacket(hello, hello.length, host, port);
     DatagramPacket inPack = new DatagramPacket(new byte[5], 5);
-    try (DatagramSocket ds = new DatagramSocket()) {
-      System.out.println(ds.getInetAddress());
+    try {
       ds.setSoTimeout(timeout);
       ds.send(outPack);
       ds.receive(inPack);

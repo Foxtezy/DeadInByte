@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.connecting.packet;
+package ru.nsu.fit.dib.projectdib.multiplayer.packet;
 
 import javafx.geometry.Point2D;
 
@@ -8,5 +8,5 @@ public class EntityState {
 
   private Point2D coordinate;
 
-  private Double angle;
+  private Point2D angle;
 }

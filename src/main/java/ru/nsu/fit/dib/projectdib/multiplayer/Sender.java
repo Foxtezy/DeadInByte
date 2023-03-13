@@ -7,7 +7,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import ru.nsu.fit.dib.projectdib.connecting.packet.GameStatePacket;
+import ru.nsu.fit.dib.projectdib.multiplayer.exeptions.PacketSizeException;
+import ru.nsu.fit.dib.projectdib.multiplayer.packet.GameStatePacket;
 
 public class Sender {
 
@@ -24,7 +25,13 @@ public class Sender {
     StringWriter writer = new StringWriter();
     new Gson().toJson(gameStatePacket, writer);
     byte[] byteArray = writer.toString().getBytes(StandardCharsets.UTF_8);
-    DatagramPacket packet = new DatagramPacket(byteArray, byteArray.length, address);
+    byte[] p = new byte[byteArray.length + 1];
+    if (p.length > 55000) {
+      throw new PacketSizeException();
+    }
+    p[0] = 1;
+    System.arraycopy(byteArray, 0, p, 1, byteArray.length);
+    DatagramPacket packet = new DatagramPacket(p, p.length, address);
     try {
       socket.send(packet);
     } catch (IOException e) {

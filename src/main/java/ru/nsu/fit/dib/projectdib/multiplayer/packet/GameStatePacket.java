@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.connecting.packet;
+package ru.nsu.fit.dib.projectdib.multiplayer.packet;
 
 import java.util.List;
 
