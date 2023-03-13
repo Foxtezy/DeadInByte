@@ -9,6 +9,8 @@ import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.SquareDamageModule;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 
 public class WeaponComponent extends Component {
 
@@ -30,11 +32,11 @@ public class WeaponComponent extends Component {
     getEntity().setScaleX(0.75);
     getEntity().setScaleY(0.75);
     getEntity().setRotation(90);
-    imgRadius = weapon.getImageRadius();
-    angle = weapon.getAngle();
+    imgRadius = weapon.getModule(TextureModule.class).getImageRadius();
+    angle = weapon.getModule(TextureModule.class).getAngle();
     rotatedPoint = getEntity().getPosition().add(new Point2D(0, 20));
-    radius = weapon.getRadius();
-    distance = weapon.getDistance();
+    radius = weapon.getModule(SquareDamageModule.class).getRadius();
+    distance = weapon.getModule(SquareDamageModule.class).getDistance();
   }
 
   public Weapon getWeapon() {

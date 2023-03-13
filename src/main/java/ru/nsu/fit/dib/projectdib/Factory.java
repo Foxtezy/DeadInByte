@@ -42,6 +42,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 
 /**
  * Class Factory for making Entities.
@@ -253,11 +254,11 @@ public class Factory implements EntityFactory {
   @Spawns("weapon")
   public Entity Weapon(SpawnData data) {
     Weapon weapon = data.get("weapon");
-    ImageView iv = imageViewFromSpriteSheet(weapon.getTexturePath(),weapon.getWeaponID(),
-        weapon.getImageWidht(),weapon.getImageHeight(), ProjectConfig._WEAPON_COLUMNS);
+    ImageView iv = imageViewFromSpriteSheet(weapon.getModule(TextureModule.class).getTexturePath(),weapon.getModule(TextureModule.class).getWeaponID(),
+        weapon.getModule(TextureModule.class).getImageWidht(),weapon.getModule(TextureModule.class).getImageHeight(), ProjectConfig._WEAPON_COLUMNS);
     //iv.setRotate(90);
     WeaponComponent weaponComponent = new WeaponComponent(weapon);
-    weapon.setComponent(weaponComponent);
+    weapon.getModule(TextureModule.class).setComponent(weaponComponent);
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WEAPON)

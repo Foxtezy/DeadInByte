@@ -1,20 +1,18 @@
 package ru.nsu.fit.dib.projectdib.entity.creatures.modules;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
-import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
-public class WeaponModule extends CreatureModule{
+public class CreatureWeaponModule extends CreatureModule{
   private int activeWeapon;
   private int weaponSize;
   private List<Weapon> weapons;
 
-  public WeaponModule(Weapon startWeapon){
+  public CreatureWeaponModule(Weapon startWeapon){
     this.activeWeapon = 0;
     this.weaponSize = 2;
     this.weapons = new ArrayList<>();

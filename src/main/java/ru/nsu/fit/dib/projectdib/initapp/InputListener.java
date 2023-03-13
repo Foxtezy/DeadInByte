@@ -24,10 +24,11 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
-import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponModule;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
@@ -82,8 +83,8 @@ public class InputListener {
     onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
       Creature hero = player.getComponent(PlayerComponent.class).getHero();
-      hero.getModule(WeaponModule.class).getActiveWeapon().getComponent().getEntity().xProperty().unbind();
-      hero.getModule(WeaponModule.class).getActiveWeapon().getComponent().getEntity().yProperty().unbind();
+      hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
+      hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().yProperty().unbind();
     });
     onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(PlayerComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
@@ -111,9 +112,9 @@ public class InputListener {
                 .filter(weapon -> weapon.hasComponent(CollidableComponent.class)
                     && weapon.isColliding(player)).toList());
         //Удаляем все оружие игрока из списка
-        hero.getModule(WeaponModule.class).getWeaponsList().forEach(weapon -> {
+        hero.getModule(CreatureWeaponModule.class).getWeaponsList().forEach(weapon -> {
           if (!Objects.equals(weapon.getName(), "hand")) {
-            list.remove(weapon.getComponent().getEntity());
+            list.remove(weapon.getModule(TextureModule.class).getComponent().getEntity());
           }
         });
 
@@ -121,9 +122,9 @@ public class InputListener {
           Entity weaponEntity = list.get(0);
 
           Weapon weapon = weaponEntity.getComponent(WeaponComponent.class).getWeapon();
-          hero.getModule(WeaponModule.class).changeWeapon(weapon);
+          hero.getModule(CreatureWeaponModule.class).changeWeapon(weapon);
         } else {
-          hero.getModule(WeaponModule.class).changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
+          hero.getModule(CreatureWeaponModule.class).changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
         }
       }
     }, KeyCode.F, VirtualButton.X);
@@ -131,12 +132,12 @@ public class InputListener {
       @Override
       protected void onActionBegin() {
         Creature hero = player.getComponent(PlayerComponent.class).getHero();
-        if (!hero.getModule(WeaponModule.class).getActiveWeapon().getName().equals("hand")) {
-          hero.getModule(WeaponModule.class).getActiveWeapon().getComponent().getEntity().setVisible(false);
+        if (!hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getName().equals("hand")) {
+          hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().setVisible(false);
         }
-        Weapon weapon = hero.getModule(WeaponModule.class).getNextWeapon();
+        Weapon weapon = hero.getModule(CreatureWeaponModule.class).getNextWeapon();
         if (!weapon.getName().equals("hand")) {
-          weapon.getComponent().getEntity().setVisible(true);
+          weapon.getModule(TextureModule.class).getComponent().getEntity().setVisible(true);
         }
       }
     }, KeyCode.Q, VirtualButton.B);

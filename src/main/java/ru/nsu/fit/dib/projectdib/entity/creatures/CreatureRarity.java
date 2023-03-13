@@ -12,8 +12,6 @@ public enum CreatureRarity {
     this.probability = probability;
   }
 
-  ;
-
   public double getProbability() {
     return probability;
   }
