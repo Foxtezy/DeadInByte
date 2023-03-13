@@ -37,7 +37,7 @@ public class SettingsLoader {
     settings.setPreserveResizeRatio(true);
     settings.setFileSystemWriteAllowed(false);
     settings.setSceneFactory(new ScenesFactory());
-    //settings.setMainMenuEnabled(true);
+    settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig(_cfg);

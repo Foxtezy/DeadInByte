@@ -4,7 +4,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.IDComponent;
 import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.entity.moving.components.PlayerMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
@@ -34,7 +34,8 @@ public class ServerTaskManager {
 		int newId = spawned.getComponent(IDComponent.class).getId();
 		NewEntity spawnedNewEntity = new NewEntity(newId, name, spawnData);
 		listNewEntities.add(spawnedNewEntity);
-		EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(), spawned.getComponent(PlayerMovingComponent.class).getMouseVelocity());
+		EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(), spawned.getComponent(
+				PlayerComponent.class).getMouseVelocity());
 		listEntityState.add(spawnedEntityState);
 		idServerHashTable.put(newId, spawned);
 	}
@@ -46,7 +47,7 @@ public class ServerTaskManager {
 			listEntityState.parallelStream().forEach(entState -> {
 				int id = entState.getId();
 				entState.setCoordinate(idServerHashTable.get(id).getPosition());
-				entState.setAngle(idServerHashTable.get(id).getComponent(PlayerMovingComponent.class).getMouseVelocity());
+				entState.setAngle(idServerHashTable.get(id).getComponent(PlayerComponent.class).getMouseVelocity());
 			});
 			return listEntityState;
 		}

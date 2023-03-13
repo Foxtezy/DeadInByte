@@ -58,24 +58,6 @@ public class InputListener {
 
   public void run() {
     ClientTaskManager clientTaskManager = new ClientTaskManager();
-    onKeyUp(KeyCode.P, () -> {
-      Point2D p1 = player.getPosition().add(new Point2D(5, 5));
-      List<NewEntity> nel = new ArrayList<>();
-      nel.add(new NewEntity(1, "box", new SpawnData(p1)));
-      clientTaskManager.spawnEntities(nel);
-      System.out.println(clientTaskManager.getIdHashTable().get(1) + " spawned");
-      System.out.println("with ID" + clientTaskManager.getIdHashTable().get(1).getComponent(
-          IDComponent.class).getId());
-    });
-    onKeyUp(KeyCode.L, () -> {
-      Point2D p2 = clientTaskManager.getIdHashTable().get(1).getPosition().add(new Point2D(5, 5));
-      List<EntityState> nes = new ArrayList<>();
-      nes.add(new EntityState(1, p2, 0.0));
-      clientTaskManager.updateEntities(nes);
-      System.out.println(clientTaskManager.getIdHashTable().get(1) + " moved");
-      System.out.println("with ID" + clientTaskManager.getIdHashTable().get(1).getComponent(
-          IDComponent.class).getId());
-    });
     //==============================================================================================
     onKey(KeyCode.W, "Up", () -> player.getComponent(PlayerComponent.class).up());
     onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerComponent.class).left());
