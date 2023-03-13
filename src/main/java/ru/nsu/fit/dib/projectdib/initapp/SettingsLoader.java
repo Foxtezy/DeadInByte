@@ -1,5 +1,7 @@
-package ru.nsu.fit.dib.projectdib.init_app;
+package ru.nsu.fit.dib.projectdib.initapp;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.onKey;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.onKeyUp;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._cfg;
 
 import com.almasb.fxgl.app.ApplicationMode;
@@ -29,12 +31,13 @@ public class SettingsLoader {
    * Загружает настройки.
    */
   public void run() {
+    settings.setScaleAffectedOnResize(true);
     settings.setTitle("RDPLS-D2");
     settings.setManualResizeEnabled(true);
     settings.setPreserveResizeRatio(true);
     settings.setFileSystemWriteAllowed(false);
     settings.setSceneFactory(new ScenesFactory());
-    settings.setMainMenuEnabled(true);
+    //settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig(_cfg);
