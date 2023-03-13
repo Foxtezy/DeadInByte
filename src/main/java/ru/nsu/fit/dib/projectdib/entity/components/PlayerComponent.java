@@ -155,11 +155,12 @@ public class PlayerComponent extends CreatureComponent implements MovingInterfac
     shootTimer.capture();
 
   }
-  public Creature getHero(){
+
+  public Point2D getMouseVelocity() {
+    return getInput().getVectorToMouse(getEntity().getPosition());
+  }
+
+  public Creature getHero() {
     return hero;
   }
-  /*
-  public Point2D getVectorView(){
-    return getInput().getVectorToMouse(getEntity().getPosition());
-  }*/
 }
