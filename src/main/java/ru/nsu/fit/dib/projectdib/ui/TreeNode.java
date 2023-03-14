@@ -114,6 +114,7 @@ public class TreeNode<T> {
     return activeNode.parent.getChildren();
   }
 
+
   /**
    * Получить детей активной Node
    *
@@ -130,5 +131,9 @@ public class TreeNode<T> {
    */
   public T getParentAN() {
     return activeNode.root;
+  }
+
+  public TreeNode<T> getActiveNode() {
+    return activeNode;
   }
 }

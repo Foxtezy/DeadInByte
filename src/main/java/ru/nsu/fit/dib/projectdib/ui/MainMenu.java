@@ -11,14 +11,12 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._returnSelectedButton
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Objects;
 import javafx.animation.Animation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -28,11 +26,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
@@ -132,6 +131,8 @@ public class MainMenu extends FXGLMenu {
 
     Image unpushed = new Image(_menuButton, 1020, 180, true, false);
     Image pushed = new Image(_menuSelectedButton, 1020, 180, true, false);
+    Image unpushedEnter = new Image(_menuButton, 510, 90, true, false);
+    Image pushedEnter = new Image(_menuSelectedButton, 510, 90, true, false);
     Image unpushedReturn = new Image(_returnButton, 132, 132, true, false);
     Image pushedReturn = new Image(_returnSelectedButton, 132, 132, true,
         false);
@@ -145,6 +146,12 @@ public class MainMenu extends FXGLMenu {
     ImageButton connect = new ImageButton("Connect", font, "#5ae8a8", "#2b2944", pushed, unpushed);
     ImageButton server = new ImageButton("Create server", font, "#5ae8a8", "#2b2944", pushed,
         unpushed);
+    String gamePort = String.valueOf(666);
+    ImageButton serverID = new ImageButton("Server: " + gamePort, font, "#5ae8a8", "#2b2944",
+        pushed,
+        unpushed);
+    ImageButton enter = new ImageButton("Enter", font, "#5ae8a8", "#2b2944", pushedEnter,
+        unpushedEnter);
     //==============================================================================================
     ImageButton returnButton = new ImageButton("", font, "#5ae8a8", "#2b2944", pushedReturn,
         unpushedReturn);
@@ -156,6 +163,7 @@ public class MainMenu extends FXGLMenu {
     //=====================================[   Buttons Tree   ]=====================================
     TreeNode<ImageButton> tree = new TreeNode<>(null, List.of(start, multiplayer, settings));
     tree.addNodes(multiplayer, List.of(connect, server));
+    tree.addNodes(server, List.of(serverID));
     //=====================================[ Buttons Handlers ]=====================================
     //===Multiplayer===
     multiplayer.setOnMouseClicked(event -> {
@@ -166,20 +174,45 @@ public class MainMenu extends FXGLMenu {
     });
     //===Create server===
     server.setOnMouseClicked(event -> {
-      Stage stage = new Stage();
-      stage.setTitle("Server");
-      StackPane ip = new StackPane();
-      Text text;
-      try {
-        text = new Text(InetAddress.getLocalHost().toString());
-      } catch (UnknownHostException e) {
-        throw new RuntimeException(e);
+      ui.getChildren().removeAll(tree.getParentANChildren());
+      tree.changeActiveNode(server);
+      ui.getChildren().add(serverID);
+    });
+    //===Connect===
+    TextField passwordField = new TextField();
+    VBox connectToServer = new VBox();
+    connect.setOnMouseClicked(event -> {
+      ui.getChildren().removeAll(tree.getParentANChildren());
+      tree.changeActiveNode(connect);
+      passwordField.setPrefSize(700, 100);
+      passwordField.setMinSize(700, 100);
+      passwordField.setMaxSize(700, 100);
+      passwordField.setFont(Font.font(_fontDustyPro, FontWeight.BOLD, 50));
+      passwordField.setAlignment(Pos.CENTER);
+      passwordField.setPromptText("Enter game port");
+      passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
+      connectToServer.setAlignment(Pos.CENTER);
+      connectToServer.getChildren().add(passwordField);
+      connectToServer.getChildren().add(enter);
+      //tree.addNodes(connectToServer);
+      ui.getChildren().add(connectToServer);
+    });
+    //===Enter===
+    enter.setOnMouseClicked(event -> {
+      if (Objects.equals(passwordField.getText(), gamePort)) {
+        ui.getChildren().remove(connectToServer);
+        Text success = new Text("You have successfully" + '\n' + "connected to the game!");
+        success.setFont(Font.font(_fontDustyPro, 70));
+        success.setFill(Color.GREEN);
+        VBox successBox = new VBox();
+        successBox.getChildren().add(success);
+        successBox.setAlignment(Pos.CENTER);
+        ui.getChildren().add(successBox);
+      } else {
+        passwordField.clear();
+        passwordField.setPromptText("Wrong port!");
+        passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
       }
-      ip.getChildren().add(text);
-      Scene newScene = new Scene(ip,450, 450);
-      stage.setScene(newScene);
-      stage.show();
-      ((Node)(event.getSource())).getScene().getWindow().hide();
     });
     //===Start===
     start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
@@ -188,11 +221,16 @@ public class MainMenu extends FXGLMenu {
     });
     //===Return===
     returnButton.setOnMouseClicked(event -> {
+      System.out.println(tree.getANChildren());
       ui.getChildren().removeAll(tree.getParentANChildren());
-      tree.changeActiveNode(tree.getRoot());
+
+      System.out.println(tree.getParentAN());
+      tree.changeActiveNode(tree.getParentAN());
+
       if (tree.getRoot() == tree.getParentAN()) {
         globalAnchor.getChildren().remove(returnButton);
       }
+      System.out.println(tree.getParentANChildren());
       ui.getChildren().addAll(tree.getANChildren());
     });
     AnchorPane.setBottomAnchor(returnButton, 100d);
