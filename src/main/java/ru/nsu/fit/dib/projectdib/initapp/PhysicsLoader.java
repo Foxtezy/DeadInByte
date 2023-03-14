@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.init_app;
+package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 import static com.almasb.fxgl.dsl.FXGL.spawn;

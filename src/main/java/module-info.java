@@ -10,7 +10,8 @@ open module projectdib.main {
   exports ru.nsu.fit.dib.projectdib.ui;
   exports ru.nsu.fit.dib.projectdib.ui.UIElements;
   exports ru.nsu.fit.dib.projectdib.data;
-  exports ru.nsu.fit.dib.projectdib.init_app;
+  exports ru.nsu.fit.dib.projectdib.initapp;
+  exports ru.nsu.fit.dib.projectdib.entity.components;
 }
 /*
 module ru.nsu.fit.dib.projectdib {

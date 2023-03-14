@@ -9,7 +9,6 @@ public enum EntityType {
 
   PLAYER("player"),
   BOX("box"),
-  TREE("tree"),
   COIN("coin"),
   PROJECTILE("projectile"),
   ENEMY("enemy"),
@@ -22,6 +21,7 @@ public enum EntityType {
   CHEST("chest"),
   BOW("bow"),
   AK("ak"),
+  WEAPON("weapon"),
   EXPLOSION("explosion");
 
   private final String name;

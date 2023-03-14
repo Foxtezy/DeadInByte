@@ -1,17 +1,21 @@
 package ru.nsu.fit.dib.projectdib;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.onKey;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import ru.nsu.fit.dib.projectdib.init_app.GameInitializer;
-import ru.nsu.fit.dib.projectdib.init_app.InputListener;
-import ru.nsu.fit.dib.projectdib.init_app.PhysicsLoader;
-import ru.nsu.fit.dib.projectdib.init_app.SettingsLoader;
+import com.almasb.fxgl.entity.Entity;
+import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
+import ru.nsu.fit.dib.projectdib.initapp.InputListener;
+import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
+import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 
 /**
  * Основной класс игры.
  */
 public class App extends GameApplication {
 
+  Entity player;
   InputListener inputListener;
 
   /**
@@ -51,7 +55,6 @@ public class App extends GameApplication {
     PhysicsLoader physicsLoader = new PhysicsLoader();
     physicsLoader.run();
   }
-
   /**
    * Инициализация игры.
    */
@@ -60,5 +63,6 @@ public class App extends GameApplication {
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
+    player=gameInitializer.getPlayer();
   }
 }

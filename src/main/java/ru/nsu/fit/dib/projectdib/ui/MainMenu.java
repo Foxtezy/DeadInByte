@@ -168,6 +168,8 @@ public class MainMenu extends FXGLMenu {
     });
     //===Start===
     start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
+    //===Server===
+    server.setOnMouseClicked(event->{});
     //===Settings===
     settings.setOnMouseClicked(event -> {
     });
