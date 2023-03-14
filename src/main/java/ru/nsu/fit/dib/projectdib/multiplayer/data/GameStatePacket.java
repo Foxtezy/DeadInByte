@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import java.util.List;
 
 public class GameStatePacket {
+
   private final List<NewEntity> newEntityList;
   private final List<EntityState> allCoordinatesOfEntitiesList;
 
@@ -16,8 +17,9 @@ public class GameStatePacket {
     return allCoordinatesOfEntitiesList;
   }
 
-  public GameStatePacket(List<NewEntity> newEntityList,List<EntityState> allCoordinatesOfEntitiesList) {
-    this.newEntityList=newEntityList;
-    this.allCoordinatesOfEntitiesList=allCoordinatesOfEntitiesList;
+  public GameStatePacket(List<NewEntity> newEntityList,
+      List<EntityState> allCoordinatesOfEntitiesList) {
+    this.newEntityList = newEntityList;
+    this.allCoordinatesOfEntitiesList = allCoordinatesOfEntitiesList;
   }
 }

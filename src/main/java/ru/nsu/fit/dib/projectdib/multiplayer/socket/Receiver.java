@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.multiplayer;
+package ru.nsu.fit.dib.projectdib.multiplayer.socket;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -7,8 +7,8 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
+import ru.nsu.fit.dib.projectdib.multiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.multiplayer.exeptions.PacketTypeException;
-import ru.nsu.fit.dib.projectdib.multiplayer.packet.GameStatePacket;
 
 public class Receiver {
 
@@ -32,7 +32,8 @@ public class Receiver {
       throw new RuntimeException(e);
     }
     if (p.getData()[0] != 1) {
-      throw new PacketTypeException();
+      String json = new String(p.getData(), 1, p.getLength(), StandardCharsets.UTF_8);
+      throw new PacketTypeException(new Gson().fromJson(json, GameStatePacket.class));
     }
     String json = new String(p.getData(), 1, p.getLength(), StandardCharsets.UTF_8);
     return new Gson().fromJson(json, GameStatePacket.class);

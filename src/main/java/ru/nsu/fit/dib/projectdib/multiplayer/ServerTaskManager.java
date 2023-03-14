@@ -17,45 +17,46 @@ import java.util.concurrent.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 public class ServerTaskManager {
-	private Map<Integer, Entity> idServerHashTable;
-	private List<NewEntity> listNewEntities;
-	private List<EntityState> listEntityState;
-	//Вынес Executor и UpdateTask, чтобы было создано только по 1 экземпляру
-	private ExecutorService executorService = Executors.newFixedThreadPool(1);
-	private UpdateTask updateTask = new UpdateTask();
-	
-	public ServerTaskManager() {
-		idServerHashTable = new HashMap<>();
-	}
-	
-	public void mySpawn(String name, Point2D pos) {
-		SpawnData spawnData = new SpawnData(pos);
-		Entity spawned = spawn(name, pos);
-		int newId = spawned.getComponent(IDComponent.class).getId();
-		NewEntity spawnedNewEntity = new NewEntity(newId, name, spawnData);
-		listNewEntities.add(spawnedNewEntity);
-		EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(), spawned.getComponent(
-				PlayerComponent.class).getMouseVelocity());
-		listEntityState.add(spawnedEntityState);
-		idServerHashTable.put(newId, spawned);
-	}
-	
-	
-	private class UpdateTask implements Callable<List<EntityState>> {
-		@Override
-		public List<EntityState> call() throws Exception {
-			listEntityState.parallelStream().forEach(entState -> {
-				int id = entState.getId();
-				entState.setCoordinate(idServerHashTable.get(id).getPosition());
-				entState.setAngle(idServerHashTable.get(id).getComponent(PlayerComponent.class).getMouseVelocity());
-			});
-			return listEntityState;
-		}
-	}
-		public GameStatePacket makePacket() {
-		Future<List<EntityState>> updatedListEntityState = executorService.submit(updateTask);
-		GameStatePacket packet = new GameStatePacket(listNewEntities, listEntityState);
-		listNewEntities.clear();
-		return packet;
-	}
+
+  private final Map<Integer, Entity> idServerHashTable = new HashMap<>();;
+  private List<NewEntity> listNewEntities;
+  private List<EntityState> listEntityState;
+  //Вынес Executor и UpdateTask, чтобы было создано только по 1 экземпляру
+  private final ExecutorService executorService = Executors.newCachedThreadPool();
+  private final UpdateTask updateTask = new UpdateTask();
+
+  public void mySpawn(String name, Point2D pos) {
+    SpawnData spawnData = new SpawnData(pos); // TODO: 14.03.2023
+    Entity spawned = spawn(name, pos);
+    int newId = spawned.getComponent(IDComponent.class).getId();
+    NewEntity spawnedNewEntity = new NewEntity(newId, name, spawnData);
+    listNewEntities.add(spawnedNewEntity);
+    EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(),
+        spawned.getComponent(
+            PlayerComponent.class).getMouseVelocity()); // TODO: 14.03.2023 Фигня
+    listEntityState.add(spawnedEntityState);
+    idServerHashTable.put(newId, spawned);
+  }
+
+
+  private class UpdateTask implements Callable<List<EntityState>> {
+
+    @Override
+    public List<EntityState> call() throws Exception {
+      listEntityState.parallelStream().forEach(entState -> {
+        int id = entState.getId();
+        entState.setCoordinate(idServerHashTable.get(id).getPosition());
+        entState.setAngle(
+            idServerHashTable.get(id).getComponent(PlayerComponent.class).getMouseVelocity());
+      });
+      return listEntityState;
+    }
+  }
+
+  public GameStatePacket makePacket() {
+    Future<List<EntityState>> updatedListEntityState = executorService.submit(updateTask);
+    GameStatePacket packet = new GameStatePacket(listNewEntities, listEntityState);
+    listNewEntities.clear();
+    return packet;
+  }
 }

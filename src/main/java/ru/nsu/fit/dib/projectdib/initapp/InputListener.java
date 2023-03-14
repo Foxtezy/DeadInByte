@@ -9,15 +9,12 @@ import static com.almasb.fxgl.dsl.FXGL.onKeyUp;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
@@ -29,9 +26,7 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
-import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
+import ru.nsu.fit.dib.projectdib.multiplayer.Client;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -57,7 +52,7 @@ public class InputListener {
   }
 
   public void run() {
-    ClientTaskManager clientTaskManager = new ClientTaskManager();
+    Client client = new Client();
     //==============================================================================================
     onKey(KeyCode.W, "Up", () -> player.getComponent(PlayerComponent.class).up());
     onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerComponent.class).left());
