@@ -1,13 +1,10 @@
 package ru.nsu.fit.dib.projectdib.multiplayer;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.components.IDComponent;
-import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.GameStatePacket;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.NewEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,19 +21,6 @@ public class ServerTaskManager {
   //Вынес Executor и UpdateTask, чтобы было создано только по 1 экземпляру
   private final ExecutorService executorService = Executors.newCachedThreadPool();
   private final UpdateTask updateTask = new UpdateTask();
-
-  public void mySpawn(String name, Point2D pos) {
-    SpawnData spawnData = new SpawnData(pos); // TODO: 14.03.2023
-    Entity spawned = spawn(name, pos);
-    int newId = spawned.getComponent(IDComponent.class).getId();
-    NewEntity spawnedNewEntity = new NewEntity(newId, name, spawnData);
-    listNewEntities.add(spawnedNewEntity);
-    EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(),
-        spawned.getComponent(
-            PlayerComponent.class).getMouseVelocity()); // TODO: 14.03.2023 Фигня
-    listEntityState.add(spawnedEntityState);
-    idServerHashTable.put(newId, spawned);
-  }
 
 
   private class UpdateTask implements Callable<List<EntityState>> {

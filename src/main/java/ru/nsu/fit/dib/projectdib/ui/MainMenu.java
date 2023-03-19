@@ -32,8 +32,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.connecting.ConnectionInfo;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
@@ -42,8 +42,6 @@ import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
  * Главное меню.
  */
 public class MainMenu extends FXGLMenu {
-
-  private final ConnectionInfo connectionInfo = new ConnectionInfo();
 
   public MainMenu(MenuType type) {
     super(type);
@@ -174,9 +172,9 @@ public class MainMenu extends FXGLMenu {
     settings.setOnMouseClicked(event -> {
     });
     //==Server==
-    AtomicReference<CompletableFuture<List<SocketAddress>>> serverConnectionFuture = new AtomicReference<>();
-    ServerConnectionTask serverConnectionTask = new ServerConnectionTask(connectionInfo.getDatagramSocket());
-    server.setOnMouseClicked(event -> serverConnectionFuture.set(CompletableFuture.supplyAsync(serverConnectionTask)));
+    //AtomicReference<CompletableFuture<List<SocketAddress>>> serverConnectionFuture = new AtomicReference<>();
+    //ServerConnectionTask serverConnectionTask = new ServerConnectionTask(MCServer.getServerSocket());
+    //server.setOnMouseClicked(event -> serverConnectionFuture.set(CompletableFuture.supplyAsync(serverConnectionTask)));
     //===Return===
     returnButton.setOnMouseClicked(event -> {
       ui.getChildren().removeAll(tree.getParentANChildren());

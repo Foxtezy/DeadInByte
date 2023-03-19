@@ -10,6 +10,7 @@ import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
@@ -23,6 +24,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 
 /**
  * Инициализатор игры.
@@ -51,7 +53,14 @@ public class GameInitializer {
     double y = (lvl.start.getCentrePoint().y) * 160;
     SpawnData sd = new SpawnData(x,y);
     sd.put("creature", RandomCharacterSystem.NewCharacter());
-    player = spawn("player", sd);
+    try {
+      player = EntitySpawner.spawn("player", sd).get();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    } catch (ExecutionException e) {
+      throw new RuntimeException(e);
+    }
+    //player = spawn("player", sd);
 
     Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getModule(
         CreatureWeaponModule.class).getActiveWeapon();

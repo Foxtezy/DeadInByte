@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.multiplayer.data;
+package ru.nsu.fit.dib.projectdib.newMultiplayer.data;
 
 import javafx.geometry.Point2D;
 

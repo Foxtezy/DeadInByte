@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.multiplayer.socket;
+package ru.nsu.fit.dib.projectdib.newMultiplayer.socket;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -7,15 +7,19 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.GameStatePacket;
-import ru.nsu.fit.dib.projectdib.multiplayer.exeptions.PacketSizeException;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketSizeException;
 
 public class Sender {
 
   private final DatagramSocket socket;
 
-  public Sender(DatagramSocket socket) {
+  private final Gson gson;
+
+  public Sender(DatagramSocket socket, Gson gson) {
     this.socket = socket;
+    this.gson = gson;
   }
 
   public void send(SocketAddress address, GameStatePacket gameStatePacket) {
@@ -26,7 +30,7 @@ public class Sender {
     if (p.length > 55000) {
       throw new PacketSizeException();
     }
-    p[0] = 1;
+    p[0] = MessageType.NEW_STATE.getId();
     System.arraycopy(byteArray, 0, p, 1, byteArray.length);
     DatagramPacket packet = new DatagramPacket(p, p.length, address);
     try {
@@ -38,13 +42,13 @@ public class Sender {
 
   public void sendException(SocketAddress address, GameStatePacket gameStatePacket) {
     StringWriter writer = new StringWriter();
-    new Gson().toJson(gameStatePacket, writer);
+    gson.toJson(gameStatePacket, writer);
     byte[] byteArray = writer.toString().getBytes(StandardCharsets.UTF_8);
     byte[] p = new byte[byteArray.length + 1];
     if (p.length > 55000) {
       throw new PacketSizeException();
     }
-    p[0] = 0;
+    p[0] = MessageType.ERROR.getId();
     System.arraycopy(byteArray, 0, p, 1, byteArray.length);
     DatagramPacket packet = new DatagramPacket(p, p.length, address);
     try {

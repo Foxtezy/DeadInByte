@@ -26,7 +26,7 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
-import ru.nsu.fit.dib.projectdib.multiplayer.Client;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -52,7 +52,7 @@ public class InputListener {
   }
 
   public void run() {
-    Client client = new Client();
+    ClientState clientState = new ClientState();
     //==============================================================================================
     onKey(KeyCode.W, "Up", () -> player.getComponent(PlayerComponent.class).up());
     onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerComponent.class).left());

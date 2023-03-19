@@ -1,17 +1,15 @@
-package ru.nsu.fit.dib.projectdib.multiplayer;
+package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
-import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.List;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.GameStatePacket;
-import ru.nsu.fit.dib.projectdib.multiplayer.exeptions.PacketTypeException;
-import ru.nsu.fit.dib.projectdib.multiplayer.socket.Receiver;
-import ru.nsu.fit.dib.projectdib.multiplayer.socket.Sender;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 
-public class ServerThread implements Runnable {
+public class ServerThread extends Thread {
 
-  private Thread thread;
 
   private final Receiver receiver;
 
@@ -21,9 +19,9 @@ public class ServerThread implements Runnable {
 
   private Integer nextEntityId = 1;
 
-  public ServerThread(DatagramSocket serverSocket, List<SocketAddress> clientSockets) {
-    this.receiver = new Receiver(serverSocket);
-    this.sender = new Sender(serverSocket);
+  public ServerThread(Receiver receiver, Sender sender, List<SocketAddress> clientSockets) {
+    this.receiver = receiver;
+    this.sender = sender;
     this.clientSockets = clientSockets;
   }
 
