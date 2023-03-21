@@ -5,7 +5,7 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 public class WeaponJSON {
 
 
-  Integer id;
+  private Integer id;
   private Weapons weapon;
   private Integer seed;
 

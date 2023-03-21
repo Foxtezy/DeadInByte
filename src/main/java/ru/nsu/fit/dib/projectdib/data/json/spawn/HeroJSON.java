@@ -4,8 +4,8 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 
 public class HeroJSON {
 
-  Integer id;
-  Integer seed;
+  private Integer id;
+  private Integer seed;
   private HeroType heroType;
 
   public HeroType getHeroType() {
