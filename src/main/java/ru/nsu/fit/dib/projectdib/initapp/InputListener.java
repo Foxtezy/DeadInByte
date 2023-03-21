@@ -21,6 +21,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.data.Controls;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
@@ -59,10 +60,10 @@ public class InputListener {
   public void run() {
     ClientTaskManager clientTaskManager = new ClientTaskManager();
     //==============================================================================================
-    onKey(KeyCode.W, "Up", () -> player.getComponent(PlayerComponent.class).up());
-    onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerComponent.class).left());
-    onKey(KeyCode.S, "Down", () -> player.getComponent(PlayerComponent.class).down());
-    onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerComponent.class).right());
+    onKey(Controls.UP, "Up", () -> player.getComponent(PlayerComponent.class).up());
+    onKey(Controls.LEFT, "Left", () -> player.getComponent(PlayerComponent.class).left());
+    onKey(Controls.DOWN, "Down", () -> player.getComponent(PlayerComponent.class).down());
+    onKey(Controls.RIGHT, "Right", () -> player.getComponent(PlayerComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
       Creature hero = player.getComponent(PlayerComponent.class).getHero();
       hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
@@ -109,7 +110,7 @@ public class InputListener {
           hero.getModule(CreatureWeaponModule.class).changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
         }
       }
-    }, KeyCode.F, VirtualButton.X);
+    }, Controls.TAKE_THROW_WEAPON, VirtualButton.X);
     getInput().addAction(new UserAction("Swap weapons") {
       @Override
       protected void onActionBegin() {
@@ -122,6 +123,6 @@ public class InputListener {
           weapon.getModule(TextureModule.class).getComponent().getEntity().setVisible(true);
         }
       }
-    }, KeyCode.Q, VirtualButton.B);
+    }, Controls.CHANGE_WEAPON, VirtualButton.B);
   }
 }

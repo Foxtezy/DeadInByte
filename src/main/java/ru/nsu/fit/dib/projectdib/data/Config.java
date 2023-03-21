@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.data;
 
+import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;

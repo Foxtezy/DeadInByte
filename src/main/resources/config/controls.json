@@ -1,0 +1,8 @@
+{
+  "UP": "W",
+  "LEFT": "A",
+  "DOWN": "S",
+  "RIGHT": "D",
+  "CHANGE_WEAPON": "Q",
+  "TAKE_THROW_WEAPON": "F"
+}
