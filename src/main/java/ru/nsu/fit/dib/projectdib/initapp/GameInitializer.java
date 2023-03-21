@@ -52,7 +52,6 @@ public class GameInitializer {
     SpawnData sd = new SpawnData(x,y);
     sd.put("creature", RandomCharacterSystem.NewCharacter());
     player = spawn("player", sd);
-
     Weapon myWeapon = player.getComponent(HeroComponent.class).getCreature().getModule(
         CreatureWeaponModule.class).getActiveWeapon();
     SpawnData wsd = new SpawnData(x, y);

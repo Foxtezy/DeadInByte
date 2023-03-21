@@ -5,6 +5,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 import static java.lang.Math.abs;
 
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
