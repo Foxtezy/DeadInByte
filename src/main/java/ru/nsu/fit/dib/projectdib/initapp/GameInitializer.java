@@ -50,7 +50,7 @@ public class GameInitializer {
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     SpawnData sd = new SpawnData(x,y);
-    sd.put("creature", RandomCharacterSystem.NewCharacter());
+    sd.put("creature", RandomCharacterSystem.NewCharacter(1000));
     player = spawn("player", sd);
 
     Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getModule(
