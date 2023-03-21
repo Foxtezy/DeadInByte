@@ -26,7 +26,7 @@ public class ClientState {
   private final Map<Integer, Entity> idHashTable = new HashMap<>();
 
   public List<Entity> spawnEntities(List<NewEntity> newEntities) {
-    if (newEntities == null) {
+    if (newEntities.isEmpty()) {
       return new ArrayList<>();
     }
     List<Entity> entityList = new ArrayList<>();

@@ -53,14 +53,7 @@ public class GameInitializer {
     double y = (lvl.start.getCentrePoint().y) * 160;
     SpawnData sd = new SpawnData(x,y);
     sd.put("creature", RandomCharacterSystem.NewCharacter());
-    try {
-      player = EntitySpawner.spawn("player", sd).get();
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    } catch (ExecutionException e) {
-      throw new RuntimeException(e);
-    }
-    //player = spawn("player", sd);
+    player = spawn("player", sd);
 
     Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getModule(
         CreatureWeaponModule.class).getActiveWeapon();

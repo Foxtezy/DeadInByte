@@ -8,6 +8,9 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.json_converters.WeaponDeserializer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.json_converters.WeaponSerializer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.EMCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
@@ -20,16 +23,13 @@ public final class ServerConfig {
     throw new UnsupportedOperationException();
   }
 
-  static {
-    MCServer.addBean(EMCServer.GSON, new GsonBuilder().setLenient().create());
+  public static void init() {
+    MCServer.addBean(EMCServer.GSON, new GsonBuilder().serializeNulls()
+        .create());
     addServerSocket();
 
     MCServer.addBean(EMCServer.SENDER, new Sender(MCServer.getServerSocket(), MCServer.getGson()));
     MCServer.addBean(EMCServer.RECEIVER, new Receiver(MCServer.getServerSocket(), MCServer.getGson()));
-
-    List<SocketAddress> addresses = new ArrayList<>();
-    addresses.add(new InetSocketAddress("localhost", 8080));
-    MCServer.addBean(EMCServer.CLIENT_ADDRESSES, addresses);
   }
 
   private static void addServerSocket() {
@@ -43,7 +43,7 @@ public final class ServerConfig {
   }
 
   public static void addClientAddresses(List<SocketAddress> socketAddresses) {
-    MCServer.getClientAddresses().addAll(socketAddresses);
+    MCServer.addBean(EMCServer.CLIENT_ADDRESSES, socketAddresses);
   }
 
   public static void addServerThread(ServerThread thread) {

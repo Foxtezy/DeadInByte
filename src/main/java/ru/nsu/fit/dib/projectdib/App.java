@@ -75,6 +75,8 @@ public class App extends GameApplication {
   @Override
   protected void initGame() {
 
+    ServerConfig.init();
+    ClientConfig.init();
     ServerConfig.addClientAddresses(List.of(new InetSocketAddress("localhost", 9090)));
     ServerThread serverThread = new ServerThread(MCServer.getReceiver(), MCServer.getSender(), MCServer.getClientAddresses());
     ServerConfig.addServerThread(serverThread);

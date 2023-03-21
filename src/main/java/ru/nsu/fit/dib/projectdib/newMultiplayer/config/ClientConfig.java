@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.json_converters.WeaponDeserializer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.json_converters.WeaponSerializer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -18,8 +21,9 @@ public final class ClientConfig {
     throw new UnsupportedOperationException();
   }
 
-  static {
-    MCClient.addBean(EMCClient.GSON, new GsonBuilder().setLenient().create());
+  public static void init() {
+    MCClient.addBean(EMCClient.GSON, new GsonBuilder().serializeNulls()
+        .create());
     addClientSocket();
     MCClient.addBean(EMCClient.SENDER, new Sender(MCClient.getClientSocket(), MCClient.getGson()));
     MCClient.addBean(EMCClient.RECEIVER, new Receiver(MCClient.getClientSocket(), MCClient.getGson()));
@@ -29,7 +33,7 @@ public final class ClientConfig {
   private static void addClientSocket() {
     DatagramSocket datagramSocket;
     try {
-      datagramSocket = new DatagramSocket();
+      datagramSocket = new DatagramSocket(9090);
     } catch (SocketException e) {
       throw new RuntimeException(e);
     }
