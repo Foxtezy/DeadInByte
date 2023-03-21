@@ -97,6 +97,10 @@ public class TreeNode<T> {
     activeNode = getNode(node);
   }
 
+  public void changeActiveNode(TreeNode<T> node) {
+    activeNode = node;
+  }
+
   private List<T> getChildren() {
     List<T> list = new ArrayList<>();
     leafs.forEach(nowNode -> {
@@ -131,6 +135,10 @@ public class TreeNode<T> {
    */
   public T getParentAN() {
     return activeNode.root;
+  }
+
+  public TreeNode<T> getParentA() {
+    return activeNode.parent;
   }
 
   public TreeNode<T> getActiveNode() {

@@ -21,4 +21,5 @@ public interface ProjectConfig {
   String _menuSelectedButton = "assets/UI/elements/menu_selected_button1k.png";
   String _returnButton = "assets/UI/elements/return_button1k.png";
   String _returnSelectedButton = "assets/UI/elements/return_selected_button1k.png";
+  String _loadingAnimation = "assets/UI/elements/loadingAnimation.gif";
 }
