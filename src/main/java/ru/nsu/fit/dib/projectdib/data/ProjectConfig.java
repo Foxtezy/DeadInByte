@@ -12,7 +12,6 @@ public interface ProjectConfig {
   int _player_width = 160;
   int _player_height = 320;
 
-
   //UIConfig
   String _fontDustyPro = "assets/UI/fonts/DustyPro.ttf";
   String _forestAnimationUI = "assets/UI/elements/forest1k.png";

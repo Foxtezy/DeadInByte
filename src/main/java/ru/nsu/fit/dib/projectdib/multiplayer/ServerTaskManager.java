@@ -35,7 +35,7 @@ public class ServerTaskManager {
 		NewEntity spawnedNewEntity = new NewEntity(newId, name, spawnData);
 		listNewEntities.add(spawnedNewEntity);
 		EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(), spawned.getComponent(
-				PlayerComponent.class).getMouseVelocity());
+				PlayerComponent.class).getDirectionView());
 		listEntityState.add(spawnedEntityState);
 		idServerHashTable.put(newId, spawned);
 	}
@@ -47,7 +47,7 @@ public class ServerTaskManager {
 			listEntityState.parallelStream().forEach(entState -> {
 				int id = entState.getId();
 				entState.setCoordinate(idServerHashTable.get(id).getPosition());
-				entState.setAngle(idServerHashTable.get(id).getComponent(PlayerComponent.class).getMouseVelocity());
+				entState.setAngle(idServerHashTable.get(id).getComponent(PlayerComponent.class).getDirectionView());
 			});
 			return listEntityState;
 		}

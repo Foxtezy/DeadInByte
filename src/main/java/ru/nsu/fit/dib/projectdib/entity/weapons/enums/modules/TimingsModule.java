@@ -2,8 +2,8 @@ package ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules;
 
 public class TimingsModule extends WeaponModule {
 
-  protected int impactSpeed;
-  protected int rollbackTime;
+  private double impactSpeed;
+  private double rollbackTime;
 
   public TimingsModule(int rollbackTime, int impactSpeed) {
     super();
@@ -11,15 +11,19 @@ public class TimingsModule extends WeaponModule {
     this.impactSpeed = impactSpeed;
   }
 
-  public int getImpactSpeed() {
+  public double getImpactSpeed() {
     return impactSpeed;
   }
 
-  protected int getRollbackTime() {
+  public double getRollbackTime() {
     return rollbackTime;
   }
 
-  protected void setRollbackTime(int rollbackTime) {
+  public void setRollbackTime(int rollbackTime) {
     this.rollbackTime = rollbackTime;
+  }
+
+  public double getIterationTime(){
+    return rollbackTime+impactSpeed;
   }
 }

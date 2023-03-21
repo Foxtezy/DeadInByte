@@ -29,7 +29,7 @@ public class WeaponFactory {
           .build();
       case Staff -> new Weapon.WeaponBuilder(WeaponRarity.ordinary, "staff")
           .setDamageModule(WeaponType.magic, DamageType.PIERCING, 1, 6)
-          .setView(21, WeaponSize.MEDIUM, 80d, 50d)
+          .setView(21, WeaponSize.MEDIUM, 80d, 40d)
           .setScope(1000, 1)
           .setTime(600, 300)
           .build();

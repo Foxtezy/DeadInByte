@@ -65,7 +65,11 @@ public class GameInitializer {
 
     player.setScaleUniform(0.75);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-
+    //===================================
+    //SpawnData sd2 = new SpawnData(x,y);
+    //sd2.put("creature", RandomCharacterSystem.NewCharacter());
+    //spawn("player", sd2);
+    //===================================
     viewport.setWidth(getAppWidth());
     viewport.setHeight(getAppHeight());
     viewport.setZoom(0.75);

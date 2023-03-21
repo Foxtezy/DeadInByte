@@ -33,16 +33,18 @@ public final class Creature {
     return (T) modules.get(type);
   }
 
+  /*
   public boolean hit(Creature creature) {
     return creature.getDamage(this,
-        getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(
-            DamageModule.class).getDamageType(),
-        getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(
-            DamageModule.class).getDamage());
+        getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(DamageModule.class).getDamageType(),
+        getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(DamageModule.class).getDamage());
   }
-
+*/
   private boolean getDamage(Creature from, DamageType damageType, int damage) {
     return getModule(HPModule.class).changeHP(damage);
+  }
+  public int getArmorCoefficient(){
+    return 10+getModule(SpecsModule.class).getAgilityModifier();
   }
 
   public String getName() {
