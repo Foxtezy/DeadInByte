@@ -22,8 +22,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
@@ -60,16 +60,16 @@ public class InputListener {
   public void run() {
     ClientTaskManager clientTaskManager = new ClientTaskManager();
     //==============================================================================================
-    onKey(Controls.UP, "Up", () -> player.getComponent(PlayerComponent.class).up());
-    onKey(Controls.LEFT, "Left", () -> player.getComponent(PlayerComponent.class).left());
-    onKey(Controls.DOWN, "Down", () -> player.getComponent(PlayerComponent.class).down());
-    onKey(Controls.RIGHT, "Right", () -> player.getComponent(PlayerComponent.class).right());
+    onKey(Controls.UP, "Up", () -> player.getComponent(HeroComponent.class).up());
+    onKey(Controls.LEFT, "Left", () -> player.getComponent(HeroComponent.class).left());
+    onKey(Controls.DOWN, "Down", () -> player.getComponent(HeroComponent.class).down());
+    onKey(Controls.RIGHT, "Right", () -> player.getComponent(HeroComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
-      Creature hero = player.getComponent(PlayerComponent.class).getHero();
+      Creature hero = player.getComponent(HeroComponent.class).getCreature();
       hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
       hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().yProperty().unbind();
     });
-    onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(PlayerComponent.class).attack());
+    onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(HeroComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -89,7 +89,7 @@ public class InputListener {
       @Override
       protected void onActionBegin() {
 
-        Creature hero = player.getComponent(PlayerComponent.class).getHero();
+        Creature hero = player.getComponent(HeroComponent.class).getCreature();
         List<Entity> list = new ArrayList<>(
             getGameWorld().getEntitiesByType(EntityType.WEAPON).stream()
                 .filter(weapon -> weapon.hasComponent(CollidableComponent.class)
@@ -114,7 +114,7 @@ public class InputListener {
     getInput().addAction(new UserAction("Swap weapons") {
       @Override
       protected void onActionBegin() {
-        Creature hero = player.getComponent(PlayerComponent.class).getHero();
+        Creature hero = player.getComponent(HeroComponent.class).getCreature();
         if (!hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getName().equals("hand")) {
           hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().setVisible(false);
         }
