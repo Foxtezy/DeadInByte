@@ -8,9 +8,8 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 public class HeroesFactory {
-
-  public static Creature getHero(HeroType heroType) {
-    List<Integer> specsList = RandomSystem.generateCreatureSpecs();
+  public static Creature newHero(HeroType heroType,Integer seed) {
+    List<Integer> specsList = RandomSystem.generateCreatureSpecs(seed);
     return switch (heroType) {
       case Elf -> new Creature.CreatureBuilder(CreatureRarity.mediocre, "GigaElf")
           .setID(0)
