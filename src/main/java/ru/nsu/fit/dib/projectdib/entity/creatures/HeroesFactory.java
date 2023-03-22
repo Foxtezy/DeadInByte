@@ -48,6 +48,7 @@ public class HeroesFactory {
           .setStartWeapon(WeaponFactory.getWeapon(Weapons.Staff))
           .setSkill(WeaponType.magic, 2)
           .build();
+      default -> throw new NullPointerException("Undeclared hero type");
     };
   }
 
@@ -75,5 +76,6 @@ public class HeroesFactory {
     public CreatureRarity getCreatureRarity() {
       return creatureRarity;
     }
+    
   }
 }
