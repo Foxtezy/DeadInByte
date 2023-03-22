@@ -33,6 +33,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
@@ -57,11 +58,17 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.WeaponModule;
  */
 public class Factory implements EntityFactory {
 
-  public static Entity spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer seed){
+  public static Pair<Entity,Entity> spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer seed){
     SpawnData sd = new SpawnData(position);
     sd.put("clientHero",isClientHero);
-    sd.put("creature", HeroesFactory.newHero(RandomCharacterSystem.NewCharacter(),seed));
-    return spawn("player", sd);
+    sd.put("creature", HeroesFactory.newHero(heroType,seed));
+    Entity hero = spawn("player", sd);
+    hero.setScaleUniform(0.75);
+    SpawnData weaponSD = new SpawnData(position);
+    weaponSD.put("weapon",  hero.getComponent(HeroComponent.class).getCreature().getModule(
+        CreatureWeaponModule.class).getActiveWeapon());
+    Entity weapon = spawn("weapon",weaponSD);
+    return new Pair(hero,weapon);
   };
   public static Entity spawnWeapon(Weapons weaponType,Point2D position){
     SpawnData sd = new SpawnData(position);
