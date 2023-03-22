@@ -58,6 +58,15 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.WeaponModule;
  */
 public class Factory implements EntityFactory {
 
+  /**
+   * Creates Hero and heroes weapon.
+   *
+   * @param heroType type of hero
+   * @param position position
+   * @param isClientHero true if client hero
+   * @param seed hero seed
+   * @return pair of entity Hero and Weapon
+   */
   public static Pair<Entity,Entity> spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer seed){
     SpawnData sd = new SpawnData(position);
     sd.put("clientHero",isClientHero);
@@ -70,6 +79,14 @@ public class Factory implements EntityFactory {
     Entity weapon = spawn("weapon",weaponSD);
     return new Pair(hero,weapon);
   };
+
+  /**
+   * Creates weapon.
+   *
+   * @param weaponType type of weapon
+   * @param position position
+   * @return weapon entity
+   */
   public static Entity spawnWeapon(Weapons weaponType,Point2D position){
     SpawnData sd = new SpawnData(position);
     sd.put("weapon", WeaponFactory.getWeapon(weaponType));
