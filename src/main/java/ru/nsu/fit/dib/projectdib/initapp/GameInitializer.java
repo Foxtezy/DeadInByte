@@ -2,17 +2,24 @@ package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
+import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
@@ -47,11 +54,9 @@ public class GameInitializer {
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
-
     Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
     Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
-
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
