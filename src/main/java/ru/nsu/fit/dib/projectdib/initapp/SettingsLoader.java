@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.onKey;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.onKeyUp;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.CONTROLS_PATH;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._cfg;
 
 import com.almasb.fxgl.app.ApplicationMode;
@@ -9,6 +10,8 @@ import com.almasb.fxgl.app.GameSettings;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import ru.nsu.fit.dib.projectdib.data.Config;
+import ru.nsu.fit.dib.projectdib.data.Controls;
+import ru.nsu.fit.dib.projectdib.data.JSONLoader;
 import ru.nsu.fit.dib.projectdib.ui.ScenesFactory;
 
 /**
@@ -41,6 +44,7 @@ public class SettingsLoader {
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig(_cfg);
+    JSONLoader.loadConfig(CONTROLS_PATH, Controls.class);
     // Window mod
     switch (Config.WINDOW_MODE) {
       case "Window" -> {

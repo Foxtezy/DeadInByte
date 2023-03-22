@@ -10,6 +10,7 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.action.Action;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.UserAction;
@@ -21,17 +22,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.data.Controls;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
-import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
-import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
-import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
-import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -59,16 +55,16 @@ public class InputListener {
   public void run() {
     ClientTaskManager clientTaskManager = new ClientTaskManager();
     //==============================================================================================
-    onKey(KeyCode.W, "Up", () -> player.getComponent(PlayerComponent.class).up());
-    onKey(KeyCode.A, "Left", () -> player.getComponent(PlayerComponent.class).left());
-    onKey(KeyCode.S, "Down", () -> player.getComponent(PlayerComponent.class).down());
-    onKey(KeyCode.D, "Right", () -> player.getComponent(PlayerComponent.class).right());
+    onKey(Controls.UP, "Up", () -> player.getComponent(HeroComponent.class).up());
+    onKey(Controls.LEFT, "Left", () -> player.getComponent(HeroComponent.class).left());
+    onKey(Controls.DOWN, "Down", () -> player.getComponent(HeroComponent.class).down());
+    onKey(Controls.RIGHT, "Right", () -> player.getComponent(HeroComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
-      Creature hero = player.getComponent(PlayerComponent.class).getHero();
+      Creature hero = player.getComponent(HeroComponent.class).getCreature();
       hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
       hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().yProperty().unbind();
     });
-    onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(PlayerComponent.class).attack());
+    onBtn(MouseButton.PRIMARY, "shoot", () -> player.getComponent(HeroComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {
@@ -87,41 +83,27 @@ public class InputListener {
     getInput().addAction(new UserAction("Take") {
       @Override
       protected void onActionBegin() {
-
-        Creature hero = player.getComponent(PlayerComponent.class).getHero();
-        List<Entity> list = new ArrayList<>(
-            getGameWorld().getEntitiesByType(EntityType.WEAPON).stream()
-                .filter(weapon -> weapon.hasComponent(CollidableComponent.class)
-                    && weapon.isColliding(player)).toList());
-        //Удаляем все оружие игрока из списка
-        hero.getModule(CreatureWeaponModule.class).getWeaponsList().forEach(weapon -> {
-          if (!Objects.equals(weapon.getName(), "hand")) {
-            list.remove(weapon.getModule(TextureModule.class).getComponent().getEntity());
-          }
-        });
-
+        HeroComponent playerComponent = player.getComponent(HeroComponent.class);
+        List<Entity> list = playerComponent.findWeapon();
+        //----------------------------------------
         if (list.size() >= 1) {
-          Entity weaponEntity = list.get(0);
-
-          Weapon weapon = weaponEntity.getComponent(WeaponComponent.class).getWeapon();
-          hero.getModule(CreatureWeaponModule.class).changeWeapon(weapon);
+          //Спрашиваем сервер можно ли забрать Weapon
+          //если да то:
+          playerComponent.takeWeapon(list.get(0));
         } else {
-          hero.getModule(CreatureWeaponModule.class).changeWeapon(WeaponFactory.getWeapon(Weapons.Hand));
+          //Если Weapon рядом нет то прашиваем можно ли выбрость:
+          playerComponent.throwWeapon();
         }
+        //Вообще эту часть нужно будет убрать тк действие будет совершаться из распакованного JSON-а
+        //------------------------------------------
       }
-    }, KeyCode.F, VirtualButton.X);
+    }, Controls.TAKE_THROW_WEAPON, VirtualButton.X);
+
     getInput().addAction(new UserAction("Swap weapons") {
       @Override
       protected void onActionBegin() {
-        Creature hero = player.getComponent(PlayerComponent.class).getHero();
-        if (!hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getName().equals("hand")) {
-          hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().setVisible(false);
-        }
-        Weapon weapon = hero.getModule(CreatureWeaponModule.class).getNextWeapon();
-        if (!weapon.getName().equals("hand")) {
-          weapon.getModule(TextureModule.class).getComponent().getEntity().setVisible(true);
-        }
+        player.getComponent(HeroComponent.class).swapWeapon();
       }
-    }, KeyCode.Q, VirtualButton.B);
+    }, Controls.CHANGE_WEAPON, VirtualButton.B);
   }
 }

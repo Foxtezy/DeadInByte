@@ -12,7 +12,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import java.util.Random;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
@@ -52,8 +52,7 @@ public class GameInitializer {
     SpawnData sd = new SpawnData(x,y);
     sd.put("creature", RandomCharacterSystem.NewCharacter());
     player = spawn("player", sd);
-
-    Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getModule(
+    Weapon myWeapon = player.getComponent(HeroComponent.class).getCreature().getModule(
         CreatureWeaponModule.class).getActiveWeapon();
     SpawnData wsd = new SpawnData(x, y);
     wsd.put("weapon",myWeapon);
@@ -65,7 +64,11 @@ public class GameInitializer {
 
     player.setScaleUniform(0.75);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-
+    //===================================
+    //SpawnData sd2 = new SpawnData(x,y);
+    //sd2.put("creature", RandomCharacterSystem.NewCharacter());
+    //spawn("player", sd2);
+    //===================================
     viewport.setWidth(getAppWidth());
     viewport.setHeight(getAppHeight());
     viewport.setZoom(0.75);

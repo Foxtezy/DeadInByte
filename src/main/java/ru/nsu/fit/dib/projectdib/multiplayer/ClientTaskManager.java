@@ -10,6 +10,10 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import java.util.HashMap;
 import java.util.List;
 import javafx.geometry.Point2D;
+import javax.swing.Action;
+import ru.nsu.fit.dib.projectdib.data.json.update.UpdatedCreatureJSON;
+import ru.nsu.fit.dib.projectdib.data.json.update.UpdatedWeaponJSON;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.multiplayer.data.NewEntity;
@@ -21,7 +25,7 @@ public class ClientTaskManager {
   }
 
   //Хранятся все ID всех отслеживаемых Entity
-  private HashMap<Integer,Entity> idHashTable;
+  public static HashMap<Integer,Entity> idHashTable;
   public ClientTaskManager(){
     idHashTable=new HashMap<>();
   }
@@ -45,13 +49,11 @@ public class ClientTaskManager {
       //entity.getTransformComponent().set
       entity.setPosition(new Vec2(newPos).add(currPos.multiply(-1)));
     });
-    //HashвMap<Integer,Entity> hashMap =
+    //HashMap<Integer,Entity> hashMap =
         //entityStream.map(entity -> new HashMap.SimpleEntry<> (entity.getComponent(IDComponent.class).getId(),entity));
         //HashMap<Integer,Entity> hashMap = new HashMap<>(entityStream.map();
         //newPacket.getAllCoordinatesOfEntitiesList().forEach(entityState -> {
 
         //});
   }
-
-
 }
