@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import kotlin.Pair;
 
 public class RandomSystem {
 
@@ -22,12 +23,14 @@ public class RandomSystem {
     return random.nextInt(numberCubeFaces + 1);
   }
 
-  public static List<Integer> generateCreatureSpecs() {
+  public static List<Integer> generateCreatureSpecs(Integer seed) {
     List<Integer> list = new ArrayList<>();
+    list.add(seed);
+    Random rand = new Random(seed);
     for (int j = 0; j < 6; j++) {
       List<Integer> rolls = new ArrayList<>();
       for (int i = 0; i < 4; i++) {
-        rolls.add(d(6));
+        rolls.add(rand.nextInt(6+1));
       }
       Collections.sort(rolls);
       int value = 0;
