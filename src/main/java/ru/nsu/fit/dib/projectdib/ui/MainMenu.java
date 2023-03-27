@@ -175,16 +175,45 @@ public class MainMenu extends FXGLMenu {
     //===
     ui.getChildren().addAll(space, start, multiplayer, settings);
     //=====================================[   Buttons Tree   ]=====================================
-    //TreeNode<ImageButton> tree = new TreeNode<>(null, List.of(start, multiplayer, settings));
+    ///root///
     TreeNode<Node> tree = new TreeNode<>(null, List.of(start, multiplayer, settings));
+    ///multiplayer///
     tree.addNodes(multiplayer, List.of(connect, server));
+    ///server///
     tree.addNodes(server, List.of(update, startMultiplayer, serverID));
+    ///connect///
+    /*TextField passwordField = new TextField();
+    VBox authentication = new VBox();
+    passwordField.setPrefSize(700, 100);
+    passwordField.setMinSize(700, 100);
+    passwordField.setMaxSize(700, 100);
+    passwordField.setFont(smallFont);
+    passwordField.setAlignment(Pos.CENTER);
+    passwordField.setPromptText("Enter game port");
+    passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
+    authentication.setAlignment(Pos.CENTER);
+    authentication.getChildren().add(passwordField);
+    authentication.getChildren().add(enter);
+    tree.addNodes(connect, List.of(authentication));
+    ///enter///
+    Text text1 = new Text("Please, wait for");
+    Text text2 = new Text("the game to start");
+    text1.setFont(smallFont);
+    text2.setFont(smallFont);
+    text1.setFill(Color.WHITE);
+    text2.setFill(Color.WHITE);
+    VBox loadingBox = new VBox();
+    loadingBox.getChildren().add(loading);
+    loadingBox.getChildren().add(text1);
+    loadingBox.getChildren().add(text2);
+    loadingBox.setAlignment(Pos.CENTER);
+    tree.addNodes(authentication, List.of(loadingBox));*/
     //=====================================[ Buttons Handlers ]=====================================
 
     //===Multiplayer===
     multiplayer.setOnMouseClicked(event -> {
       globalAnchor.getChildren().add(returnButton);
-      ui.getChildren().removeAll(tree.getParentANChildren());
+      ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(multiplayer);
       ui.getChildren().addAll(tree.getANChildren());
     });
@@ -210,7 +239,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Create server===
     server.setOnMouseClicked(event -> {
-      ui.getChildren().removeAll(tree.getParentANChildren());
+      ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(server);
       ui.getChildren().addAll(tree.getANChildren());
       //Thread survey = new Thread(task);
@@ -235,17 +264,17 @@ public class MainMenu extends FXGLMenu {
     TextField passwordField = new TextField();
     VBox authentication = new VBox();
     connect.setOnMouseClicked(event -> {
-      ui.getChildren().removeAll(tree.getParentANChildren());
+      ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(connect);
       passwordField.setPrefSize(700, 100);
       passwordField.setMinSize(700, 100);
       passwordField.setMaxSize(700, 100);
-      //passwordField.setFont(Font.font(_fontDustyPro, FontWeight.BOLD, 50));
       passwordField.setFont(smallFont);
       passwordField.setAlignment(Pos.CENTER);
       passwordField.setPromptText("Enter game port");
       passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
       authentication.setAlignment(Pos.CENTER);
+      //ошибка здесь
       authentication.getChildren().add(passwordField);
       authentication.getChildren().add(enter);
       tree.addNodes(connect, List.of(authentication));
@@ -288,10 +317,12 @@ public class MainMenu extends FXGLMenu {
     returnButton.setOnMouseClicked(event -> {
       System.out.println(tree.getActiveNode());
       System.out.println(tree.getANChildren());
-      //ui.getChildren().removeAll(tree.getParentANChildren());
       ui.getChildren().removeAll(tree.getANChildren());
 
+      tree.removeChildren();
+      System.out.println(tree.getANChildren());
       System.out.println(tree.getParentA());
+
       tree.changeActiveNode(tree.getParentA());
 
       if (tree.getRoot() == tree.getParentAN()) {

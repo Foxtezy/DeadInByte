@@ -73,8 +73,15 @@ public class TreeNode<T> {
   private void addNodes(List<T> branchLeafs) {
     leafs = new ArrayList<>();
     branchLeafs.forEach(leaf -> {
-      this.leafs.add(new TreeNode<>(leaf));
+      this.leafs.add(new TreeNode<>(this, leaf));
     });
+  }
+
+  public void removeChildren() {
+    for (TreeNode<T> leaf : activeNode.leafs) {
+      leaf.parent = null;
+    }
+    activeNode.leafs.removeAll(activeNode.leafs);
   }
 
   /**
@@ -135,6 +142,10 @@ public class TreeNode<T> {
    */
   public T getParentAN() {
     return activeNode.root;
+  }
+
+  public T getT() {
+    return this.root;
   }
 
   public TreeNode<T> getParentA() {
