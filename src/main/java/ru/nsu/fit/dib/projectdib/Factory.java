@@ -33,22 +33,65 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
+import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.WeaponModule;
 
 /**
  * Class Factory for making Entities.
  */
 public class Factory implements EntityFactory {
 
+  /**
+   * Creates Hero and heroes weapon.
+   *
+   * @param heroType type of hero
+   * @param position position
+   * @param isClientHero true if client hero
+   * @param seed hero seed
+   * @return pair of entity Hero and Weapon
+   */
+  public static Pair<Entity,Entity> spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer seed){
+    SpawnData sd = new SpawnData(position);
+    sd.put("clientHero",isClientHero);
+    sd.put("creature", HeroesFactory.newHero(heroType,seed));
+    Entity hero = spawn("player", sd);
+    hero.setScaleUniform(0.75);
+    SpawnData weaponSD = new SpawnData(position);
+    weaponSD.put("weapon",  hero.getComponent(HeroComponent.class).getCreature().getModule(
+        CreatureWeaponModule.class).getActiveWeapon());
+    Entity weapon = spawn("weapon",weaponSD);
+    return new Pair(hero,weapon);
+  };
+
+  /**
+   * Creates weapon.
+   *
+   * @param weaponType type of weapon
+   * @param position position
+   * @return weapon entity
+   */
+  public static Entity spawnWeapon(Weapons weaponType,Point2D position){
+    SpawnData sd = new SpawnData(position);
+    sd.put("weapon", WeaponFactory.getWeapon(weaponType));
+    return spawn("weapon", sd);
+  };
   /**
    * Entity Player.
    *
@@ -62,7 +105,8 @@ public class Factory implements EntityFactory {
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
     HeroComponent heroComponent = new HeroComponent(creature,new Point2D(50,180));
-    heroComponent.bindDirectionView(entity -> getInput().getVectorToMouse(entity.getPosition().add(new Point2D(80, 160))));
+    if (data.get("clientHero")) heroComponent.bindDirectionView(entity -> getInput().getVectorToMouse(entity.getPosition().add(new Point2D(80, 160))));
+    else heroComponent.bindDirectionView(entity ->new Point2D(0,0));
     creature.getModule(JFXModule.class).setComponent(heroComponent);
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()

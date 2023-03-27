@@ -19,26 +19,26 @@ public class RandomCharacterSystem {
       CreatureRarity.masterful, 0.2,
       CreatureRarity.legendary, 0.05));
 
-  public static Creature NewCharacter(Integer seed) {
+  public static HeroType NewCharacter() {
     recalculateProbabilities();
     double r = RandomSystem.getRandDouble(0,1);
     if (r<=probabilities.get(CreatureRarity.legendary))
-      return generateCharacter(CreatureRarity.legendary,seed);
+      return generateCharacter(CreatureRarity.legendary);
     else if (r<=probabilities.get(CreatureRarity.masterful))
-      return generateCharacter(CreatureRarity.masterful,seed);
+      return generateCharacter(CreatureRarity.masterful);
     else if (r<=probabilities.get(CreatureRarity.special))
-      return generateCharacter(CreatureRarity.special,seed);
+      return generateCharacter(CreatureRarity.special);
     else if (r<=probabilities.get(CreatureRarity.ordinary))
-      return generateCharacter(CreatureRarity.ordinary,seed);
-    else return generateCharacter(CreatureRarity.mediocre,seed);
+      return generateCharacter(CreatureRarity.ordinary);
+    else return generateCharacter(CreatureRarity.mediocre);
 
   }
 
-  private static Creature generateCharacter(CreatureRarity creatureRarity,Integer seed) {
+  private static HeroType generateCharacter(CreatureRarity creatureRarity) {
     List<HeroType> heroTypeList = HeroType.getAll(creatureRarity);
-    if (heroTypeList.size()<=0) return RandomCharacterSystem.NewCharacter(seed);
+    if (heroTypeList.size()<=0) return RandomCharacterSystem.NewCharacter();
     int k=RandomSystem.getRandInt(0, heroTypeList.size());
-    return HeroesFactory.newHero(heroTypeList.get(k),seed);
+    return heroTypeList.get(k);
   }
 
   private static void recalculateProbabilities() {

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import javafx.geometry.Point2D;
 import javax.swing.Action;
+import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.json.update.UpdatedCreatureJSON;
 import ru.nsu.fit.dib.projectdib.data.json.update.UpdatedWeaponJSON;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
@@ -49,11 +50,12 @@ public class ClientTaskManager {
       //entity.getTransformComponent().set
       entity.setPosition(new Vec2(newPos).add(currPos.multiply(-1)));
     });
-    //HashMap<Integer,Entity> hashMap =
-        //entityStream.map(entity -> new HashMap.SimpleEntry<> (entity.getComponent(IDComponent.class).getId(),entity));
-        //HashMap<Integer,Entity> hashMap = new HashMap<>(entityStream.map();
-        //newPacket.getAllCoordinatesOfEntitiesList().forEach(entityState -> {
-
-        //});
   }
+  /*
+  Factory.spawnHero();
+  Factory.spawnWeapon();
+
+
+
+   */
 }

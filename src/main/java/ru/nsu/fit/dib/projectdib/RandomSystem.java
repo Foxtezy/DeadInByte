@@ -25,7 +25,6 @@ public class RandomSystem {
 
   public static List<Integer> generateCreatureSpecs(Integer seed) {
     List<Integer> list = new ArrayList<>();
-    list.add(seed);
     Random rand = new Random(seed);
     for (int j = 0; j < 6; j++) {
       List<Integer> rolls = new ArrayList<>();

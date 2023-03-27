@@ -1,7 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data.json.update;
 
 /**
- * Действие существа. action           - тип действия objectOfAction   - объект над которым
+ * Действие существа. action - тип действия objectOfAction - объект над которым
  * совершается действие(null, если действие осуществляется не над каким либо объектом)
  */
 public class Action {
