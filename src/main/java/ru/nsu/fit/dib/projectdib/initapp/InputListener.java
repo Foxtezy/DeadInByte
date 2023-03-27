@@ -27,7 +27,6 @@ import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
-import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -53,7 +52,6 @@ public class InputListener {
   }
 
   public void run() {
-    ClientTaskManager clientTaskManager = new ClientTaskManager();
     //==============================================================================================
     onKey(Controls.UP, "Up", () -> player.getComponent(HeroComponent.class).up());
     onKey(Controls.LEFT, "Left", () -> player.getComponent(HeroComponent.class).left());

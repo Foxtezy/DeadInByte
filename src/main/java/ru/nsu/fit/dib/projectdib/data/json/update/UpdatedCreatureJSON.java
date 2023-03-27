@@ -6,7 +6,8 @@ import com.almasb.fxgl.entity.Entity;
 import java.util.List;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
-import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 /**
  * JSON для обновления существа
@@ -38,7 +39,7 @@ public class UpdatedCreatureJSON {
     actions.forEach(action -> {
       switch (action.getType()){
         case ATTACK -> creature.getComponent(CreatureComponent.class).attack();
-        case TAKE -> creature.getComponent(CreatureComponent.class).takeWeapon(ClientTaskManager.idHashTable.get(action.getObjectOfAction()));
+        case TAKE -> creature.getComponent(CreatureComponent.class).takeWeapon(MCClient.getClientState().getIdHashTable().get(action.getObjectOfAction()));
         case THROW -> creature.getComponent(CreatureComponent.class).throwWeapon();
       }
     });

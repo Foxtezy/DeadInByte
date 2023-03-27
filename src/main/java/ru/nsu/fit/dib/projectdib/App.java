@@ -85,8 +85,8 @@ public class App extends GameApplication {
     ClientThread clientThread = new ClientThread(MCClient.getReceiver(), MCClient.getSender(), MCClient.getServerAddress());
     ClientConfig.addClientThread(clientThread);
 
-    serverThread.start();
-    clientThread.start();
+    //serverThread.start();
+    //clientThread.start();
 
 
     GameInitializer gameInitializer = new GameInitializer();

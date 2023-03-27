@@ -7,8 +7,6 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.json_converters.WeaponDeserializer;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.json_converters.WeaponSerializer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
