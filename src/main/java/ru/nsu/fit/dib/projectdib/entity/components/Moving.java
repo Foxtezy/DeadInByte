@@ -1,6 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.components;
 
-public interface MovingInterface {
+public interface Moving {
 
 
   /**

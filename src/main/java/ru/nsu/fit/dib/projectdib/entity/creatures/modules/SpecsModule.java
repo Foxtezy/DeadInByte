@@ -46,4 +46,5 @@ public class SpecsModule extends CreatureModule {
   public int getCharismaModifier() {
     return charisma / 2 - 5;
   }
+
 }

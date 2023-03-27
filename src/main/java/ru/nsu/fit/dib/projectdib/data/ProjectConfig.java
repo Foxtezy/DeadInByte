@@ -12,7 +12,6 @@ public interface ProjectConfig {
   int _player_width = 160;
   int _player_height = 320;
 
-
   //UIConfig
   String _fontDustyPro = "assets/UI/fonts/DustyPro.ttf";
   String _forestAnimationUI = "assets/UI/elements/forest1k.png";
@@ -25,5 +24,7 @@ public interface ProjectConfig {
   String _smallWeapon = "assets/textures/SmallWeapon.png";
   String _mediumWeapon = "assets/textures/MediumWeapon.png";
   String _bigWeapon = "assets/textures/BigWeapon.png";
+  //================================================================================================
+  String CONTROLS_PATH = "src/main/resources/config/controls.json";
   int _WEAPON_COLUMNS =16;
 }

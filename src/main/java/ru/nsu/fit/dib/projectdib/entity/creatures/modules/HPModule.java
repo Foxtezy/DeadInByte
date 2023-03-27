@@ -12,6 +12,9 @@ public class HPModule extends CreatureModule{
   public int getCurrentHP() {
     return currentHP;
   }
+  public int getMaxHP() {
+    return hp;
+  }
 
   public boolean changeHP(int damage) {
     if (currentHP > damage) {

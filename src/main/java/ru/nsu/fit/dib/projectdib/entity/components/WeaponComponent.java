@@ -5,6 +5,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 import static java.lang.Math.abs;
 
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
@@ -47,7 +48,7 @@ public class WeaponComponent extends Component {
   public void onUpdate(double tpf) {
     if (weapon.getUser() != null) {
       Point2D userPos = weapon.getUser().getModule(JFXModule.class).getComponent().getEntity().getPosition();
-      Point2D vectorView = getInput().getVectorToMouse(userPos.add(new Point2D(80,160)));
+      Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
       Point2D rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
 

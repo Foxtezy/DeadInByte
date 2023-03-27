@@ -10,10 +10,13 @@ import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
+import javafx.geometry.Point2D;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
@@ -24,7 +27,6 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 
 /**
  * Инициализатор игры.
@@ -51,23 +53,16 @@ public class GameInitializer {
 
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
-    SpawnData sd = new SpawnData(x,y);
-    sd.put("creature", RandomCharacterSystem.NewCharacter(1000));
-    player = spawn("player", sd);
-
-    Weapon myWeapon = player.getComponent(PlayerComponent.class).getHero().getModule(
-        CreatureWeaponModule.class).getActiveWeapon();
-    SpawnData wsd = new SpawnData(x, y);
-    wsd.put("weapon",myWeapon);
-    Entity weapon = spawn("weapon",wsd);
-
-    SpawnData wsd2 = new SpawnData(x, y);
-    wsd2.put("weapon", WeaponFactory.getWeapon(Weapons.Sword));
-    spawn("weapon",wsd2);
-
-    player.setScaleUniform(0.75);
+    Point2D position = new Point2D(x,y);
+    Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
+    player=pair.getKey();
+    Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
-
+    //===================================
+    //SpawnData sd2 = new SpawnData(x,y);
+    //sd2.put("creature", RandomCharacterSystem.NewCharacter());
+    //spawn("player", sd2);
+    //===================================
     viewport.setWidth(getAppWidth());
     viewport.setHeight(getAppHeight());
     viewport.setZoom(0.75);
