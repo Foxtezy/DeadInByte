@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
@@ -9,6 +10,8 @@ import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.NewEntity;
@@ -48,8 +51,7 @@ public class ClientThread extends Thread {
           throw new RuntimeException(e);
         }
       }
-      Point2D entPos = new Point2D(newEntity.getSpawnData().getX(),
-          newEntity.getSpawnData().getX()); //могут быть проблемы
+      Point2D entPos = newEntity.getPosition();
       Optional<Entity> entity = spawnEntityList.stream().filter(e -> e.getPosition().equals(entPos))
           .findAny();
       if (entity.isPresent()) {
@@ -65,6 +67,9 @@ public class ClientThread extends Thread {
       List<EntityState> entityStates = MCClient.getClientState().getEntityStates();
       List<NewEntity> newEntityList = new ArrayList<>();
       newEntities.drainTo(newEntityList);
+      if (entityStates.size() > 0) {
+        System.out.println(entityStates.get(0).getPosition());
+      }
       sender.send(serverAddress, new GameStatePacket(newEntityList, entityStates));
       try {
         GameStatePacket gameStatePacket = receiver.receive();

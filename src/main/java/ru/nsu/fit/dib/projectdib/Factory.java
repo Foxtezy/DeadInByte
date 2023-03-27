@@ -77,8 +77,8 @@ public class Factory implements EntityFactory {
     weaponSD.put("weapon",  hero.getComponent(HeroComponent.class).getCreature().getModule(
         CreatureWeaponModule.class).getActiveWeapon());
     Entity weapon = spawn("weapon",weaponSD);
-    return new Pair(hero,weapon);
-  };
+    return new Pair<>(hero,weapon);
+  }
 
   /**
    * Creates weapon.
@@ -91,7 +91,7 @@ public class Factory implements EntityFactory {
     SpawnData sd = new SpawnData(position);
     sd.put("weapon", WeaponFactory.getWeapon(weaponType));
     return spawn("weapon", sd);
-  };
+  }
   /**
    * Entity Player.
    *

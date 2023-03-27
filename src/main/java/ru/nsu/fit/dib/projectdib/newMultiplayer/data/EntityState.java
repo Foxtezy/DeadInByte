@@ -1,32 +1,37 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data;
 
+import java.util.List;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.data.json.update.Action;
 
 public class EntityState {
   private final Integer id;
-  private Point2D coordinate;
-  private Point2D angle;
+  private Point2D position;
+  private Point2D directionView; //для player
+  private List<Action> actions; //для player
+
   public Integer getId() {
     return id;
   }
 
-  public Point2D getCoordinate() {
-    return coordinate;
+  public Point2D getPosition() {
+    return position;
   }
 
-  public Point2D getAngle() {
-    return angle;
+  public Point2D getDirectionView() {
+    return directionView;
   }
   
-  public void setCoordinate(Point2D newCoordinate){
-    this.coordinate = newCoordinate;
+  public void setPosition(Point2D newCoordinate){
+    this.position = newCoordinate;
   }
-  public void setAngle(Point2D newAngle){
-    this.angle = newAngle;
+  public void setDirectionView(Point2D newAngle){
+    this.directionView = newAngle;
   }
-  public EntityState(Integer id, Point2D coordinate, Point2D angle){
+  public EntityState(Integer id, Point2D position, Point2D directionView, List<Action> actions){
     this.id=id;
-    this.coordinate=coordinate;
-    this.angle=angle;
+    this.position = position;
+    this.directionView = directionView;
+    this.actions = actions;
   }
 }

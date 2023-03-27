@@ -10,8 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -23,19 +27,20 @@ public class ClientState {
   }
 
   //Хранятся все ID всех отслеживаемых Entity
-  private final Map<Integer, Entity> idHashTable = new HashMap<>();
+  private final Map<Integer, Entity> idHashTable = new ConcurrentHashMap<>();
 
   public List<Entity> spawnEntities(List<NewEntity> newEntities) {
     if (newEntities.isEmpty()) {
       return new ArrayList<>();
     }
     List<Entity> entityList = new ArrayList<>();
-    newEntities.forEach(newEntityData -> {
-      Entity entity = spawn(newEntityData.getName(), newEntityData.getSpawnData());
-      entity.addComponent(new IDComponent(newEntityData.getName(), newEntityData.getId()));
-      idHashTable.put(newEntityData.getId(), entity);
-      entityList.add(entity);
-    });
+    for (int i = 0; i < newEntities.size(); i++) {
+      if (Objects.equals(newEntities.get(i).getName(), "weapon")) {
+        Entity entity = Factory.spawnWeapon(Weapons.valueOf(newEntities.get(i).getEntityType()), newEntities.get(i).getPosition());
+        idHashTable.put(newEntities.get(i).getId(), entity);
+        entityList.add(entity);
+      }
+    }
     return entityList;
   }
 
@@ -46,29 +51,18 @@ public class ClientState {
       }
       Entity entity = idHashTable.get(entityState.getId());
       Point2D currPos = entity.getPosition();
-      Point2D newPos = entityState.getCoordinate();
-      PhysicsComponent physics = entity.getComponent(PhysicsComponent.class);
-      entity.setPosition(new Vec2(newPos).add(currPos.multiply(-1)));
+      Point2D newPos = entityState.getPosition();
+      entity.setPosition(new Vec2(newPos));
     });
   }
 
   public List<EntityState> getEntityStates() {
     return idHashTable.entrySet().stream()
-        .map(e -> new EntityState(e.getKey(), e.getValue().getPosition(), null)).collect(
+        .map(e -> new EntityState(e.getKey(), e.getValue().getPosition(), null, null)).collect(
             Collectors.toList());
   }
 
   public Entity acceptedSpawn(NewEntity newEntity) {
     return MCClient.getClientThread().spawnNewEntity(newEntity);
   }
-
-  /*public void getSpawnRequest(String name, SpawnData spawnData) {
-    NewEntity spawnedNewEntity = new NewEntity(newId, name, spawnData);
-    listNewEntities.add(spawnedNewEntity);
-    EntityState spawnedEntityState = new EntityState(newId, spawned.getPosition(),
-        spawned.getComponent(
-            PlayerComponent.class).getMouseVelocity()); // TODO: 14.03.2023 Фигня
-    listEntityState.add(spawnedEntityState);
-    idServerHashTable.put(newId, spawned);
-  } */
 }

@@ -10,6 +10,7 @@ import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
@@ -27,6 +28,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 
 /**
  * Инициализатор игры.
@@ -56,7 +58,14 @@ public class GameInitializer {
     Point2D position = new Point2D(x,y);
     Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
-    Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
+    //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
+    try {
+      Entity s = EntitySpawner.spawn("weapon", position, "Sword", null).get();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    } catch (ExecutionException e) {
+      throw new RuntimeException(e);
+    }
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
