@@ -69,6 +69,11 @@ public class ClientState {
         // TODO: 14.03.2023 вызов метода отправки пакета ошибки
       }
       Entity entity = idHashTable.get(entityState.getId());
+      try {
+        Thread.sleep(20);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
       if (entityState.isCreature() && !entity.getComponent(DataComponent.class).isClientEntity()) entityState.updateCreature(entity);
       else entityState.updateWeapon(entity);
     });

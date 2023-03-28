@@ -44,9 +44,10 @@ public class EntityState {
     this.bindedEntity=bindedEntity;
   }
   public void updateCreature(Entity creature){
-
-    Point2D movingVector = position.add(creature.getPosition().multiply(-1));
-    creature.getComponent(HeroComponent.class).moveByVector(movingVector);
+    if (position!=null){
+      Point2D movingVector = position.add(creature.getPosition().multiply(-1));
+      creature.getComponent(HeroComponent.class).moveByVector(movingVector);
+    }
 
     creature.getComponent(HeroComponent.class).bindDirectionView(entity -> rotation);
     actions.forEach(action -> {
