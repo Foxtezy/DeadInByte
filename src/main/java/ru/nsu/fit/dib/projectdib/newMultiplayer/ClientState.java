@@ -48,7 +48,7 @@ public class ClientState {
         idHashTable.put(newEntities.get(i).getId(), entity);
         entityList.add(entity);
       }
-      /*
+
       else if (Objects.equals(newEntities.get(i).getName(), "player")){
         Entity entity = Factory.spawnHero(HeroType.valueOf(newEntities.get(i).getEntityType()),
             newEntities.get(i).getPosition(),
@@ -57,7 +57,7 @@ public class ClientState {
         idHashTable.put(newEntities.get(i).getId(), entity);
         entityList.add(entity);
       }
-      */
+
     }
     return entityList;
   }

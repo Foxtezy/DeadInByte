@@ -92,7 +92,7 @@ public class InputListener {
           //если да то:
           //playerComponent.takeWeapon(list.get(0));
         } else {
-          player.getComponent(DataComponent.class).addAction(new Action(ActionType.THROW,list.get(0).getComponent(DataComponent.class).getId()));
+          player.getComponent(DataComponent.class).addAction(new Action(ActionType.THROW,null));
           //Если Weapon рядом нет то прашиваем можно ли выбрость:
           //playerComponent.throwWeapon();
         }
