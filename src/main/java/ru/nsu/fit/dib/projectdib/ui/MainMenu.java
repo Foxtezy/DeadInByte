@@ -139,8 +139,10 @@ public class MainMenu extends FXGLMenu {
     Image pushed = new Image(_menuSelectedButton, 1020, 180, true, false);
     Image unpushedEnter = new Image(_menuButton, 510, 90, true, false);
     Image pushedEnter = new Image(_menuSelectedButton, 510, 90, true, false);
-    Image unpushedServer = new Image(_menuButton, 700, 90, true, false);
-    Image pushedServer = new Image(_menuSelectedButton, 700, 90, true, false);
+    Image unpushedServer = new Image(_menuButton, 765, 135, true, false);
+    Image pushedServer = new Image(_menuSelectedButton, 765, 135, true, false);
+    Image unpushedUpdate = new Image(_menuButton, 510, 90, true, false);
+    Image pushedUpdate = new Image(_menuSelectedButton, 510, 90, true, false);
     Image unpushedReturn = new Image(_returnButton, 132, 132, true, false);
     Image pushedReturn = new Image(_returnSelectedButton, 132, 132, true,
         false);
@@ -155,15 +157,15 @@ public class MainMenu extends FXGLMenu {
     ImageButton server = new ImageButton("Create server", font, "#5ae8a8", "#2b2944", pushed,
         unpushed);
     String gamePort = String.valueOf(666);
-    ImageButton serverID = new ImageButton("Server: " + gamePort, font, "#5ae8a8", "#2b2944",
+    ImageButton serverID = new ImageButton("Server: " + gamePort, smallFont, "#5ae8a8", "#2b2944",
         pushedServer,
         unpushedServer);
-    ImageButton startMultiplayer = new ImageButton("Start", font, "#5ae8a8", "#2b2944",
+    ImageButton startMultiplayer = new ImageButton("Start", smallFont, "#5ae8a8", "#2b2944",
         pushedServer,
         unpushedServer);
-    ImageButton update = new ImageButton("Update", font, "#5ae8a8", "#2b2944",
-        pushedServer,
-        unpushedServer);
+    ImageButton update = new ImageButton("Update", smallFont, "#5ae8a8", "#2b2944",
+        pushedUpdate,
+        unpushedUpdate);
     ImageButton enter = new ImageButton("Enter", font, "#5ae8a8", "#2b2944", pushedEnter,
         unpushedEnter);
     //==============================================================================================
@@ -177,12 +179,58 @@ public class MainMenu extends FXGLMenu {
     //=====================================[   Buttons Tree   ]=====================================
     ///root///
     TreeNode<Node> tree = new TreeNode<>(null, List.of(start, multiplayer, settings));
-    ///multiplayer///
-    tree.addNodes(multiplayer, List.of(connect, server));
-    ///server///
-    tree.addNodes(server, List.of(update, startMultiplayer, serverID));
-    ///connect///
-    /*TextField passwordField = new TextField();
+    //=====================================[ Buttons Handlers ]=====================================
+
+    //===Multiplayer===
+    multiplayer.setOnMouseClicked(event -> {
+      globalAnchor.getChildren().add(returnButton);
+      ui.getChildren().removeAll(tree.getANChildren());
+      tree.changeActiveNode(multiplayer);
+      tree.addNodes(multiplayer, List.of(connect, server));
+      ui.getChildren().addAll(tree.getANChildren());
+    });
+
+    //===Create server===
+    //VBox serverBox = new VBox();
+    //ScrollPane scrollPane = new ScrollPane(serverBox);
+    server.setOnMouseClicked(event -> {
+      ui.getChildren().removeAll(tree.getANChildren());
+      tree.changeActiveNode(server);
+      //serverBox.getChildren().addAll(update, startMultiplayer, serverID);
+      //scrollPane.setPrefViewportHeight(600);
+      //scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+      /*Set<Node> nodes = scrollPane.lookupAll(".scroll-bar");
+      for (Node node : nodes) {
+        node.setStyle("-fx-background: black; -fx-background-color: white");
+      }*/
+      //scrollPane.getStylesheets().add(".scroll-bar:vertical .thumb {-fx-background-color: #334db3;};");
+      //scrollPane.setStyle(".scroll-pane {-fx-background: transparent; -fx-background-color: transparent;"
+        //  + ".scroll-bar:vertical .thumb {-fx-background-color: #334db3;};}");
+      //scrollPane.setBackground(Background.EMPTY);
+      tree.addNodes(server, List.of(update, startMultiplayer, serverID));
+      //tree.addNodes(server, List.of(update, startMultiplayer, serverID, scrollBar));
+      ui.getChildren().addAll(tree.getANChildren());
+    });
+
+    //===Update===
+    AtomicInteger client = new AtomicInteger(1);
+    update.setOnMouseClicked(event -> {
+      String clientID = String.valueOf(client.get());
+      ImageButton newClient = new ImageButton("Client: " + clientID, font, "#5ae8a8",
+          "#2b2944",
+          pushedServer,
+          unpushedServer);
+      //serverBox.getChildren().add(newClient);
+      //scrollPane.setContent(serverBox);
+      tree.addNodes(server, List.of(newClient));
+      //tree.addNodes(server, List.of(scrollPane));
+      //ui.getChildren().removeAll(tree.getANChildren());
+      ui.getChildren().add(newClient);
+      client.getAndIncrement();
+    });
+
+    //===Connect===
+    TextField passwordField = new TextField();
     VBox authentication = new VBox();
     passwordField.setPrefSize(700, 100);
     passwordField.setMinSize(700, 100);
@@ -194,8 +242,15 @@ public class MainMenu extends FXGLMenu {
     authentication.setAlignment(Pos.CENTER);
     authentication.getChildren().add(passwordField);
     authentication.getChildren().add(enter);
-    tree.addNodes(connect, List.of(authentication));
-    ///enter///
+
+    connect.setOnMouseClicked(event -> {
+      ui.getChildren().removeAll(tree.getANChildren());
+      tree.changeActiveNode(connect);
+      tree.addNodes(connect, List.of(authentication));
+      ui.getChildren().add(authentication);
+    });
+
+    //===Enter===
     Text text1 = new Text("Please, wait for");
     Text text2 = new Text("the game to start");
     text1.setFont(smallFont);
@@ -207,96 +262,11 @@ public class MainMenu extends FXGLMenu {
     loadingBox.getChildren().add(text1);
     loadingBox.getChildren().add(text2);
     loadingBox.setAlignment(Pos.CENTER);
-    tree.addNodes(authentication, List.of(loadingBox));*/
-    //=====================================[ Buttons Handlers ]=====================================
 
-    //===Multiplayer===
-    multiplayer.setOnMouseClicked(event -> {
-      globalAnchor.getChildren().add(returnButton);
-      ui.getChildren().removeAll(tree.getANChildren());
-      tree.changeActiveNode(multiplayer);
-      ui.getChildren().addAll(tree.getANChildren());
-    });
-
-    Runnable task = () -> {
-      List<Integer> clients = new ArrayList<>(4);
-      clients.addAll(List.of(1, 2, 3, 4));
-      for (Integer client : clients) {
-        try {
-          sleep(1000);
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
-        String clientID = String.valueOf(client);
-        ImageButton newClient = new ImageButton("Client: " + clientID, font, "#5ae8a8",
-            "#2b2944",
-            pushedServer,
-            unpushedServer);
-        tree.addNodes(server, List.of(newClient));
-        ui.getChildren().add(newClient);
-      }
-    };
-
-    //===Create server===
-    server.setOnMouseClicked(event -> {
-      ui.getChildren().removeAll(tree.getANChildren());
-      tree.changeActiveNode(server);
-      ui.getChildren().addAll(tree.getANChildren());
-      //Thread survey = new Thread(task);
-      //survey.start();
-      //clientSurvey(tree, ui, pushedServer, unpushedServer, server, font);
-    });
-
-    //===Update===
-    AtomicInteger client = new AtomicInteger(1);
-    update.setOnMouseClicked(event -> {
-      String clientID = String.valueOf(client.get());
-      ImageButton newClient = new ImageButton("Client: " + clientID, font, "#5ae8a8",
-          "#2b2944",
-          pushedServer,
-          unpushedServer);
-      tree.addNodes(server, List.of(newClient));
-      ui.getChildren().add(newClient);
-      client.getAndIncrement();
-    });
-
-    //===Connect===
-    TextField passwordField = new TextField();
-    VBox authentication = new VBox();
-    connect.setOnMouseClicked(event -> {
-      ui.getChildren().removeAll(tree.getANChildren());
-      tree.changeActiveNode(connect);
-      passwordField.setPrefSize(700, 100);
-      passwordField.setMinSize(700, 100);
-      passwordField.setMaxSize(700, 100);
-      passwordField.setFont(smallFont);
-      passwordField.setAlignment(Pos.CENTER);
-      passwordField.setPromptText("Enter game port");
-      passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
-      authentication.setAlignment(Pos.CENTER);
-      //ошибка здесь
-      authentication.getChildren().add(passwordField);
-      authentication.getChildren().add(enter);
-      tree.addNodes(connect, List.of(authentication));
-      ui.getChildren().add(authentication);
-    });
-
-    //===Enter===
     enter.setOnMouseClicked(event -> {
       if (Objects.equals(passwordField.getText(), gamePort)) {
         ui.getChildren().removeAll(tree.getANChildren());
         tree.changeActiveNode(authentication);
-        Text text1 = new Text("Please, wait for");
-        Text text2 = new Text("the game to start");
-        text1.setFont(smallFont);
-        text2.setFont(smallFont);
-        text1.setFill(Color.WHITE);
-        text2.setFill(Color.WHITE);
-        VBox loadingBox = new VBox();
-        loadingBox.getChildren().add(loading);
-        loadingBox.getChildren().add(text1);
-        loadingBox.getChildren().add(text2);
-        loadingBox.setAlignment(Pos.CENTER);
         tree.addNodes(authentication, List.of(loadingBox));
         ui.getChildren().add(loadingBox);
       } else {
@@ -315,21 +285,12 @@ public class MainMenu extends FXGLMenu {
 
     //===Return===
     returnButton.setOnMouseClicked(event -> {
-      System.out.println(tree.getActiveNode());
-      System.out.println(tree.getANChildren());
       ui.getChildren().removeAll(tree.getANChildren());
-
       tree.removeChildren();
-      System.out.println(tree.getANChildren());
-      System.out.println(tree.getParentA());
-
       tree.changeActiveNode(tree.getParentA());
-
       if (tree.getRoot() == tree.getParentAN()) {
         globalAnchor.getChildren().remove(returnButton);
       }
-      System.out.println(tree.getActiveNode());
-      System.out.println(tree.getANChildren());
       ui.getChildren().addAll(tree.getANChildren());
     });
     AnchorPane.setBottomAnchor(returnButton, 100d);

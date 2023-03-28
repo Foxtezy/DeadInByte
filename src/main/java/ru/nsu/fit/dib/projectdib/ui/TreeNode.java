@@ -28,6 +28,7 @@ public class TreeNode<T> {
   }
 
   private TreeNode(TreeNode<T> parent, T root) {
+    this.leafs = new ArrayList<>();
     this.parent = parent;
     this.root = root;
   }
@@ -41,6 +42,7 @@ public class TreeNode<T> {
   public TreeNode(T root, List<T> leafs) {
     parent = this;
     activeNode = this;
+    this.leafs = new ArrayList<>();
     addNodes(leafs);
     this.root = root;
   }
@@ -71,17 +73,11 @@ public class TreeNode<T> {
   }
 
   private void addNodes(List<T> branchLeafs) {
-    leafs = new ArrayList<>();
+    //leafs = new ArrayList<>();
     branchLeafs.forEach(leaf -> {
-      this.leafs.add(new TreeNode<>(this, leaf));
+      TreeNode<T> branchLeaf = new TreeNode<>(this, leaf);
+      this.leafs.add(branchLeaf);
     });
-  }
-
-  public void removeChildren() {
-    for (TreeNode<T> leaf : activeNode.leafs) {
-      leaf.parent = null;
-    }
-    activeNode.leafs.removeAll(activeNode.leafs);
   }
 
   /**
@@ -93,6 +89,13 @@ public class TreeNode<T> {
   public void addNodes(T branchRoot, List<T> branchLeafs) {
     TreeNode<T> localRoot = getNode(branchRoot);
     localRoot.addNodes(branchLeafs);
+  }
+
+  public void removeChildren() {
+    for (TreeNode<T> leaf : activeNode.leafs) {
+      leaf.parent = null;
+    }
+    activeNode.leafs.clear();
   }
 
   /**
@@ -144,15 +147,9 @@ public class TreeNode<T> {
     return activeNode.root;
   }
 
-  public T getT() {
-    return this.root;
-  }
 
   public TreeNode<T> getParentA() {
     return activeNode.parent;
   }
 
-  public TreeNode<T> getActiveNode() {
-    return activeNode;
-  }
 }
