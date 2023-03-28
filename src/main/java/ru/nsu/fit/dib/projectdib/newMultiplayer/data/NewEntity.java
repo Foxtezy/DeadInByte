@@ -10,6 +10,11 @@ public class NewEntity {
   private String entityType; //HeroType, WeaponType, EnemyType
   private Integer seed; //сид для генерации игрока
 
+  public void setBindedEntity(Integer bindedEntity) {
+    this.bindedEntity = bindedEntity;
+  }
+
+  private Integer bindedEntity;
   public Integer getId() {
     return id;
   }
@@ -30,11 +35,15 @@ public class NewEntity {
     this.id = id;
   }
 
-  public NewEntity(Integer id, String name, Point2D position, String entityType, Integer seed) {
+  public NewEntity(Integer id, String name, Point2D position, String entityType, Integer seed,Integer bindedEntity) {
     this.id = id;
     this.name = name;
     this.position = position;
     this.entityType = entityType;
     this.seed = seed;
+  }
+
+  public Integer getBindedEntity() {
+    return bindedEntity;
   }
 }

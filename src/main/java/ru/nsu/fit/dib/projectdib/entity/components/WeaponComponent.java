@@ -8,6 +8,7 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.SquareDamageModule;
@@ -21,6 +22,7 @@ public class WeaponComponent extends Component {
   Double imgRadius;
   Double angle;
   Point2D rotatedPoint;
+  Point2D rotation;
   Point2D lastVectorView = new Point2D(0, 0);
 
   public WeaponComponent(Weapon weapon) {
@@ -49,7 +51,7 @@ public class WeaponComponent extends Component {
     if (weapon.getUser() != null) {
       Point2D userPos = weapon.getUser().getModule(JFXModule.class).getComponent().getEntity().getPosition();
       Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
-      Point2D rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
+      rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
 
       getEntity().rotateToVector(rotation);
@@ -57,6 +59,14 @@ public class WeaponComponent extends Component {
       getEntity().setX(position.getX());
       getEntity().setY(position.getY());
     }
+  }
+  public Point2D getRotation(){
+    return rotation;
+  }
+
+  public boolean isActive() {
+    if (getWeapon().getUser()==null) return false;
+    return (getWeapon().getUser().getModule(CreatureWeaponModule.class).getActiveWeapon()==getWeapon());
   }
   /*
   public void attack() {

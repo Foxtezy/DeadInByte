@@ -29,6 +29,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 /**
  * Инициализатор игры.
@@ -56,8 +57,14 @@ public class GameInitializer {
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
-    Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
-    player=pair.getKey();
+    Integer id =12323232;
+    Integer wid=12312;
+    player = Factory.spawnHero(HeroType.Elf,position,
+        true,id, RandomSystem.random.nextInt());
+    Entity weapon = Factory.spawnWeapon(null,position,wid,player);
+
+    MCClient.getClientState().getIdHashTable().put(id,player);
+    MCClient.getClientState().getIdHashTable().put(wid,weapon);
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     try {
       Entity s = EntitySpawner.spawn("weapon", position, "Sword", null).get();

@@ -10,9 +10,7 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.action.Action;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import java.util.ArrayList;
@@ -23,6 +21,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
+import ru.nsu.fit.dib.projectdib.data.json.update.Action;
+import ru.nsu.fit.dib.projectdib.data.json.update.ActionType;
+import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
@@ -83,14 +84,17 @@ public class InputListener {
       protected void onActionBegin() {
         HeroComponent playerComponent = player.getComponent(HeroComponent.class);
         List<Entity> list = playerComponent.findWeapon();
+
         //----------------------------------------
         if (list.size() >= 1) {
           //Спрашиваем сервер можно ли забрать Weapon
+          player.getComponent(DataComponent.class).addAction(new Action(ActionType.TAKE,list.get(0).getComponent(DataComponent.class).getId()));
           //если да то:
-          playerComponent.takeWeapon(list.get(0));
+          //playerComponent.takeWeapon(list.get(0));
         } else {
+          player.getComponent(DataComponent.class).addAction(new Action(ActionType.THROW,list.get(0).getComponent(DataComponent.class).getId()));
           //Если Weapon рядом нет то прашиваем можно ли выбрость:
-          playerComponent.throwWeapon();
+          //playerComponent.throwWeapon();
         }
         //Вообще эту часть нужно будет убрать тк действие будет совершаться из распакованного JSON-а
         //------------------------------------------

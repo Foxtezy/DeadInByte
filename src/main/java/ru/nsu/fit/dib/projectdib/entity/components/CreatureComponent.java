@@ -142,6 +142,10 @@ public class CreatureComponent extends Component implements Moving {
     physics.setVelocityY(0);
     physics.setVelocityX(0);
   }
+  public void moveByVector(Point2D vector){
+    physics.setVelocityX(vector.getX()*creature.getSpeed());
+    physics.setVelocityY(vector.getY()*creature.getSpeed());
+  }
 
   //==================================================================================================
   public Point2D getDirectionView() {

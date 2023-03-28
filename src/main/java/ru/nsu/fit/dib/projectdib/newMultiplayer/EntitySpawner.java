@@ -17,7 +17,7 @@ public final class EntitySpawner {
 
   public static Future<Entity> spawn(String entityName, Point2D position, String entityType,
       Integer seed) {
-    NewEntity newEntity = new NewEntity(null, entityName, position, entityType, seed);
+    NewEntity newEntity = new NewEntity(null, entityName, position, entityType, seed,null);
     return CompletableFuture.supplyAsync(() -> {
       final Entity[] entity = {null};
       Thread compThread = Thread.currentThread();

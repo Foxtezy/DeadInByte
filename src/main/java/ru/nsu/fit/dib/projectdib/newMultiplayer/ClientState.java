@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.NewEntity;
@@ -36,29 +38,49 @@ public class ClientState {
     List<Entity> entityList = new ArrayList<>();
     for (int i = 0; i < newEntities.size(); i++) {
       if (Objects.equals(newEntities.get(i).getName(), "weapon")) {
-        Entity entity = Factory.spawnWeapon(Weapons.valueOf(newEntities.get(i).getEntityType()), newEntities.get(i).getPosition());
+        Entity bindedEntity=null;
+        if (newEntities.get(i).getBindedEntity()!=null) bindedEntity=MCClient.getClientState().idHashTable.get(newEntities.get(i).getBindedEntity());
+        Entity entity = Factory.spawnWeapon(
+            Weapons.valueOf(newEntities.get(i).getEntityType()),
+            newEntities.get(i).getPosition(),
+            newEntities.get(i).getId(),
+            bindedEntity);
         idHashTable.put(newEntities.get(i).getId(), entity);
         entityList.add(entity);
       }
+      /*
+      else if (Objects.equals(newEntities.get(i).getName(), "player")){
+        Entity entity = Factory.spawnHero(HeroType.valueOf(newEntities.get(i).getEntityType()),
+            newEntities.get(i).getPosition(),
+            true,234,
+            newEntities.get(i).getId());
+        idHashTable.put(newEntities.get(i).getId(), entity);
+        entityList.add(entity);
+      }
+      */
     }
     return entityList;
   }
 
   public void updateEntities(List<EntityState> entityStates) {
+
     entityStates.forEach(entityState -> {
       if (!idHashTable.containsKey(entityState.getId())) {
         // TODO: 14.03.2023 вызов метода отправки пакета ошибки
       }
       Entity entity = idHashTable.get(entityState.getId());
-      Point2D currPos = entity.getPosition();
-      Point2D newPos = entityState.getPosition();
-      entity.setPosition(new Vec2(newPos));
+      if (entityState.isCreature() && !entity.getComponent(DataComponent.class).isClientEntity()) entityState.updateCreature(entity);
+      else entityState.updateWeapon(entity);
     });
   }
 
   public List<EntityState> getEntityStates() {
     return idHashTable.entrySet().stream()
-        .map(e -> new EntityState(e.getKey(), e.getValue().getPosition(), null, null)).collect(
+        .map(e -> new EntityState(e.getKey(),
+            e.getValue().getComponent(DataComponent.class).getPosition(),
+            e.getValue().getComponent(DataComponent.class).getRotation(),
+            e.getValue().getComponent(DataComponent.class).getActions(),
+            e.getValue().getComponent(DataComponent.class).getBindedEntity())).collect(
             Collectors.toList());
   }
 
