@@ -15,6 +15,11 @@ public class NewEntity {
   }
 
   private Integer bindedEntity;
+
+  public Integer getSeed() {
+    return seed;
+  }
+
   public Integer getId() {
     return id;
   }

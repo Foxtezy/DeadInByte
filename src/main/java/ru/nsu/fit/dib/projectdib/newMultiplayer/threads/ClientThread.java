@@ -68,7 +68,7 @@ public class ClientThread extends Thread {
       List<NewEntity> newEntityList = new ArrayList<>();
       newEntities.drainTo(newEntityList);
       if (entityStates.size() > 0) {
-        System.out.println(entityStates.get(0).getPosition());
+        //System.out.println(entityStates.get(0).getPosition());
       }
       sender.send(serverAddress, new GameStatePacket(newEntityList, entityStates));
       try {

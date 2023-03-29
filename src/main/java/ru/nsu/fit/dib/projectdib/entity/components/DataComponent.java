@@ -18,7 +18,7 @@ public class DataComponent extends Component {
   private EntityType entityType;
   private Integer bindedEntity;
   private Integer id;
-  private boolean isClientEntity;
+  private Boolean isClientEntity;
 
   public DataComponent(EntityType entityType, boolean isClientEntity, Integer id) {
     this.isClientEntity = isClientEntity;

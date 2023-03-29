@@ -48,12 +48,12 @@ public class ClientState {
         idHashTable.put(newEntities.get(i).getId(), entity);
         entityList.add(entity);
       }
-
       else if (Objects.equals(newEntities.get(i).getName(), "player")){
         Entity entity = Factory.spawnHero(HeroType.valueOf(newEntities.get(i).getEntityType()),
             newEntities.get(i).getPosition(),
-            true,234,
-            newEntities.get(i).getId());
+            false,
+            newEntities.get(i).getId(),
+            newEntities.get(i).getSeed());
         idHashTable.put(newEntities.get(i).getId(), entity);
         entityList.add(entity);
       }
