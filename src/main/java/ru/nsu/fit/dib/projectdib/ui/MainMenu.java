@@ -9,6 +9,7 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._menuButton;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._menuSelectedButton;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._returnButton;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._returnSelectedButton;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.style;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
@@ -21,6 +22,7 @@ import javafx.animation.Animation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -191,23 +193,25 @@ public class MainMenu extends FXGLMenu {
     });
 
     //===Create server===
-    //VBox serverBox = new VBox();
-    //ScrollPane scrollPane = new ScrollPane(serverBox);
+    VBox serverBox = new VBox();
+    ScrollPane scrollPane = new ScrollPane(serverBox);
     server.setOnMouseClicked(event -> {
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(server);
-      //serverBox.getChildren().addAll(update, startMultiplayer, serverID);
-      //scrollPane.setPrefViewportHeight(600);
+      serverBox.getChildren().addAll(update, startMultiplayer, serverID);
+      scrollPane.setPrefViewportHeight(600);
       //scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
       /*Set<Node> nodes = scrollPane.lookupAll(".scroll-bar");
       for (Node node : nodes) {
         node.setStyle("-fx-background: black; -fx-background-color: white");
       }*/
       //scrollPane.getStylesheets().add(".scroll-bar:vertical .thumb {-fx-background-color: #334db3;};");
-      //scrollPane.setStyle(".scroll-pane {-fx-background: transparent; -fx-background-color: transparent;"
+      //scrollPane.setStyle(".scroll-pane {-fx-background: transparent; -fx-background-color: transparent;");
         //  + ".scroll-bar:vertical .thumb {-fx-background-color: #334db3;};}");
+      scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+      scrollPane.getStylesheets().add(this.getClass().getClassLoader().getResource(style).toExternalForm());
       //scrollPane.setBackground(Background.EMPTY);
-      tree.addNodes(server, List.of(update, startMultiplayer, serverID));
+      tree.addNodes(server, List.of(scrollPane));
       //tree.addNodes(server, List.of(update, startMultiplayer, serverID, scrollBar));
       ui.getChildren().addAll(tree.getANChildren());
     });
@@ -220,12 +224,13 @@ public class MainMenu extends FXGLMenu {
           "#2b2944",
           pushedServer,
           unpushedServer);
-      //serverBox.getChildren().add(newClient);
-      //scrollPane.setContent(serverBox);
-      tree.addNodes(server, List.of(newClient));
+      serverBox.getChildren().add(newClient);
+      scrollPane.setContent(serverBox);
+      ui.getChildren().removeAll(tree.getANChildren());
+      tree.removeChildren();
+      tree.addNodes(server, List.of(scrollPane));
       //tree.addNodes(server, List.of(scrollPane));
-      //ui.getChildren().removeAll(tree.getANChildren());
-      ui.getChildren().add(newClient);
+      ui.getChildren().addAll(tree.getANChildren());
       client.getAndIncrement();
     });
 
