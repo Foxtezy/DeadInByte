@@ -31,6 +31,7 @@ import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
 /**
  * Инициализатор игры.
@@ -68,16 +69,15 @@ public class GameInitializer {
     //MCClient.getClientState().getIdHashTable().put(id,player);
     //MCClient.getClientState().getIdHashTable().put(wid,weapon);
     try {
-      player = EntitySpawner.spawn("player",position,HeroType.Elf.toString(),RandomSystem.random.nextInt(),null).get();
-      Weapons weaponType = player.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getStartWeapon();
-      weapon = EntitySpawner.spawn("weapon",position,weaponType.toString(),null,player.getComponent(
-          DataComponent.class).getId()).get();
+      player = EntitySpawner.spawn(new NewEntity("elf",123,position,null)).get();
+      //Weapons weaponType = player.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getStartWeapon();
+      //weapon = EntitySpawner.spawn(new NewEntity("weapon",231,position,null)).get();
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     try {
-      Entity s = EntitySpawner.spawn("weapon", position, "Sword", null,null).get();
+      Entity s = EntitySpawner.spawn(new NewEntity("sword", null,position,null)).get();
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }
