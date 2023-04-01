@@ -1,13 +1,12 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.newentities.NewEntity;
 
 public final class EntitySpawner {
 
@@ -15,9 +14,7 @@ public final class EntitySpawner {
     throw new UnsupportedOperationException();
   }
 
-  public static Future<Entity> spawn(String entityName, Point2D position, String entityType,
-      Integer seed) {
-    NewEntity newEntity = new NewEntity(null, entityName, position, entityType, seed,null);
+  public static Future<Entity> spawn(NewEntity newEntity) {
     return CompletableFuture.supplyAsync(() -> {
       final Entity[] entity = {null};
       Thread compThread = Thread.currentThread();
@@ -30,6 +27,7 @@ public final class EntitySpawner {
       } catch (InterruptedException e) {
       }
       return entity[0];
+
     });
   }
 }

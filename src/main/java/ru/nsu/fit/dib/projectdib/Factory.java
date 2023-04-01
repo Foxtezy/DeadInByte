@@ -79,6 +79,12 @@ public class Factory implements EntityFactory {
     return hero;
   }
 
+  public static Entity spawnStandardWeapon(Integer id,Entity bindedEntity){
+    SpawnData sd = new SpawnData(bindedEntity.getPosition());
+    sd.put("id",id);
+    sd.put("weapon",  bindedEntity.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getActiveWeapon());
+    return spawn("weapon", sd);
+  }
   /**
    * Creates weapon.
    *
@@ -86,11 +92,10 @@ public class Factory implements EntityFactory {
    * @param position position
    * @return weapon entity
    */
-  public static Entity spawnWeapon(Weapons weaponType,Point2D position,Integer id,Entity bindedEntity){
+  public static Entity spawnWeapon(Weapons weaponType,Point2D position,Integer id){
     SpawnData sd = new SpawnData(position);
     sd.put("id",id);
-    if (weaponType==null && bindedEntity!=null) sd.put("weapon",  bindedEntity.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getActiveWeapon());
-    else sd.put("weapon", WeaponFactory.getWeapon(weaponType));
+    sd.put("weapon", WeaponFactory.getWeapon(weaponType));
     return spawn("weapon", sd);
   }
   /**

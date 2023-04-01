@@ -16,6 +16,7 @@ import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
+import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
@@ -48,7 +49,7 @@ public class GameInitializer {
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
 
-    Level lvl = new Level(new Random().nextInt(), 64, 64, 1, 15);
+    Level lvl = new Level(12345, 64, 64, 1, 15);
     String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
@@ -57,20 +58,27 @@ public class GameInitializer {
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
-    Integer id =12323232;
-    Integer wid=12312;
-    player = Factory.spawnHero(HeroType.Elf,position,
-        true,id, RandomSystem.random.nextInt());
-    Entity weapon = Factory.spawnWeapon(null,position,wid,player);
+    Entity weapon;
+    //Integer id =12323232;
+    //Integer wid=12312;
+    //player = Factory.spawnHero(HeroType.Elf,position,
+    //    true,id, RandomSystem.random.nextInt());
+    //Entity weapon = Factory.spawnWeapon(null,position,wid,player);
 
-    MCClient.getClientState().getIdHashTable().put(id,player);
-    MCClient.getClientState().getIdHashTable().put(wid,weapon);
+    //MCClient.getClientState().getIdHashTable().put(id,player);
+    //MCClient.getClientState().getIdHashTable().put(wid,weapon);
+    try {
+      player = EntitySpawner.spawn("player",position,HeroType.Elf.toString(),RandomSystem.random.nextInt(),null).get();
+      Weapons weaponType = player.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getStartWeapon();
+      weapon = EntitySpawner.spawn("weapon",position,weaponType.toString(),null,player.getComponent(
+          DataComponent.class).getId()).get();
+    } catch (ExecutionException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     try {
-      Entity s = EntitySpawner.spawn("weapon", position, "Sword", null).get();
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    } catch (ExecutionException e) {
+      Entity s = EntitySpawner.spawn("weapon", position, "Sword", null,null).get();
+    } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));

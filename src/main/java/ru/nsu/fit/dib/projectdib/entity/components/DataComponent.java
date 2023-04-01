@@ -15,6 +15,11 @@ public class DataComponent extends Component {
   private Point2D position;
   private Point2D rotation;
   private List<Action> actions; //для player
+
+  public EntityType getEntityType() {
+    return entityType;
+  }
+
   private EntityType entityType;
   private Integer bindedEntity;
   private Integer id;

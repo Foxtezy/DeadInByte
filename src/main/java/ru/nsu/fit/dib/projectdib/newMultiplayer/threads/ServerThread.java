@@ -37,9 +37,9 @@ public class ServerThread extends Thread {
         continue;
       } catch (SocketTimeoutException e) {
         // сеть упала
-        throw new RuntimeException(e);
+        throw new RuntimeException("сеть упала=("+e);
       }
-
+      inPacket.getActions().getSpawnActions().values().stream().filter(gameAction -> gameAction.equals());
       // логика обработки пакета :)
       inPacket.getNewEntityList().forEach(e -> {
         e.setId(nextEntityId);

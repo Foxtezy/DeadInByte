@@ -5,20 +5,19 @@ import java.util.List;
 
 public class GameStatePacket {
 
-  private final List<NewEntity> newEntityList;
-  private final List<EntityState> allCoordinatesOfEntitiesList;
-
-  public List<NewEntity> getNewEntityList() {
-    return newEntityList;
+  private final List<EntityState> entitiesStates;
+  private final ActionPacket actions;
+  public List<EntityState> getEntitiesStates() {
+    return entitiesStates;
   }
 
-  public List<EntityState> getAllCoordinatesOfEntitiesList() {
-    return allCoordinatesOfEntitiesList;
+  public GameStatePacket(ActionPacket actions,
+      List<EntityState> entitiesStates) {
+    this.entitiesStates = entitiesStates;
+    this.actions=actions;
   }
 
-  public GameStatePacket(List<NewEntity> newEntityList,
-      List<EntityState> allCoordinatesOfEntitiesList) {
-    this.newEntityList = newEntityList;
-    this.allCoordinatesOfEntitiesList = allCoordinatesOfEntitiesList;
+  public ActionPacket getActions() {
+    return actions;
   }
 }
