@@ -11,8 +11,8 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.newentities.NewEntity;
 
 public class ClientState {
 
@@ -30,7 +30,7 @@ public class ClientState {
     List<Entity> entityList = new ArrayList<>();
     for (int i = 0; i < newEntities.size(); i++) {
       Entity entity = newEntities.get(i).spawn();
-      //TODO: заменить не SpawnAction
+      //TODO: заменить на SpawnAction
       entityList.add(entity);
     }
     return entityList;
@@ -61,7 +61,7 @@ public class ClientState {
   }
 
   public Entity acceptedSpawn(NewEntity newEntity) {
-    return MCClient.getClientThread().spawnNewEntity(newEntity);
+    return MCClient.getClientThread().spawnNewEntity(new SpawnAction(newEntity));
   }
 
   public void doActions(ActionPacket actions) {

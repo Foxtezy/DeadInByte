@@ -3,7 +3,10 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.List;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
@@ -37,17 +40,15 @@ public class ServerThread extends Thread {
         continue;
       } catch (SocketTimeoutException e) {
         // сеть упала
-        throw new RuntimeException("сеть упала=("+e);
+        throw new RuntimeException("сеть упала=(" + e);
       }
-      inPacket.getActions().getSpawnActions().values().stream().filter(gameAction -> gameAction.equals());
-      // логика обработки пакета :)
-      inPacket.getNewEntityList().forEach(e -> {
-        e.setId(nextEntityId);
-        nextEntityId++;
+      //Спавнит по запросам всегда
+      inPacket.getActions().getSpawnActions().values().stream()
+          .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED).forEach(spawnAction -> {
+        spawnAction.getNewEntity().setId(nextEntityId++);
+        if (HeroType.getByName(spawnAction.getNewEntity().getEntityType())!=null) spawnAction.getNewEntity().setWeaponId(nextEntityId++);
       });
-
       GameStatePacket outPacket = inPacket;
-
       clientSockets.forEach(s -> sender.send(s, outPacket));
     }
   }

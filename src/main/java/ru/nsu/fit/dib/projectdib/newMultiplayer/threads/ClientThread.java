@@ -3,23 +3,15 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 import com.almasb.fxgl.entity.Entity;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.data.json.update.Action;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionQueues;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.newentities.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
@@ -33,7 +25,7 @@ public class ClientThread extends Thread {
 
   private final Receiver receiver;
 
-  private final ActionPacket actions = new ActionPacket(new HashMap<>(),new HashMap<>());
+  private final ActionPacket actions = new ActionPacket(new HashMap<>(), new HashMap<>());
   private final ActionQueues actionQueues = new ActionQueues();
   private final Object monitor = new Object();
 
@@ -42,8 +34,8 @@ public class ClientThread extends Thread {
     this.sender = sender;
     this.receiver = receiver;
   }
-  /*
-  public Entity spawnNewEntity(NewEntity newEntity) {
+
+  public Entity spawnNewEntity(SpawnAction newAction) {
     //newEntities.add(newEntity);
     while (true) {
       synchronized (monitor) {
@@ -54,17 +46,17 @@ public class ClientThread extends Thread {
           throw new RuntimeException(e);
         }
       }
-      //TODO: убрать костыль
-
-      Point2D entPos = newEntity.getPosition();
-      Optional<Entity> entity = spawnEntityList.stream().filter(e -> e.getPosition().equals(entPos))
-          .findAny();
-      if (entity.isPresent()) {
-        spawnEntityList.remove(entity.get());
-        return entity.get();
+      //Сверяем по ID, которое в какой то момент времени изменится когда клиент получит пакет
+      if (newAction.getNewEntity().getID()!=null) {
+        Entity entity = MCClient.getClientState().getIdHashTable()
+            .get(newAction.getNewEntity().getID());
+        if (entity != null) {
+          return entity;
+        }
       }
     }
-  }*/
+  }
+
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {

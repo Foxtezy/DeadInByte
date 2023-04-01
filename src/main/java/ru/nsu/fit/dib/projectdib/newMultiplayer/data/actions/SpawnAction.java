@@ -1,8 +1,11 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.newentities.NewEntity;
-
 public class SpawnAction extends GameAction {
+
+  public NewEntity getNewEntity() {
+    return newEntity;
+  }
+
   private final NewEntity newEntity;
   public SpawnAction(NewEntity newEntity){
     super();

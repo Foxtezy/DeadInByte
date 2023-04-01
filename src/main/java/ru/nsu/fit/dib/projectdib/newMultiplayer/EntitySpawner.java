@@ -4,9 +4,8 @@ import com.almasb.fxgl.entity.Entity;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import javafx.application.Platform;
-import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.newentities.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
 public final class EntitySpawner {
 
@@ -19,6 +18,8 @@ public final class EntitySpawner {
       final Entity[] entity = {null};
       Thread compThread = Thread.currentThread();
       Platform.runLater(() -> {
+        //Принят для исполнения или принят чтоб передать версеру?
+        //Где передается серверу?
         entity[0] = MCClient.getClientState().acceptedSpawn(newEntity);
         compThread.interrupt();
       });

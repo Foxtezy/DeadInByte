@@ -1,5 +1,9 @@
 package ru.nsu.fit.dib.projectdib.entity.weapons;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponRarity;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponSize;
@@ -50,11 +54,21 @@ public class WeaponFactory {
   }
 
   public enum Weapons {
-    Hand,
-    Rapier,
-    Sword,
-    AK47,
-    Bow,
-    Staff
+    Hand("hand"),
+    Rapier("rapier"),
+    Sword("sword"),
+    AK47("ak47"),
+    Bow("bow"),
+    Staff("staff");
+    private static final Map<String, Weapons> map = Arrays.stream(values())
+        .collect(
+            Collectors.toMap(orderStatus -> orderStatus.name, orderStatus -> orderStatus));
+    private final String name;
+    Weapons(String name) {
+      this.name=name;
+    }
+    public static Weapons getByName(String weaponName){
+      return map.get(weaponName);
+    }
   }
 }
