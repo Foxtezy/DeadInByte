@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionQueues;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
@@ -25,7 +27,8 @@ public class ClientThread extends Thread {
 
   private final Receiver receiver;
 
-  private final ActionPacket actions = new ActionPacket(new HashMap<>(), new HashMap<>()); // TODO: 03.04.2023 удалять actions по завершении
+  private final ActionPacket actions = new ActionPacket(new HashMap<>(),
+      new HashMap<>()); // TODO: 03.04.2023 удалять actions по завершении
   private final ActionQueues actionQueues = new ActionQueues();
   private final Object monitor = new Object();
 
@@ -47,12 +50,31 @@ public class ClientThread extends Thread {
         }
       }
       //Сверяем по ID, которое в какой то момент времени изменится когда клиент получит пакет
-      if (newAction.getNewEntity().getID()!=null && MCClient.getClientState().getIdHashTable()
-          .get(newAction.getNewEntity().getID())!=null) {
+      if (newAction.getNewEntity().getID() != null && MCClient.getClientState().getIdHashTable()
+          .get(newAction.getNewEntity().getID()) != null) {
         return MCClient.getClientState().getIdHashTable()
             .get(newAction.getNewEntity().getID());
       }
     }
+  }
+
+  public void doAction(GameAction newAction) {
+    actionQueues.addAction(newAction);
+    /*
+    while (true) {
+      synchronized (monitor) {
+        try {
+          monitor.wait();
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          throw new RuntimeException(e);
+        }
+      }
+      //Сверяем по ID, которое в какой то момент времени изменится когда клиент получит пакет
+      if (newAction.getStatus() == ActionStatus.COMPLETED) {
+        return;
+      }
+    }*/
   }
 
   @Override

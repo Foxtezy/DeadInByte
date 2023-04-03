@@ -63,6 +63,9 @@ public class WeaponComponent extends Component {
   public Point2D getRotation(){
     return rotation;
   }
+  public boolean hasUser(){
+    return weapon.getUser()!=null;
+  }
 
   public boolean isActive() {
     if (getWeapon().getUser()==null) return false;

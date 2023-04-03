@@ -6,6 +6,11 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class TakeWeaponAction extends GameAction{
   private final Integer heroId;
+
+  public Integer getWeaponId() {
+    return weaponId;
+  }
+
   private final Integer weaponId;
   public TakeWeaponAction(Integer heroId,Integer weaponId){
     super();

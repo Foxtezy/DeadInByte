@@ -11,6 +11,11 @@ public class ActionPacket {
   }
 
   private final Map<String,SpawnAction> spawnActions;
+
+  public Map<String, TakeWeaponAction> getTakeWeaponActions() {
+    return takeWeaponActions;
+  }
+
   private final Map<String,TakeWeaponAction> takeWeaponActions;
   public ActionPacket(Map<String,SpawnAction> spawnActions,Map<String,TakeWeaponAction> takeWeaponActions) {
     this.spawnActions=spawnActions;
@@ -35,5 +40,16 @@ public class ActionPacket {
         spawnActions.get(id).getNewEntity().setWeaponId(action.getNewEntity().getWeaponId());
       }
     });
+    actionPacket.getTakeWeaponActions().forEach((id,action) -> {
+      //если APPROVED действия нет в базе - добавляем(создан другим клиентом или сервером)
+      if (takeWeaponActions.get(id)==null) takeWeaponActions.put(id,action);
+        //если APPROVED действия есть в базе - меняем статус на APPROVE
+        // (создан этим клиентом или уже получил информацию о действии)
+        // и меняем ID
+      else if (takeWeaponActions.get(id)!=null && takeWeaponActions.get(id).getStatus() == ActionStatus.CREATED) {
+        takeWeaponActions.get(id).setStatus(action.getStatus());
+      }
+    });
   }
+
 }

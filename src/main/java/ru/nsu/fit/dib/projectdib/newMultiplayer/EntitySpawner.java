@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
 public final class EntitySpawner {
@@ -30,5 +31,19 @@ public final class EntitySpawner {
       return entity[0];
 
     });
+  }
+  public static void doAction(GameAction action) {
+    final Entity[] entity = {null};
+    Thread compThread = Thread.currentThread();
+    Platform.runLater(() -> {
+      //Принят для исполнения или принят чтоб передать версеру?
+      //Где передается серверу?
+      MCClient.getClientState().acceptedAction(action);
+      compThread.interrupt();
+    });
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+    }
   }
 }

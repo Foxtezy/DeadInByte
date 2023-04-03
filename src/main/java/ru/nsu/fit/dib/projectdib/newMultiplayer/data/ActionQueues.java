@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.data;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.TakeWeaponAction;
 
@@ -21,7 +22,13 @@ public class ActionQueues {
 
   public void addToActionPacket(ActionPacket actionPacket){
     newSpawnActions.forEach(action -> actionPacket.getSpawnActions().put(action.getId(),action));
+    newTakeWeaponActions.forEach(action -> actionPacket.getTakeWeaponActions().put(action.getId(),action));
   }
 
 
+  public void addAction(GameAction newAction) {
+    if (newAction.getClass()==TakeWeaponAction.class) {
+      newTakeWeaponActions.add((TakeWeaponAction) newAction);
+    }
+  }
 }

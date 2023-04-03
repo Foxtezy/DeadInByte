@@ -3,7 +3,9 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.List;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
@@ -44,11 +46,19 @@ public class ServerThread extends Thread {
       }
       //Спавнит по запросам всегда
       inPacket.getActions().getSpawnActions().values().stream()
-          .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED).forEach(spawnAction -> {
+          .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED)
+          .forEach(spawnAction -> {
         spawnAction.setStatus(ActionStatus.APPROVED);
         spawnAction.getNewEntity().setId(nextEntityId++);
         if (HeroType.getByName(spawnAction.getNewEntity().getEntityType())!=null) spawnAction.getNewEntity().setWeaponId(nextEntityId++);
       });
+      inPacket.getActions().getTakeWeaponActions().values().stream()
+          .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED)
+          .forEach(takeWeaponAction -> {
+            if (!MCClient.getClientState().getIdHashTable().get(takeWeaponAction.getWeaponId()).getComponent(
+                WeaponComponent.class).hasUser()) takeWeaponAction.setStatus(ActionStatus.APPROVED);
+            else takeWeaponAction.setStatus(ActionStatus.REFUSED);
+          });
       GameStatePacket outPacket = inPacket;
       clientSockets.forEach(s -> sender.send(s, outPacket));
     }

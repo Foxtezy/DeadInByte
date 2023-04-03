@@ -11,6 +11,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 
@@ -63,9 +64,15 @@ public class ClientState {
   public Entity acceptedSpawn(NewEntity newEntity) {
     return MCClient.getClientThread().spawnNewEntity(new SpawnAction(newEntity));
   }
-
+  public void acceptedAction(GameAction action) {
+    MCClient.getClientThread().doAction(action);
+  }
   public void doActions(ActionPacket actions) {
     actions.getSpawnActions().values().stream().filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(e -> {
+      e.setStatus(ActionStatus.COMPLETED);
+      e.run();
+    });
+    actions.getTakeWeaponActions().values().stream().filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(e -> {
       e.setStatus(ActionStatus.COMPLETED);
       e.run();
     });
