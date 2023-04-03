@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 import com.almasb.fxgl.entity.Entity;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,8 @@ public class ClientThread extends Thread {
 
   private final Receiver receiver;
 
-  private final ActionPacket actions = new ActionPacket(new HashMap<>(),
-      new HashMap<>()); // TODO: 03.04.2023 удалять actions по завершении
+  private final ActionPacket actions = new ActionPacket(Collections.synchronizedMap(new HashMap<>()),
+      Collections.synchronizedMap(new HashMap<>())); // TODO: 03.04.2023 удалять actions по завершении
   private final ActionQueues actionQueues = new ActionQueues();
   private final Object monitor = new Object();
 

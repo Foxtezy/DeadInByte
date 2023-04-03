@@ -64,17 +64,25 @@ public class ClientState {
   public Entity acceptedSpawn(NewEntity newEntity) {
     return MCClient.getClientThread().spawnNewEntity(new SpawnAction(newEntity));
   }
+
   public void acceptedAction(GameAction action) {
     MCClient.getClientThread().doAction(action);
   }
+
   public void doActions(ActionPacket actions) {
-    actions.getSpawnActions().values().stream().filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(e -> {
-      e.setStatus(ActionStatus.COMPLETED);
-      e.run();
-    });
-    actions.getTakeWeaponActions().values().stream().filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(e -> {
-      e.setStatus(ActionStatus.COMPLETED);
-      e.run();
-    });
+
+    synchronized (actions.getSpawnActions()) {
+      actions.getSpawnActions().values().stream()
+          .filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(this::runAction);
+    }
+    synchronized (actions.getTakeWeaponActions()) {
+      actions.getTakeWeaponActions().values().stream()
+          .filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(this::runAction);
+    }
+  }
+
+  private synchronized void runAction(GameAction action) {
+    action.setStatus(ActionStatus.COMPLETED);
+    action.run();
   }
 }

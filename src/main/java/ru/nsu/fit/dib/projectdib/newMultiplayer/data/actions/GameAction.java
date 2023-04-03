@@ -9,7 +9,7 @@ public abstract class GameAction {
   //id создателя:id действия
   //"1:132"
   private final String id;
-  private ActionStatus status;
+  private volatile ActionStatus status;
   public static Integer clientID = 1;
   //TODO: перенести поле c ID клиента в нужное место
   public static Integer actionNumbers = 0;
@@ -25,7 +25,7 @@ public abstract class GameAction {
     return status;
   }
 
-  public void setStatus(ActionStatus status) {
+  public synchronized void setStatus(ActionStatus status) {
     this.status = status;
   }
 
