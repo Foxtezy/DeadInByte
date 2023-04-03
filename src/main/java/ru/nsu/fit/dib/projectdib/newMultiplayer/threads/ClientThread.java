@@ -47,12 +47,10 @@ public class ClientThread extends Thread {
         }
       }
       //Сверяем по ID, которое в какой то момент времени изменится когда клиент получит пакет
-      if (newAction.getNewEntity().getID()!=null) {
-        Entity entity = MCClient.getClientState().getIdHashTable()
+      if (newAction.getNewEntity().getID()!=null && MCClient.getClientState().getIdHashTable()
+          .get(newAction.getNewEntity().getID())!=null) {
+        return MCClient.getClientState().getIdHashTable()
             .get(newAction.getNewEntity().getID());
-        if (entity != null) {
-          return entity;
-        }
       }
     }
   }

@@ -60,6 +60,11 @@ public class HeroesFactory {
     Wizard(CreatureRarity.special, "wizard"),
     JonnyS(CreatureRarity.masterful, "jonnys");
     private final CreatureRarity creatureRarity;
+
+    public String getName() {
+      return name;
+    }
+
     private final String name;
     private static final Map<String, HeroType> map = Arrays.stream(values())
         .collect(

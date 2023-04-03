@@ -63,6 +63,11 @@ public class WeaponFactory {
     private static final Map<String, Weapons> map = Arrays.stream(values())
         .collect(
             Collectors.toMap(orderStatus -> orderStatus.name, orderStatus -> orderStatus));
+
+    public String getName() {
+      return name;
+    }
+
     private final String name;
     Weapons(String name) {
       this.name=name;

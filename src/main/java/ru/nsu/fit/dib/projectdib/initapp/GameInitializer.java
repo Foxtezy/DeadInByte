@@ -55,29 +55,18 @@ public class GameInitializer {
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print()
-
+    Entity weapon;
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
-    Entity weapon;
-    //Integer id =12323232;
-    //Integer wid=12312;
-    //player = Factory.spawnHero(HeroType.Elf,position,
-    //    true,id, RandomSystem.random.nextInt());
-    //Entity weapon = Factory.spawnWeapon(null,position,wid,player);
-
-    //MCClient.getClientState().getIdHashTable().put(id,player);
-    //MCClient.getClientState().getIdHashTable().put(wid,weapon);
     try {
-      player = EntitySpawner.spawn(new NewEntity("elf",123,position,null)).get();
-      //Weapons weaponType = player.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getStartWeapon();
-      //weapon = EntitySpawner.spawn(new NewEntity("weapon",231,position,null)).get();
+      System.out.println(HeroType.Elf.getName());
+      player = EntitySpawner.spawn(new NewEntity(HeroType.Elf.getName(),123,position,null)).get();
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
-    //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     try {
-      Entity s = EntitySpawner.spawn(new NewEntity("sword", null,position,null)).get();
+      weapon = EntitySpawner.spawn(new NewEntity(Weapons.Bow.getName(), null,position,null)).get();
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }

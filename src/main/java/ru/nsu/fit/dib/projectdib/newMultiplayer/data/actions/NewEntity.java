@@ -30,6 +30,8 @@ public class NewEntity {
   public NewEntity(String entityType, Integer seed, Point2D position,Integer weaponId) {
     this.entityType = entityType;
     this.seed = seed;
+    this.position=position;
+    this.weaponId=weaponId;
   }
 
   public Entity spawn() {

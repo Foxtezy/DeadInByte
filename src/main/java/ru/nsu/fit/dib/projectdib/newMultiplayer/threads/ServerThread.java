@@ -45,6 +45,7 @@ public class ServerThread extends Thread {
       //Спавнит по запросам всегда
       inPacket.getActions().getSpawnActions().values().stream()
           .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED).forEach(spawnAction -> {
+        spawnAction.setStatus(ActionStatus.APPROVED);
         spawnAction.getNewEntity().setId(nextEntityId++);
         if (HeroType.getByName(spawnAction.getNewEntity().getEntityType())!=null) spawnAction.getNewEntity().setWeaponId(nextEntityId++);
       });
