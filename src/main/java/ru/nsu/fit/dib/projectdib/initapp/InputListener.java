@@ -10,21 +10,14 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntitySpawner;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
-import ru.nsu.fit.dib.projectdib.data.json.update.Action;
-import ru.nsu.fit.dib.projectdib.data.json.update.ActionType;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
@@ -96,7 +89,7 @@ public class InputListener {
           //если да то:
           //playerComponent.takeWeapon(list.get(0));
         } else {
-          player.getComponent(DataComponent.class).addAction(new Action(ActionType.THROW,null));
+          //player.getComponent(DataComponent.class).addAction(new Action(ActionType.THROW,null));
           //Если Weapon рядом нет то прашиваем можно ли выбрость:
           //playerComponent.throwWeapon();
         }

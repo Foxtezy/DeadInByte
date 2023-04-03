@@ -1,20 +1,15 @@
 package ru.nsu.fit.dib.projectdib.entity.components;
 
 import com.almasb.fxgl.entity.component.Component;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
-import ru.nsu.fit.dib.projectdib.data.json.update.Action;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class DataComponent extends Component {
 
   private Point2D position;
   private Point2D rotation;
-  private List<Action> actions; //для player
 
   public EntityType getEntityType() {
     return entityType;
@@ -29,15 +24,8 @@ public class DataComponent extends Component {
     this.isClientEntity = isClientEntity;
     this.entityType = entityType;
     rotation = new Point2D(0, 0);
-    actions = new ArrayList<>();
     this.id = id;
   }
-
-  @Override
-  public void onAdded() {
-    actions = new ArrayList<>();
-  }
-
   @Override
   public void onUpdate(double tpf) {
     switch (entityType) {
@@ -60,18 +48,6 @@ public class DataComponent extends Component {
       }
     }
   }
-
-  public void addAction(Action action) {
-    actions.add(action);
-  }
-
-  public List<Action> getActions() {
-    List<Action> currActions = List.copyOf(actions);
-    actions.clear();
-    return currActions;
-  }
-
-
   public Point2D getRotation() {
     return rotation;
   }

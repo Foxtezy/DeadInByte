@@ -1,8 +1,12 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer;
 
+import static java.util.concurrent.CompletableFuture.runAsync;
+
+import com.almasb.fxgl.core.concurrent.Async;
 import com.almasb.fxgl.entity.Entity;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.concurrent.RunnableFuture;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
@@ -33,17 +37,16 @@ public final class EntitySpawner {
     });
   }
   public static void doAction(GameAction action) {
-    final Entity[] entity = {null};
-    Thread compThread = Thread.currentThread();
-    Platform.runLater(() -> {
-      //Принят для исполнения или принят чтоб передать версеру?
-      //Где передается серверу?
-      MCClient.getClientState().acceptedAction(action);
-      compThread.interrupt();
-    });
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-    }
+    runAsync(()->{    Thread compThread = Thread.currentThread();
+      Platform.runLater(() -> {
+        //Принят для исполнения или принят чтоб передать версеру?
+        //Где передается серверу?
+        MCClient.getClientState().acceptedAction(action);
+        compThread.interrupt();
+      });
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+      }});
   }
 }

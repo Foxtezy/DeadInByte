@@ -1,12 +1,9 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data;
 
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.Entity;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.data.json.update.Action;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
