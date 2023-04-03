@@ -25,7 +25,7 @@ public class ClientThread extends Thread {
 
   private final Receiver receiver;
 
-  private final ActionPacket actions = new ActionPacket(new HashMap<>(), new HashMap<>());
+  private final ActionPacket actions = new ActionPacket(new HashMap<>(), new HashMap<>()); // TODO: 03.04.2023 удалять actions по завершении
   private final ActionQueues actionQueues = new ActionQueues();
   private final Object monitor = new Object();
 
@@ -36,7 +36,7 @@ public class ClientThread extends Thread {
   }
 
   public Entity spawnNewEntity(SpawnAction newAction) {
-    //newEntities.add(newEntity);
+    actionQueues.getNewSpawnActions().add(newAction);
     while (true) {
       synchronized (monitor) {
         try {
@@ -60,7 +60,6 @@ public class ClientThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      //List<NewEntity> newEntityList = new ArrayList<>();
 
       //Добавляем новые действия в мапу
       actionQueues.addToActionPacket(actions);
@@ -73,12 +72,10 @@ public class ClientThread extends Thread {
         MCClient.getClientState().updateEntities(gameStatePacket.getEntitiesStates());
 
         //Обновляем состояния действий
-        //List<GameAction> actions = gameStatePacket.getActions();
         actions.update(gameStatePacket.getActions());
         // Как вариант - отдать MCClient-у мапу - пусть разбирается сам - выполняет APPROVED а потом меняет статус на COMPLETED
 
         //Запускаем в выполнение действия
-        //  GameAction.do();
         MCClient.getClientState().doActions(actions);
 
         synchronized (monitor) {

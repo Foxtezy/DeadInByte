@@ -65,6 +65,9 @@ public class ClientState {
   }
 
   public void doActions(ActionPacket actions) {
-    actions.getSpawnActions().values().stream().filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(SpawnAction::run);
+    actions.getSpawnActions().values().stream().filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(e -> {
+      e.setStatus(ActionStatus.COMPLETED);
+      e.run();
+    });
   }
 }

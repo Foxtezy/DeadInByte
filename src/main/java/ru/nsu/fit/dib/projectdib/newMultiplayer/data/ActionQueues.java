@@ -14,7 +14,14 @@ public class ActionQueues {
     newSpawnActions=new LinkedBlockingQueue<>();
     newTakeWeaponActions = new LinkedBlockingQueue<>();
   }
+
+  public BlockingQueue<SpawnAction> getNewSpawnActions() {
+    return newSpawnActions;
+  }
+
   public void addToActionPacket(ActionPacket actionPacket){
     newSpawnActions.forEach(action -> actionPacket.getSpawnActions().put(action.getId(),action));
   }
+
+
 }
