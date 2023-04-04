@@ -128,6 +128,7 @@ public class Factory implements EntityFactory {
     EnemyComponent enemyComponent = new EnemyComponent(creature,new Point2D(50,180));
     enemyComponent.bindDirectionView(entity ->new Point2D(0,0));
     creature.getModule(JFXModule.class).setEnemyComponent(enemyComponent);
+    AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
             .from(data)
@@ -137,9 +138,11 @@ public class Factory implements EntityFactory {
             .anchorFromCenter()
             .with(physics)
             .with(enemyComponent)
-            .with(new CellMoveComponent(30, 30, 85))
-            .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+  //          .with(new CellMoveComponent(160, 160, 20))
+            //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
             //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
+  //          .with(move)
+  //          .with(new PlayerChaseComponent(move))
             .collidable()
             .build();
   }

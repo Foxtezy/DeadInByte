@@ -18,8 +18,8 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.*;
 
 public class EnemyComponent extends Component {
     //View
-    private final double scale = 0.07;
-    private final AnimatedTexture texture;
+    private final double scale = 1;
+    private AnimatedTexture texture;
     protected Creature creature;
     AnimationChannel animationMovement;
     AnimationChannel animationStanding;
@@ -37,14 +37,23 @@ public class EnemyComponent extends Component {
         int creatureNumber = creature.getModule(JFXModule.class).getImageID();
 
         Image img = new Image(_enemy);
-        this.animationMovement = new AnimationChannel(img,
-                _enemy_numberColumns, _enemy_width, _enemy_height, Duration.millis(600),
-                3 + creatureNumber * _enemy_numberColumns, (creatureNumber + 1) * _enemy_numberColumns);
+        if(creatureNumber == 3){ //MUD
+            this.animationMovement = new AnimationChannel(img,
+                    8, _enemy_width, _enemy_height, Duration.millis(600),
+                    4 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);
 
+            this.animationStanding = new AnimationChannel(img,
+                    8, _enemy_width, _enemy_height, Duration.millis(600),
+                    creatureNumber*_enemy_numberColumns, 3 + creatureNumber*_enemy_numberColumns);
+        }else{
+        this.animationMovement = new AnimationChannel(img,
+                8, _enemy_width, _enemy_height, Duration.millis(600),
+                3 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);
 
         this.animationStanding = new AnimationChannel(img,
-                _enemy_numberColumns, _enemy_width, _enemy_height, Duration.millis(600),
-                1 + creatureNumber * _enemy_numberColumns, 3 + creatureNumber * _enemy_numberColumns);
+                8, _enemy_width, _enemy_height, Duration.millis(600),
+                creatureNumber*_enemy_numberColumns, 1 + creatureNumber*_enemy_numberColumns);
+        }
 
         texture = new AnimatedTexture(animationStanding);
         texture.loop();

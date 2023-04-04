@@ -57,7 +57,7 @@ public class GameInitializer {
     Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
-    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Ogre,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mud,position, RandomSystem.random.nextInt());
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
 
 

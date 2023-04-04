@@ -1,6 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.creatures.modules;
 
-import ru.nsu.fit.dib.projectdib.entity.components.EnemyComponent;
+import com.almasb.fxgl.entity.component.Component;import ru.nsu.fit.dib.projectdib.entity.components.EnemyComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 
 public class JFXModule extends CreatureModule{
@@ -19,8 +19,19 @@ public class JFXModule extends CreatureModule{
   public void setEnemyComponent(EnemyComponent component){
     this.enemyComponent = component;
   }
-  public HeroComponent getComponent() {
-    return component;
+  public Component getComponent() {
+    // division for enemies and heroes. One of them have to be equal null.
+      if(this.component == null && this.enemyComponent == null){
+        throw new NullPointerException("NLP in JFXModule.getComponent()");
+      }
+    return this.component != null ? this.component : this.enemyComponent;
   }
+  public Boolean hasHeroComponent(){
+    if(this.component == null && this.enemyComponent == null){
+      throw new NullPointerException("NLP in JFXModule.hasHeroComponent()");
+    }
+    return this.component != null;
+  }
+
   public EnemyComponent getEnemyComponent(){return enemyComponent;}
 }

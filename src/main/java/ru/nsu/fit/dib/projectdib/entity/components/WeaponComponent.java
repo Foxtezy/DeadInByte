@@ -5,7 +5,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 import static java.lang.Math.abs;
 
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.dsl.FXGL;import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
@@ -48,10 +48,19 @@ public class WeaponComponent extends Component {
   public void onUpdate(double tpf) {
     if (weapon.getUser() != null) {
       Point2D userPos = weapon.getUser().getModule(JFXModule.class).getComponent().getEntity().getPosition();
-      Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
+      Point2D vectorView = null;
+      Component userComponent = weapon.getUser().getModule(JFXModule.class).getComponent();
+      if(weapon.getUser().getModule(JFXModule.class).hasHeroComponent()){
+        vectorView = ((HeroComponent)userComponent).getDirectionView();
+      }else{
+        //TODO correct enemies duration
+        vectorView = FXGL.getInput().getMousePositionWorld();
+      }
+      if(vectorView == null){
+        throw new NullPointerException("vectorView == null in WeaponComponent.onUpdate()");
+      }
       Point2D rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
-      //TODO getEnemyComponent().getEntity().getPosition();
       getEntity().rotateToVector(rotation);
 
       getEntity().setX(position.getX());
