@@ -48,10 +48,11 @@ public class ClientState {
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
-      if (MCClient.getClientState().getIdHashTable().get(entityState.getId()) == null) {
+      if (MCClient.getClientState().getIdHashTable().get(entityState.getId()) != null) {
         if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
-            DataComponent.class).isClientEntity())
+            DataComponent.class).isClientEntity()) {
           entityState.update();
+        }
       }
     });
   }

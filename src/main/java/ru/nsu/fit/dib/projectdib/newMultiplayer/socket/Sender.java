@@ -23,7 +23,7 @@ public class Sender {
     this.gson = gson;
   }
 
-  public synchronized void send(SocketAddress address, GameStatePacket gameStatePacket) {
+  public void send(SocketAddress address, GameStatePacket gameStatePacket) {
     StringWriter writer = new StringWriter();
     new Gson().toJson(gameStatePacket, GameStatePacket.class, writer);
     byte[] byteArray = writer.toString().getBytes(StandardCharsets.UTF_8);
@@ -43,7 +43,7 @@ public class Sender {
 
   public void sendException(SocketAddress address, GameStatePacket gameStatePacket) {
     StringWriter writer = new StringWriter();
-    gson.toJson(gameStatePacket, GameStatePacket.class, writer);
+    new Gson().toJson(gameStatePacket, GameStatePacket.class, writer);
     byte[] byteArray = writer.toString().getBytes(StandardCharsets.UTF_8);
     byte[] p = new byte[byteArray.length + 1];
     if (p.length > 55000) {

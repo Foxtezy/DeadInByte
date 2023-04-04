@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules;
 
+import javafx.scene.image.Image;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponSize;
@@ -38,11 +39,11 @@ public class TextureModule extends WeaponModule {
   }
 
 
-  public String getTexturePath() {
+  public Image getTexturePath() {
     return switch (weaponSize) {
-      case SMALL -> ProjectConfig._smallWeapon;
-      case MEDIUM -> ProjectConfig._mediumWeapon;
-      case BIG -> ProjectConfig._bigWeapon;
+      case SMALL -> ProjectConfig._smallWeapon_img;
+      case MEDIUM -> ProjectConfig._mediumWeapon_img;
+      case BIG -> ProjectConfig._bigWeapon_img;
     };
   }
 

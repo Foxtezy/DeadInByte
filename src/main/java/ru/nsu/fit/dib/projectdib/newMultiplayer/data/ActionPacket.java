@@ -73,6 +73,6 @@ public class ActionPacket {
     Stream<String> keys = lastActions.keySet().stream()
         .filter(key -> lastActions.get(key).getStatus() == ActionStatus.COMPLETED).filter(
             currActions::containsKey);
-    runAsync(() -> keys.forEach(lastActions::remove));
+    //runAsync(() -> keys.forEach(lastActions::remove));
   }
 }

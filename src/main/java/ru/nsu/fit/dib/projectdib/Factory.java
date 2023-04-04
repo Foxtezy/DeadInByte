@@ -326,8 +326,8 @@ public class Factory implements EntityFactory {
         .with(dataComponent)
         .build();
   }
-  ImageView imageViewFromSpriteSheet(String path, int number, int spriteWidth, int spriteHeight,int columns){
-    ImageView iv = new ImageView(new Image(path));
+  ImageView imageViewFromSpriteSheet(Image img, int number, int spriteWidth, int spriteHeight,int columns){
+    ImageView iv = new ImageView(img);
     iv.setViewport(new Rectangle2D(spriteWidth*(number%columns),spriteHeight*(number/columns),spriteWidth,spriteHeight));
     return iv;
   }

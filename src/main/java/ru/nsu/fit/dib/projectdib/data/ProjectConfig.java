@@ -1,5 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data;
 
+import javafx.scene.image.Image;
+
 /**
  * Настройки игры, не изменяемые пользователем.
  */
@@ -27,4 +29,7 @@ public interface ProjectConfig {
   //================================================================================================
   String CONTROLS_PATH = "src/main/resources/config/controls.json";
   int _WEAPON_COLUMNS =16;
+  Image _smallWeapon_img = new Image(_smallWeapon);
+  Image _mediumWeapon_img = new Image(_mediumWeapon);
+  Image _bigWeapon_img = new Image(_bigWeapon);
 }

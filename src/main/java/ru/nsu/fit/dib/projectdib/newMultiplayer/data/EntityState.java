@@ -12,11 +12,10 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 
 public class EntityState {
-
   private final Integer id;
   private Point2D position;
   private Point2D rotation;
-  private Integer bindedEntity; //для player - активное оружие
+  private final Integer bindedEntity; //для player - активное оружие
 
   public EntityState(Integer id, Point2D position, Point2D rotation, Integer bindedEntity) {
     this.id = id;
@@ -50,7 +49,8 @@ public class EntityState {
 
     Map<Integer, Entity> hashTable = MCClient.getClientState().getIdHashTable();
     Entity entity = hashTable.get(id);
-
+    if (entity==null) return;
+    //TODO DataComponent not found
     switch (entity.getComponent(DataComponent.class).getEntityType()) {
       case PLAYER -> {
         if (position != null) {
@@ -61,10 +61,12 @@ public class EntityState {
 
         CreatureWeaponModule module = entity.getComponent(HeroComponent.class).getCreature()
             .getModule(CreatureWeaponModule.class);
-        Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
+        if (bindedEntity!=null){
+          Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
 
-        if (!weapon.getComponent(WeaponComponent.class).isActive()) {
-          module.getNextWeapon();
+          if (!weapon.getComponent(WeaponComponent.class).isActive()) {
+            module.getNextWeapon();
+          }
         }
 
       }

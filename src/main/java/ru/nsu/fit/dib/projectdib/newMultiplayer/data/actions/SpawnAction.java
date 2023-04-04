@@ -1,5 +1,7 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
+import javafx.application.Platform;
+
 public class SpawnAction extends GameAction {
 
   public NewEntity getNewEntity() {
@@ -13,6 +15,6 @@ public class SpawnAction extends GameAction {
   }
   @Override
   public void run() {
-    newEntity.spawn();
+    Platform.runLater(newEntity::spawn);
   }
 }

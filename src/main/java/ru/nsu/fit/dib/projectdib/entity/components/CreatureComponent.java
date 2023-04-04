@@ -47,13 +47,13 @@ public class CreatureComponent extends Component implements Moving {
   private PhysicsComponent physics;
   private String currentWeapon;
   private boolean isMoving = false;
+  private static final Image img = new Image(_player);
 
   public CreatureComponent(Creature creature, Point2D localAnchor) {
     this.localAnchor = localAnchor;
     this.creature = creature;
     int creatureNumber = creature.getModule(JFXModule.class).getImageID();
     //animation settings
-    Image img = new Image(_player);
     animationMovement = new AnimationChannel(img,
         _player_numberColumns, _player_width, _player_height, Duration.millis(600),
         5 + creatureNumber * 13, 8 + creatureNumber * 13);

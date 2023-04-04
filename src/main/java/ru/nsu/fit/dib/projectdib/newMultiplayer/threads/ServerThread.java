@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ public class ServerThread extends Thread {
 
   private final List<SocketAddress> clientSockets;
 
-  private Integer nextEntityId = 1;
+  private Integer nextEntityId = 5;
 
   public ServerThread(Receiver receiver, Sender sender, List<SocketAddress> clientSockets) {
     this.receiver = receiver;
@@ -53,7 +54,13 @@ public class ServerThread extends Thread {
           .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED)
           .forEach(spawnAction -> {
             spawnAction.setStatus(ActionStatus.APPROVED);
-            spawnAction.getNewEntity().setId(nextEntityId++);
+            if (HeroType.getByName(spawnAction.getNewEntity().getEntityType())!=null){
+              String id = Arrays.stream(spawnAction.getId().split(":")).findFirst().get();
+              spawnAction.getNewEntity().setId(Integer.parseInt(id));
+            }
+            else {
+              spawnAction.getNewEntity().setId(nextEntityId++);
+            }
             if (HeroType.getByName(spawnAction.getNewEntity().getEntityType()) != null) {
               spawnAction.getNewEntity().setWeaponId(nextEntityId++);
             }
@@ -63,23 +70,26 @@ public class ServerThread extends Thread {
       inPacket.getActions().getTakeWeaponActions().values().stream()
           .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED)
           .forEach(takeWeaponAction -> {
-            if (!MCClient.getClientState().getIdHashTable().get(takeWeaponAction.getWeaponId())
-                .getComponent(
-                    WeaponComponent.class).hasUser()) {
-              takeWeaponAction.setStatus(ActionStatus.APPROVED);
-            } else {
-              takeWeaponAction.setStatus(ActionStatus.REFUSED);
+            if (MCClient.getClientState().getIdHashTable().get(takeWeaponAction.getWeaponId())
+                != null) {
+              if (!MCClient.getClientState().getIdHashTable().get(takeWeaponAction.getWeaponId())
+                  .getComponent(
+                      WeaponComponent.class).hasUser()) {
+                takeWeaponAction.setStatus(ActionStatus.APPROVED);
+              } else {
+                takeWeaponAction.setStatus(ActionStatus.REFUSED);
+              }
             }
           });
       deleteCompleted(inPacket.getActions().getTakeWeaponActions());
-
       GameStatePacket outPacket = inPacket;
       clientSockets.forEach(s -> sender.send(s, outPacket));
     }
   }
-  private synchronized void deleteCompleted(Map<String,? extends GameAction> actions){
+
+  private synchronized void deleteCompleted(Map<String, ? extends GameAction> actions) {
     actions.keySet().stream()
         .filter(key -> actions.get(key).getStatus() == ActionStatus.COMPLETED);
-        //.forEach(actions::remove);
+    //.forEach(actions::remove);
   }
 }

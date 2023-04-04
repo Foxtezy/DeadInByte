@@ -88,10 +88,12 @@ public class ClientThread extends Thread {
       actionQueues.addToActionPacket(actions);
       //Отправляем пакет
       List<EntityState> entityStates = MCClient.getClientState().getEntityStates();
+      //System.out.println(entityStates);
       sender.send(serverAddress, new GameStatePacket(actions, entityStates));
       try {
         //Обновляем состояния объектов
         GameStatePacket gameStatePacket = receiver.receive();
+        gameStatePacket.getEntitiesStates().stream().filter(e -> e.getId() == 2).forEach(e -> System.out.println(e));
         MCClient.getClientState().updateEntities(gameStatePacket.getEntitiesStates());
 
         //Обновляем состояния действий
