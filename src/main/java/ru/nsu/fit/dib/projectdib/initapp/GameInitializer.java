@@ -58,6 +58,9 @@ public class GameInitializer {
     player=pair.getKey();
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mud,position, RandomSystem.random.nextInt());
+    //spawn("enemy", x+100, y+100);
+
+
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
 
 

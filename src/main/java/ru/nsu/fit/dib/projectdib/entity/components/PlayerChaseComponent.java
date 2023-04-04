@@ -27,6 +27,8 @@ import ru.nsu.fit.dib.projectdib.Factory;
  * Описывает движение..врагов? Пояснить.
  */
 public class PlayerChaseComponent extends Component {
+    private int oldX = 0;
+    private int oldY = 0;
 
   private final AStarMoveComponent enemy;
 //  private static AStarPathfinder enemyPath = new AStarPathfinder(
@@ -48,14 +50,20 @@ public PlayerChaseComponent(AStarMoveComponent enemy) {
   }
 
   private void move() {
-    var player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
+    Entity player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
     //var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
     int x = player.call("getCellX");
     int y = player.call("getCellY");
+    //enemy.getGrid().
    if (player.isColliding(enemy.getEntity())) {
       enemy.stopMovement();
-    } else {
+      enemy.getEntity().getComponent(EnemyComponent.class).setNewPosition(0,false);
+   } else {
       enemy.moveToCell(x, y);
+      enemy.getEntity().getComponent(EnemyComponent.class).setNewPosition(x - oldX, enemy.isMoving());
+
+      oldX = x;
+      oldY = y;
     }
-  }
+}
 }

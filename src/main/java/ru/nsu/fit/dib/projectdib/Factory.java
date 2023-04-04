@@ -113,7 +113,7 @@ public class Factory implements EntityFactory {
         .anchorFromCenter()
         .with(physics)
         .with(heroComponent)
-        .with(new CellMoveComponent(30, 30, 85))
+        .with(new CellMoveComponent(160, 160, 85))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
@@ -132,48 +132,49 @@ public class Factory implements EntityFactory {
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
             .from(data)
-            .type(EntityType.PLAYER)
+            .type(EntityType.ENEMY)
             //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
             .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
             .anchorFromCenter()
-            .with(physics)
-            .with(enemyComponent)
-  //          .with(new CellMoveComponent(160, 160, 20))
+    //          .with(physics)
+              .with(enemyComponent)
+            .with(new CellMoveComponent(160, 160, 100))
             //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
             //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
-  //          .with(move)
-  //          .with(new PlayerChaseComponent(move))
+            .with(move)
+            .with(new PlayerChaseComponent(move))
             .collidable()
             .build();
   }
-/*
-  @Spawns("enemy")
-  public Entity newEnemy(SpawnData data) {
-    var hp = new HealthIntComponent(10);
-    var hpView = new ProgressBar(false);
-    hpView.setFill(Color.LIGHTGREEN);
-    hpView.setMaxValue(10);
-    hpView.setWidth(40);
-    hpView.setTranslateY(-10);
-    hpView.currentValueProperty().bind(hp.valueProperty());
 
-    Circle circle = new Circle(10, 10, 10, Color.RED);
-    circle.setStroke(Color.BROWN);
-    circle.setStrokeWidth(2.0);
-    return entityBuilder()
-            .from(data)
-            .type(EntityType.ENEMY)
-            .viewWithBBox(texture("skull.png", 50, 50))
-            .anchorFromCenter()
-            .collidable()
-            .with(hp)
-            .view(hpView)
-            .with(new CellMoveComponent(25, 25, 100))
-            .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-            .with(new PlayerChaseComponent())
-            .build();
-  }
-*/
+//  @Spawns("enemy")
+//  public Entity newEnemy(SpawnData data) {
+//    var hp = new HealthIntComponent(10);
+//    var hpView = new ProgressBar(false);
+//    hpView.setFill(Color.LIGHTGREEN);
+//    hpView.setMaxValue(10);
+//    hpView.setWidth(40);
+//    hpView.setTranslateY(-10);
+//    hpView.currentValueProperty().bind(hp.valueProperty());
+//    AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
+//    Circle circle = new Circle(10, 10, 10, Color.RED);
+//    circle.setStroke(Color.BROWN);
+//    circle.setStrokeWidth(2.0);
+//    return entityBuilder()
+//            .from(data)
+//            .type(EntityType.ENEMY)
+//            .viewWithBBox(texture("skull.png", 100, 100))
+//            .anchorFromCenter()
+//            .collidable()
+//            .with(hp)
+//            .view(hpView)
+//            .with(new CellMoveComponent(160, 160, 100))
+//            .with(move)
+//            //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+//            .with(new PlayerChaseComponent(move))
+//            .build();
+//  }
+
 
   @Spawns("platform")
   public Entity platform(SpawnData data) {

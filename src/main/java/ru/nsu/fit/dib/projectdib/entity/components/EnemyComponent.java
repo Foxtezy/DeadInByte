@@ -1,6 +1,5 @@
 package ru.nsu.fit.dib.projectdib.entity.components;
 
-import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -14,7 +13,7 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 
 import java.util.function.Function;
 
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.*;
 
 public class EnemyComponent extends Component {
     //View
@@ -30,7 +29,7 @@ public class EnemyComponent extends Component {
     private PhysicsComponent physics;
     private String currentWeapon;
     private boolean isMoving = false;
-
+    private double newPosition = 0;
     public EnemyComponent(Creature creature, Point2D localAnchor) {
         this.localAnchor = localAnchor;
         this.creature = creature;
@@ -75,42 +74,43 @@ public class EnemyComponent extends Component {
         entity.setScaleUniform(scale);
     }
 
+    public void setNewPosition(double x, boolean y){
+        this.newPosition = x;
+        this.isMoving = y;
+    }
+    public Creature getCreature() {
+        return creature;
+    }
     @Override
     public void onUpdate(double tpf) {
-        if (isMoving != isMoving()) {
-            stateChanged = true;
-            isMoving = isMoving();
-        }
-        //Изменилось ли состояние
-        if (stateChanged) {
+//        if (isMoving != isMoving()) {
+//            stateChanged = true;
+//            isMoving = isMoving();
+//        }
+//        //Изменилось ли состояние
+       // if (stateChanged) {
             //texture.loopAnimationChannel(isMoving() ? animationMovement : animationStanding);
             AnimationChannel animation = texture.getAnimationChannel();
             //Движется или нет
-            if (isMoving()) {
+            if (isMoving) {
                 texture.loopAnimationChannel(animationMovement);
             } else {
+
                 texture.loopAnimationChannel(animationStanding);
             }
             stateChanged = false;
-        }
+
 
         Point2D mouseVelocity = getDirectionView();
         //Поворот
-        if (mouseVelocity.angle(1, 0) <= 90) {
+        if (newPosition >= 0) {
             rotate(CreatureComponent.SIDE.RIGHT);
         } else {
             rotate(CreatureComponent.SIDE.LEFT);
         }
-        physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
+//        physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
     }
 
-    public Creature getCreature() {
-        return creature;
-    }
-
-    private boolean isMoving() {
-        return FXGLMath.abs(physics.getVelocityX()) > 0 || FXGLMath.abs(physics.getVelocityY()) > 0;
-    }
 
     public void rotate(CreatureComponent.SIDE side) {
         if (side == CreatureComponent.SIDE.RIGHT) {
