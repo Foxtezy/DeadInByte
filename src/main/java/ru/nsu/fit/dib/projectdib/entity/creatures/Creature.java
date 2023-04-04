@@ -8,6 +8,7 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.SpecsModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponSkillsModule;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
@@ -109,8 +110,8 @@ public final class Creature {
       return this;
     }
 
-    public CreatureBuilder setStartWeapon(Weapon weapon) {
-      CreatureWeaponModule module = new CreatureWeaponModule(weapon);
+    public CreatureBuilder setStartWeapon(Weapons weaponType) {
+      CreatureWeaponModule module = new CreatureWeaponModule(weaponType);
       modules.put(CreatureWeaponModule.class, module);
       return this;
     }

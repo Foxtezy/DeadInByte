@@ -1,14 +1,17 @@
 package ru.nsu.fit.dib.projectdib.entity.creatures;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
-import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 public class HeroesFactory {
-  public static Creature newHero(HeroType heroType,Integer seed) {
+
+  public static Creature newHero(HeroType heroType, Integer seed) {
     List<Integer> specsList = RandomSystem.generateCreatureSpecs(seed);
     return switch (heroType) {
       case Elf -> new Creature.CreatureBuilder(CreatureRarity.mediocre, "GigaElf")
@@ -17,7 +20,7 @@ public class HeroesFactory {
               RandomSystem.d(10),
               specsList.get(3), specsList.get(0), specsList.get(2),
               specsList.get(5), specsList.get(4), specsList.get(1))
-          .setStartWeapon(WeaponFactory.getWeapon(Weapons.Bow))
+          .setStartWeapon(Weapons.Bow)
           .setSkill(WeaponType.shooting, 2)
           .build();
       case JonnyS -> new Creature.CreatureBuilder(CreatureRarity.masterful, "Jonny")
@@ -26,7 +29,7 @@ public class HeroesFactory {
               RandomSystem.d(10),
               specsList.get(4), specsList.get(0), specsList.get(1),
               specsList.get(3), specsList.get(5), specsList.get(2))
-          .setStartWeapon(WeaponFactory.getWeapon(Weapons.AK47))
+          .setStartWeapon(Weapons.AK47)
           .setSkill(WeaponType.shooting, 2).build();
       case Knight -> new Creature.CreatureBuilder(CreatureRarity.ordinary, "Knight")
           .setID(1)
@@ -34,7 +37,7 @@ public class HeroesFactory {
               RandomSystem.d(10),
               specsList.get(1), specsList.get(2), specsList.get(0),
               specsList.get(5), specsList.get(4), specsList.get(3))
-          .setStartWeapon(WeaponFactory.getWeapon(Weapons.Sword))
+          .setStartWeapon(Weapons.Sword)
           .setSkill(WeaponType.melee, 2)
           .build();
       case Wizard -> new Creature.CreatureBuilder(CreatureRarity.special, "Wizard")
@@ -44,7 +47,7 @@ public class HeroesFactory {
               specsList.get(3), specsList.get(0), specsList.get(2),
               specsList.get(5), specsList.get(4), specsList.get(1)
           )
-          .setStartWeapon(WeaponFactory.getWeapon(Weapons.Staff))
+          .setStartWeapon(Weapons.Staff)
           .setSkill(WeaponType.magic, 2)
           .build();
       default -> throw new NullPointerException("Undeclared hero type");
@@ -52,14 +55,28 @@ public class HeroesFactory {
   }
 
   public enum HeroType {
-    Elf(CreatureRarity.mediocre),
-    Knight(CreatureRarity.ordinary),
-    Wizard(CreatureRarity.special),
-    JonnyS(CreatureRarity.masterful);
-    final CreatureRarity creatureRarity;
+    Elf(CreatureRarity.mediocre, "elf"),
+    Knight(CreatureRarity.ordinary, "knight"),
+    Wizard(CreatureRarity.special, "wizard"),
+    JonnyS(CreatureRarity.masterful, "jonnys");
+    private final CreatureRarity creatureRarity;
 
-    HeroType(CreatureRarity creatureRarity) {
+    public String getName() {
+      return name;
+    }
+
+    private final String name;
+    private static final Map<String, HeroType> map = Arrays.stream(values())
+        .collect(
+            Collectors.toMap(orderStatus -> orderStatus.name, orderStatus -> orderStatus));
+
+    HeroType(CreatureRarity creatureRarity, String name) {
       this.creatureRarity = creatureRarity;
+      this.name = name;
+    }
+
+    public static HeroType getByName(String findingName) {
+      return map.get(findingName);
     }
 
     public static List<HeroType> getAll(CreatureRarity rarity) {
@@ -75,6 +92,6 @@ public class HeroesFactory {
     public CreatureRarity getCreatureRarity() {
       return creatureRarity;
     }
-    
+
   }
 }

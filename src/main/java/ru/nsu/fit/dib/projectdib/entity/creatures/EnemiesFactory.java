@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.entity.creatures;
 
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class EnemiesFactory {
 				.setSpecs(RandomSystem.d(10),
 					specsList.get(0), specsList.get(4), specsList.get(1),
 					specsList.get(2), specsList.get(5), specsList.get(3))
-				.setStartWeapon(WeaponFactory.getWeapon(WeaponFactory.Weapons.Hand))
+				.setStartWeapon(WeaponFactory.Weapons.Hand)
 				.setSkill(WeaponType.melee, 5)
 				.build();
 			case ZOMBIE -> new Creature.CreatureBuilder(CreatureRarity.special, "Zombie")
@@ -24,7 +25,7 @@ public class EnemiesFactory {
 				.setSpecs(RandomSystem.d(5),
 					specsList.get(2), specsList.get(3), specsList.get(1),
 					specsList.get(4), specsList.get(5), specsList.get(5))
-				.setStartWeapon(WeaponFactory.getWeapon(WeaponFactory.Weapons.Sword))
+				.setStartWeapon(Weapons.Sword)
 				.setSkill(WeaponType.shooting, 2)
 				.build();
 			case SKELETON -> new Creature.CreatureBuilder(CreatureRarity.special, "Zombie")
@@ -32,7 +33,7 @@ public class EnemiesFactory {
 				.setSpecs(RandomSystem.d(5),
 					specsList.get(2), specsList.get(3), specsList.get(1),
 					specsList.get(4), specsList.get(5), specsList.get(5))
-				.setStartWeapon(WeaponFactory.getWeapon(WeaponFactory.Weapons.Bow))
+				.setStartWeapon(WeaponFactory.Weapons.Bow)
 				.setSkill(WeaponType.shooting, 3)
 				.build();
 			default -> throw new NullPointerException("Undeclared enemy type");

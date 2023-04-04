@@ -42,6 +42,7 @@ public class HeroComponent extends CreatureComponent implements Moving {
   private final double scale = 0.07;
   AnimationChannel animationWaiting;
   AnimationChannel animationBack;
+  private static final Image img = new Image(_player);
   private LocalTimer shootTimer = newLocalTimer();
 
   private boolean isMoving = false;
@@ -49,7 +50,6 @@ public class HeroComponent extends CreatureComponent implements Moving {
   public HeroComponent(Creature hero, Point2D localAnchor) {
     super(hero,localAnchor);
     int heroNumber = creature.getModule(JFXModule.class).getImageID();
-    Image img = new Image(_player);
     animationWaiting = new AnimationChannel(img,
         _player_numberColumns, _player_width, _player_height, Duration.millis(450),
         2 + heroNumber * 13, 4 + heroNumber * 13);

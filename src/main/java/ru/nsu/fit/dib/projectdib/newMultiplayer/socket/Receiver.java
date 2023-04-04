@@ -37,9 +37,9 @@ public class Receiver {
     }
     if (p.getData()[0] != MessageType.NEW_STATE.getId()) {
       String json = new String(p.getData(), 1, p.getLength() - 1, StandardCharsets.UTF_8);
-      throw new PacketTypeException(gson.fromJson(json, GameStatePacket.class));
+      throw new PacketTypeException(new Gson().fromJson(json, GameStatePacket.class));
     }
     String json = new String(p.getData(), 1, p.getLength() - 1, StandardCharsets.UTF_8);
-    return gson.fromJson(json, GameStatePacket.class);
+    return new Gson().fromJson(json, GameStatePacket.class);
   }
 }

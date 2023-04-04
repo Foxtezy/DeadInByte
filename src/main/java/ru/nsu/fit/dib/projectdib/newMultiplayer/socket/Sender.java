@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketSizeException;
@@ -42,7 +43,7 @@ public class Sender {
 
   public void sendException(SocketAddress address, GameStatePacket gameStatePacket) {
     StringWriter writer = new StringWriter();
-    gson.toJson(gameStatePacket, GameStatePacket.class, writer);
+    new Gson().toJson(gameStatePacket, GameStatePacket.class, writer);
     byte[] byteArray = writer.toString().getBytes(StandardCharsets.UTF_8);
     byte[] p = new byte[byteArray.length + 1];
     if (p.length > 55000) {

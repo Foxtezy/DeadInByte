@@ -26,6 +26,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -37,6 +38,7 @@ import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
@@ -67,19 +69,22 @@ public class Factory implements EntityFactory {
    * @param seed hero seed
    * @return pair of entity Hero and Weapon
    */
-  public static Pair<Entity,Entity> spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer seed){
+  public static Entity spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer id,Integer seed){
     SpawnData sd = new SpawnData(position);
     sd.put("clientHero",isClientHero);
     sd.put("creature", HeroesFactory.newHero(heroType,seed));
+    sd.put("id",id);
     Entity hero = spawn("player", sd);
     hero.setScaleUniform(0.75);
-    SpawnData weaponSD = new SpawnData(position);
-    weaponSD.put("weapon",  hero.getComponent(HeroComponent.class).getCreature().getModule(
-        CreatureWeaponModule.class).getActiveWeapon());
-    Entity weapon = spawn("weapon",weaponSD);
-    return new Pair<>(hero,weapon);
+    return hero;
   }
 
+  public static Entity spawnStandardWeapon(Integer id,Entity bindedEntity){
+    SpawnData sd = new SpawnData(bindedEntity.getPosition());
+    sd.put("id",id);
+    sd.put("weapon",  bindedEntity.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getActiveWeapon());
+    return spawn("weapon", sd);
+  }
   /**
    * Creates weapon.
    *
@@ -87,8 +92,9 @@ public class Factory implements EntityFactory {
    * @param position position
    * @return weapon entity
    */
-  public static Entity spawnWeapon(Weapons weaponType,Point2D position){
+  public static Entity spawnWeapon(Weapons weaponType,Point2D position,Integer id){
     SpawnData sd = new SpawnData(position);
+    sd.put("id",id);
     sd.put("weapon", WeaponFactory.getWeapon(weaponType));
     return spawn("weapon", sd);
   }
@@ -101,13 +107,17 @@ public class Factory implements EntityFactory {
   @Spawns("player")
   public Entity newPlayer(SpawnData data) {
     Creature creature = data.get("creature");
+
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
+
     HeroComponent heroComponent = new HeroComponent(creature,new Point2D(50,180));
     if (data.get("clientHero")) heroComponent.bindDirectionView(entity -> getInput().getVectorToMouse(entity.getPosition().add(new Point2D(80, 160))));
     else heroComponent.bindDirectionView(entity ->new Point2D(0,0));
     creature.getModule(JFXModule.class).setComponent(heroComponent);
+
+    DataComponent dataComponent = new DataComponent(EntityType.PLAYER,data.get("clientHero"),data.get("id"));
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
         .from(data)
@@ -117,6 +127,7 @@ public class Factory implements EntityFactory {
         .anchorFromCenter()
         .with(physics)
         .with(heroComponent)
+        .with(dataComponent)
         .with(new CellMoveComponent(30, 30, 85))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
@@ -301,9 +312,10 @@ public class Factory implements EntityFactory {
     Weapon weapon = data.get("weapon");
     ImageView iv = imageViewFromSpriteSheet(weapon.getModule(TextureModule.class).getTexturePath(),weapon.getModule(TextureModule.class).getWeaponID(),
         weapon.getModule(TextureModule.class).getImageWidht(),weapon.getModule(TextureModule.class).getImageHeight(), ProjectConfig._WEAPON_COLUMNS);
-    //iv.setRotate(90);
     WeaponComponent weaponComponent = new WeaponComponent(weapon);
     weapon.getModule(TextureModule.class).setComponent(weaponComponent);
+
+    DataComponent dataComponent = new DataComponent(EntityType.WEAPON,false,data.get("id"));
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WEAPON)
@@ -311,10 +323,11 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(BoundingShape.box(75, 20)))
         .with(new CollidableComponent(true))
         .with(weaponComponent)
+        .with(dataComponent)
         .build();
   }
-  ImageView imageViewFromSpriteSheet(String path, int number, int spriteWidth, int spriteHeight,int columns){
-    ImageView iv = new ImageView(new Image(path));
+  ImageView imageViewFromSpriteSheet(Image img, int number, int spriteWidth, int spriteHeight,int columns){
+    ImageView iv = new ImageView(img);
     iv.setViewport(new Rectangle2D(spriteWidth*(number%columns),spriteHeight*(number/columns),spriteWidth,spriteHeight));
     return iv;
   }

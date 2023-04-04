@@ -12,14 +12,21 @@ public class CreatureWeaponModule extends CreatureModule{
   private int weaponSize;
   private List<Weapon> weapons;
 
-  public CreatureWeaponModule(Weapon startWeapon){
+  public Weapons getStartWeapon() {
+    return startWeapon;
+  }
+
+  private Weapons startWeapon;
+
+  public CreatureWeaponModule(Weapons startWeapon){
+    this.startWeapon=startWeapon;
     this.activeWeapon = 0;
     this.weaponSize = 2;
     this.weapons = new ArrayList<>();
     for (int i = 0; i < weaponSize; i++) {
       weapons.add(WeaponFactory.getWeapon(Weapons.Hand));
     }
-    changeWeapon(startWeapon);
+    changeWeapon(WeaponFactory.getWeapon(startWeapon));
     user=null;
   }
   private Creature user;

@@ -1,20 +1,21 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.Factory;
-import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
+import javafx.application.Platform;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionQueues;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
@@ -28,10 +29,9 @@ public class ClientThread extends Thread {
 
   private final Receiver receiver;
 
-  private final BlockingQueue<NewEntity> newEntities = new LinkedBlockingQueue<>();
-
-  private final BlockingQueue<Entity> spawnEntityList = new LinkedBlockingQueue<>();
-
+  private final ActionPacket actions = new ActionPacket(Collections.synchronizedMap(new HashMap<>()),
+      Collections.synchronizedMap(new HashMap<>())); // TODO: 03.04.2023 удалять actions по завершении
+  private final ActionQueues actionQueues = new ActionQueues();
   private final Object monitor = new Object();
 
   public ClientThread(Receiver receiver, Sender sender, SocketAddress serverAddress) {
@@ -40,8 +40,8 @@ public class ClientThread extends Thread {
     this.receiver = receiver;
   }
 
-  public Entity spawnNewEntity(NewEntity newEntity) {
-    newEntities.add(newEntity);
+  public Entity spawnNewEntity(SpawnAction newAction) {
+    actionQueues.getNewSpawnActions().add(newAction);
     while (true) {
       synchronized (monitor) {
         try {
@@ -51,31 +51,58 @@ public class ClientThread extends Thread {
           throw new RuntimeException(e);
         }
       }
-      Point2D entPos = newEntity.getPosition();
-      Optional<Entity> entity = spawnEntityList.stream().filter(e -> e.getPosition().equals(entPos))
-          .findAny();
-      if (entity.isPresent()) {
-        spawnEntityList.remove(entity.get());
-        return entity.get();
+      //Сверяем по ID, которое в какой то момент времени изменится когда клиент получит пакет
+      if (newAction.getNewEntity().getID() != null && MCClient.getClientState().getIdHashTable()
+          .get(newAction.getNewEntity().getID()) != null) {
+        return MCClient.getClientState().getIdHashTable()
+            .get(newAction.getNewEntity().getID());
       }
     }
+  }
+
+  public void doAction(GameAction newAction) {
+    actionQueues.addAction(newAction);
+    /*
+    while (true) {
+      synchronized (monitor) {
+        try {
+          monitor.wait();
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          throw new RuntimeException(e);
+        }
+      }
+      //Сверяем по ID, которое в какой то момент времени изменится когда клиент получит пакет
+      if (newAction.getStatus() == ActionStatus.COMPLETED) {
+        return;
+      }
+    }*/
   }
 
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
+      //System.out.println("spawn: "+actions.getSpawnActions().keySet());
+      //System.out.println("takeWeapon: "+actions.getTakeWeaponActions().keySet());
+      //Добавляем новые действия в мапу
+      actionQueues.addToActionPacket(actions);
+      //Отправляем пакет
       List<EntityState> entityStates = MCClient.getClientState().getEntityStates();
-      List<NewEntity> newEntityList = new ArrayList<>();
-      newEntities.drainTo(newEntityList);
-      if (entityStates.size() > 0) {
-        System.out.println(entityStates.get(0).getPosition());
-      }
-      sender.send(serverAddress, new GameStatePacket(newEntityList, entityStates));
+      //System.out.println(entityStates);
+      sender.send(serverAddress, new GameStatePacket(actions, entityStates));
       try {
+        //Обновляем состояния объектов
         GameStatePacket gameStatePacket = receiver.receive();
-        MCClient.getClientState().updateEntities(gameStatePacket.getAllCoordinatesOfEntitiesList());
-        List<Entity> entityList = MCClient.getClientState().spawnEntities(gameStatePacket.getNewEntityList());
-        spawnEntityList.addAll(entityList);
+        gameStatePacket.getEntitiesStates().stream().filter(e -> e.getId() == 2).forEach(e -> System.out.println(e));
+        MCClient.getClientState().updateEntities(gameStatePacket.getEntitiesStates());
+
+        //Обновляем состояния действий
+        actions.update(gameStatePacket.getActions());
+        // Как вариант - отдать MCClient-у мапу - пусть разбирается сам - выполняет APPROVED а потом меняет статус на COMPLETED
+
+        //Запускаем в выполнение действия
+        MCClient.getClientState().doActions(actions);
+
         synchronized (monitor) {
           monitor.notifyAll();
         }

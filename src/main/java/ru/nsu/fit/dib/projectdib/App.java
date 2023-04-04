@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import java.net.InetSocketAddress;
 import java.util.List;
+import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
@@ -76,18 +77,16 @@ public class App extends GameApplication {
   protected void initGame() {
 
     ServerConfig.init();
-    ClientConfig.init();
-    ServerConfig.addClientAddresses(List.of(new InetSocketAddress("localhost", 9090)));
+    ServerConfig.addClientAddresses(List.of(new InetSocketAddress("localhost", 9090), new InetSocketAddress("192.168.43.112", 9090)));
     ServerThread serverThread = new ServerThread(MCServer.getReceiver(), MCServer.getSender(), MCServer.getClientAddresses());
     ServerConfig.addServerThread(serverThread);
+    serverThread.start();
 
+    ClientConfig.init();
     ClientConfig.addServerAddress(new InetSocketAddress("localhost", 8080));
     ClientThread clientThread = new ClientThread(MCClient.getReceiver(), MCClient.getSender(), MCClient.getServerAddress());
     ClientConfig.addClientThread(clientThread);
-
-    serverThread.start();
     clientThread.start();
-
 
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
