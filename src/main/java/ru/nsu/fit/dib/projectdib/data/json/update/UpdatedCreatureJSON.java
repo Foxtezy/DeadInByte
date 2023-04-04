@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.Entity;
 import java.util.List;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
 
 /**
@@ -28,12 +29,12 @@ public class UpdatedCreatureJSON {
   public void updateCreature(Entity creature){
 
     Point2D movingVector = position.add(creature.getPosition().multiply(-1));
-    if (movingVector.getX()>0) creature.getComponent(CreatureComponent.class).right();
-    else if (movingVector.getX()<0) creature.getComponent(CreatureComponent.class).left();
-    if (movingVector.getY()>0) creature.getComponent(CreatureComponent.class).down();
-    else if (movingVector.getY()<0) creature.getComponent(CreatureComponent.class).up();
+    if (movingVector.getX()>0) creature.getComponent(HeroComponent.class).right();
+    else if (movingVector.getX()<0) creature.getComponent(HeroComponent.class).left();
+    if (movingVector.getY()>0) creature.getComponent(HeroComponent.class).down();
+    else if (movingVector.getY()<0) creature.getComponent(HeroComponent.class).up();
 
-    creature.getComponent(CreatureComponent.class).bindDirectionView(entity -> directionView);
+    creature.getComponent(HeroComponent.class).bindDirectionView(entity -> directionView);
 
     actions.forEach(action -> {
       switch (action.getType()){

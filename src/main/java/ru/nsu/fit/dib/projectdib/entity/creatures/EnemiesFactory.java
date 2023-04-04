@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnemiesFactory {
-	public static Creature getEnemy(EnemyType enemyType){
+	public static Creature newEnemy(EnemyType enemyType, Integer seed){
 		List<Integer> specsList = RandomSystem.generateCreatureSpecs(123);
 		return switch (enemyType) {
 			case Ogre -> new Creature.CreatureBuilder(CreatureRarity.special, "Ogre")

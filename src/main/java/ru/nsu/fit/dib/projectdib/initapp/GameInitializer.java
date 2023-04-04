@@ -16,7 +16,7 @@ import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
-import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
@@ -56,8 +56,11 @@ public class GameInitializer {
     Point2D position = new Point2D(x,y);
     Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
-    Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
+    //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
+    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Ogre,position, RandomSystem.random.nextInt());
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
+
+
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
     //sd2.put("creature", RandomCharacterSystem.NewCharacter());

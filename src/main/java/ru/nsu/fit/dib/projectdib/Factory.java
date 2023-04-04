@@ -36,13 +36,10 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
-import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.*;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
@@ -80,24 +77,23 @@ public class Factory implements EntityFactory {
     return new Pair(hero,weapon);
   };
 
-  /**
-   * Creates weapon.
-   *
-   * @param weaponType type of weapon
-   * @param position position
-   * @return weapon entity
-   */
+  public static Pair<Entity,Entity> spawnEnemy(EnemiesFactory.EnemyType enemyType, Point2D position, Integer seed){
+    SpawnData sd = new SpawnData(position);
+    sd.put("creature", EnemiesFactory.newEnemy(enemyType, seed));
+    Entity enemy = spawn("enemy", sd);
+   // enemy.setScaleUniform(0.75);
+    SpawnData weaponSD = new SpawnData(position);
+    weaponSD.put("weapon",  enemy.getComponent(EnemyComponent.class).getCreature().getModule(
+            CreatureWeaponModule.class).getActiveWeapon());
+    Entity weapon = spawn("weapon", weaponSD);
+    return new Pair(enemy, weapon);
+  }
+
   public static Entity spawnWeapon(Weapons weaponType,Point2D position){
     SpawnData sd = new SpawnData(position);
     sd.put("weapon", WeaponFactory.getWeapon(weaponType));
     return spawn("weapon", sd);
   };
-  /**
-   * Entity Player.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Player
-   */
   @Spawns("player")
   public Entity newPlayer(SpawnData data) {
     Creature creature = data.get("creature");
@@ -123,7 +119,58 @@ public class Factory implements EntityFactory {
         .collidable()
         .build();
   }
+  @Spawns("enemy")
+  public Entity newEnemy(SpawnData data) {
+    Creature creature = data.get("creature");
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
+    EnemyComponent enemyComponent = new EnemyComponent(creature,new Point2D(50,180));
+    enemyComponent.bindDirectionView(entity ->new Point2D(0,0));
+    creature.getModule(JFXModule.class).setEnemyComponent(enemyComponent);
+    //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
+    return entityBuilder()
+            .from(data)
+            .type(EntityType.PLAYER)
+            //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
+            .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
+            .anchorFromCenter()
+            .with(physics)
+            .with(enemyComponent)
+            .with(new CellMoveComponent(30, 30, 85))
+            .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+            //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
+            .collidable()
+            .build();
+  }
+/*
+  @Spawns("enemy")
+  public Entity newEnemy(SpawnData data) {
+    var hp = new HealthIntComponent(10);
+    var hpView = new ProgressBar(false);
+    hpView.setFill(Color.LIGHTGREEN);
+    hpView.setMaxValue(10);
+    hpView.setWidth(40);
+    hpView.setTranslateY(-10);
+    hpView.currentValueProperty().bind(hp.valueProperty());
 
+    Circle circle = new Circle(10, 10, 10, Color.RED);
+    circle.setStroke(Color.BROWN);
+    circle.setStrokeWidth(2.0);
+    return entityBuilder()
+            .from(data)
+            .type(EntityType.ENEMY)
+            .viewWithBBox(texture("skull.png", 50, 50))
+            .anchorFromCenter()
+            .collidable()
+            .with(hp)
+            .view(hpView)
+            .with(new CellMoveComponent(25, 25, 100))
+            .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+            .with(new PlayerChaseComponent())
+            .build();
+  }
+*/
 
   @Spawns("platform")
   public Entity platform(SpawnData data) {
@@ -148,12 +195,6 @@ public class Factory implements EntityFactory {
         .build();
   }
 
-  /**
-   * Entity Box.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Box
-   */
   @Spawns("box")
   public Entity newBox(SpawnData data) {
     var hp = new HealthIntComponent(3);
@@ -181,12 +222,6 @@ public class Factory implements EntityFactory {
         .build();
   }
 
-  /**
-   * Entity Chest.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for chest
-   */
   @Spawns("chest")
   public Entity newChest(SpawnData data) {
     var hp = new HealthIntComponent(3);
@@ -214,12 +249,6 @@ public class Factory implements EntityFactory {
   }
 
 
-  /**
-   * Entity Coin.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Coin
-   */
   @Spawns("coin")
   public Entity newCoin(SpawnData data) {
     return entityBuilder()
@@ -231,12 +260,6 @@ public class Factory implements EntityFactory {
   }
 
 
-  /**
-   * Entity Arrow.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Arrow
-   */
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
@@ -317,38 +340,6 @@ public class Factory implements EntityFactory {
     ImageView iv = new ImageView(new Image(path));
     iv.setViewport(new Rectangle2D(spriteWidth*(number%columns),spriteHeight*(number/columns),spriteWidth,spriteHeight));
     return iv;
-  }
-  /**
-   * Entity Enemy.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Enemy
-   */
-  @Spawns("enemy")
-  public Entity newEnemy(SpawnData data) {
-    var hp = new HealthIntComponent(10);
-    var hpView = new ProgressBar(false);
-    hpView.setFill(Color.LIGHTGREEN);
-    hpView.setMaxValue(10);
-    hpView.setWidth(40);
-    hpView.setTranslateY(-10);
-    hpView.currentValueProperty().bind(hp.valueProperty());
-
-    Circle circle = new Circle(10, 10, 10, Color.RED);
-    circle.setStroke(Color.BROWN);
-    circle.setStrokeWidth(2.0);
-    return entityBuilder()
-        .from(data)
-        .type(EntityType.ENEMY)
-        .viewWithBBox(texture("skull.png", 50, 50))
-        .anchorFromCenter()
-        .collidable()
-        .with(hp)
-        .view(hpView)
-        .with(new CellMoveComponent(25, 25, 100))
-        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-        .with(new PlayerChaseComponent())
-        .build();
   }
 
   @Spawns("button")

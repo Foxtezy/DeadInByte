@@ -51,7 +51,7 @@ public class WeaponComponent extends Component {
       Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
       Point2D rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
-
+      //TODO getEnemyComponent().getEntity().getPosition();
       getEntity().rotateToVector(rotation);
 
       getEntity().setX(position.getX());
