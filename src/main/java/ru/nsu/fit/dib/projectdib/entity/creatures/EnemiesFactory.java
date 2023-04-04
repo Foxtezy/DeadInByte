@@ -44,7 +44,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case LongHead -> new Creature.CreatureBuilder(CreatureRarity.special, "LongHead")
-					.setID(5)
+					.setID(4)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -52,7 +52,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Mask -> new Creature.CreatureBuilder(CreatureRarity.special, "Mask")
-					.setID(6)
+					.setID(5)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -60,7 +60,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Boar -> new Creature.CreatureBuilder(CreatureRarity.special, "Boar")
-					.setID(7)
+					.setID(6)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -68,7 +68,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Shaman -> new Creature.CreatureBuilder(CreatureRarity.special, "Shaman")
-					.setID(8)
+					.setID(7)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -76,7 +76,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Invisible -> new Creature.CreatureBuilder(CreatureRarity.special, "Invisible")
-					.setID(9)
+					.setID(8)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -84,7 +84,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.magic, 3)
 					.build();
 			case Chel -> new Creature.CreatureBuilder(CreatureRarity.special, "Chel")
-					.setID(10)
+					.setID(9)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -92,7 +92,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Devil -> new Creature.CreatureBuilder(CreatureRarity.special, "Devil")
-					.setID(11)
+					.setID(10)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -100,7 +100,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Angel -> new Creature.CreatureBuilder(CreatureRarity.special, "Angel")
-					.setID(12)
+					.setID(11)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -108,7 +108,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.magic, 3)
 					.build();
 			case GreenIsaac -> new Creature.CreatureBuilder(CreatureRarity.special, "GreenIsaac")
-					.setID(13)
+					.setID(12)
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
