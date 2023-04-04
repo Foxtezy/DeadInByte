@@ -54,10 +54,10 @@ public class GameInitializer {
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
-    Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.Elf,position,true, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.JonnyS,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
-    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mud,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
 
 
