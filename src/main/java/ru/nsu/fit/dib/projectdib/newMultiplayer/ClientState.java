@@ -48,12 +48,16 @@ public class ClientState {
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
-      entityState.update();
+      if (MCClient.getClientState().getIdHashTable().get(entityState.getId()) == null) {
+        if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
+            DataComponent.class).isClientEntity())
+          entityState.update();
+      }
     });
   }
 
   public List<EntityState> getEntityStates() {
-    return idHashTable.entrySet().stream()
+    return idHashTable.entrySet().stream().filter(e->e.getValue().hasComponent(DataComponent.class))
         .map(e -> new EntityState(e.getKey(),
             e.getValue().getComponent(DataComponent.class).getPosition(),
             e.getValue().getComponent(DataComponent.class).getRotation(),

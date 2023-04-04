@@ -19,34 +19,9 @@ public final class EntitySpawner {
   }
 
   public static Future<Entity> spawn(NewEntity newEntity) {
-    return CompletableFuture.supplyAsync(() -> {
-      final Entity[] entity = {null};
-      Thread compThread = Thread.currentThread();
-      Platform.runLater(() -> {
-        //Принят для исполнения или принят чтоб передать версеру?
-        //Где передается серверу?
-        entity[0] = MCClient.getClientState().acceptedSpawn(newEntity);
-        compThread.interrupt();
-      });
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-      }
-      return entity[0];
-
-    });
+    return CompletableFuture.supplyAsync(() -> MCClient.getClientState().acceptedSpawn(newEntity));
   }
   public static void doAction(GameAction action) {
-    runAsync(()->{    Thread compThread = Thread.currentThread();
-      Platform.runLater(() -> {
-        //Принят для исполнения или принят чтоб передать версеру?
-        //Где передается серверу?
-        MCClient.getClientState().acceptedAction(action);
-        compThread.interrupt();
-      });
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-      }});
+    runAsync(() -> MCClient.getClientState().acceptedAction(action));
   }
 }

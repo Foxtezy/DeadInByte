@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionQueues;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
@@ -81,8 +82,8 @@ public class ClientThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      System.out.println("spawn: "+actions.getSpawnActions().keySet());
-      System.out.println("takeWeapon: "+actions.getTakeWeaponActions().keySet());
+      //System.out.println("spawn: "+actions.getSpawnActions().keySet());
+      //System.out.println("takeWeapon: "+actions.getTakeWeaponActions().keySet());
       //Добавляем новые действия в мапу
       actionQueues.addToActionPacket(actions);
       //Отправляем пакет
