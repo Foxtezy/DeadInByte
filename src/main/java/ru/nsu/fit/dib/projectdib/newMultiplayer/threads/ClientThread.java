@@ -81,7 +81,8 @@ public class ClientThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-
+      System.out.println("spawn: "+actions.getSpawnActions().keySet());
+      System.out.println("takeWeapon: "+actions.getTakeWeaponActions().keySet());
       //Добавляем новые действия в мапу
       actionQueues.addToActionPacket(actions);
       //Отправляем пакет
