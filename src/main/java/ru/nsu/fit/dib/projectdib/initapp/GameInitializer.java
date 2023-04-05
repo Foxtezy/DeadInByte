@@ -60,7 +60,7 @@ public class GameInitializer {
 
     Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
-    Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mud,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
 
 
 

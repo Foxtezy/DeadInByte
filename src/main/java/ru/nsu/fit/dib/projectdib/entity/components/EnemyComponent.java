@@ -35,6 +35,14 @@ private static Image imgEnemy = new Image(_enemy);
         this.localAnchor = localAnchor;
         this.creature = creature;
         int creatureNumber = creature.getModule(JFXModule.class).getImageID();
+        if(creatureNumber == 5){
+                                    // Mask
+         imgEnemy = new Image("assets/textures/4.png");
+        }else{
+            imgEnemy = new Image("assets/textures/3.png");
+
+        }
+
 //
 ////        if(creatureNumber == 3){ //MUD
 ////            this.animationMovement = new AnimationChannel(imgEnemy,
@@ -53,6 +61,7 @@ private static Image imgEnemy = new Image(_enemy);
 //                8, _enemy_width, _enemy_height, Duration.millis(600),
 //                creatureNumber*_enemy_numberColumns, 1 + creatureNumber*_enemy_numberColumns);
 //        }
+
         this.animationStanding = new AnimationChannel(imgEnemy,
                 2, 160, 320, Duration.millis(600),
                 0, 1);
