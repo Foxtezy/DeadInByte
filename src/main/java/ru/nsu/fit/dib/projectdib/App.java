@@ -62,7 +62,7 @@ public class App extends GameApplication {
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player=gameInitializer.getPlayer();
-    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 160, 160,
+/*    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 160, 160,
             (type) -> {
               if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
                 return CellState.NOT_WALKABLE;
@@ -70,6 +70,6 @@ public class App extends GameApplication {
 
               return CellState.WALKABLE;
             });
-    set("grid", grid);
+    set("grid", grid);*/
   }
 }

@@ -128,11 +128,11 @@ public class Factory implements EntityFactory {
     EnemyComponent enemyComponent = new EnemyComponent(creature,new Point2D(50,180));
     enemyComponent.bindDirectionView(entity ->new Point2D(0,0));
     creature.getModule(JFXModule.class).setEnemyComponent(enemyComponent);
-    AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
+    //AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
             .from(data)
-            .type(EntityType.PLAYER)
+            .type(EntityType.ENEMY)
             //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
             .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
             .anchorFromCenter()

@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.entity.creatures;
 
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class EnemiesFactory {
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setStartWeapon(WeaponFactory.getWeapon(WeaponFactory.Weapons.Bow))
+					.setStartWeapon(WeaponFactory.getWeapon(Weapons.Hand))
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Mask -> new Creature.CreatureBuilder(CreatureRarity.special, "Mask")
@@ -96,7 +97,7 @@ public class EnemiesFactory {
 					.setSpecs(RandomSystem.d(5),
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setStartWeapon(WeaponFactory.getWeapon(WeaponFactory.Weapons.Hand))
+					.setStartWeapon(WeaponFactory.getWeapon(Weapons.AK47))
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Angel -> new Creature.CreatureBuilder(CreatureRarity.special, "Angel")

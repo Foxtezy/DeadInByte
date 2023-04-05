@@ -37,7 +37,7 @@ public class EnemyComponent extends Component {
         int creatureNumber = creature.getModule(JFXModule.class).getImageID();
 
         Image img = new Image(_enemy);
-        if(creatureNumber == 3){ //MUD
+        if(creatureNumber == 3 || creatureNumber == 4){ //MUD and LongHead have other animation
             this.animationMovement = new AnimationChannel(img,
                     8, _enemy_width, _enemy_height, Duration.millis(600),
                     4 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);

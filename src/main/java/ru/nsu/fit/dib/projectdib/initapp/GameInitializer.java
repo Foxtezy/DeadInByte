@@ -16,7 +16,9 @@ import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
-import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
@@ -57,7 +59,10 @@ public class GameInitializer {
     Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.JonnyS,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
     //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
-    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemyType.LongHead,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemyType.LongHead,position, RandomSystem.random.nextInt());
+
+    //Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemyType.Mud, new Point2D(lvl.roomList.get(1).getCentrePoint().getX()*160,lvl.roomList.get(1).getCentrePoint().getY()*160), RandomSystem.random.nextInt());
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
 
 
