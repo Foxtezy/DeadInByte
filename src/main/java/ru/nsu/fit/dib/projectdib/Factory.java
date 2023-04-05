@@ -11,10 +11,7 @@ import static java.lang.Character.toUpperCase;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityFactory;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.*;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
@@ -69,6 +66,7 @@ public class Factory implements EntityFactory {
     sd.put("clientHero",isClientHero);
     sd.put("creature", HeroesFactory.newHero(heroType,seed));
     Entity hero = spawn("player", sd);
+
     hero.setScaleUniform(0.75);
     SpawnData weaponSD = new SpawnData(position);
     weaponSD.put("weapon",  hero.getComponent(HeroComponent.class).getCreature().getModule(
@@ -80,8 +78,10 @@ public class Factory implements EntityFactory {
   public static Pair<Entity,Entity> spawnEnemy(EnemiesFactory.EnemyType enemyType, Point2D position, Integer seed){
     SpawnData sd = new SpawnData(position);
     sd.put("creature", EnemiesFactory.newEnemy(enemyType, seed));
+
+    //enemy = getGameWorld().create("enemy", sd);
     Entity enemy = spawn("enemy", sd);
-   // enemy.setScaleUniform(0.75);
+    enemy.setScaleUniform(0.75);
     SpawnData weaponSD = new SpawnData(position);
     weaponSD.put("weapon",  enemy.getComponent(EnemyComponent.class).getCreature().getModule(
             CreatureWeaponModule.class).getActiveWeapon());

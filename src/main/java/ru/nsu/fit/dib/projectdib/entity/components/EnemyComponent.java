@@ -30,30 +30,35 @@ public class EnemyComponent extends Component {
     private PhysicsComponent physics;
     private String currentWeapon;
     private boolean isMoving = false;
-
+private static Image imgEnemy = new Image(_enemy);
     public EnemyComponent(Creature creature, Point2D localAnchor) {
         this.localAnchor = localAnchor;
         this.creature = creature;
         int creatureNumber = creature.getModule(JFXModule.class).getImageID();
-
-        Image img = new Image(_enemy);
-        if(creatureNumber == 3){ //MUD
-            this.animationMovement = new AnimationChannel(img,
-                    8, _enemy_width, _enemy_height, Duration.millis(600),
-                    4 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);
-
-            this.animationStanding = new AnimationChannel(img,
-                    8, _enemy_width, _enemy_height, Duration.millis(600),
-                    creatureNumber*_enemy_numberColumns, 3 + creatureNumber*_enemy_numberColumns);
-        }else{
-        this.animationMovement = new AnimationChannel(img,
-                8, _enemy_width, _enemy_height, Duration.millis(600),
-                3 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);
-
-        this.animationStanding = new AnimationChannel(img,
-                8, _enemy_width, _enemy_height, Duration.millis(600),
-                creatureNumber*_enemy_numberColumns, 1 + creatureNumber*_enemy_numberColumns);
-        }
+//
+////        if(creatureNumber == 3){ //MUD
+////            this.animationMovement = new AnimationChannel(imgEnemy,
+////                    8, _enemy_width, _enemy_height, Duration.millis(600),
+////                    4 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);
+////
+////            this.animationStanding = new AnimationChannel(imgEnemy,
+////                    8, _enemy_width, _enemy_height, Duration.millis(600),
+////                    creatureNumber*_enemy_numberColumns, 3 + creatureNumber*_enemy_numberColumns);
+////        }else{
+//        this.animationMovement = new AnimationChannel(imgEnemy,
+//                8, _enemy_width, _enemy_height, Duration.millis(600),
+//                3 + creatureNumber*_enemy_numberColumns,7+creatureNumber*_enemy_numberColumns);
+//
+//        this.animationStanding = new AnimationChannel(imgEnemy,
+//                8, _enemy_width, _enemy_height, Duration.millis(600),
+//                creatureNumber*_enemy_numberColumns, 1 + creatureNumber*_enemy_numberColumns);
+//        }
+        this.animationStanding = new AnimationChannel(imgEnemy,
+                2, 160, 320, Duration.millis(600),
+                0, 1);
+        this.animationMovement = new AnimationChannel(imgEnemy,
+                2, 160, 320, Duration.millis(600),
+                0, 1);
 
         texture = new AnimatedTexture(animationStanding);
         texture.loop();
@@ -94,9 +99,9 @@ public class EnemyComponent extends Component {
             stateChanged = false;
         }
 
-        Point2D mouseVelocity = getDirectionView();
+        //Point2D mouseVelocity = getDirectionView();
         //Поворот
-        if (mouseVelocity.angle(1, 0) <= 90) {
+        if (true) {
             rotate(CreatureComponent.SIDE.RIGHT);
         } else {
             rotate(CreatureComponent.SIDE.LEFT);

@@ -56,9 +56,12 @@ public class GameInitializer {
     Point2D position = new Point2D(x,y);
     Pair<Entity,Entity> pair = Factory.spawnHero(HeroType.JonnyS,position,true, RandomSystem.random.nextInt());
     player=pair.getKey();
-    //Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
-    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
+
+    Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
+    Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mud,position, RandomSystem.random.nextInt());
+
 
 
     //===================================

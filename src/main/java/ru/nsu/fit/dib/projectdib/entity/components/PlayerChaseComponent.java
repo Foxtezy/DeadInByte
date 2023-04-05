@@ -48,14 +48,14 @@ public PlayerChaseComponent(AStarMoveComponent enemy) {
   }
 
   private void move() {
-    var player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
-    //var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
-    int x = player.call("getCellX");
-    int y = player.call("getCellY");
-   if (player.isColliding(enemy.getEntity())) {
-      enemy.stopMovement();
-    } else {
-      enemy.moveToCell(x, y);
-    }
+//    var player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
+//    //var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
+//    int x = player.call("getCellX");
+//    int y = player.call("getCellY");
+//   if (player.isColliding(enemy.getEntity())) {
+//      enemy.stopMovement();
+//    } else {
+//      enemy.moveToCell(x, y);
+//    }
   }
 }
