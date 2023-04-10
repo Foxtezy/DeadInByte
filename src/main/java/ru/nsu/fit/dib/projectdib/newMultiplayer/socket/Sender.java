@@ -31,7 +31,7 @@ public class Sender {
     if (p.length > 55000) {
       throw new PacketSizeException();
     }
-    p[0] = MessageType.NEW_STATE.getId();
+    //p[0] = MessageType.NEW_STATE.getId();
     System.arraycopy(byteArray, 0, p, 1, byteArray.length);
     DatagramPacket packet = new DatagramPacket(p, p.length, address);
     try {

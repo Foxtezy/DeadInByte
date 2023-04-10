@@ -89,7 +89,6 @@ public class ClientThread extends Thread {
       //Отправляем пакет
       List<EntityState> entityStates = MCClient.getClientState().getEntityStates();
       //System.out.println(entityStates);
-      sender.send(serverAddress, new GameStatePacket(actions, entityStates));
       try {
         //Обновляем состояния объектов
         GameStatePacket gameStatePacket = receiver.receive();

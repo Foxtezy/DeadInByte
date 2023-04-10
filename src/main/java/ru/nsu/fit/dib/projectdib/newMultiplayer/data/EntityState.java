@@ -12,10 +12,11 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 
 public class EntityState {
-  private final Integer id;
+
+  private final int id;
   private Point2D position;
   private Point2D rotation;
-  private final Integer bindedEntity; //для player - активное оружие
+  private final int bindedEntity; //для player - активное оружие
 
   public EntityState(Integer id, Point2D position, Point2D rotation, Integer bindedEntity) {
     this.id = id;
@@ -24,7 +25,7 @@ public class EntityState {
     this.bindedEntity = bindedEntity;
   }
 
-  public Integer getId() {
+  public int getId() {
     return id;
   }
 
@@ -45,11 +46,15 @@ public class EntityState {
   }
 
   public void update() {
-    if (Objects.equals(id, SpawnAction.clientID)) return;
+    if (Objects.equals(id, SpawnAction.clientID)) {
+      return;
+    }
 
     Map<Integer, Entity> hashTable = MCClient.getClientState().getIdHashTable();
     Entity entity = hashTable.get(id);
-    if (entity==null) return;
+    if (entity == null) {
+      return;
+    }
     //TODO DataComponent not found
     switch (entity.getComponent(DataComponent.class).getEntityType()) {
       case PLAYER -> {
@@ -61,15 +66,18 @@ public class EntityState {
 
         CreatureWeaponModule module = entity.getComponent(HeroComponent.class).getCreature()
             .getModule(CreatureWeaponModule.class);
-        if (bindedEntity!=null){
-          Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
 
-          if (!weapon.getComponent(WeaponComponent.class).isActive()) {
-            module.getNextWeapon();
-          }
+        Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
+        if (!weapon.getComponent(WeaponComponent.class).isActive()) {
+          module.getNextWeapon();
         }
+
 
       }
     }
+  }
+
+  public int getActiveWeapon() {
+    return bindedEntity;
   }
 }

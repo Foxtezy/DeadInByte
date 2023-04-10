@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
@@ -29,17 +30,39 @@ public class Receiver {
       throw new RuntimeException(e);
     }
     byte[] byteArray = new byte[60000];
+
+    /*
     DatagramPacket p = new DatagramPacket(byteArray, byteArray.length);
     try {
       socket.receive(p);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    if (p.getData()[0] != MessageType.NEW_STATE.getId()) {
+    */
+    switch (MessageType.getMessageType(byteArray[0])){
+      case UPDATE -> {
+        /*
+        long startTime = System.currentTimeMillis();
+        ByteBuffer bb = ByteBuffer.wrap(byteArray);
+        reposListFlat = frogermcs.io.flatbuffs.model.flat.ReposList.getRootAsReposList(bb);
+        for (int i = 0; i < reposListFlat.reposLength(); i++) {
+          Repo repos = reposListFlat.repos(i);
+          Log.d("FlatBuffers", "Repo #" + i + ", id: " + repos.id());
+        }
+        long endTime = System.currentTimeMillis() - startTime;
+        tvFlat.setText("Elements: " + reposListFlat.reposLength() + ": load time: " + endTime + "ms");
+
+        return*/
+      }
+
+    }
+/*
+    if (p.getData()[0] != MessageType.UPDATE.getId()) {
       String json = new String(p.getData(), 1, p.getLength() - 1, StandardCharsets.UTF_8);
       throw new PacketTypeException(new Gson().fromJson(json, GameStatePacket.class));
     }
-    String json = new String(p.getData(), 1, p.getLength() - 1, StandardCharsets.UTF_8);
-    return new Gson().fromJson(json, GameStatePacket.class);
+    String json = new String(p.getData(), 1, p.getLength() - 1, StandardCharsets.UTF_8);*/
+    //return new Gson().fromJson(null, GameStatePacket.class);
+    return null;
   }
 }
