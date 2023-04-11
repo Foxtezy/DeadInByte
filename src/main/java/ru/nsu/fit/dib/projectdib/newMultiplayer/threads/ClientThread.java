@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import javafx.application.Platform;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionQueues;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
@@ -18,6 +19,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 
@@ -91,7 +93,7 @@ public class ClientThread extends Thread {
       //System.out.println(entityStates);
       try {
         //Обновляем состояния объектов
-        GameStatePacket gameStatePacket = receiver.receive();
+        Pair<MessageType, Object> gameStatePacket = receiver.receive();
         gameStatePacket.getEntitiesStates().stream().filter(e -> e.getId() == 2).forEach(e -> System.out.println(e));
         MCClient.getClientState().updateEntities(gameStatePacket.getEntitiesStates());
 

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -15,6 +16,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 
@@ -39,7 +41,7 @@ public class ServerThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      GameStatePacket inPacket;
+      Pair<MessageType,Object> inPacket;
       try {
         inPacket = receiver.receive();
       } catch (PacketTypeException e) {
@@ -50,6 +52,9 @@ public class ServerThread extends Thread {
         throw new RuntimeException("сеть упала=(" + e);
       }
       //Спавнит по запросам всегда
+      switch (inPacket.getKey()){
+
+      }
       inPacket.getActions().getSpawnActions().values().stream()
           .filter(gameAction -> gameAction.getStatus() == ActionStatus.CREATED)
           .forEach(spawnAction -> {
@@ -82,7 +87,7 @@ public class ServerThread extends Thread {
             }
           });
       deleteCompleted(inPacket.getActions().getTakeWeaponActions());
-      GameStatePacket outPacket = inPacket;
+      Pair<MessageType,Object> outPacket = inPacket;
       clientSockets.forEach(s -> sender.send(s, outPacket));
     }
   }

@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 public enum MessageType {
   ERROR((byte) 0),
   UPDATE((byte) 1),
-  ACTION((byte) 2),
-  MAP((byte) 3);
+  SPAWN((byte) 2),
+  ACTION((byte) 3),
+  MAP((byte) 4);
 
   private final byte id;
   private static final Map<Byte, MessageType> map = Arrays.stream(MessageType.values())

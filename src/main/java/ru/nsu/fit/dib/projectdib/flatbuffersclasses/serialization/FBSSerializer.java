@@ -1,14 +1,14 @@
 package ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization;
 
-import static ru.nsu.fit.dib.projectdib.flatbuffersclasses.update.SpawnActionData.createSpawnActionData;
+import static ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.SpawnActionData.createSpawnActionData;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import java.nio.ByteBuffer;
 import java.util.List;
-import ru.nsu.fit.dib.projectdib.flatbuffersclasses.update.EntityStateData;
-import ru.nsu.fit.dib.projectdib.flatbuffersclasses.update.EntityStateDataList;
-import ru.nsu.fit.dib.projectdib.flatbuffersclasses.update.NewEntityData;
-import ru.nsu.fit.dib.projectdib.flatbuffersclasses.update.Point2D;
+import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.EntityStateData;
+import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.EntityStateDataList;
+import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData;
+import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.Point2D;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
