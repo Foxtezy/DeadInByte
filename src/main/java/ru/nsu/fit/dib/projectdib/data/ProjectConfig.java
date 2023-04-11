@@ -32,4 +32,5 @@ public interface ProjectConfig {
   Image _smallWeapon_img = new Image(_smallWeapon);
   Image _mediumWeapon_img = new Image(_mediumWeapon);
   Image _bigWeapon_img = new Image(_bigWeapon);
+  Integer MAX_PLAYERS = 4;
 }

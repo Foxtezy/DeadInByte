@@ -1,6 +1,6 @@
 //./flatc.exe -j -o <куда>  <*.fbs>
 //Данные для обновления состояния объектов
-namespace ru.nsu.fit.dib.projectdib.flatbuffersclasses.update;
+namespace ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
 
 struct Point2D {
   x:double;

@@ -10,20 +10,20 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.TakeWeaponAction;
 
 public class ActionPacket {
 
-  public synchronized Map<String, SpawnAction> getSpawnActions() {
+  public synchronized Map<Integer, SpawnAction> getSpawnActions() {
     return spawnActions;
   }
 
-  private final Map<String, SpawnAction> spawnActions;
+  private final Map<Integer, SpawnAction> spawnActions;
 
-  public synchronized Map<String, TakeWeaponAction> getTakeWeaponActions() {
+  public synchronized Map<Integer, TakeWeaponAction> getTakeWeaponActions() {
     return takeWeaponActions;
   }
 
-  private final Map<String, TakeWeaponAction> takeWeaponActions;
+  private final Map<Integer, TakeWeaponAction> takeWeaponActions;
 
-  public ActionPacket(Map<String, SpawnAction> spawnActions,
-      Map<String, TakeWeaponAction> takeWeaponActions) {
+  public ActionPacket(Map<Integer, SpawnAction> spawnActions,
+      Map<Integer, TakeWeaponAction> takeWeaponActions) {
     this.spawnActions = spawnActions;
     this.takeWeaponActions = takeWeaponActions;
   }
@@ -68,9 +68,9 @@ public class ActionPacket {
     deleteCompletedActions(getTakeWeaponActions(), actionPacket.getTakeWeaponActions());
   }
 
-  private void deleteCompletedActions(Map<String, ? extends GameAction> lastActions,
-      Map<String, ? extends GameAction> currActions) {
-    Stream<String> keys = lastActions.keySet().stream()
+  private void deleteCompletedActions(Map<Integer, ? extends GameAction> lastActions,
+      Map<Integer, ? extends GameAction> currActions) {
+    Stream<Integer> keys = lastActions.keySet().stream()
         .filter(key -> lastActions.get(key).getStatus() == ActionStatus.COMPLETED).filter(
             currActions::containsKey);
     //runAsync(() -> keys.forEach(lastActions::remove));

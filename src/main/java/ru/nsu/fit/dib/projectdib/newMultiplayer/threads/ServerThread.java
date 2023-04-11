@@ -55,8 +55,8 @@ public class ServerThread extends Thread {
           .forEach(spawnAction -> {
             spawnAction.setStatus(ActionStatus.APPROVED);
             if (HeroType.getByName(spawnAction.getNewEntity().getEntityType())!=null){
-              String id = Arrays.stream(spawnAction.getId().split(":")).findFirst().get();
-              spawnAction.getNewEntity().setId(Integer.parseInt(id));
+              Integer id = spawnAction.getOwnerId();
+              spawnAction.getNewEntity().setId(id);
             }
             else {
               spawnAction.getNewEntity().setId(nextEntityId++);
@@ -87,7 +87,7 @@ public class ServerThread extends Thread {
     }
   }
 
-  private synchronized void deleteCompleted(Map<String, ? extends GameAction> actions) {
+  private synchronized void deleteCompleted(Map<Integer, ? extends GameAction> actions) {
     actions.keySet().stream()
         .filter(key -> actions.get(key).getStatus() == ActionStatus.COMPLETED);
     //.forEach(actions::remove);
