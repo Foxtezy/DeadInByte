@@ -3,10 +3,13 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.config;
 import com.almasb.fxgl.entity.SpawnData;
 import com.google.gson.GsonBuilder;
 import java.net.DatagramSocket;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientReceiverThread;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientSenderThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -20,29 +23,21 @@ public final class ClientConfig {
   }
 
   public static void init() {
-    MCClient.addBean(EMCClient.GSON, new GsonBuilder().serializeNulls()
-        .create());
-    addClientSocket();
-    MCClient.addBean(EMCClient.SENDER, new Sender(MCClient.getClientSocket(), MCClient.getGson()));
-    MCClient.addBean(EMCClient.RECEIVER, new Receiver(MCClient.getClientSocket(), MCClient.getGson()));
+    MCClient.addBean(EMCClient.CLIENT_SOCKET, new Socket());
+    MCClient.addBean(EMCClient.SENDER, new Sender(null, null));
+    MCClient.addBean(EMCClient.RECEIVER, new Receiver(null, null));
     MCClient.addBean(EMCClient.CLIENT_STATE, new ClientState());
   }
 
-  private static void addClientSocket() {
-    DatagramSocket datagramSocket;
-    try {
-      datagramSocket = new DatagramSocket(9090);
-    } catch (SocketException e) {
-      throw new RuntimeException(e);
-    }
-    MCClient.addBean(EMCClient.CLIENT_SOCKET, datagramSocket);
+  public static void addClientId(Integer id) {
+    MCClient.addBean(EMCClient.CLIENT_ID, id);
   }
 
-  public static void addServerAddress(SocketAddress socketAddress) {
-    MCClient.addBean(EMCClient.SERVER_ADDRESS, socketAddress);
+  public static void addClientSenderThread(ClientSenderThread thread) {
+    MCClient.addBean(EMCClient.CLIENT_SENDER_THREAD, thread);
   }
 
-  public static void addClientThread(ClientThread thread) {
-    MCClient.addBean(EMCClient.CLIENT_THREAD, thread);
+  public static void addClientReceiverThread(ClientReceiverThread thread) {
+    MCClient.addBean(EMCClient.CLIENT_RECEIVER_THREAD, thread);
   }
 }

@@ -1,6 +1,5 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
-import static ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction.clientID;
 
 import com.almasb.fxgl.entity.Entity;
 import java.util.Objects;
@@ -37,7 +36,7 @@ public class NewEntity {
   public Entity spawn() {
     HeroType hero=HeroType.getByName(entityType);
     if (hero!=null) {
-      Entity heroEntity = Factory.spawnHero(hero, position, Objects.equals(id, clientID), id, seed);
+      Entity heroEntity = Factory.spawnHero(hero, position, Objects.equals(id, MCClient.getClientId()), id, seed);
       MCClient.getClientState().getIdHashTable().put(id, heroEntity);
       Entity weaponEntity = Factory.spawnStandardWeapon(weaponId, heroEntity);
       MCClient.getClientState().getIdHashTable().put(weaponId, weaponEntity);

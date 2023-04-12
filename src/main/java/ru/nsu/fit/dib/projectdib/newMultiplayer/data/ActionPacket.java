@@ -1,13 +1,12 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data;
 
-import static java.util.concurrent.CompletableFuture.runAsync;
-
 import java.util.Map;
 import java.util.stream.Stream;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.TakeWeaponAction;
 
+@Deprecated
 public class ActionPacket {
 
   public synchronized Map<String, SpawnAction> getSpawnActions() {
@@ -50,7 +49,6 @@ public class ActionPacket {
         getSpawnActions().get(id).getNewEntity().setWeaponId(action.getNewEntity().getWeaponId());
       }
     });
-    deleteCompletedActions(getSpawnActions(), actionPacket.getSpawnActions());
 
     actionPacket.getTakeWeaponActions().forEach((id, action) -> {
       //если APPROVED действия нет в базе - добавляем(создан другим клиентом или сервером)
@@ -65,14 +63,5 @@ public class ActionPacket {
         getTakeWeaponActions().get(id).setStatus(action.getStatus());
       }
     });
-    deleteCompletedActions(getTakeWeaponActions(), actionPacket.getTakeWeaponActions());
-  }
-
-  private void deleteCompletedActions(Map<String, ? extends GameAction> lastActions,
-      Map<String, ? extends GameAction> currActions) {
-    Stream<String> keys = lastActions.keySet().stream()
-        .filter(key -> lastActions.get(key).getStatus() == ActionStatus.COMPLETED).filter(
-            currActions::containsKey);
-    //runAsync(() -> keys.forEach(lastActions::remove));
   }
 }

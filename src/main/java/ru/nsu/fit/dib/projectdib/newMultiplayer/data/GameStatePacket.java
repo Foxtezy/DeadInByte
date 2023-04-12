@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.data;
 
 import java.util.List;
 
+@Deprecated
 public class GameStatePacket {
 
   private final List<EntityState> entitiesStates;

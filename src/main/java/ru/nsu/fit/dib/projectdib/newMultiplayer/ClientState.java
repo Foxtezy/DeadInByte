@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionPacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -23,19 +22,6 @@ public class ClientState {
 
   //Хранятся все ID всех отслеживаемых Entity
   private final Map<Integer, Entity> idHashTable = new ConcurrentHashMap<>();
-
-  public List<Entity> spawnEntities(List<NewEntity> newEntities) {
-    if (newEntities.isEmpty()) {
-      return new ArrayList<>();
-    }
-    List<Entity> entityList = new ArrayList<>();
-    for (int i = 0; i < newEntities.size(); i++) {
-      Entity entity = newEntities.get(i).spawn();
-      //TODO: заменить на SpawnAction
-      entityList.add(entity);
-    }
-    return entityList;
-  }
 
   public void updateEntities(List<EntityState> entityStates) {
 
@@ -58,6 +44,11 @@ public class ClientState {
   }
 
   public List<EntityState> getEntityStates() {
+    try {
+      Thread.sleep(20);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
     return idHashTable.entrySet().stream().filter(e->e.getValue().hasComponent(DataComponent.class))
         .map(e -> new EntityState(e.getKey(),
             e.getValue().getComponent(DataComponent.class).getPosition(),
@@ -67,27 +58,13 @@ public class ClientState {
   }
 
   public Entity acceptedSpawn(NewEntity newEntity) {
-    return MCClient.getClientThread().spawnNewEntity(new SpawnAction(newEntity));
+    acceptedAction(new SpawnAction(newEntity));
+
+    // TODO: 16.04.2023 вот тут вопрос с таблицей
   }
 
   public void acceptedAction(GameAction action) {
-    MCClient.getClientThread().doAction(action);
+    MCClient.getClientSenderThread().addActionTask(action);
   }
 
-  public void doActions(ActionPacket actions) {
-
-    synchronized (actions.getSpawnActions()) {
-      actions.getSpawnActions().values().stream()
-          .filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(this::runAction);
-    }
-    synchronized (actions.getTakeWeaponActions()) {
-      actions.getTakeWeaponActions().values().stream()
-          .filter(action -> action.getStatus() == ActionStatus.APPROVED).forEach(this::runAction);
-    }
-  }
-
-  private synchronized void runAction(GameAction action) {
-    action.setStatus(ActionStatus.COMPLETED);
-    action.run();
-  }
 }

@@ -2,11 +2,11 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.context.client;
 
 public enum EMCClient {
 
+  CLIENT_ID,
   CLIENT_SOCKET,
-  CLIENT_THREAD,
-  SERVER_ADDRESS,
+  CLIENT_SENDER_THREAD,
+  CLIENT_RECEIVER_THREAD,
   SENDER,
   RECEIVER,
-  CLIENT_STATE,
-  GSON
+  CLIENT_STATE
 }

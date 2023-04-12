@@ -1,10 +1,11 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.context.client;
 
-import com.google.gson.Gson;
 import java.net.DatagramSocket;
-import java.net.SocketAddress;
+import java.net.Socket;
 import java.util.HashMap;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientReceiverThread;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientSenderThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.ContextException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
@@ -25,25 +26,33 @@ public final class MCClient {
     context.put(emcClient, bean);
   }
 
-  public static DatagramSocket getClientSocket() {
-    if (context.get(EMCClient.CLIENT_SOCKET) instanceof DatagramSocket s) {
+  public static Integer getClientId() {
+    if (context.get(EMCClient.CLIENT_ID) instanceof Integer i) {
+      return i;
+    } else {
+      throw new ContextException();
+    }
+  }
+
+  public static Socket getClientSocket() {
+    if (context.get(EMCClient.CLIENT_SOCKET) instanceof Socket s) {
       return s;
     } else {
       throw new ContextException();
     }
   }
 
-  public static ClientThread getClientThread() {
-    if (context.get(EMCClient.CLIENT_THREAD) instanceof ClientThread t) {
+  public static ClientSenderThread getClientSenderThread() {
+    if (context.get(EMCClient.CLIENT_SENDER_THREAD) instanceof ClientSenderThread t) {
       return t;
     } else {
       throw new ContextException();
     }
   }
 
-  public static SocketAddress getServerAddress() {
-    if (context.get(EMCClient.SERVER_ADDRESS) instanceof SocketAddress s) {
-      return s;
+  public static ClientReceiverThread getClientReceiverThread() {
+    if (context.get(EMCClient.CLIENT_RECEIVER_THREAD) instanceof ClientReceiverThread t) {
+      return t;
     } else {
       throw new ContextException();
     }
@@ -68,14 +77,6 @@ public final class MCClient {
   public static ClientState getClientState() {
     if (context.get(EMCClient.CLIENT_STATE) instanceof ClientState c) {
       return c;
-    } else {
-      throw new ContextException();
-    }
-  }
-
-  public static Gson getGson() {
-    if (context.get(EMCClient.GSON) instanceof Gson gson) {
-      return gson;
     } else {
       throw new ContextException();
     }

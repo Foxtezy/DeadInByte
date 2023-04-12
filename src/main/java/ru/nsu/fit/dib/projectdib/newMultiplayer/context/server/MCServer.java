@@ -2,9 +2,11 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.context.server;
 
 import com.google.gson.Gson;
 import java.net.DatagramSocket;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.ContextException;
@@ -24,13 +26,6 @@ public final class MCServer {
     context.put(emcServer, bean);
   }
 
-  public static DatagramSocket getServerSocket() {
-    if (context.get(EMCServer.SERVER_SOCKET) instanceof DatagramSocket s) {
-      return s;
-    } else {
-      throw new ContextException();
-    }
-  }
 
   public static ClientThread getClientThread() {
     if (context.get(EMCServer.SERVER_THREAD) instanceof ClientThread t) {
@@ -40,9 +35,9 @@ public final class MCServer {
     }
   }
 
-  public static List<SocketAddress> getClientAddresses() {
-    if (context.get(EMCServer.CLIENT_ADDRESSES) instanceof List<?> l) {
-      return (List<SocketAddress>) l;
+  public static Map<Integer, Socket> getClientSockets() {
+    if (context.get(EMCServer.CLIENT_SOCKETS) instanceof List<?> l) {
+      return (Map<Integer, Socket>) l;
     } else {
       throw new ContextException();
     }
@@ -59,14 +54,6 @@ public final class MCServer {
   public static Receiver getReceiver() {
     if (context.get(EMCServer.RECEIVER) instanceof Receiver r) {
       return r;
-    } else {
-      throw new ContextException();
-    }
-  }
-
-  public static Gson getGson() {
-    if (context.get(EMCServer.GSON) instanceof Gson gson) {
-      return gson;
     } else {
       throw new ContextException();
     }

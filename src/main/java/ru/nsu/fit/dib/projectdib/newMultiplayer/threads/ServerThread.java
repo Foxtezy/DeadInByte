@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.Arrays;
@@ -25,11 +26,11 @@ public class ServerThread extends Thread {
 
   private final Sender sender;
 
-  private final List<SocketAddress> clientSockets;
+  private final List<Socket> clientSockets;
 
   private Integer nextEntityId = 5;
 
-  public ServerThread(Receiver receiver, Sender sender, List<SocketAddress> clientSockets) {
+  public ServerThread(Receiver receiver, Sender sender, List<Socket> clientSockets) {
     this.receiver = receiver;
     this.sender = sender;
     this.clientSockets = clientSockets;
@@ -81,15 +82,8 @@ public class ServerThread extends Thread {
               }
             }
           });
-      deleteCompleted(inPacket.getActions().getTakeWeaponActions());
       GameStatePacket outPacket = inPacket;
       clientSockets.forEach(s -> sender.send(s, outPacket));
     }
-  }
-
-  private synchronized void deleteCompleted(Map<String, ? extends GameAction> actions) {
-    actions.keySet().stream()
-        .filter(key -> actions.get(key).getStatus() == ActionStatus.COMPLETED);
-    //.forEach(actions::remove);
   }
 }

@@ -45,12 +45,12 @@ public class EntityState {
   }
 
   public void update() {
-    if (Objects.equals(id, SpawnAction.clientID)) return;
+    if (Objects.equals(id, MCClient.getClientId())) return;
 
     Map<Integer, Entity> hashTable = MCClient.getClientState().getIdHashTable();
     Entity entity = hashTable.get(id);
     if (entity==null) return;
-    //TODO DataComponent not found
+    // TODO: 12.04.2023 тут свич надо дописать
     switch (entity.getComponent(DataComponent.class).getEntityType()) {
       case PLAYER -> {
         if (position != null) {
