@@ -19,6 +19,7 @@ public class ClientSenderThread extends Thread {
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       List<EntityState> entityStates = MCClient.getClientState().getEntityStates();
+      MCClient.getClientSocket()
       //тут отправляем на сервер список с состояниями
       //actionQueue.forEach(отправка); отправка actions
     }

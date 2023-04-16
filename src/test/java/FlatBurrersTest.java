@@ -7,15 +7,14 @@ import org.junit.jupiter.api.Test;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization.FBSDeserializer;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization.FBSSerializer;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 
-public class FlatBurrersTest {
+class FlatBurrersTest {
 
   @Test
-  public void UpdateDataTest(){
+  void UpdateDataTest(){
     List<EntityState> list = new ArrayList<>();
     list.add(new EntityState(1,new Point2D(1,4),new Point2D(3,1),2));
     list.add(new EntityState(3,new Point2D(5,6),new Point2D(6,3),4));
@@ -33,16 +32,14 @@ public class FlatBurrersTest {
     }
   }
   @Test
-  public  void SpawnDataTest(){
+  void SpawnDataTest(){
     EntityState state = new EntityState(123,new Point2D(12,23),new Point2D(34,45),1234);
     NewEntity newEntity = new NewEntity(HeroType.Elf.name(), 234,state);
-    SpawnAction sa = new SpawnAction(ActionStatus.APPROVED,123,newEntity);
+    SpawnAction sa = new SpawnAction(newEntity);
     ByteBuffer buffer = FBSSerializer.serialize(sa);
 
     SpawnAction newSA = FBSDeserializer.deserializeSpawnAction(buffer);
 
-    Assertions.assertEquals(sa.getId(),newSA.getId());
-    Assertions.assertEquals(sa.getStatus(), newSA.getStatus());
     Assertions.assertEquals(sa.getNewEntity().getSeed(),newSA.getNewEntity().getSeed());
     Assertions.assertEquals(sa.getNewEntity().getID(),newSA.getNewEntity().getID());
     Assertions.assertEquals(sa.getNewEntity().getWeaponId(),newSA.getNewEntity().getWeaponId());

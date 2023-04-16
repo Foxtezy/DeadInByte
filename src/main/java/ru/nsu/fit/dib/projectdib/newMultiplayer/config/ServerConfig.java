@@ -1,14 +1,7 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.config;
 
-import com.almasb.fxgl.entity.SpawnData;
-import com.google.gson.GsonBuilder;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
+
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.EMCServer;
@@ -23,8 +16,8 @@ public final class ServerConfig {
   }
 
   public static void init() {
-    MCServer.addBean(EMCServer.SENDER, new Sender(null, null));
-    MCServer.addBean(EMCServer.RECEIVER, new Receiver(null, null));
+    MCServer.addBean(EMCServer.SENDER, new Sender());
+    MCServer.addBean(EMCServer.RECEIVER, new Receiver());
   }
 
   public static void addClientAddresses(Map<Integer, Socket> sockets) {

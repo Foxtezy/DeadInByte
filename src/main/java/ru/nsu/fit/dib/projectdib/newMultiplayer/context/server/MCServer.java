@@ -1,14 +1,9 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.context.server;
 
-import com.google.gson.Gson;
-import java.net.DatagramSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ClientThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.ContextException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
@@ -27,13 +22,6 @@ public final class MCServer {
   }
 
 
-  public static ClientThread getClientThread() {
-    if (context.get(EMCServer.SERVER_THREAD) instanceof ClientThread t) {
-      return t;
-    } else {
-      throw new ContextException();
-    }
-  }
 
   public static Map<Integer, Socket> getClientSockets() {
     if (context.get(EMCServer.CLIENT_SOCKETS) instanceof List<?> l) {

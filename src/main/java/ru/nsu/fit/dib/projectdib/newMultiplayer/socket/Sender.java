@@ -34,9 +34,6 @@ public class Sender {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-
-    //Передаем
-    //...
   }
 
 }

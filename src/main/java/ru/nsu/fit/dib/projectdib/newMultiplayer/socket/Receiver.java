@@ -27,11 +27,6 @@ public class Receiver {
   }
 
   public Pair<MessageType, Object> receive() throws PacketTypeException, SocketTimeoutException {
-    try {
-      socket.setSoTimeout(1000);
-    } catch (SocketException e) {
-      throw new RuntimeException(e);
-    }
     byte[] byteArray;
     //Получаем что то
     try {
