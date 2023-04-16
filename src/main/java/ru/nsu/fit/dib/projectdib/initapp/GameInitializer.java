@@ -65,11 +65,6 @@ public class GameInitializer {
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
-    try {
-      weapon = EntitySpawner.spawn(new NewEntity(Weapons.Bow.getName(), 123,position,null)).get();
-    } catch (InterruptedException | ExecutionException e) {
-      throw new RuntimeException(e);
-    }
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);

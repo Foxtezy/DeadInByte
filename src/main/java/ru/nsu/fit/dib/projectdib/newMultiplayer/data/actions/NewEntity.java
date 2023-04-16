@@ -1,7 +1,5 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
-import static ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction.clientID;
-
 import com.almasb.fxgl.entity.Entity;
 import java.util.Objects;
 import javafx.geometry.Point2D;
@@ -32,6 +30,7 @@ public class NewEntity {
 
   public NewEntity(String entityType, Integer seed, Point2D position,Integer weaponId) {
     this.entityType = entityType;
+    this.id = MCClient.getClientId();
     this.seed = Objects.requireNonNullElse(seed, DEFAULT_SEED);
     state = new EntityState(id,position,new Point2D(0,0),weaponId);
   }

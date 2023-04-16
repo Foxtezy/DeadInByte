@@ -59,7 +59,11 @@ public class ClientState {
 
   public Entity acceptedSpawn(NewEntity newEntity) {
     acceptedAction(new SpawnAction(newEntity));
-
+    Entity player=null;
+    while (player==null){
+      player = idHashTable.get(newEntity.getID());
+    }
+    return player;
     // TODO: 16.04.2023 вот тут вопрос с таблицей
   }
 
