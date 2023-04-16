@@ -45,7 +45,7 @@ public class NewEntity {
     if (hero!=null) {
       Entity heroEntity = Factory.spawnHero(hero, state.getPosition(), Objects.equals(id, MCClient.getClientId()), id, seed);
       MCClient.getClientState().getIdHashTable().put(id, heroEntity);
-      Entity weaponEntity = Factory.spawnStandardWeapon(weaponId, heroEntity);
+      Entity weaponEntity = Factory.spawnStandardWeapon(weaponId, id,heroEntity);
       MCClient.getClientState().getIdHashTable().put(weaponId, weaponEntity);
       return heroEntity;
     }

@@ -1,10 +1,12 @@
 package ru.nsu.fit.dib.projectdib.entity.components;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class DataComponent extends Component {
 
@@ -18,10 +20,10 @@ public class DataComponent extends Component {
   private EntityType entityType;
   private Integer bindedEntity;
   private Integer id;
-  private Boolean isClientEntity;
+  private int ownerID=-1;
 
-  public DataComponent(EntityType entityType, boolean isClientEntity, Integer id) {
-    this.isClientEntity = isClientEntity;
+  public DataComponent(EntityType entityType, Integer ownerID, Integer id) {
+    if (ownerID!=null) this.ownerID = ownerID;
     this.entityType = entityType;
     rotation = new Point2D(0, 0);
     this.id = id;
@@ -65,6 +67,9 @@ public class DataComponent extends Component {
   }
 
   public boolean isClientEntity() {
-    return isClientEntity;
+    return ownerID== MCClient.getClientId();
+  }
+  public int getOwnerID() {
+    return ownerID;
   }
 }

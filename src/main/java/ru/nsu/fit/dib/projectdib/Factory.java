@@ -54,6 +54,7 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.WeaponModule;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 /**
  * Class Factory for making Entities.
@@ -63,41 +64,46 @@ public class Factory implements EntityFactory {
   /**
    * Creates Hero and heroes weapon.
    *
-   * @param heroType type of hero
-   * @param position position
+   * @param heroType     type of hero
+   * @param position     position
    * @param isClientHero true if client hero
-   * @param seed hero seed
+   * @param seed         hero seed
    * @return pair of entity Hero and Weapon
    */
-  public static Entity spawnHero(HeroType heroType,Point2D position, Boolean isClientHero,Integer id,Integer seed){
+  public static Entity spawnHero(HeroType heroType, Point2D position, Boolean isClientHero,
+      Integer id, Integer seed) {
     SpawnData sd = new SpawnData(position);
-    sd.put("clientHero",isClientHero);
-    sd.put("creature", HeroesFactory.newHero(heroType,seed));
-    sd.put("id",id);
+    sd.put("owner", id);
+    sd.put("creature", HeroesFactory.newHero(heroType, seed));
+    sd.put("id", id);
     Entity hero = spawn("player", sd);
     hero.setScaleUniform(0.75);
     return hero;
   }
 
-  public static Entity spawnStandardWeapon(Integer id,Entity bindedEntity){
+  public static Entity spawnStandardWeapon(Integer id, Integer ownerID, Entity bindedEntity) {
     SpawnData sd = new SpawnData(bindedEntity.getPosition());
-    sd.put("id",id);
-    sd.put("weapon",  bindedEntity.getComponent(HeroComponent.class).getCreature().getModule(CreatureWeaponModule.class).getActiveWeapon());
+    sd.put("id", id);
+    sd.put("owner", ownerID);
+    sd.put("weapon", bindedEntity.getComponent(HeroComponent.class).getCreature()
+        .getModule(CreatureWeaponModule.class).getActiveWeapon());
     return spawn("weapon", sd);
   }
+
   /**
    * Creates weapon.
    *
    * @param weaponType type of weapon
-   * @param position position
+   * @param position   position
    * @return weapon entity
    */
-  public static Entity spawnWeapon(Weapons weaponType,Point2D position,Integer id){
+  public static Entity spawnWeapon(Weapons weaponType, Point2D position, Integer id) {
     SpawnData sd = new SpawnData(position);
-    sd.put("id",id);
+    sd.put("id", id);
     sd.put("weapon", WeaponFactory.getWeapon(weaponType));
     return spawn("weapon", sd);
   }
+
   /**
    * Entity Player.
    *
@@ -112,12 +118,17 @@ public class Factory implements EntityFactory {
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
-    HeroComponent heroComponent = new HeroComponent(creature,new Point2D(50,180));
-    if (data.get("clientHero")) heroComponent.bindDirectionView(entity -> getInput().getVectorToMouse(entity.getPosition().add(new Point2D(80, 160))));
-    else heroComponent.bindDirectionView(entity ->new Point2D(0,0));
+    HeroComponent heroComponent = new HeroComponent(creature, new Point2D(50, 180));
+    if (data.get("owner") == MCClient.getClientId()) {
+      heroComponent.bindDirectionView(
+          entity -> getInput().getVectorToMouse(entity.getPosition().add(new Point2D(80, 160))));
+    } else {
+      heroComponent.bindDirectionView(entity -> new Point2D(0, 0));
+    }
     creature.getModule(JFXModule.class).setComponent(heroComponent);
 
-    DataComponent dataComponent = new DataComponent(EntityType.PLAYER,data.get("clientHero"),data.get("id"));
+    DataComponent dataComponent = new DataComponent(EntityType.PLAYER, data.get("owner"),
+        data.get("id"));
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
     return entityBuilder()
         .from(data)
@@ -135,6 +146,28 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+  @Spawns("weapon")
+  public Entity Weapon(SpawnData data) {
+    Weapon weapon = data.get("weapon");
+    ImageView iv = imageViewFromSpriteSheet(weapon.getModule(TextureModule.class).getTexturePath(),
+        weapon.getModule(TextureModule.class).getWeaponID(),
+        weapon.getModule(TextureModule.class).getImageWidht(),
+        weapon.getModule(TextureModule.class).getImageHeight(), ProjectConfig._WEAPON_COLUMNS);
+    WeaponComponent weaponComponent = new WeaponComponent(weapon);
+    weapon.getModule(TextureModule.class).setComponent(weaponComponent);
+
+    DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"),
+        data.get("id"));
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.WEAPON)
+        .viewWithBBox(iv)
+        .bbox(new HitBox(BoundingShape.box(75, 20)))
+        .with(new CollidableComponent(true))
+        .with(weaponComponent)
+        .with(dataComponent)
+        .build();
+  }
 
   @Spawns("platform")
   public Entity platform(SpawnData data) {
@@ -263,74 +296,16 @@ public class Factory implements EntityFactory {
         .collidable()
         .build();
   }
-  /*
-  @Spawns("bow")
-  public Entity newBow(SpawnData data) {
-    return entityBuilder(data)
-        .from(data)
-        .type(EntityType.BOW)
-        .viewWithBBox(texture("red_bow.png", 15, 50))
-        .bbox(new HitBox(BoundingShape.box(50, 15)))
-        .with(new CollidableComponent(true))
-        .build();
-  }
 
-  @Spawns("ak")
-  public Entity newAK(SpawnData data) {
-    return entityBuilder(data)
-        .from(data)
-        .type(EntityType.AK)
-        .viewWithBBox(texture("weapon_ak.png", 75, 20))
-        .bbox(new HitBox(BoundingShape.box(75, 20)))
-        .with(new CollidableComponent(true))
-        .build();
-  }
-    @Spawns("player")
-  public Entity newPlayer(SpawnData data) {
-    PhysicsComponent physics = new PhysicsComponent();
-    physics.setBodyType(BodyType.DYNAMIC);
-    physics.setFixtureDef(new FixtureDef().friction(0.3f));
-    HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
-
-    return entityBuilder()
-        .from(data)
-        .type(EntityType.PLAYER)
-        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
-        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
-        .anchorFromCenter()
-        .with(physics)
-        .with(new PlayerMovingComponent(specs,new Point2D(50,180)))
-        .with(new CellMoveComponent(30, 30, 85))
-        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-        //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
-        .collidable()
-        .build();
-  }
-  */
-  @Spawns("weapon")
-  public Entity Weapon(SpawnData data) {
-    Weapon weapon = data.get("weapon");
-    ImageView iv = imageViewFromSpriteSheet(weapon.getModule(TextureModule.class).getTexturePath(),weapon.getModule(TextureModule.class).getWeaponID(),
-        weapon.getModule(TextureModule.class).getImageWidht(),weapon.getModule(TextureModule.class).getImageHeight(), ProjectConfig._WEAPON_COLUMNS);
-    WeaponComponent weaponComponent = new WeaponComponent(weapon);
-    weapon.getModule(TextureModule.class).setComponent(weaponComponent);
-
-    DataComponent dataComponent = new DataComponent(EntityType.WEAPON,false,data.get("id"));
-    return entityBuilder(data)
-        .from(data)
-        .type(EntityType.WEAPON)
-        .viewWithBBox(iv)
-        .bbox(new HitBox(BoundingShape.box(75, 20)))
-        .with(new CollidableComponent(true))
-        .with(weaponComponent)
-        .with(dataComponent)
-        .build();
-  }
-  ImageView imageViewFromSpriteSheet(Image img, int number, int spriteWidth, int spriteHeight,int columns){
+  ImageView imageViewFromSpriteSheet(Image img, int number, int spriteWidth, int spriteHeight,
+      int columns) {
     ImageView iv = new ImageView(img);
-    iv.setViewport(new Rectangle2D(spriteWidth*(number%columns),spriteHeight*(number/columns),spriteWidth,spriteHeight));
+    iv.setViewport(
+        new Rectangle2D(spriteWidth * (number % columns), spriteHeight * (number / columns),
+            spriteWidth, spriteHeight));
     return iv;
   }
+
   /**
    * Entity Enemy.
    *
