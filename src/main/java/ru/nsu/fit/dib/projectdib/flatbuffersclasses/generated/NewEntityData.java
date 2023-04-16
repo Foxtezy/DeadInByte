@@ -4,6 +4,7 @@ package ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
 
 import java.nio.*;
 import java.lang.*;
+import java.util.*;
 import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")

@@ -8,7 +8,6 @@ import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.EntityStateData;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.EntityStateDataList;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.SpawnActionData;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.ActionStatus;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
@@ -27,10 +26,7 @@ public class FBSDeserializer {
 
   public static SpawnAction deserializeSpawnAction(ByteBuffer buffer) {
     SpawnActionData spawnActionData = SpawnActionData.getRootAsSpawnActionData(buffer);
-    SpawnAction spawnAction = new SpawnAction(ActionStatus.getByID(spawnActionData.status()),
-        spawnActionData.id(),
-        deserializeNewEntity(spawnActionData.data()));
-    return spawnAction;
+    return new SpawnAction(deserializeNewEntity(spawnActionData.data()));
   }
 
   private static NewEntity deserializeNewEntity(NewEntityData newEntityData) {

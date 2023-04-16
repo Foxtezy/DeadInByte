@@ -31,18 +31,15 @@ public class FBSSerializer {
   public static ByteBuffer serialize(SpawnAction action){
     FlatBufferBuilder builder = new FlatBufferBuilder(INITAL_SIZE);
     int spawnActionData = createSpawnActionData(builder,
-        action.getStatus().getID(),
-        action.getId(),
         createNewEntityData(builder, action.getNewEntity()));
     builder.finish(spawnActionData);
     return builder.dataBuffer();
   }
   private static int createNewEntityData(FlatBufferBuilder builder, NewEntity newEntity){
-    int newEntityData = NewEntityData.createNewEntityData(builder,
+    return NewEntityData.createNewEntityData(builder,
         builder.createString(newEntity.getEntityType()),
         newEntity.getSeed(),
         createEntityStateData(builder,newEntity.getState()));
-    return newEntityData;
   }
   private static int createEntityStateData(FlatBufferBuilder builder, EntityState state) {
     EntityStateData.startEntityStateData(builder);

@@ -13,8 +13,6 @@ table NewEntityData{
 }
 
 table SpawnActionData {
-  status:ActionStatus;
-  id:int;
   data:NewEntityData;
 }
 

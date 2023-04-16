@@ -4,6 +4,7 @@ package ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
 
 import java.nio.*;
 import java.lang.*;
+import java.util.*;
 import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
@@ -14,26 +15,18 @@ public final class SpawnActionData extends Table {
   public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public SpawnActionData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public byte status() { int o = __offset(4); return o != 0 ? bb.get(o + bb_pos) : 0; }
-  public int id() { int o = __offset(6); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
   public ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData data() { return data(new ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData()); }
-  public ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData data(ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData obj) { int o = __offset(8); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData data(ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createSpawnActionData(FlatBufferBuilder builder,
-      byte status,
-      int id,
       int dataOffset) {
-    builder.startTable(3);
+    builder.startTable(1);
     SpawnActionData.addData(builder, dataOffset);
-    SpawnActionData.addId(builder, id);
-    SpawnActionData.addStatus(builder, status);
     return SpawnActionData.endSpawnActionData(builder);
   }
 
-  public static void startSpawnActionData(FlatBufferBuilder builder) { builder.startTable(3); }
-  public static void addStatus(FlatBufferBuilder builder, byte status) { builder.addByte(0, status, 0); }
-  public static void addId(FlatBufferBuilder builder, int id) { builder.addInt(1, id, 0); }
-  public static void addData(FlatBufferBuilder builder, int dataOffset) { builder.addOffset(2, dataOffset, 0); }
+  public static void startSpawnActionData(FlatBufferBuilder builder) { builder.startTable(1); }
+  public static void addData(FlatBufferBuilder builder, int dataOffset) { builder.addOffset(0, dataOffset, 0); }
   public static int endSpawnActionData(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;
