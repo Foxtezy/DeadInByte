@@ -66,5 +66,4 @@ public class ClientState {
   public void acceptedAction(GameAction action) {
     MCClient.getClientSenderThread().addActionTask(action);
   }
-
 }
