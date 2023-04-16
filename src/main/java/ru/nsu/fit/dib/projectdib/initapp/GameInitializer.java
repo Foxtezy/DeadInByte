@@ -66,7 +66,7 @@ public class GameInitializer {
       throw new RuntimeException(e);
     }
     try {
-      weapon = EntitySpawner.spawn(new NewEntity(Weapons.Bow.getName(), null,position,null)).get();
+      weapon = EntitySpawner.spawn(new NewEntity(Weapons.Bow.getName(), 123,position,null)).get();
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }

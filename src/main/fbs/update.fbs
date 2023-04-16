@@ -1,0 +1,21 @@
+//./flatc.exe -j -o <куда>  <*.fbs>
+//Данные для обновления состояния объектов
+namespace ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
+
+struct Point2D {
+  x:double;
+  y:double;
+}
+
+table EntityStateData {
+  id:int;
+  pos:Point2D;
+  rot:Point2D;
+  active_weapon:int;
+}
+
+table EntityStateDataList{
+  list:[EntityStateData];
+}
+
+root_type EntityStateDataList;
