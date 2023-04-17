@@ -14,7 +14,8 @@ public final class ServerConfig {
   }
 
   public static void init() {
-
+    addServerActionThread(new ServerActionThread());
+    addServerUpdaterThread(new ServerUpdaterThread());
   }
 
   public static void addClientAddresses(Map<Integer, Socket> sockets) {
@@ -22,10 +23,12 @@ public final class ServerConfig {
   }
 
   public static void addServerActionThread(ServerActionThread thread) {
+    thread.start();
     MCServer.addBean(EMCServer.SERVER_ACTION_THREAD, thread);
   }
 
   public static void addServerUpdaterThread(ServerUpdaterThread thread) {
+    thread.start();
     MCServer.addBean(EMCServer.SERVER_UPDATER_THREAD, thread);
   }
 }

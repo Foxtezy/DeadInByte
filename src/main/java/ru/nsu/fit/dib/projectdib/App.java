@@ -3,10 +3,21 @@ package ru.nsu.fit.dib.projectdib;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.HashMap;
+import java.util.Map;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ClientConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerActionThread;
 
 /**
  * Основной класс игры.
@@ -66,6 +77,37 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
+    ServerSocket serverSocket;
+    Map<Integer, Socket> clientSockets = new HashMap<>();
+    try {
+      serverSocket = new ServerSocket(8080);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    try {
+      System.out.println("Подключение");
+      new Thread(() -> {
+        ClientConfig.init();
+        Socket socket = MCClient.getClientSocket();
+        try {
+          socket.connect(new InetSocketAddress("localhost", 8080));
+          ClientConfig.addClientId(socket.getInputStream().read());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }).start();
+      Socket client = serverSocket.accept();
+      //отправляем клиенту его id
+      client.getOutputStream().write(2);
+      clientSockets.put(2, client);
+      System.out.println("Подключено");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    ServerConfig.init();
+    ServerConfig.addClientAddresses(clientSockets);
+
+
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
