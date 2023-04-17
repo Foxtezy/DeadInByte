@@ -31,7 +31,10 @@ public class ServerUpdaterThread extends Thread {
       List<EntityState> outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
       clientsStates.forEach(outList::addAll);
       Sender sender = new Sender();
-      MCServer.getClientSockets().values().forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, outList)));
+      if (!outList.isEmpty()) {
+        MCServer.getClientSockets().values()
+            .forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, outList)));
+      }
     }
   }
 }

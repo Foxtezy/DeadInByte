@@ -16,13 +16,15 @@ public class EntityState {
   private final int id;
   private Point2D position;
   private Point2D rotation;
-  private final int bindedEntity; //для player - активное оружие
+  private int bindedEntity=-1; //для player - активное оружие
 
   public EntityState(Integer id, Point2D position, Point2D rotation, Integer bindedEntity) {
     this.id = id;
     this.position = position;
     this.rotation = rotation;
-    this.bindedEntity = bindedEntity;
+    if (bindedEntity!=null) {
+      this.bindedEntity = bindedEntity;
+    }
   }
 
   public int getId() {

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
@@ -17,7 +16,8 @@ import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ClientConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerActionThread;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerReceiverThread;
 
 /**
  * Основной класс игры.
@@ -72,6 +72,7 @@ public class App extends GameApplication {
   protected void onPreInit() {
 
   }
+
   /**
    * Инициализация игры.
    */
@@ -87,8 +88,8 @@ public class App extends GameApplication {
     try {
       System.out.println("Подключение");
       new Thread(() -> {
-        ClientConfig.init();
-        Socket socket = MCClient.getClientSocket();
+        Socket socket = new Socket();
+        ClientConfig.addClientSocket(socket);
         try {
           socket.connect(new InetSocketAddress("localhost", 8080));
           ClientConfig.addClientId(socket.getInputStream().read());
@@ -98,19 +99,29 @@ public class App extends GameApplication {
       }).start();
       Socket client = serverSocket.accept();
       //отправляем клиенту его id
+      client.getOutputStream().write(1);
+      clientSockets.put(1, client);
+      ClientConfig.init();
+      new ServerReceiverThread(client).start();
+      System.out.println("Подключено");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+/*    try {
+      Socket client = serverSocket.accept();
+      new ServerReceiverThread(client).start();
+      //отправляем клиенту его id
       client.getOutputStream().write(2);
       clientSockets.put(2, client);
       System.out.println("Подключено");
     } catch (IOException e) {
       throw new RuntimeException(e);
-    }
+    }*/
+    ServerConfig.addClientSockets(clientSockets);
     ServerConfig.init();
-    ServerConfig.addClientAddresses(clientSockets);
-
-
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
-    player=gameInitializer.getPlayer();
+    player = gameInitializer.getPlayer();
   }
 }

@@ -1,15 +1,10 @@
 package ru.nsu.fit.dib.projectdib.connecting.tasks;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
@@ -51,7 +46,7 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
       }
     }
     ServerConfig.init();
-    ServerConfig.addClientAddresses(clientSockets);
+    ServerConfig.addClientSockets(clientSockets);
     return clientSockets;
   }
 }

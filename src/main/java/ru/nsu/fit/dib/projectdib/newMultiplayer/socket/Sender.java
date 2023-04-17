@@ -1,8 +1,10 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.socket;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.List;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization.FBSSerializer;
@@ -13,15 +15,20 @@ public class Sender {
 
   public void send(Socket address, Pair<MessageType, Object> message) {
     ByteBuffer buffer = switch (message.getKey()){
-      case UPDATE -> FBSSerializer.serialize((SpawnAction) message.getValue());
-      case SPAWN -> FBSSerializer.serialize((List<EntityState>) message.getValue());
+      case SPAWN-> FBSSerializer.serialize((SpawnAction) message.getValue());
+      case UPDATE -> FBSSerializer.serialize((List<EntityState>) message.getValue());
       default -> throw new IllegalArgumentException("Illegal type of message");
     };
     byte[] p = buffer.array();
+    byte[] pt = new byte[p.length + 1];
+    System.arraycopy(p, 0, pt, 1, p.length);
+    pt[0] = message.getKey().getId();
     try {
       synchronized (address) {
-        address.getOutputStream().write(p.length);
-        address.getOutputStream().write(p);
+        DataOutputStream d = new DataOutputStream(address.getOutputStream());
+        d.writeInt(pt.length);
+        d.close();
+        address.getOutputStream().write(pt);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

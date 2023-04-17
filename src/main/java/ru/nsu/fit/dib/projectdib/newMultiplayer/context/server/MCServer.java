@@ -26,7 +26,7 @@ public final class MCServer {
 
 
   public static Map<Integer, Socket> getClientSockets() {
-    if (context.get(EMCServer.CLIENT_SOCKETS) instanceof List<?> l) {
+    if (context.get(EMCServer.CLIENT_SOCKETS) instanceof Map<?, ?> l) {
       return (Map<Integer, Socket>) l;
     } else {
       throw new ContextException();

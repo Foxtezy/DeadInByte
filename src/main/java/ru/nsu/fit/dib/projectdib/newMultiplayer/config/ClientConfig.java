@@ -14,7 +14,6 @@ public final class ClientConfig {
   }
 
   public static void init() {
-    MCClient.addBean(EMCClient.CLIENT_SOCKET, new Socket());
     MCClient.addBean(EMCClient.CLIENT_STATE, new ClientState());
     addClientSenderThread(new ClientSenderThread());
     addClientReceiverThread(new ClientReceiverThread());
@@ -32,5 +31,9 @@ public final class ClientConfig {
   public static void addClientReceiverThread(ClientReceiverThread thread) {
     thread.start();
     MCClient.addBean(EMCClient.CLIENT_RECEIVER_THREAD, thread);
+  }
+
+  public static void addClientSocket(Socket socket) {
+    MCClient.addBean(EMCClient.CLIENT_SOCKET, socket);
   }
 }

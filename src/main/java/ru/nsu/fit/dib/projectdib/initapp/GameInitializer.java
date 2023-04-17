@@ -65,6 +65,7 @@ public class GameInitializer {
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
+    System.out.println("e");
     player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
