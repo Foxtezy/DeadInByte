@@ -3,25 +3,28 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 
 public class ClientSenderThread extends Thread {
 
-  private BlockingQueue<GameAction> actionQueue = new LinkedBlockingQueue<>();
+  private BlockingQueue<Pair<MessageType, Object>> actionQueue = new LinkedBlockingQueue<>();
 
-  public void addActionTask(GameAction gameAction) {
+  public void addActionTask(Pair<MessageType, Object> gameAction) {
     actionQueue.add(gameAction);
   }
 
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      List<EntityState> entityStates = MCClient.getClientState().getEntityStates();
-      MCClient.getClientSocket()
-      //тут отправляем на сервер список с состояниями
-      //actionQueue.forEach(отправка); отправка actions
+      List<EntityState> entityStates = MCClient.getClientState().getEntityStatesByOwnerId(MCClient.getClientId());
+      // тут задержка должна быть
+      Sender sender = new Sender();
+      sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.UPDATE, entityStates));
+      actionQueue.forEach(a -> sender.send(MCClient.getClientSocket(), a));
     }
   }
 

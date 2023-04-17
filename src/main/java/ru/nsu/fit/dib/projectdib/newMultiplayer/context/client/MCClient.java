@@ -56,22 +56,6 @@ public final class MCClient {
     }
   }
 
-  public static Sender getSender() {
-    if (context.get(EMCClient.SENDER) instanceof Sender s) {
-      return s;
-    } else {
-      throw new ContextException();
-    }
-  }
-
-  public static Receiver getReceiver() {
-    if (context.get(EMCClient.RECEIVER) instanceof Receiver r) {
-      return r;
-    } else {
-      throw new ContextException();
-    }
-  }
-
   public static ClientState getClientState() {
     if (context.get(EMCClient.CLIENT_STATE) instanceof ClientState c) {
       return c;

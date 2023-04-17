@@ -1,21 +1,12 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.socket;
 
-import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization.FBSDeserializer;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.GameStatePacket;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.exeptions.PacketTypeException;
 
 public class Receiver {
@@ -26,7 +17,7 @@ public class Receiver {
     this.socket = socket;
   }
 
-  public Pair<MessageType, Object> receive() throws PacketTypeException, SocketTimeoutException {
+  public Pair<MessageType, Object> receive() {
     byte[] byteArray;
     //Получаем что то
     try {

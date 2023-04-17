@@ -7,6 +7,8 @@ import java.util.Map;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.ContextException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerActionThread;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerUpdaterThread;
 
 public final class MCServer {
 
@@ -31,17 +33,17 @@ public final class MCServer {
     }
   }
 
-  public static Sender getSender() {
-    if (context.get(EMCServer.SENDER) instanceof Sender s) {
-      return s;
+  public static ServerActionThread getActionThread() {
+    if (context.get(EMCServer.SERVER_ACTION_THREAD) instanceof ServerActionThread t) {
+      return t;
     } else {
       throw new ContextException();
     }
   }
 
-  public static Receiver getReceiver() {
-    if (context.get(EMCServer.RECEIVER) instanceof Receiver r) {
-      return r;
+  public static ServerUpdaterThread getUpdaterThread() {
+    if (context.get(EMCServer.SERVER_UPDATER_THREAD) instanceof ServerUpdaterThread t) {
+      return t;
     } else {
       throw new ContextException();
     }

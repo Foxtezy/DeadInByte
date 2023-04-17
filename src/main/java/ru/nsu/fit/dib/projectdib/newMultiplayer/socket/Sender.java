@@ -1,15 +1,8 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.socket;
 
-import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization.FBSSerializer;
@@ -26,8 +19,10 @@ public class Sender {
     };
     byte[] p = buffer.array();
     try {
-      address.getOutputStream().write(p.length);
-      address.getOutputStream().write(p);
+      synchronized (address) {
+        address.getOutputStream().write(p.length);
+        address.getOutputStream().write(p);
+      }
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 
 public class ClientState {
 
@@ -41,13 +43,9 @@ public class ClientState {
     });
   }
 
-  public List<EntityState> getEntityStates() {
-    try {
-      Thread.sleep(20);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+  public List<EntityState> getEntityStatesByOwnerId(Integer id) {
     return idHashTable.entrySet().stream().filter(e->e.getValue().hasComponent(DataComponent.class))
+        .filter(e -> e.getValue().getComponent(DataComponent.class).getOwnerID() == id)
         .map(e -> new EntityState(e.getKey(),
             e.getValue().getComponent(DataComponent.class).getPosition(),
             e.getValue().getComponent(DataComponent.class).getRotation(),
@@ -56,16 +54,15 @@ public class ClientState {
   }
 
   public Entity acceptedSpawn(NewEntity newEntity) {
-    acceptedAction(new SpawnAction(newEntity));
+    acceptedAction(new Pair<>(MessageType.SPAWN, new SpawnAction(newEntity)));
     Entity player=null;
     while (player==null){
       player = idHashTable.get(newEntity.getID());
     }
     return player;
-    // TODO: 16.04.2023 вот тут вопрос с таблицей
   }
 
-  public void acceptedAction(GameAction action) {
+  public void acceptedAction(Pair<MessageType, Object> action) {
     MCClient.getClientSenderThread().addActionTask(action);
   }
 }
