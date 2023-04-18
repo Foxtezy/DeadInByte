@@ -17,7 +17,7 @@ class FlatBurrersTest {
   void UpdateDataTest(){
     List<EntityState> list = new ArrayList<>();
     list.add(new EntityState(1,new Point2D(1,4),new Point2D(3,1),2));
-    list.add(new EntityState(3,new Point2D(5,6),new Point2D(6,3),4));
+    //list.add(new EntityState(3,new Point2D(5,6),new Point2D(6,3),4));
     //list.add(new EntityState(5,new Point2D(2,2),new Point2D(3,8),1));
 
     ByteBuffer buffer = FBSSerializer.serialize(list);
@@ -32,7 +32,7 @@ class FlatBurrersTest {
 
 
     List<EntityState> newList = FBSDeserializer.deserializeEntityStateList(byteBuffer.flip());
-    for(int i=0;i<2;i++){
+    for(int i=0;i<1;i++){
       Assertions.assertEquals(list.get(i).getId(),newList.get(i).getId());
       Assertions.assertEquals(list.get(i).getPosition().getX(),newList.get(i).getPosition().getX());
       Assertions.assertEquals(list.get(i).getPosition().getY(),newList.get(i).getPosition().getY());

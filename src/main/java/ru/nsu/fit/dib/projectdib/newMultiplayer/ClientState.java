@@ -44,7 +44,7 @@ public class ClientState {
   }
 
   public List<EntityState> getEntityStatesByOwnerId(Integer id) {
-    List<EntityState> list = idHashTable.entrySet().stream().filter(e->e.getValue().hasComponent(DataComponent.class))
+    return idHashTable.entrySet().stream().filter(e->e.getValue().hasComponent(DataComponent.class))
         .filter(e -> e.getValue().getComponent(DataComponent.class).getOwnerID() == id)
         .filter(e ->e.getValue().getComponent(DataComponent.class).isValid())
         .map(e -> new EntityState(e.getKey(),
@@ -52,9 +52,6 @@ public class ClientState {
             e.getValue().getComponent(DataComponent.class).getRotation(),
             e.getValue().getComponent(DataComponent.class).getBindedEntity())
         ).collect(Collectors.toList());
-    // TODO: 18.04.2023 разобраться почему Vector при 1 значении падает
-    if (list.size()==1) list.add(list.get(0));
-    return list;
   }
 
   public Entity acceptedSpawn(NewEntity newEntity) {
