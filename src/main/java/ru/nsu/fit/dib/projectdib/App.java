@@ -26,7 +26,7 @@ public class App extends GameApplication {
 
   Entity player;
   InputListener inputListener;
-
+  public static GameMode gameMode;
   /**
    * Main-метод.
    *
@@ -78,34 +78,32 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
-    ServerSocket serverSocket;
-    Map<Integer, Socket> clientSockets = new HashMap<>();
-    try {
-      serverSocket = new ServerSocket(8080);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    try {
-      System.out.println("Подключение");
-      new Thread(() -> {
-        Socket socket = new Socket();
-        ClientConfig.addClientSocket(socket);
+    switch (gameMode){
+      case SERVER, SINGLE -> {
+        ServerSocket serverSocket;
+        Map<Integer, Socket> clientSockets = new HashMap<>();
         try {
-          socket.connect(new InetSocketAddress("localhost", 8080));
-          ClientConfig.addClientId(socket.getInputStream().read());
+          serverSocket = new ServerSocket(8080);
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
-      }).start();
-      Socket client = serverSocket.accept();
-      //отправляем клиенту его id
-      client.getOutputStream().write(1);
-      clientSockets.put(1, client);
-      ClientConfig.init();
-      new ServerReceiverThread(client).start();
-      System.out.println("Подключено");
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+        try {
+          System.out.println("Подключение");
+          new Thread(()->initClient("localhost")).start();
+          Socket client = serverSocket.accept();
+          //отправляем клиенту его id
+          client.getOutputStream().write(1);
+          clientSockets.put(1, client);
+          ClientConfig.init();
+          new ServerReceiverThread(client).start();
+          System.out.println("Подключено");
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+        ServerConfig.addClientSockets(clientSockets);
+        ServerConfig.init();
+      }
+      case CLIENT -> initClient("192.168.15.1");
     }
 /*    try {
       Socket client = serverSocket.accept();
@@ -117,11 +115,19 @@ public class App extends GameApplication {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }*/
-    ServerConfig.addClientSockets(clientSockets);
-    ServerConfig.init();
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
+  }
+  private static void initClient(String hostname) {
+    Socket socket = new Socket();
+    ClientConfig.addClientSocket(socket);
+    try {
+      socket.connect(new InetSocketAddress(hostname, 8080));
+      ClientConfig.addClientId(socket.getInputStream().read());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

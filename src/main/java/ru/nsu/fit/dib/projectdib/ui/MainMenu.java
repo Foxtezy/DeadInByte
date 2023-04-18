@@ -32,6 +32,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.App;
+import ru.nsu.fit.dib.projectdib.GameMode;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
@@ -165,9 +167,20 @@ public class MainMenu extends FXGLMenu {
       ui.getChildren().addAll(tree.getANChildren());
     });
     //===Start===
-    start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
+    start.setOnMouseClicked(event -> {
+      App.gameMode = GameMode.SINGLE;
+      FXGL.getGameController().startNewGame();
+    });
     //===Server===
-    server.setOnMouseClicked(event->{});
+    server.setOnMouseClicked(event -> {
+      App.gameMode = GameMode.SERVER;
+      FXGL.getGameController().startNewGame();
+    });
+    //===Client===
+    connect.setOnMouseClicked(event -> {
+      App.gameMode = GameMode.CLIENT;
+      FXGL.getGameController().startNewGame();
+    });
     //===Settings===
     settings.setOnMouseClicked(event -> {
     });
