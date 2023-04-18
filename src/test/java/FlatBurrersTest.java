@@ -32,7 +32,7 @@ class FlatBurrersTest {
 
 
     List<EntityState> newList = FBSDeserializer.deserializeEntityStateList(byteBuffer.flip());
-    for(int i=0;i<newList.size();i++){
+    for(int i=0;i<2;i++){
       Assertions.assertEquals(list.get(i).getId(),newList.get(i).getId());
       Assertions.assertEquals(list.get(i).getPosition().getX(),newList.get(i).getPosition().getX());
       Assertions.assertEquals(list.get(i).getPosition().getY(),newList.get(i).getPosition().getY());

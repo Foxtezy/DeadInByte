@@ -16,27 +16,27 @@ public class ServerUpdaterThread extends Thread {
 
   private static final Integer SERVER_ID = -1;
 
-  private BlockingQueue<Pair<MessageType, Object>> updaterQueue = new LinkedBlockingQueue<>();
+  private BlockingQueue<List<EntityState>> updaterQueue = new LinkedBlockingQueue<>();
 
-  public void addUpdateTask(Pair<MessageType, Object> update) {
-    var v = (List<EntityState>) update.getValue();
-    System.out.println(v);
-    updaterQueue.add(update);
+  public void addUpdateTask(List<EntityState> list) {
+    updaterQueue.add(list);
   }
 
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      List<Pair<MessageType, Object>> updaterList = new ArrayList<>();
-      updaterQueue.drainTo(updaterList);
-      List<List<EntityState>> clientsStates = updaterList.stream().map(u -> (List<EntityState>)u.getValue()).collect(Collectors.toList());
       List<EntityState> outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
-      clientsStates.forEach(outList::addAll);
-      Sender sender = new Sender();
-      if (!outList.isEmpty()) {
-        MCServer.getClientSockets().values()
-            .forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, outList)));
+      while (outList.size()==0){
+        outList=MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
+        List<List<EntityState>> clientsStates = new ArrayList<>();
+        updaterQueue.drainTo(clientsStates);
+        clientsStates.forEach(outList::addAll);
       }
+      Sender sender = new Sender();
+      System.out.println(outList);
+      List<EntityState> finalOutList = outList;
+      MCServer.getClientSockets().values()
+          .forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, finalOutList)));
     }
   }
 }

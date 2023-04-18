@@ -24,7 +24,8 @@ public class FBSSerializer {
       EntityState state = entityStateList.get(i);
       list[i] = createEntityStateData(builder,state);
     }
-    int entityStateDataList = EntityStateDataList.createListVector(builder,list);
+    int i = builder.createVectorOfTables(list);
+    int entityStateDataList = EntityStateDataList.createEntityStateDataList(builder,i);
     builder.finish(entityStateDataList);
     return builder.dataBuffer();
   }
