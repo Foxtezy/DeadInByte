@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 import com.almasb.fxgl.entity.Entity;
 import java.util.Objects;
 import javafx.geometry.Point2D;
+import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
@@ -13,11 +14,6 @@ public class NewEntity {
 
   private static final int DEFAULT_SEED = 1;
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  private Integer id;
   private EntityState state;
 
   public String getEntityType() {
@@ -26,13 +22,11 @@ public class NewEntity {
 
   private final String entityType;
   private final int seed;
-  private Integer weaponId;
 
-  public NewEntity(String entityType, Integer seed, Point2D position,Integer weaponId) {
+  public NewEntity(String entityType, Integer seed, @NotNull Point2D position,Integer weaponId) {
     this.entityType = entityType;
-    this.id = MCClient.getClientId();
     this.seed = Objects.requireNonNullElse(seed, DEFAULT_SEED);
-    state = new EntityState(id,position,new Point2D(0,0),weaponId);
+    state = new EntityState(MCClient.getClientId(),position,new Point2D(0,0),weaponId);
   }
   public NewEntity(String entityType, Integer seed, EntityState state) {
     this.entityType = entityType;
@@ -43,30 +37,30 @@ public class NewEntity {
   public Entity spawn() {
     HeroType hero=HeroType.getByName(entityType);
     if (hero!=null) {
-      Entity heroEntity = Factory.spawnHero(hero, state.getPosition(), Objects.equals(id, MCClient.getClientId()), id, seed);
-      MCClient.getClientState().getIdHashTable().put(id, heroEntity);
-      Entity weaponEntity = Factory.spawnStandardWeapon(weaponId, id,heroEntity);
-      MCClient.getClientState().getIdHashTable().put(weaponId, weaponEntity);
+      Entity heroEntity = Factory.spawnHero(hero, state.getPosition(), Objects.equals(state.getId(), MCClient.getClientId()), state.getId(), seed);
+      MCClient.getClientState().getIdHashTable().put(state.getId(), heroEntity);
+      Entity weaponEntity = Factory.spawnStandardWeapon(state.getActiveWeapon(), state.getId(),heroEntity);
+      MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
       return heroEntity;
     }
     Weapons weapon = Weapons.getByName(entityType);
     if (weapon!=null) {
-      Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(), id);
-      MCClient.getClientState().getIdHashTable().put(id, weaponEntity);
+      Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(), state.getId());
+      MCClient.getClientState().getIdHashTable().put(state.getId(), weaponEntity);
       return weaponEntity;
     }
     throw new IllegalArgumentException("Entity type not found");
   }
   public void setWeaponId(Integer weaponId) {
-    this.weaponId = weaponId;
+    state.setActiveWeapon(weaponId);
   }
 
   public Integer getID() {
-    return id;
+    return state.getId();
   }
 
   public Integer getWeaponId() {
-    return weaponId;
+    return state.getActiveWeapon();
   }
 
   public int getSeed() {

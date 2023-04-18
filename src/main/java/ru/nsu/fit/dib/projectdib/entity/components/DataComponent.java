@@ -36,7 +36,8 @@ public class DataComponent extends Component {
       }
       case PLAYER -> {
         rotation = getEntity().getComponent(HeroComponent.class).getDirectionView();
-        WeaponComponent weaponComponent =getEntity().getComponent(HeroComponent.class).getCreature()
+        position = getEntity().getPosition();
+        WeaponComponent weaponComponent = getEntity().getComponent(HeroComponent.class).getCreature()
             .getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(
                 TextureModule.class).getComponent();
         if (weaponComponent != null) {
@@ -71,5 +72,9 @@ public class DataComponent extends Component {
   }
   public int getOwnerID() {
     return ownerID;
+  }
+
+  public boolean isValid() {
+    return position!=null && rotation != null;
   }
 }

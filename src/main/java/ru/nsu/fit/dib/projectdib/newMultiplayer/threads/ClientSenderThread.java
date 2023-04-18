@@ -20,14 +20,16 @@ public class ClientSenderThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      List<EntityState> entityStates = MCClient.getClientState().getEntityStatesByOwnerId(MCClient.getClientId());
+      List<EntityState> entityStates = MCClient.getClientState()
+          .getEntityStatesByOwnerId(MCClient.getClientId());
       // тут задержка должна быть
       Sender sender = new Sender();
       if (!entityStates.isEmpty()) {
         sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.UPDATE, entityStates));
       }
-      if (!actionQueue.isEmpty()) {
-        actionQueue.forEach(a -> sender.send(MCClient.getClientSocket(), a));
+      while (!actionQueue.isEmpty()){
+        Pair<MessageType, Object> pair = actionQueue.poll();
+        sender.send(MCClient.getClientSocket(),pair);
       }
     }
   }

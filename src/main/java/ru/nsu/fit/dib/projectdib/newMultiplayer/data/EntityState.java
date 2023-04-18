@@ -4,6 +4,7 @@ import com.almasb.fxgl.entity.Entity;
 import java.util.Map;
 import java.util.Objects;
 import javafx.geometry.Point2D;
+import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
@@ -18,7 +19,7 @@ public class EntityState {
   private Point2D rotation;
   private int bindedEntity=-1; //для player - активное оружие
 
-  public EntityState(Integer id, Point2D position, Point2D rotation, Integer bindedEntity) {
+  public EntityState(int id, @NotNull Point2D position, @NotNull Point2D rotation, Integer bindedEntity) {
     this.id = id;
     this.position = position;
     this.rotation = rotation;
@@ -77,5 +78,9 @@ public class EntityState {
 
   public int getActiveWeapon() {
     return bindedEntity;
+  }
+
+  public void setActiveWeapon(Integer weaponId) {
+    this.bindedEntity=weaponId;
   }
 }

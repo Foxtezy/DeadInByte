@@ -19,13 +19,13 @@ public class FBSSerializer {
 
   public static ByteBuffer serialize(List<EntityState> entityStateList) {
     FlatBufferBuilder builder = new FlatBufferBuilder(INITAL_SIZE);
-    int[] entityStateDataList = new int[entityStateList.size()];
+    int[] list = new int[entityStateList.size()];
     for (int i = 0; i < entityStateList.size(); i++) {
       EntityState state = entityStateList.get(i);
-      entityStateDataList[i] = createEntityStateData(builder,state);
+      list[i] = createEntityStateData(builder,state);
     }
-    int list = EntityStateDataList.createListVector(builder,entityStateDataList);
-    builder.finish(list);
+    int entityStateDataList = EntityStateDataList.createListVector(builder,list);
+    builder.finish(entityStateDataList);
     return builder.dataBuffer();
   }
   public static ByteBuffer serialize(SpawnAction action){

@@ -19,6 +19,8 @@ public class Sender {
       case UPDATE -> FBSSerializer.serialize((List<EntityState>) message.getValue());
       default -> throw new IllegalArgumentException("Illegal type of message");
     };
+
+    //System.out.println(message.getKey().toString()+" sended");
     buffer.compact().position(0);
     byte[] data = new byte[buffer.remaining()];
     buffer.get(data);

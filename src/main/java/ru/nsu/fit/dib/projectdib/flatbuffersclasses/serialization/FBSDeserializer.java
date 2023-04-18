@@ -15,8 +15,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 public class FBSDeserializer {
 
   public static List<EntityState> deserializeEntityStateList(ByteBuffer buffer) {
-    EntityStateDataList entityStateDataList = EntityStateDataList.getRootAsEntityStateDataList(
-        buffer);
+    EntityStateDataList entityStateDataList = EntityStateDataList.getRootAsEntityStateDataList(buffer);
     List<EntityState> list = new ArrayList<>();
     for (int i = 0; i < entityStateDataList.listLength(); i++) {
       list.add(deserializeEntityState(entityStateDataList.list(i)));

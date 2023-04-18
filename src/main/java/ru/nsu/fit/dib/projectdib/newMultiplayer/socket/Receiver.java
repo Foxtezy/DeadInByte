@@ -33,12 +33,12 @@ public class Receiver {
     System.arraycopy(byteArray, 1, data, 0, data.length);
     ByteBuffer byteBuffer = ByteBuffer.allocate(data.length);
     byteBuffer.put(data).flip();
+    //System.out.println(MessageType.getMessageType(byteArray[0]).toString()+" received");
     switch (MessageType.getMessageType(byteArray[0])){
       case UPDATE -> {
         return new Pair<>(MessageType.UPDATE, FBSDeserializer.deserializeEntityStateList(byteBuffer));
       }
       case SPAWN -> {
-        //System.out.println(Arrays.toString(byteArray));
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }
       default -> {
