@@ -29,7 +29,6 @@ public class Sender {
       synchronized (address) {
         DataOutputStream d = new DataOutputStream(address.getOutputStream());
         d.writeInt(pt.length);
-        d.close();
         address.getOutputStream().write(pt);
       }
     } catch (IOException e) {

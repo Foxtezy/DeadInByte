@@ -24,9 +24,7 @@ public class Receiver {
       DataInputStream dis = new DataInputStream(socket.getInputStream());
       int len = dis.readInt();
       byteArray = new byte[len];
-      System.out.println(len);
       dis.readFully(byteArray);
-      dis.close();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -40,7 +38,7 @@ public class Receiver {
         return new Pair<>(MessageType.UPDATE, FBSDeserializer.deserializeEntityStateList(byteBuffer));
       }
       case SPAWN -> {
-        System.out.println(Arrays.toString(byteArray));
+        //System.out.println(Arrays.toString(byteArray));
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }
       default -> {
