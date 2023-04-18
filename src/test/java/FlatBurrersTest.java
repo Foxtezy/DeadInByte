@@ -38,7 +38,14 @@ class FlatBurrersTest {
     SpawnAction sa = new SpawnAction(newEntity);
     ByteBuffer buffer = FBSSerializer.serialize(sa);
 
-    SpawnAction newSA = FBSDeserializer.deserializeSpawnAction(buffer);
+    buffer.compact().position(0);
+    int size = buffer.remaining();
+    byte[] data = new byte[size];
+    buffer.get(data);
+    //=====================
+    ByteBuffer byteBuffer = ByteBuffer.allocate(data.length);
+    byteBuffer.put(data);
+    SpawnAction newSA = FBSDeserializer.deserializeSpawnAction(byteBuffer.flip());
 
     Assertions.assertEquals(sa.getNewEntity().getSeed(),newSA.getNewEntity().getSeed());
     Assertions.assertEquals(sa.getNewEntity().getID(),newSA.getNewEntity().getID());

@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.serialization.FBSDeserializer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 
 public class Receiver {
 
@@ -30,9 +31,10 @@ public class Receiver {
       throw new RuntimeException(e);
     }
     //Передаем в буфер
-    byte[] message = new byte[byteArray.length - 1];
-    System.arraycopy(byteArray, 1, message, 0, message.length);
-    ByteBuffer byteBuffer = ByteBuffer.wrap(message);
+    byte[] data = new byte[byteArray.length - 1];
+    System.arraycopy(byteArray, 1, data, 0, data.length);
+    ByteBuffer byteBuffer = ByteBuffer.allocate(data.length);
+    byteBuffer.put(data).flip();
     switch (MessageType.getMessageType(byteArray[0])){
       case UPDATE -> {
         return new Pair<>(MessageType.UPDATE, FBSDeserializer.deserializeEntityStateList(byteBuffer));
