@@ -19,6 +19,8 @@ public class ServerUpdaterThread extends Thread {
   private BlockingQueue<Pair<MessageType, Object>> updaterQueue = new LinkedBlockingQueue<>();
 
   public void addUpdateTask(Pair<MessageType, Object> update) {
+    var v = (List<EntityState>) update.getValue();
+    System.out.println(v);
     updaterQueue.add(update);
   }
 

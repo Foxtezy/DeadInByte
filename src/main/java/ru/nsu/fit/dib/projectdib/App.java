@@ -90,13 +90,14 @@ public class App extends GameApplication {
         try {
           System.out.println("Подключение");
           new Thread(()->initClient("localhost")).start();
-          Socket client = serverSocket.accept();
-          //отправляем клиенту его id
-          client.getOutputStream().write(1);
-          clientSockets.put(1, client);
-          ClientConfig.init();
-          new ServerReceiverThread(client).start();
-          System.out.println("Подключено");
+          for (int i = 1; i < 2; i++) {
+            Socket client = serverSocket.accept();
+            //отправляем клиенту его id
+            client.getOutputStream().write(i);
+            clientSockets.put(i, client);
+            new ServerReceiverThread(client).start();
+            System.out.println("Подключено");
+          }
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
@@ -105,16 +106,6 @@ public class App extends GameApplication {
       }
       case CLIENT -> initClient("192.168.15.1");
     }
-/*    try {
-      Socket client = serverSocket.accept();
-      new ServerReceiverThread(client).start();
-      //отправляем клиенту его id
-      client.getOutputStream().write(2);
-      clientSockets.put(2, client);
-      System.out.println("Подключено");
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }*/
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
@@ -129,5 +120,6 @@ public class App extends GameApplication {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    ClientConfig.init();
   }
 }

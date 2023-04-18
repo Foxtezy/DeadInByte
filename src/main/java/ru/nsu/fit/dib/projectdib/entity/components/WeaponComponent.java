@@ -48,7 +48,7 @@ public class WeaponComponent extends Component {
 
   @Override
   public void onUpdate(double tpf) {
-    if (weapon.getUser() != null) {
+    if (weapon.getUser() != null && weapon.getUser().getModule(JFXModule.class).getComponent().getEntity()!=null) {
       Point2D userPos = weapon.getUser().getModule(JFXModule.class).getComponent().getEntity().getPosition();
       Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
       rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);

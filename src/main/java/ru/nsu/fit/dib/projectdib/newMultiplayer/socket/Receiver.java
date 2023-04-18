@@ -17,6 +17,10 @@ public class Receiver {
     this.socket = socket;
   }
 
+  public Socket getSocket() {
+    return socket;
+  }
+
   public Pair<MessageType, Object> receive() {
     byte[] byteArray;
     //Получаем что то
