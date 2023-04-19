@@ -35,7 +35,7 @@ public class ClientState {
       }
       if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(DataComponent.class)){
         if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(
-            WeaponComponent.class)) System.out.println("weapon");
+            WeaponComponent.class)) System.out.println("weapon ");
         else if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(
             HeroComponent.class))
           System.out.println("hero");
@@ -46,7 +46,6 @@ public class ClientState {
           DataComponent.class).isClientEntity()) {
         return;
       }
-      System.out.println("123");
       entityState.update();
     });
   }
