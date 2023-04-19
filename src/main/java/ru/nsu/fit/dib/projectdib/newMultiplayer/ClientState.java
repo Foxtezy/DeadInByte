@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
@@ -31,10 +33,20 @@ public class ClientState {
         // TODO: 14.03.2023 вызов метода отправки пакета ошибки
         return;
       }
+      if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(DataComponent.class)){
+        if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(
+            WeaponComponent.class)) System.out.println("weapon");
+        else if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(
+            HeroComponent.class))
+          System.out.println("hero");
+        else System.out.println("someone");
+        return;
+      }
       if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
           DataComponent.class).isClientEntity()) {
         return;
       }
+      System.out.println("123");
       entityState.update();
     });
   }
