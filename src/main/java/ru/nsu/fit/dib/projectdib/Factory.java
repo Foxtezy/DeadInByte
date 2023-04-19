@@ -130,7 +130,7 @@ public class Factory implements EntityFactory {
     DataComponent dataComponent = new DataComponent(EntityType.PLAYER, data.get("owner"),
         data.get("id"));
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
-    return entityBuilder()
+    Entity entity =  entityBuilder()
         .from(data)
         .type(EntityType.PLAYER)
         //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
@@ -144,6 +144,8 @@ public class Factory implements EntityFactory {
         //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
         .collidable()
         .build();
+    while (!entity.hasComponent(DataComponent.class));
+    return entity;
   }
 
   @Spawns("weapon")
@@ -158,7 +160,7 @@ public class Factory implements EntityFactory {
 
     DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"),
         data.get("id"));
-    return entityBuilder(data)
+    Entity entity = entityBuilder(data)
         .from(data)
         .type(EntityType.WEAPON)
         .viewWithBBox(iv)
@@ -167,6 +169,8 @@ public class Factory implements EntityFactory {
         .with(weaponComponent)
         .with(dataComponent)
         .build();
+    while (!entity.hasComponent(DataComponent.class));
+    return entity;
   }
 
   @Spawns("platform")
