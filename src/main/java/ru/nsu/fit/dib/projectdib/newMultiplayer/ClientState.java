@@ -41,6 +41,7 @@ public class ClientState {
 
   public List<EntityState> getEntityStatesByOwnerId(Integer id) {
     return idHashTable.entrySet().stream()
+        .filter(e->e.getValue().hasComponent(DataComponent.class))
         .filter(e -> e.getValue().getComponent(DataComponent.class).getOwnerID() == id)
         .filter(e -> e.getValue().getComponent(DataComponent.class).isValid())
         .map(e -> new EntityState(e.getKey(),

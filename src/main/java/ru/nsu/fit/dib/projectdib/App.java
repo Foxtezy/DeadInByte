@@ -104,7 +104,7 @@ public class App extends GameApplication {
         ServerConfig.addClientSockets(clientSockets);
         ServerConfig.init();
       }
-      case CLIENT -> initClient("192.168.15.1");
+      case CLIENT -> initClient("192.168.43.8");
     }
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
