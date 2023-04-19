@@ -13,6 +13,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.Utils;
 
 public class ClientState {
 
@@ -24,40 +25,35 @@ public class ClientState {
   private final Map<Integer, Entity> idHashTable = new ConcurrentHashMap<>();
 
   public void updateEntities(List<EntityState> entityStates) {
-
+    Utils.delay();
     entityStates.forEach(entityState -> {
       if (!idHashTable.containsKey(entityState.getId())) {
         // TODO: 14.03.2023 вызов метода отправки пакета ошибки
+        return;
       }
-      try {
-        Thread.sleep(20);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
+      if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
+          DataComponent.class).isClientEntity()) {
+        return;
       }
-      if (MCClient.getClientState().getIdHashTable().get(entityState.getId()) != null) {
-        if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
-            DataComponent.class).isClientEntity()) {
-          entityState.update();
-        }
-      }
+      entityState.update();
     });
   }
 
   public List<EntityState> getEntityStatesByOwnerId(Integer id) {
-    return idHashTable.entrySet().stream().filter(e->e.getValue().hasComponent(DataComponent.class))
+    return idHashTable.entrySet().stream()
         .filter(e -> e.getValue().getComponent(DataComponent.class).getOwnerID() == id)
-        .filter(e ->e.getValue().getComponent(DataComponent.class).isValid())
+        .filter(e -> e.getValue().getComponent(DataComponent.class).isValid())
         .map(e -> new EntityState(e.getKey(),
             e.getValue().getComponent(DataComponent.class).getPosition(),
             e.getValue().getComponent(DataComponent.class).getRotation(),
             e.getValue().getComponent(DataComponent.class).getBindedEntity())
         ).collect(Collectors.toList());
   }
-
   public Entity acceptedSpawn(NewEntity newEntity) {
     acceptedAction(new Pair<>(MessageType.SPAWN, new SpawnAction(newEntity)));
-    Entity player=null;
-    while (player==null){
+    Entity player = null;
+    // TODO: 19.04.2023 Observer pattern
+    while (player == null) {
       player = idHashTable.get(newEntity.getID());
     }
     return player;

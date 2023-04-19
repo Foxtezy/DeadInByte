@@ -25,9 +25,12 @@ public class ServerUpdaterThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
+      Utils.delay();
       List<EntityState> outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
-      while (outList.size()==0){
-        outList=MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
+      // TODO: 19.04.2023 Сделать нормальную проверку на наличие данных для передачи
+      //  (пока что сервер все складывает в outList и проверяет на 0)
+      while (outList.size() == 0) {
+        outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
         List<List<EntityState>> clientsStates = new ArrayList<>();
         updaterQueue.drainTo(clientsStates);
         clientsStates.forEach(outList::addAll);

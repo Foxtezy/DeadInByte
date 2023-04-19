@@ -22,11 +22,7 @@ public class ClientSenderThread extends Thread {
     while (!Thread.currentThread().isInterrupted()) {
       List<EntityState> entityStates = MCClient.getClientState()
           .getEntityStatesByOwnerId(MCClient.getClientId());
-      try {
-        Thread.sleep(20);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
+      Utils.delay();
       // тут задержка должна быть
       Sender sender = new Sender();
       if (!entityStates.isEmpty()) {
