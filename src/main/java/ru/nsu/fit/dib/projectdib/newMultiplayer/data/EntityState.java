@@ -67,7 +67,7 @@ public class EntityState {
             .getModule(CreatureWeaponModule.class);
 
         Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
-        if (!weapon.getComponent(WeaponComponent.class).isActive()) {
+        if (weapon!=null && !weapon.getComponent(WeaponComponent.class).isActive()) {
           module.getNextWeapon();
         }
 

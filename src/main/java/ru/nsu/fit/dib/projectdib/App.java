@@ -90,7 +90,7 @@ public class App extends GameApplication {
         try {
           System.out.println("Подключение");
           new Thread(()->initClient("localhost")).start();
-          for (int i = 1; i < 2; i++) {
+          for (int i = 1; i < 3; i++) {
             Socket client = serverSocket.accept();
             //отправляем клиенту его id
             client.getOutputStream().write(i);

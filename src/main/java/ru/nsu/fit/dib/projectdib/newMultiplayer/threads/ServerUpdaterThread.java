@@ -33,7 +33,6 @@ public class ServerUpdaterThread extends Thread {
         clientsStates.forEach(outList::addAll);
       }
       Sender sender = new Sender();
-      System.out.println(outList);
       List<EntityState> finalOutList = outList;
       MCServer.getClientSockets().values()
           .forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, finalOutList)));
