@@ -104,10 +104,7 @@ public class CreatureComponent extends Component implements Moving {
     }
     if (newPosition!=null) {
       double l=newPosition.add(getEntity().getPosition().multiply(-1)).magnitude();
-      if (l<40 && l>20){
-        move(newPosition);
-      }
-      else if (l<20)
+      if (l<4)
       {
         physics.setLinearVelocity(0,0);
       }
@@ -156,7 +153,7 @@ public class CreatureComponent extends Component implements Moving {
   }
   private void move(Point2D position){
     Point2D movingVector = position.add(entity.getPosition().multiply(-1));
-    physics.setLinearVelocity(movingVector);
+    physics.setLinearVelocity(movingVector.normalize().multiply(getCreature().getSpeed()));
   }
 
   //==================================================================================================
