@@ -10,7 +10,6 @@ import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 
 public class EntityState {
 
@@ -55,10 +54,12 @@ public class EntityState {
     Entity entity = hashTable.get(id);
     if (entity==null) return;
     // TODO: 12.04.2023 тут свич надо дописать
+    // TODO: 21.04.2023 иногда выскакивает DataComponent not found
     switch (entity.getComponent(DataComponent.class).getEntityType()) {
       case PLAYER -> {
         if (position != null) {
           Point2D movingVector = position.add(entity.getPosition().multiply(-1));
+          // TODO: 21.04.2023 проверка HeroComponent
           entity.getComponent(HeroComponent.class).moveByVector(movingVector);
         }
         entity.getComponent(HeroComponent.class).bindDirectionView(e -> rotation);
@@ -82,5 +83,15 @@ public class EntityState {
 
   public void setActiveWeapon(Integer weaponId) {
     this.bindedEntity=weaponId;
+  }
+
+  @Override
+  public String toString() {
+    return "EntityState{" +
+        "id=" + id +
+        ", position=" + position +
+        ", rotation=" + rotation +
+        ", bindedEntity=" + bindedEntity +
+        '}';
   }
 }

@@ -68,7 +68,7 @@ public class DataComponent extends Component {
   }
 
   public boolean isClientEntity() {
-    return ownerID== MCClient.getClientId();
+    return ownerID == MCClient.getClientId();
   }
   public int getOwnerID() {
     return ownerID;

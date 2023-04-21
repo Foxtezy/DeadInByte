@@ -34,15 +34,10 @@ public class ClientState {
         return;
       }
       if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(DataComponent.class)){
-        if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(
-            WeaponComponent.class)) System.out.println("weapon ");
-        else if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(
-            HeroComponent.class))
-          System.out.println("hero");
-        else System.out.println("someone");
+        System.out.println("someone");
         return;
       }
-      if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
+      if (MCClient.getClientState().getIdHashTable().get(entityState.getId()).getComponent(
           DataComponent.class).isClientEntity()) {
         return;
       }

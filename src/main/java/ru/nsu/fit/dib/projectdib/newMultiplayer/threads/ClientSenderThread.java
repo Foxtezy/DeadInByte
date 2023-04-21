@@ -23,7 +23,6 @@ public class ClientSenderThread extends Thread {
       List<EntityState> entityStates = MCClient.getClientState()
           .getEntityStatesByOwnerId(MCClient.getClientId());
       Utils.delay();
-      // тут задержка должна быть
       Sender sender = new Sender();
       if (!entityStates.isEmpty()) {
         sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.UPDATE, entityStates));
