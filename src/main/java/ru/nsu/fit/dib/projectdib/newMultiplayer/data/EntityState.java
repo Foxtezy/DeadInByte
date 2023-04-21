@@ -58,9 +58,8 @@ public class EntityState {
     switch (entity.getComponent(DataComponent.class).getEntityType()) {
       case PLAYER -> {
         if (position != null) {
-          Point2D movingVector = position.add(entity.getPosition().multiply(-1));
           // TODO: 21.04.2023 проверка HeroComponent
-          entity.getComponent(HeroComponent.class).moveByVector(movingVector);
+          entity.getComponent(HeroComponent.class).moveToPoint(position);
         }
         entity.getComponent(HeroComponent.class).bindDirectionView(e -> rotation);
 

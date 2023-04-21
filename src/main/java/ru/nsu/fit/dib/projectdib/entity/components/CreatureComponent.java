@@ -46,7 +46,7 @@ public class CreatureComponent extends Component implements Moving {
   private String currentWeapon;
   private boolean isMoving = false;
   private static final Image img = new Image(_player);
-
+  private Point2D newPosition = null;
   public CreatureComponent(Creature creature, Point2D localAnchor) {
     this.localAnchor = localAnchor;
     this.creature = creature;
@@ -102,6 +102,16 @@ public class CreatureComponent extends Component implements Moving {
     } else {
       rotate(SIDE.LEFT);
     }
+    if (newPosition!=null) {
+      double l=newPosition.add(getEntity().getPosition().multiply(-1)).magnitude();
+      if (l<40 && l>20){
+        move(newPosition);
+      }
+      else if (l<20)
+      {
+        physics.setLinearVelocity(0,0);
+      }
+    }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
 
@@ -140,9 +150,13 @@ public class CreatureComponent extends Component implements Moving {
     physics.setVelocityY(0);
     physics.setVelocityX(0);
   }
-  public void moveByVector(Point2D vector){
-    physics.setVelocityX(vector.getX()*creature.getSpeed());
-    physics.setVelocityY(vector.getY()*creature.getSpeed());
+  public void moveToPoint(Point2D position){
+    newPosition=position;
+    move(position);
+  }
+  private void move(Point2D position){
+    Point2D movingVector = position.add(entity.getPosition().multiply(-1));
+    physics.setLinearVelocity(movingVector);
   }
 
   //==================================================================================================
