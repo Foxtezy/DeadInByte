@@ -3,14 +3,10 @@ package ru.nsu.fit.dib.projectdib;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ClientConfig;
 
 
 /**
@@ -20,7 +16,7 @@ public class App extends GameApplication {
 
   Entity player;
   InputListener inputListener;
-  public static GameMode gameMode;
+
   /**
    * Main-метод.
    *
@@ -105,16 +101,5 @@ public class App extends GameApplication {
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
-  }
-  private static void initClient(String hostname) {
-    Socket socket = new Socket();
-    ClientConfig.addClientSocket(socket);
-    try {
-      socket.connect(new InetSocketAddress(hostname, 8080));
-      ClientConfig.addClientId(socket.getInputStream().read());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    ClientConfig.init();
   }
 }

@@ -21,18 +21,15 @@ public class ClientConnectionTask implements Supplier<Socket> {
    */
   @Override
   public Socket get() {
-    ClientConfig.init();
-    Socket socket = MCClient.getClientSocket();
+    Socket socket = new Socket();
+    ClientConfig.addClientSocket(socket);
     try {
       socket.connect(serverAddress, 1000);
-      System.out.println("connect");
       ClientConfig.addClientId(socket.getInputStream().read());
-    } catch (SocketTimeoutException e) {
-      System.out.println("not connect");
+    } catch (Exception e) {
       return null;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
     }
+    ClientConfig.init();
     return socket;
   }
 }

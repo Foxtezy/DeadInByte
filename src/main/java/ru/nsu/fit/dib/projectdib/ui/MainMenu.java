@@ -48,12 +48,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import ru.nsu.fit.dib.projectdib.App;
-import ru.nsu.fit.dib.projectdib.GameMode;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ClientConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
@@ -232,16 +231,26 @@ public class MainMenu extends FXGLMenu {
       tree.removeChildren();
       var clients = serverConnectionTask.getClientSockets();
       for (Entry<Integer, Socket> s : clients.entrySet()) {
-        ImageButton newClient = new ImageButton("Client: " + s.getValue().getInetAddress(), font, "#5ae8a8",
+        ImageButton newClient = new ImageButton(s.getValue().getInetAddress().toString().replaceFirst("/", ""), font, "#5ae8a8",
             "#2b2944",
             pushedServer,
             unpushedServer);
-        serverBox.getChildren().add(newClient);
+        if (!serverBox.getChildren().contains(newClient)) {
+          serverBox.getChildren().add(newClient);
+        }
       }
       scrollPane.setContent(serverBox);
       tree.addNodes(server, List.of(scrollPane));
       ui.getChildren().addAll(tree.getANChildren());
     });
+
+    //===Start Multiplayer===
+    startMultiplayer.setOnMouseClicked(e -> {
+      // TODO: 24.04.2023 шлём инициализационный пакет клиентам
+      FXGL.getGameController().startNewGame();
+    });
+
+
 
     //===Connect===
     TextField passwordField = new TextField();
@@ -325,25 +334,6 @@ public class MainMenu extends FXGLMenu {
     AnchorPane.setRightAnchor(returnButton, 120d);
     //============================================================================================
 
-  }
-
-  private void clientSurvey(TreeNode<Node> tree, VBox ui, Image pushedServer, Image unpushedServer,
-      ImageButton server, Font font) {
-    List<Integer> clients = new ArrayList<>(4);
-    clients.addAll(List.of(1, 2, 3, 4));
-    for (Integer client : clients) {
-      try {
-        sleep(1000);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-      String clientID = String.valueOf(client);
-      ImageButton newClient = new ImageButton("Client: " + clientID, font, "#5ae8a8", "#2b2944",
-          pushedServer,
-          unpushedServer);
-      tree.addNodes(server, List.of(newClient));
-      ui.getChildren().add(newClient);
-    }
   }
 
   private WrappedImageView initializeAnimationImageView(String url, double requestedWidth,

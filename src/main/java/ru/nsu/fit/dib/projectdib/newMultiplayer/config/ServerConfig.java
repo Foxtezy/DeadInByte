@@ -1,7 +1,9 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.config;
 
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerActionThread;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.EMCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
@@ -16,6 +18,7 @@ public final class ServerConfig {
   public static void init() {
     addServerActionThread(new ServerActionThread());
     addServerUpdaterThread(new ServerUpdaterThread());
+    addClientSockets(new ConcurrentHashMap<>());
   }
 
   public static void addClientSockets(Map<Integer, Socket> sockets) {

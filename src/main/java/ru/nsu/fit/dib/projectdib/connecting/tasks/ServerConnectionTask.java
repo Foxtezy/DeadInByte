@@ -1,15 +1,19 @@
 package ru.nsu.fit.dib.projectdib.connecting.tasks;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerReceiverThread;
 
 /**
  * Задание которое должно выполняться в CompletableFuture
@@ -40,20 +44,23 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    CompletableFuture.supplyAsync(
+        new ClientConnectionTask(new InetSocketAddress("localhost", ProjectConfig.SERVER_PORT)));
+    ServerConfig.init();
     while (!interrupt) {
       try {
         Socket client = serverSocket.accept();
         //отправляем клиенту его id
         client.getOutputStream().write(lastClientId);
-        clientSockets.put(lastClientId++, client);
+        clientSockets.put(lastClientId, client);
+        MCServer.getClientSockets().put(lastClientId++, client);
+        new ServerReceiverThread(client).start();
       } catch (SocketTimeoutException e) {
 
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
     }
-    ServerConfig.init();
-    ServerConfig.addClientSockets(clientSockets);
     return clientSockets;
   }
 }
