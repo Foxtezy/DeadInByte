@@ -6,7 +6,9 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
 
 /**
@@ -19,6 +21,12 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
 
   private int lastClientId = 1;
 
+  private final Map<Integer, Socket> clientSockets = new ConcurrentHashMap<>();
+
+  public Map<Integer, Socket> getClientSockets() {
+    return clientSockets;
+  }
+
   public void interrupt() {
     this.interrupt = true;
   }
@@ -26,9 +34,8 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
   @Override
   public Map<Integer, Socket> get() {
     ServerSocket serverSocket;
-    Map<Integer, Socket> clientSockets = new HashMap<>();
     try {
-      serverSocket = new ServerSocket(8080);
+      serverSocket = new ServerSocket(ProjectConfig.SERVER_PORT);
       serverSocket.setSoTimeout(100);
     } catch (IOException e) {
       throw new RuntimeException(e);

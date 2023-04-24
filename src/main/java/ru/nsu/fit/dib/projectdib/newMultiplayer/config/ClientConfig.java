@@ -13,6 +13,7 @@ public final class ClientConfig {
     throw new UnsupportedOperationException();
   }
 
+  // TODO: 24.04.2023 потоки вкл после инициаллизации
   public static void init() {
     MCClient.addBean(EMCClient.CLIENT_STATE, new ClientState());
     addClientSenderThread(new ClientSenderThread());

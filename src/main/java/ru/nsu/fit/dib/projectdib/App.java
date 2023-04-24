@@ -5,19 +5,13 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ClientConfig;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerReceiverThread;
+
 
 /**
  * Основной класс игры.
@@ -78,6 +72,7 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
+    /*
     switch (gameMode){
       case SERVER, SINGLE -> {
         ServerSocket serverSocket;
@@ -105,7 +100,7 @@ public class App extends GameApplication {
         ServerConfig.init();
       }
       case CLIENT -> initClient("192.168.43.8");
-    }
+    }*/
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());

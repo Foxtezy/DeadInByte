@@ -14,10 +14,16 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.style;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.net.SocketAddress;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -44,7 +50,9 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.GameMode;
+import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
+import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
@@ -165,7 +173,7 @@ public class MainMenu extends FXGLMenu {
     ImageButton connect = new ImageButton("Connect", font, "#5ae8a8", "#2b2944", pushed, unpushed);
     ImageButton server = new ImageButton("Create server", font, "#5ae8a8", "#2b2944", pushed,
         unpushed);
-    String gamePort = String.valueOf(666);
+    String gamePort = String.valueOf(ProjectConfig.SERVER_PORT);
     ImageButton serverID = new ImageButton("Server: " + gamePort, smallFont, "#5ae8a8", "#2b2944",
         pushedServer,
         unpushedServer);
@@ -203,15 +211,14 @@ public class MainMenu extends FXGLMenu {
     VBox serverBox = new VBox();
     serverBox.getChildren().addAll(update, startMultiplayer, serverID);
     ScrollPane scrollPane = new ScrollPane();
+    final Future<Map<Integer, Socket>>[] future = new Future[]{null};
+    ServerConnectionTask serverConnectionTask = new ServerConnectionTask();
     server.setOnMouseClicked(event -> {
+      future[0] = CompletableFuture.supplyAsync(serverConnectionTask);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(server);
-      //serverBox.setMinSize(800, 600);
-      //serverBox.setMaxSize(800, 600);
-      //serverBox.setPrefSize(800, 600);
       scrollPane.setPrefViewportHeight(600);
       scrollPane.setContent(serverBox);
-      //scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
       scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
       scrollPane.getStylesheets().add(
           Objects.requireNonNull(this.getClass().getClassLoader().getResource(style)).toExternalForm());
@@ -220,21 +227,20 @@ public class MainMenu extends FXGLMenu {
     });
 
     //===Update===
-    AtomicInteger client = new AtomicInteger(1);
     update.setOnMouseClicked(event -> {
-      String clientID = String.valueOf(client.get());
-      ImageButton newClient = new ImageButton("Client: " + clientID, font, "#5ae8a8",
-          "#2b2944",
-          pushedServer,
-          unpushedServer);
-      serverBox.getChildren().add(newClient);
-      scrollPane.setContent(serverBox);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.removeChildren();
+      var clients = serverConnectionTask.getClientSockets();
+      for (Entry<Integer, Socket> s : clients.entrySet()) {
+        ImageButton newClient = new ImageButton("Client: " + s.getValue().getInetAddress(), font, "#5ae8a8",
+            "#2b2944",
+            pushedServer,
+            unpushedServer);
+        serverBox.getChildren().add(newClient);
+      }
+      scrollPane.setContent(serverBox);
       tree.addNodes(server, List.of(scrollPane));
-      //tree.addNodes(server, List.of(scrollPane));
       ui.getChildren().addAll(tree.getANChildren());
-      client.getAndIncrement();
     });
 
     //===Connect===
@@ -245,7 +251,7 @@ public class MainMenu extends FXGLMenu {
     passwordField.setMaxSize(700, 100);
     passwordField.setFont(smallFont);
     passwordField.setAlignment(Pos.CENTER);
-    passwordField.setPromptText("Enter game port");
+    passwordField.setPromptText("Enter game address");
     passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
     authentication.setAlignment(Pos.CENTER);
     authentication.getChildren().add(passwordField);
@@ -272,15 +278,29 @@ public class MainMenu extends FXGLMenu {
     loadingBox.setAlignment(Pos.CENTER);
 
     enter.setOnMouseClicked(event -> {
-      if (Objects.equals(passwordField.getText(), gamePort)) {
-        ui.getChildren().removeAll(tree.getANChildren());
-        tree.changeActiveNode(authentication);
-        tree.addNodes(authentication, List.of(loadingBox));
-        ui.getChildren().add(loadingBox);
-      } else {
+      SocketAddress socketAddress;
+      try {
+        socketAddress = new InetSocketAddress(passwordField.getText().split(":")[0], Integer.parseInt(passwordField.getText().split(":")[1]));
+      } catch (Exception e) {
         passwordField.clear();
-        passwordField.setPromptText("Wrong port!");
+        passwordField.setPromptText("Wrong address!");
         passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
+        return;
+      }
+      Future<Socket> clientFuture = CompletableFuture.supplyAsync(new ClientConnectionTask(socketAddress));
+      try {
+        if (clientFuture.get() == null) {
+          passwordField.clear();
+          passwordField.setPromptText("Wrong address!");
+          passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
+        } else {
+          ui.getChildren().removeAll(tree.getANChildren());
+          tree.changeActiveNode(authentication);
+          tree.addNodes(authentication, List.of(loadingBox));
+          ui.getChildren().add(loadingBox);
+        }
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
       }
     });
 
