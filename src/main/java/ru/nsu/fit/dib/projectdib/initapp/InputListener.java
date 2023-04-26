@@ -7,27 +7,25 @@ import static com.almasb.fxgl.dsl.FXGL.onBtnDown;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.onKeyUp;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
+import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.action.Action;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
+import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
-import ru.nsu.fit.dib.projectdib.multiplayer.ClientTaskManager;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.TakeWeaponAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -53,7 +51,6 @@ public class InputListener {
   }
 
   public void run() {
-    ClientTaskManager clientTaskManager = new ClientTaskManager();
     //==============================================================================================
     onKey(Controls.UP, "Up", () -> player.getComponent(HeroComponent.class).up());
     onKey(Controls.LEFT, "Left", () -> player.getComponent(HeroComponent.class).left());
@@ -85,14 +82,19 @@ public class InputListener {
       protected void onActionBegin() {
         HeroComponent playerComponent = player.getComponent(HeroComponent.class);
         List<Entity> list = playerComponent.findWeapon();
+
         //----------------------------------------
         if (list.size() >= 1) {
           //Спрашиваем сервер можно ли забрать Weapon
+          // TODO: 17.04.2023 надо раскоммитить
+          //doAction(new Pair<>(MessageType.ACTION, new TakeWeaponAction(player.getComponent(DataComponent.class).getId(),list.get(0).getComponent(DataComponent.class).getId())));
+          //player.getComponent(DataComponent.class).addAction(new Action(ActionType.TAKE,list.get(0).getComponent(DataComponent.class).getId()));
           //если да то:
-          playerComponent.takeWeapon(list.get(0));
+          //playerComponent.takeWeapon(list.get(0));
         } else {
+          //player.getComponent(DataComponent.class).addAction(new Action(ActionType.THROW,null));
           //Если Weapon рядом нет то прашиваем можно ли выбрость:
-          playerComponent.throwWeapon();
+          //playerComponent.throwWeapon();
         }
         //Вообще эту часть нужно будет убрать тк действие будет совершаться из распакованного JSON-а
         //------------------------------------------

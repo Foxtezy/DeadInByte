@@ -28,6 +28,7 @@ public class TreeNode<T> {
   }
 
   private TreeNode(TreeNode<T> parent, T root) {
+    this.leafs = new ArrayList<>();
     this.parent = parent;
     this.root = root;
   }
@@ -41,6 +42,7 @@ public class TreeNode<T> {
   public TreeNode(T root, List<T> leafs) {
     parent = this;
     activeNode = this;
+    this.leafs = new ArrayList<>();
     addNodes(leafs);
     this.root = root;
   }
@@ -71,9 +73,10 @@ public class TreeNode<T> {
   }
 
   private void addNodes(List<T> branchLeafs) {
-    leafs = new ArrayList<>();
+    //leafs = new ArrayList<>();
     branchLeafs.forEach(leaf -> {
-      this.leafs.add(new TreeNode<>(leaf));
+      TreeNode<T> branchLeaf = new TreeNode<>(this, leaf);
+      this.leafs.add(branchLeaf);
     });
   }
 
@@ -88,6 +91,13 @@ public class TreeNode<T> {
     localRoot.addNodes(branchLeafs);
   }
 
+  public void removeChildren() {
+    for (TreeNode<T> leaf : activeNode.leafs) {
+      leaf.parent = null;
+    }
+    activeNode.leafs.clear();
+  }
+
   /**
    * Сменить активную вершину
    *
@@ -95,6 +105,10 @@ public class TreeNode<T> {
    */
   public void changeActiveNode(T node) {
     activeNode = getNode(node);
+  }
+
+  public void changeActiveNode(TreeNode<T> node) {
+    activeNode = node;
   }
 
   private List<T> getChildren() {
@@ -114,6 +128,7 @@ public class TreeNode<T> {
     return activeNode.parent.getChildren();
   }
 
+
   /**
    * Получить детей активной Node
    *
@@ -131,4 +146,10 @@ public class TreeNode<T> {
   public T getParentAN() {
     return activeNode.root;
   }
+
+
+  public TreeNode<T> getParentA() {
+    return activeNode.parent;
+  }
+
 }

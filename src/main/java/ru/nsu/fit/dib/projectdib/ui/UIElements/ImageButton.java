@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.ui.UIElements;
 
+import java.util.Objects;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -53,5 +54,21 @@ public class ImageButton extends StackPane {
 
   private void setImage(Image image) {
     iv.setImage(image);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof ImageButton that)) {
+      return false;
+    }
+    return text.getText().equals(that.text.getText());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(text.getText());
   }
 }

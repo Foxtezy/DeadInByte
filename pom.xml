@@ -14,13 +14,16 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.8.2</junit.version>
     <kotlin.version>1.8.10</kotlin.version>
+    <!--For FlatBuffers-->
+    <fbs.sources>${basedir}/src/main/fbs</fbs.sources>
+    <fbs.generated.sources>${project.build.directory}/generated-sources/java</fbs.generated.sources>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.8.9</version>
+      <version>2.2.2</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
@@ -48,6 +51,13 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>com.google.flatbuffers</groupId>
+      <artifactId>flatbuffers-java</artifactId>
+      <version>2.0.8</version>
+    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -80,6 +90,13 @@
   </dependencies>
 
   <build>
+  <extensions>
+        <extension>
+            <groupId>kr.motd.maven</groupId>
+            <artifactId>os-maven-plugin</artifactId>
+            <version>1.7.1</version>
+        </extension>
+    </extensions>
     <plugins>
       <plugin>
         <groupId>org.openjfx</groupId>
@@ -102,6 +119,77 @@
           </execution>
         </executions>
       </plugin>
+      <!--plugin to generate flatbuffers classes-->
+      <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>2.10</version>
+    <executions>
+        <execution>
+            <id>unpack</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>unpack</goal>
+            </goals>
+            <configuration>
+                <artifactItems>
+                    <artifactItem>
+                        <groupId>com.github.davidmoten</groupId>
+                        <artifactId>flatbuffers-compiler</artifactId>
+                        <version>2.0.3.1</version>
+                        <type>tar.gz</type>
+                        <classifier>distribution-linux</classifier>
+                        <overWrite>true</overWrite>
+                        <outputDirectory>${project.build.directory}</outputDirectory>
+                    </artifactItem>
+                </artifactItems>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>1.6.0</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>exec</goal>
+            </goals>
+            <phase>generate-sources</phase>
+        </execution>
+    </executions>
+    <configuration>
+        <executable>${project.build.directory}/bin/flatc</executable>
+        <workingDirectory>${fbs.sources}</workingDirectory>
+        <arguments>
+            <argument>--java</argument>
+            <argument>--gen-mutable</argument>
+            <argument>-o</argument>
+            <argument>${fbs.generated.sources}</argument>
+            <argument>monster.fbs</argument>
+        </arguments>
+    </configuration>
+</plugin>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <version>3.1.0</version>
+    <executions>
+        <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>add-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>${fbs.generated.sources}</source>
+                </sources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
       <!-- JaCoCo plugin -->
       <plugin>
         <groupId>org.jacoco</groupId>

@@ -1,0 +1,19 @@
+include "update.fbs";
+//Данные для обновления состояния объектов
+namespace ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
+
+enum ActionStatus:byte{ CREATED=0,  // для клиента
+                        APPROVED=1, // принят сервером или им создан
+                        REFUSED=2   // отказано
+                      }
+table NewEntityData{
+  type:string;//В будущем лучше раздать id всем Entity которые спавнятся на фабриках
+  seed:int;
+  state:EntityStateData;
+}
+
+table SpawnActionData {
+  data:NewEntityData;
+}
+
+root_type SpawnActionData;

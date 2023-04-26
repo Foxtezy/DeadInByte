@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.entity.weapons;
 
 import java.util.HashMap;
 
+import java.util.Map;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponRarity;
@@ -16,9 +17,18 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.WeaponModule;
 public class Weapon {
 
   protected Creature user;
-  private HashMap<Class<? extends WeaponModule>, ? extends WeaponModule> modules;
+  private Map<Class<? extends WeaponModule>, ? extends WeaponModule> modules;
   private WeaponRarity rarity;// Редкость персонажа [0;1]
   private final String name;
+
+  public Weapon(Creature user, Map<Class<? extends WeaponModule>, ? extends WeaponModule> modules,
+      WeaponRarity rarity, String name) {
+    this.user = user;
+    this.modules = modules;
+    this.rarity = rarity;
+    this.name = name;
+  }
+
   public Weapon(WeaponBuilder weaponBuilder) {
     modules = weaponBuilder.modules;
     this.rarity = weaponBuilder.rarity;
@@ -38,6 +48,10 @@ public class Weapon {
     getModule(DamageModule.class).setUser(user);
   }
 
+  public Map<Class<? extends WeaponModule>, ? extends WeaponModule> getModules() {
+    return modules;
+  }
+
   public WeaponRarity getRarity() {
     return rarity;
   }
@@ -52,7 +66,7 @@ public class Weapon {
 
   public static class WeaponBuilder {
 
-    private final HashMap<Class<? extends WeaponModule>, WeaponModule> modules;
+    private final Map<Class<? extends WeaponModule>, WeaponModule> modules;
     private final WeaponRarity rarity;
     private final String name;
 

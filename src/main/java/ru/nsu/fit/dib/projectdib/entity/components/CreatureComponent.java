@@ -10,13 +10,11 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import javafx.geometry.Point2D;
@@ -47,13 +45,13 @@ public class CreatureComponent extends Component implements Moving {
   private PhysicsComponent physics;
   private String currentWeapon;
   private boolean isMoving = false;
-
+  private static final Image img = new Image(_player);
+  private Point2D newPosition = null;
   public CreatureComponent(Creature creature, Point2D localAnchor) {
     this.localAnchor = localAnchor;
     this.creature = creature;
     int creatureNumber = creature.getModule(JFXModule.class).getImageID();
     //animation settings
-    Image img = new Image(_player);
     animationMovement = new AnimationChannel(img,
         _player_numberColumns, _player_width, _player_height, Duration.millis(600),
         5 + creatureNumber * 13, 8 + creatureNumber * 13);
@@ -104,6 +102,13 @@ public class CreatureComponent extends Component implements Moving {
     } else {
       rotate(SIDE.LEFT);
     }
+    if (newPosition!=null) {
+      double l=newPosition.add(getEntity().getPosition().multiply(-1)).magnitude();
+      if (l<4)
+      {
+        physics.setLinearVelocity(0,0);
+      }
+    }
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
 
@@ -141,6 +146,14 @@ public class CreatureComponent extends Component implements Moving {
   public void stop() {
     physics.setVelocityY(0);
     physics.setVelocityX(0);
+  }
+  public void moveToPoint(Point2D position){
+    newPosition=position;
+    move(position);
+  }
+  private void move(Point2D position){
+    Point2D movingVector = position.add(entity.getPosition().multiply(-1));
+    physics.setLinearVelocity(movingVector.normalize().multiply(getCreature().getSpeed()));
   }
 
   //==================================================================================================

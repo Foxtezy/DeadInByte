@@ -1,5 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data;
 
+import javafx.scene.image.Image;
+
 /**
  * Настройки игры, не изменяемые пользователем.
  */
@@ -20,6 +22,9 @@ public interface ProjectConfig {
   String _menuSelectedButton = "assets/UI/elements/menu_selected_button1k.png";
   String _returnButton = "assets/UI/elements/return_button1k.png";
   String _returnSelectedButton = "assets/UI/elements/return_selected_button1k.png";
+  String _loadingAnimation = "assets/UI/elements/loadingAnimation.gif";
+  String style = "assets/UI/elements/style.css";
+  Integer SERVER_PORT = 8080;
   //Weapon
   String _smallWeapon = "assets/textures/SmallWeapon.png";
   String _mediumWeapon = "assets/textures/MediumWeapon.png";
@@ -27,4 +32,8 @@ public interface ProjectConfig {
   //================================================================================================
   String CONTROLS_PATH = "src/main/resources/config/controls.json";
   int _WEAPON_COLUMNS =16;
+  Image _smallWeapon_img = new Image(_smallWeapon);
+  Image _mediumWeapon_img = new Image(_mediumWeapon);
+  Image _bigWeapon_img = new Image(_bigWeapon);
+  Integer MAX_PLAYERS = 4;
 }
