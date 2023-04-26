@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.EntityBuilder;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 
@@ -12,7 +13,9 @@ import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.*;
+import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
@@ -112,6 +115,7 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
         .anchorFromCenter()
         .with(physics)
+        .with(new HeroViewComponent(creature.getModule(JFXModule.class).getImageID()))
         .with(heroComponent)
         .with(new CellMoveComponent(30, 30, 85))
         .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
@@ -130,21 +134,25 @@ public class Factory implements EntityFactory {
     creature.getModule(JFXModule.class).setEnemyComponent(enemyComponent);
     AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
     //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
-    return entityBuilder()
-            .from(data)
-            .type(EntityType.PLAYER)
-            //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
-            .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
-            .anchorFromCenter()
-            .with(physics)
-            .with(enemyComponent)
-  //          .with(new CellMoveComponent(160, 160, 20))
-            //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-            //.with(new ChunkLoaderComponent(new ChunkLoader(wallMapper)))
-  //          .with(move)
-  //          .with(new PlayerChaseComponent(move))
+    EntityBuilder builder= entityBuilder()
+        .from(data)
+        .type(EntityType.ENEMY)
+        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
+        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
+        .anchorFromCenter()
+        .with(physics)
+        .with(new EnemyViewComponent(creature.getModule(JFXModule.class).getImageID()))
+        .with(enemyComponent)
+        .collidable();
+    // TODO: 26.04.2023 поменять на проверку: клиент - сервер или нет
+    if (false) return builder
+            .with(new CellMoveComponent(160, 160, 20))
+        //.with(new HealthIntComponent(10))
+        .with(new CellMoveComponent(160, 160, 300).allowRotation(true))
+        //.with(new AIComponent()); todo сделать позже
             .collidable()
             .build();
+    return builder.build();
   }
 /*
   @Spawns("enemy")
