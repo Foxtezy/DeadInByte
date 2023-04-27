@@ -2,7 +2,10 @@ package ru.nsu.fit.dib.projectdib;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import java.util.List;
+import javafx.scene.Node;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
@@ -68,38 +71,25 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
-    /*
-    switch (gameMode){
-      case SERVER, SINGLE -> {
-        ServerSocket serverSocket;
-        Map<Integer, Socket> clientSockets = new HashMap<>();
-        try {
-          serverSocket = new ServerSocket(8080);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-        try {
-          System.out.println("Подключение");
-          new Thread(()->initClient("localhost")).start();
-          for (int i = 1; i < 3; i++) {
-            Socket client = serverSocket.accept();
-            //отправляем клиенту его id
-            client.getOutputStream().write(i);
-            clientSockets.put(i, client);
-            new ServerReceiverThread(client).start();
-            System.out.println("Подключено");
-          }
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-        ServerConfig.addClientSockets(clientSockets);
-        ServerConfig.init();
-      }
-      case CLIENT -> initClient("192.168.43.8");
-    }*/
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
+    player=gameInitializer.getPlayer();
+/*    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 160, 160,
+            (type) -> {
+              if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
+                return CellState.NOT_WALKABLE;
+              }
+
+              return CellState.WALKABLE;
+            });
+    set("grid", grid);*/
+  }
+  @Override
+  protected void onUpdate(double tpf){
+    List<Entity> list = FXGL.getGameScene().getGameWorld().getEntitiesByType(EntityType.PLAYER,EntityType.ENEMY,EntityType.WEAPON);
+    list.sort((e1,e2)-> (int) (e1.getY()-e2.getY()));
+    list.stream().map(entity ->entity.getViewComponent().getParent()).forEach(Node::toFront);
   }
 }

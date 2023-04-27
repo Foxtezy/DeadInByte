@@ -6,12 +6,10 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.time.LocalTimer;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
@@ -21,7 +19,6 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.HPModule;
-import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.DamageModule;
@@ -29,33 +26,15 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.SquareDamageModule
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TimingsModule;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_numberColumns;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
 
 /**
  * Описывает движение игрока.
  */
 public class HeroComponent extends CreatureComponent implements Moving {
-
-  private final double scale = 0.07;
-  AnimationChannel animationWaiting;
-  AnimationChannel animationBack;
-  private static final Image img = new Image(_player);
   private LocalTimer shootTimer = newLocalTimer();
-
-  private boolean isMoving = false;
 
   public HeroComponent(Creature hero, Point2D localAnchor) {
     super(hero,localAnchor);
-    int heroNumber = creature.getModule(JFXModule.class).getImageID();
-    animationWaiting = new AnimationChannel(img,
-        _player_numberColumns, _player_width, _player_height, Duration.millis(450),
-        2 + heroNumber * 13, 4 + heroNumber * 13);
-    animationBack = new AnimationChannel(img,
-        _player_numberColumns, _player_width, _player_height, Duration.millis(600),
-        9 + heroNumber * 13, 12 + heroNumber * 13);
   }
 
   public void attack() {
@@ -103,5 +82,31 @@ public class HeroComponent extends CreatureComponent implements Moving {
                 && circle.contains(entity.getPosition())
                 && triangle.contains(entity.getPosition()) && entity!=getEntity()).toList());
     return list;
+  }
+  @Override
+  public void left() {
+    physics.setVelocityX(-creature.getSpeed());
+  }
+
+  @Override
+  public void right() {
+    physics.setVelocityX(creature.getSpeed());
+  }
+
+  @Override
+  public void up() {
+    //да, тут должен быть именно минус
+    physics.setVelocityY(-creature.getSpeed());
+  }
+
+  @Override
+  public void down() {
+    //а тут плюс
+    physics.setVelocityY(creature.getSpeed());
+  }
+  @Override
+  public void stop() {
+    physics.setVelocityY(0);
+    physics.setVelocityX(0);
   }
 }

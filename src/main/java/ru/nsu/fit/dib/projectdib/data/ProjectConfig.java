@@ -10,6 +10,10 @@ public interface ProjectConfig {
   String _cfg = "src/main/resources/cfg.ini";
   //PlayerConfig
   String _player = "assets/textures/HeroesMovementSpriteSheet.png";
+  String _enemy = "assets/textures/Sprite-0001-export.png";
+  int _enemy_numberColumns = 8;
+  int _enemy_width = 160;
+  int _enemy_height = 320;
   int _player_numberColumns = 13;
   int _player_width = 160;
   int _player_height = 320;

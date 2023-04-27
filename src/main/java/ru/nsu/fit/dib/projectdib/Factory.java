@@ -3,19 +3,17 @@ package ru.nsu.fit.dib.projectdib;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.EntityBuilder;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
-
-import static java.lang.Character.toUpperCase;
 
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityFactory;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.*;
+import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
@@ -37,14 +35,13 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
+import ru.nsu.fit.dib.projectdib.entity.components.*;
 import ru.nsu.fit.dib.projectdib.entity.components.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
-import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
@@ -85,9 +82,31 @@ public class Factory implements EntityFactory {
     SpawnData sd = new SpawnData(bindedEntity.getPosition());
     sd.put("id", id);
     sd.put("owner", ownerID);
-    sd.put("weapon", bindedEntity.getComponent(HeroComponent.class).getCreature()
-        .getModule(CreatureWeaponModule.class).getActiveWeapon());
+    if (bindedEntity.getType()==EntityType.PLAYER) {
+      sd.put("weapon", bindedEntity.getComponent(HeroComponent.class).getCreature()
+          .getModule(CreatureWeaponModule.class).getActiveWeapon());
+    }
+    else {
+      sd.put("weapon", bindedEntity.getComponent(EnemyComponent.class).getCreature()
+          .getModule(CreatureWeaponModule.class).getActiveWeapon());
+    }
     return spawn("weapon", sd);
+  }
+
+  public static Entity spawnEnemy(EnemiesFactory.EnemyType enemyType,
+      Point2D position,Integer id, Integer seed) {
+    SpawnData sd = new SpawnData(position);
+    sd.put("creature", EnemiesFactory.newEnemy(enemyType, seed));
+    sd.put("id",id);
+    sd.put("owner",-1);
+    //enemy = getGameWorld().create("enemy", sd);
+    Entity enemy = spawn("enemy", sd);
+    enemy.setScaleUniform(0.75);/*
+    SpawnData weaponSD = new SpawnData(position);
+    weaponSD.put("weapon", enemy.getComponent(EnemyComponent.class).getCreature().getModule(
+        CreatureWeaponModule.class).getActiveWeapon());
+    Entity weapon = spawn("weapon", weaponSD);*/
+    return enemy;
   }
 
   /**
@@ -95,11 +114,13 @@ public class Factory implements EntityFactory {
    *
    * @param weaponType type of weapon
    * @param position   position
+   * @param id         id
    * @return weapon entity
    */
-  public static Entity spawnWeapon(Weapons weaponType, Point2D position, Integer id) {
+  public static Entity spawnWeapon(Weapons weaponType,Integer ownerID, Point2D position, Integer id) {
     SpawnData sd = new SpawnData(position);
     sd.put("id", id);
+    sd.put("owner",ownerID);
     sd.put("weapon", WeaponFactory.getWeapon(weaponType));
     return spawn("weapon", sd);
   }
@@ -113,7 +134,6 @@ public class Factory implements EntityFactory {
   @Spawns("player")
   public Entity newPlayer(SpawnData data) {
     Creature creature = data.get("creature");
-
     PhysicsComponent physics = new PhysicsComponent();
     physics.setBodyType(BodyType.DYNAMIC);
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
@@ -137,6 +157,7 @@ public class Factory implements EntityFactory {
         .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
         .anchorFromCenter()
         .with(physics)
+        .with(new HeroViewComponent(creature.getModule(JFXModule.class).getImageID()))
         .with(heroComponent)
         .with(dataComponent)
         .with(new CellMoveComponent(30, 30, 85))
@@ -169,9 +190,67 @@ public class Factory implements EntityFactory {
         .with(weaponComponent)
         .with(dataComponent)
         .build();
-    while (!entity.hasComponent(DataComponent.class));
     return entity;
   }
+  @Spawns("enemy")
+  public Entity newEnemy(SpawnData data) {
+    Creature creature = data.get("creature");
+    PhysicsComponent physics = new PhysicsComponent();
+    physics.setBodyType(BodyType.DYNAMIC);
+    physics.setFixtureDef(new FixtureDef().friction(0.3f));
+    EnemyComponent enemyComponent = new EnemyComponent(creature,new Point2D(50,180));
+    enemyComponent.bindDirectionView(entity ->new Point2D(0,0));
+    creature.getModule(JFXModule.class).setEnemyComponent(enemyComponent);
+    AStarMoveComponent move = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
+    //HeroSpecs specs = new HeroSpecs("1", "bow", "ak", 450.0, "player.png");
+    EntityBuilder builder= entityBuilder()
+        .from(data)
+        .type(EntityType.ENEMY)
+        //.viewWithBBox(texture("weapon_" + playerMovingComponent.getCurrentWeapon()  + ".png", 150,200))
+        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
+        .anchorFromCenter()
+        .with(physics)
+        .with(new EnemyViewComponent(creature.getModule(JFXModule.class).getImageID()))
+        .with(enemyComponent)
+        .collidable();
+    // TODO: 26.04.2023 поменять на проверку: клиент - сервер или нет
+    if (false) return builder
+            .with(new CellMoveComponent(160, 160, 20))
+        //.with(new HealthIntComponent(10))
+        .with(new CellMoveComponent(160, 160, 300).allowRotation(true))
+        //.with(new AIComponent()); todo сделать позже
+            .collidable()
+            .build();
+    return builder.build();
+  }
+/*
+  @Spawns("enemy")
+  public Entity newEnemy(SpawnData data) {
+    var hp = new HealthIntComponent(10);
+    var hpView = new ProgressBar(false);
+    hpView.setFill(Color.LIGHTGREEN);
+    hpView.setMaxValue(10);
+    hpView.setWidth(40);
+    hpView.setTranslateY(-10);
+    hpView.currentValueProperty().bind(hp.valueProperty());
+
+    Circle circle = new Circle(10, 10, 10, Color.RED);
+    circle.setStroke(Color.BROWN);
+    circle.setStrokeWidth(2.0);
+    return entityBuilder()
+            .from(data)
+            .type(EntityType.ENEMY)
+            .viewWithBBox(texture("skull.png", 50, 50))
+            .anchorFromCenter()
+            .collidable()
+            .with(hp)
+            .view(hpView)
+            .with(new CellMoveComponent(25, 25, 100))
+            .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+            .with(new PlayerChaseComponent())
+            .build();
+  }
+*/
 
   @Spawns("platform")
   public Entity platform(SpawnData data) {
@@ -301,6 +380,18 @@ public class Factory implements EntityFactory {
         .build();
   }
 
+  /*
+  @Spawns("bow")
+  public Entity newBow(SpawnData data) {
+    return entityBuilder(data)
+        .from(data)
+        .type(EntityType.BOW)
+        .viewWithBBox(texture("red_bow.png", 15, 50))
+        .bbox(new HitBox(BoundingShape.box(50, 15)))
+        .with(new CollidableComponent(true))
+        .build();
+  }*/
+
   ImageView imageViewFromSpriteSheet(Image img, int number, int spriteWidth, int spriteHeight,
       int columns) {
     ImageView iv = new ImageView(img);
@@ -309,40 +400,6 @@ public class Factory implements EntityFactory {
             spriteWidth, spriteHeight));
     return iv;
   }
-
-  /**
-   * Entity Enemy.
-   *
-   * @param data contain sets up typical properties such as the position
-   * @return entityBuilder for Enemy
-   */
-  @Spawns("enemy")
-  public Entity newEnemy(SpawnData data) {
-    var hp = new HealthIntComponent(10);
-    var hpView = new ProgressBar(false);
-    hpView.setFill(Color.LIGHTGREEN);
-    hpView.setMaxValue(10);
-    hpView.setWidth(40);
-    hpView.setTranslateY(-10);
-    hpView.currentValueProperty().bind(hp.valueProperty());
-
-    Circle circle = new Circle(10, 10, 10, Color.RED);
-    circle.setStroke(Color.BROWN);
-    circle.setStrokeWidth(2.0);
-    return entityBuilder()
-        .from(data)
-        .type(EntityType.ENEMY)
-        .viewWithBBox(texture("skull.png", 50, 50))
-        .anchorFromCenter()
-        .collidable()
-        .with(hp)
-        .view(hpView)
-        .with(new CellMoveComponent(25, 25, 100))
-        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-        .with(new PlayerChaseComponent())
-        .build();
-  }
-
   @Spawns("button")
   public Entity newButton(SpawnData data) {
     return entityBuilder()

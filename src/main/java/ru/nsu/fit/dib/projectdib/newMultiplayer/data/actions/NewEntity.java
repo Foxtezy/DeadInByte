@@ -5,6 +5,7 @@ import java.util.Objects;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -43,9 +44,17 @@ public class NewEntity {
       MCClient.getClientState().getIdHashTable().put(state.getId(), heroEntity);
       return heroEntity;
     }
+    EnemyType enemy=EnemyType.getByName(entityType);
+    if (enemy!=null) {
+      Entity enemyEntity = Factory.spawnEnemy(enemy, state.getPosition(),state.getId(), seed);
+      Entity weaponEntity = Factory.spawnStandardWeapon(state.getActiveWeapon(), state.getId(),enemyEntity);
+      MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
+      MCClient.getClientState().getIdHashTable().put(state.getId(), enemyEntity);
+      return enemyEntity;
+    }
     Weapons weapon = Weapons.getByName(entityType);
     if (weapon!=null) {
-      Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(), state.getId());
+      Entity weaponEntity = Factory.spawnWeapon(weapon,state.getId(), state.getPosition(), state.getActiveWeapon());
       MCClient.getClientState().getIdHashTable().put(state.getId(), weaponEntity);
       return weaponEntity;
     }

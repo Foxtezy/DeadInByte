@@ -222,6 +222,13 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.2</version>
+        <configuration>
+          <argLine>
+            -Xms512m
+            -Xmx4096m
+            -Dprism.maxvram=2G
+          </argLine>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -262,7 +269,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.11.0</version>
         <executions>
           <execution>
             <id>compile</id>

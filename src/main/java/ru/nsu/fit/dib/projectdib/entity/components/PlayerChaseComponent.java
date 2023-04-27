@@ -28,34 +28,34 @@ import ru.nsu.fit.dib.projectdib.Factory;
  */
 public class PlayerChaseComponent extends Component {
 
-  private static AStarMoveComponent enemy;
-  private static AStarPathfinder enemyPath = new AStarPathfinder(
-      AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 25, 25,
-          (type) -> {
-            if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-              return CellState.NOT_WALKABLE;
-            }
+  private final AStarMoveComponent enemy;
+//  private static AStarPathfinder enemyPath = new AStarPathfinder(
+//      AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 250, 250,
+//          (type) -> {
+//            if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
+//              return CellState.NOT_WALKABLE;
+//            }
+//            return CellState.WALKABLE;
+//          }));
+public PlayerChaseComponent(AStarMoveComponent enemy) {
+    this.enemy = enemy;
+}
 
-            return CellState.WALKABLE;
-          }));
 
-  @Override
+    @Override
   public void onUpdate(double tpf) {
     move();
   }
 
   private void move() {
-    var player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
-    //var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
-    int x = player.call("getCellX");
-    int y = player.call("getCellY");
-    if (enemyPath.findPath(enemy.getCurrentCell().get().getX(), enemy.getCurrentCell().get().getY(),
-        x - 2, y - 2).isEmpty()) {
-      enemy.stopMovement();
-    } else if (player.isColliding(enemy.getEntity())) {
-      enemy.stopMovement();
-    } else if (enemy.getGrid().get(x, y).isWalkable()) {
-      enemy.moveToCell(x - 2, y - 2);
-    }
+//    var player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
+//    //var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
+//    int x = player.call("getCellX");
+//    int y = player.call("getCellY");
+//   if (player.isColliding(enemy.getEntity())) {
+//      enemy.stopMovement();
+//    } else {
+//      enemy.moveToCell(x, y);
+//    }
   }
 }

@@ -8,6 +8,9 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
@@ -53,7 +56,6 @@ public class WeaponComponent extends Component {
       Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
       rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
-
       getEntity().rotateToVector(rotation);
 
       getEntity().setX(position.getX());

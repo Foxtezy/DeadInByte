@@ -27,6 +27,8 @@ public class DamageModule extends WeaponModule {
   }
 
   public int getAttack() {
+    // TODO: 26.04.2023  заглушка 
+    if (true) return 0;
     return RandomSystem.d(20) + user.getModule(WeaponSkillsModule.class).getSkills(weaponType) +
         switch (weaponType) {
           case melee -> user.getModule(SpecsModule.class).getStrengthModifier();
