@@ -5,14 +5,13 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_numberColumns;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
 
-import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class HeroViewComponent extends CreatureViewComponent {
 
-  private static Image image = new Image(_player);
+  private static final Image image = new Image(_player);
 
   public HeroViewComponent(int heroNumber) {
     super(new AnimationChannel(image,
@@ -20,7 +19,7 @@ public class HeroViewComponent extends CreatureViewComponent {
         heroNumber * 13, 1 + heroNumber * 13));
     addAnimationChannel(State.MOVING, new AnimationChannel(image,
         _player_numberColumns, _player_width, _player_height, Duration.millis(300),
-        heroNumber * 13, 1 + heroNumber * 13));
+        5+heroNumber * 13, 8 + heroNumber * 13));
     addAnimationChannel(State.WAITING,
         new AnimationChannel(image,
             _player_numberColumns, _player_width, _player_height, Duration.millis(450),

@@ -72,8 +72,8 @@ public class GameInitializer {
     Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
     Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
     Pair<Entity,Entity> pair4 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
-    //Pair<Entity,Entity> pair5 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
-    //Pair<Entity,Entity> pair6 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair5 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair6 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
 
 
     //===================================

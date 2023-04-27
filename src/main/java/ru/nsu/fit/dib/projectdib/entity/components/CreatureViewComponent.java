@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.components;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -7,6 +8,7 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.CacheHint;
 
 public abstract class CreatureViewComponent extends Component {
 
@@ -18,11 +20,14 @@ public abstract class CreatureViewComponent extends Component {
     channelMap = new HashMap<>();
     channelMap.put(State.DEFAULT,defaultAnimation);
     texture = new AnimatedTexture(defaultAnimation);
-    texture.loop();
+    //texture.loop();
     //texture.setPreserveRatio(true);
   }
   @Override
   public void onAdded() {
+    texture.loop();
+    //texture.setCache(true);
+    //texture.setCacheHint(CacheHint.SPEED);
     entity.getViewComponent().addChild(texture);
     physics = getEntity().getComponent(PhysicsComponent.class);
   }
@@ -34,11 +39,12 @@ public abstract class CreatureViewComponent extends Component {
     if (physics.isMoving()) {
       if (texture.getAnimationChannel() != channelMap.get(State.MOVING)) {
         texture.loopAnimationChannel(channelMap.get(State.MOVING));
-      } else if (texture.getAnimationChannel() != channelMap.get(State.DEFAULT)) {
-        texture.loopAnimationChannel(channelMap.get(State.DEFAULT));
       }
+    } else if (texture.getAnimationChannel() != channelMap.get(State.DEFAULT)) {
+      texture.loopAnimationChannel(channelMap.get(State.DEFAULT));
     }
-  }
+    }
+
 
   enum State {
     DEFAULT,
@@ -51,7 +57,6 @@ public abstract class CreatureViewComponent extends Component {
     } else {
       texture.setScaleX(-1);
     }
-
   }
 
   public enum Side {

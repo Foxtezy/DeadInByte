@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class EnemyViewComponent extends CreatureViewComponent {
-  private static Image image = new Image(_enemy);
+  private static final Image image = new Image(_enemy);
 
   public EnemyViewComponent(int enemyNumber) {
     super(new AnimationChannel(image,8,160,320, Duration.millis(300),
