@@ -1,14 +1,23 @@
 package ru.nsu.fit.dib.projectdib;
 
-import com.almasb.fxgl.app.FXGLApplication;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.services.FXGLAssetLoaderService;
-import com.almasb.fxgl.dsl.FXGL;import com.almasb.fxgl.dsl.FXGLForKtKt;import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.pathfinding.CellState;import com.almasb.fxgl.pathfinding.astar.AStarGrid;import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import java.awt.Image;
+import java.util.List;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
+import javax.swing.text.html.ImageView;
+import ru.nsu.fit.dib.projectdib.entity.components.EnemyComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.EnemyViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.HeroViewComponent;
+import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
-import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 
 /**
  * Основной класс игры.
@@ -36,8 +45,6 @@ public class App extends GameApplication {
   protected void initSettings(GameSettings settings) {
     SettingsLoader settingsLoader = new SettingsLoader(settings);
     settingsLoader.run();
-    //settings.set3D(false);
-    //settings.setNative(true);
   }
 
   /**
@@ -78,6 +85,8 @@ public class App extends GameApplication {
   }
   @Override
   protected void onUpdate(double tpf){
-    //System.out.println(tpf);
+    List<Entity> list = FXGL.getGameScene().getGameWorld().getEntitiesByType(EntityType.PLAYER,EntityType.ENEMY,EntityType.WEAPON);
+    list.sort((e1,e2)-> (int) (e1.getY()-e2.getY()));
+    list.stream().map(entity ->entity.getViewComponent().getParent()).forEach(Node::toFront);
   }
 }

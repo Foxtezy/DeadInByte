@@ -9,6 +9,7 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.CacheHint;
+import javafx.scene.image.ImageView;
 
 public abstract class CreatureViewComponent extends Component {
 
@@ -30,6 +31,7 @@ public abstract class CreatureViewComponent extends Component {
     //texture.setCacheHint(CacheHint.SPEED);
     entity.getViewComponent().addChild(texture);
     physics = getEntity().getComponent(PhysicsComponent.class);
+    //getEntity().getViewComponent();
   }
   protected void addAnimationChannel(State state, AnimationChannel animationChannel) {
     channelMap.put(state, animationChannel);
@@ -44,6 +46,10 @@ public abstract class CreatureViewComponent extends Component {
       texture.loopAnimationChannel(channelMap.get(State.DEFAULT));
     }
     }
+
+  public AnimatedTexture getView(){
+    return texture;
+  };
 
 
   enum State {
