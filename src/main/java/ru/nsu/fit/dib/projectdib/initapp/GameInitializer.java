@@ -9,9 +9,12 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
@@ -36,6 +39,7 @@ public class GameInitializer {
   private Factory factory;
   private Viewport viewport;
   private Entity player;
+  public static AStarGrid grid;
 
   public GameInitializer() {
   }
@@ -50,6 +54,12 @@ public class GameInitializer {
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print()
+    grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, 160, 160, (type) -> {
+      if (type == EntityType.WALL)
+        return CellState.NOT_WALKABLE;
+      return CellState.WALKABLE;
+    });
+
 
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
@@ -61,7 +71,9 @@ public class GameInitializer {
     Entity weapon = Factory.spawnWeapon(Weapons.Sword,position);
     Pair<Entity,Entity> pair2 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Devil,position, RandomSystem.random.nextInt());
     Pair<Entity,Entity> pair3 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
-
+    Pair<Entity,Entity> pair4 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair5 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
+    Pair<Entity,Entity> pair6 = Factory.spawnEnemy(EnemiesFactory.EnemyType.Mask,position, RandomSystem.random.nextInt());
 
 
     //===================================

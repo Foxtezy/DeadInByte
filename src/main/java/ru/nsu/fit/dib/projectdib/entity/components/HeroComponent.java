@@ -38,24 +38,10 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
  * Описывает движение игрока.
  */
 public class HeroComponent extends CreatureComponent implements Moving {
-
-  private final double scale = 0.07;
-  AnimationChannel animationWaiting;
-  AnimationChannel animationBack;
   private LocalTimer shootTimer = newLocalTimer();
-
-  private boolean isMoving = false;
 
   public HeroComponent(Creature hero, Point2D localAnchor) {
     super(hero,localAnchor);
-    int heroNumber = creature.getModule(JFXModule.class).getImageID();
-    Image img = new Image(_player);
-    animationWaiting = new AnimationChannel(img,
-        _player_numberColumns, _player_width, _player_height, Duration.millis(450),
-        2 + heroNumber * 13, 4 + heroNumber * 13);
-    animationBack = new AnimationChannel(img,
-        _player_numberColumns, _player_width, _player_height, Duration.millis(600),
-        9 + heroNumber * 13, 12 + heroNumber * 13);
   }
 
   public void attack() {
@@ -103,5 +89,31 @@ public class HeroComponent extends CreatureComponent implements Moving {
                 && circle.contains(entity.getPosition())
                 && triangle.contains(entity.getPosition()) && entity!=getEntity()).toList());
     return list;
+  }
+  @Override
+  public void left() {
+    physics.setVelocityX(-creature.getSpeed());
+  }
+
+  @Override
+  public void right() {
+    physics.setVelocityX(creature.getSpeed());
+  }
+
+  @Override
+  public void up() {
+    //да, тут должен быть именно минус
+    physics.setVelocityY(-creature.getSpeed());
+  }
+
+  @Override
+  public void down() {
+    //а тут плюс
+    physics.setVelocityY(creature.getSpeed());
+  }
+  @Override
+  public void stop() {
+    physics.setVelocityY(0);
+    physics.setVelocityX(0);
   }
 }
