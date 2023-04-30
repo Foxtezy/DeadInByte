@@ -13,6 +13,7 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.style;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -47,6 +48,8 @@ import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
@@ -214,7 +217,8 @@ public class MainMenu extends FXGLMenu {
       scrollPane.setContent(serverBox);
       scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
       scrollPane.getStylesheets().add(
-          Objects.requireNonNull(this.getClass().getClassLoader().getResource(style)).toExternalForm());
+          Objects.requireNonNull(this.getClass().getClassLoader().getResource(style))
+              .toExternalForm());
       tree.addNodes(server, List.of(scrollPane));
       ui.getChildren().addAll(tree.getANChildren());
     });
@@ -225,7 +229,8 @@ public class MainMenu extends FXGLMenu {
       tree.removeChildren();
       var clients = serverConnectionTask.getClientSockets();
       for (Entry<Integer, Socket> s : clients.entrySet()) {
-        ImageButton newClient = new ImageButton(s.getValue().getInetAddress().toString().replaceFirst("/", ""), font, "#5ae8a8",
+        ImageButton newClient = new ImageButton(
+            s.getValue().getInetAddress().toString().replaceFirst("/", ""), font, "#5ae8a8",
             "#2b2944",
             pushedServer,
             unpushedServer);
@@ -241,10 +246,15 @@ public class MainMenu extends FXGLMenu {
     //===Start Multiplayer===
     startMultiplayer.setOnMouseClicked(e -> {
       // TODO: 24.04.2023 шлём инициализационный пакет клиентам
+      MCServer.getClientSockets().values().forEach(s -> {
+        try {
+          s.getOutputStream().write(1);
+        } catch (IOException ex) {
+          throw new RuntimeException(ex);
+        }
+      });
       FXGL.getGameController().startNewGame();
     });
-
-
 
     //===Connect===
     TextField passwordField = new TextField();
@@ -283,24 +293,35 @@ public class MainMenu extends FXGLMenu {
     enter.setOnMouseClicked(event -> {
       SocketAddress socketAddress;
       try {
-        socketAddress = new InetSocketAddress(passwordField.getText().split(":")[0], Integer.parseInt(passwordField.getText().split(":")[1]));
+        socketAddress = new InetSocketAddress(passwordField.getText().split(":")[0],
+            Integer.parseInt(passwordField.getText().split(":")[1]));
       } catch (Exception e) {
         passwordField.clear();
         passwordField.setPromptText("Wrong address!");
         passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
         return;
       }
-      Future<Socket> clientFuture = CompletableFuture.supplyAsync(new ClientConnectionTask(socketAddress));
+      Future<Socket> clientFuture = CompletableFuture.supplyAsync(
+          new ClientConnectionTask(socketAddress));
       try {
         if (clientFuture.get() == null) {
           passwordField.clear();
           passwordField.setPromptText("Wrong address!");
-          passwordField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
+          passwordField.setStyle(
+              "-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%)");
         } else {
           ui.getChildren().removeAll(tree.getANChildren());
           tree.changeActiveNode(authentication);
           tree.addNodes(authentication, List.of(loadingBox));
           ui.getChildren().add(loadingBox);
+          CompletableFuture.runAsync(() -> {
+            try {
+              MCClient.getClientSocket().getInputStream().read();
+              FXGL.getGameController().startNewGame();
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+          });
         }
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
