@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
 import com.almasb.fxgl.entity.Entity;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class TakeWeaponAction extends GameAction{
@@ -23,6 +24,6 @@ public class TakeWeaponAction extends GameAction{
     if (hero==null) throw new IllegalArgumentException("Hero with id "+heroId+" not found");
     Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponId);
     if (weapon==null) throw new IllegalArgumentException("Weapon with id "+weaponId+" not found");
-    hero.getComponent(HeroComponent.class).takeWeapon(weapon);
+    hero.getComponent(WeaponInventoryComponent.class).takeWeapon(weapon);
   }
 }

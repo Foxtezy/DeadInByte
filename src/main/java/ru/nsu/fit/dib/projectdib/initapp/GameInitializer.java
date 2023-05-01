@@ -9,8 +9,10 @@ import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.ui.UI;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
+import javafx.scene.text.Text;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
@@ -58,12 +60,12 @@ public class GameInitializer {
     try {
       System.out.println(HeroType.Elf.getName());
       player = EntitySpawner.spawn(new NewEntity(HeroType.Elf.getName(),123,position,null)).get();
-      System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
+      //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
     System.out.println("e");
-    player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
+    //player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
     //sd2.put("creature", RandomCharacterSystem.NewCharacter());

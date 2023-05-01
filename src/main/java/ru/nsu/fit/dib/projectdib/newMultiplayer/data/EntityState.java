@@ -5,10 +5,12 @@ import java.util.Map;
 import java.util.Objects;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
-import ru.nsu.fit.dib.projectdib.entity.components.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
-import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
+import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class EntityState {
@@ -59,16 +61,13 @@ public class EntityState {
       case PLAYER -> {
         if (position != null) {
           // TODO: 21.04.2023 проверка HeroComponent
-          entity.getComponent(HeroComponent.class).moveToPoint(position);
+          entity.getComponent(ServerControlComponent.class).moveToPoint(position);
         }
-        entity.getComponent(HeroComponent.class).bindDirectionView(e -> rotation);
-
-        CreatureWeaponModule module = entity.getComponent(HeroComponent.class).getCreature()
-            .getModule(CreatureWeaponModule.class);
+        entity.getComponent(CreatureViewComponent.class).bindDirectionView(e -> rotation);
 
         Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
         if (weapon!=null && !weapon.getComponent(WeaponComponent.class).isActive()) {
-          module.getNextWeapon();
+          entity.getComponent(WeaponInventoryComponent.class).nextWeapon();
         }
 
 

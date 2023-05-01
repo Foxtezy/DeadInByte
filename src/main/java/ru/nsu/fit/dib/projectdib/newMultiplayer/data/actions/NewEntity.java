@@ -5,8 +5,14 @@ import java.util.Objects;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
+import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
+import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
@@ -36,30 +42,43 @@ public class NewEntity {
   }
 
   public Entity spawn() {
-    HeroType hero=HeroType.getByName(entityType);
-    if (hero!=null) {
-      Entity heroEntity = Factory.spawnHero(hero, state.getPosition(), Objects.equals(state.getId(), MCClient.getClientId()), state.getId(), seed);
-      Entity weaponEntity = Factory.spawnStandardWeapon(state.getActiveWeapon(), state.getId(),heroEntity);
-      MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
-      MCClient.getClientState().getIdHashTable().put(state.getId(), heroEntity);
-      return heroEntity;
+    int owner;
+    if (state.getId()>0 && state.getId()<4){
+      owner=state.getId();
     }
-    EnemyType enemy=EnemyType.getByName(entityType);
-    if (enemy!=null) {
-      Entity enemyEntity = Factory.spawnEnemy(enemy, state.getPosition(),state.getId(), seed);
-      Entity weaponEntity = Factory.spawnStandardWeapon(state.getActiveWeapon(), state.getId(),enemyEntity);
-      MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
-      MCClient.getClientState().getIdHashTable().put(state.getId(), enemyEntity);
-      return enemyEntity;
+    else {
+      owner=-1;
     }
-    Weapons weapon = Weapons.getByName(entityType);
-    if (weapon!=null) {
-      Entity weaponEntity = Factory.spawnWeapon(weapon,state.getId(), state.getPosition(), state.getActiveWeapon());
-      MCClient.getClientState().getIdHashTable().put(state.getId(), weaponEntity);
-      return weaponEntity;
+    System.out.println();
+    switch (TypeChooser.getTypeByString(entityType)){
+      case ENEMY ->{
+        Creature creature = EnemiesFactory.newEnemy(EnemyType.getByName(entityType),seed);
+        return newEntity(owner, creature);
+      }
+      case PLAYER ->{
+        Creature creature = HeroesFactory.newHero(HeroType.getByName(entityType),seed);
+        return newEntity(owner, creature);
+      }
+      case WEAPON->{
+        Weapon weapon = WeaponFactory.getWeapon(Weapons.getByName(entityType));
+        Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getActiveWeapon(),owner);
+        MCClient.getClientState().getIdHashTable().put(state.getId(), weaponEntity);
+      }
+      default -> throw new IllegalArgumentException("Entity type not found");
     }
-    throw new IllegalArgumentException("Entity type not found");
+    return null;
   }
+
+  @NotNull
+  private Entity newEntity(int owner, Creature creature) {
+    Weapon weapon = WeaponFactory.getWeapon(creature.getStandardWeapon());
+    Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner);
+    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1);
+    MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
+    MCClient.getClientState().getIdHashTable().put(state.getId(), creatureEntity);
+    return creatureEntity;
+  }
+
   public void setWeaponId(Integer weaponId) {
     state.setActiveWeapon(weaponId);
   }

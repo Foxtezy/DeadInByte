@@ -15,6 +15,7 @@ public class SpawnAction extends GameAction {
   }
   @Override
   public void run() {
+    //newEntity.spawn();
     Platform.runLater(newEntity::spawn);
   }
 }
