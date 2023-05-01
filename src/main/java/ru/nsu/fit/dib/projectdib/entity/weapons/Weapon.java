@@ -11,4 +11,11 @@ public class Weapon {
   public Weapons getType() {
     return data.weapon;
   }
+
+  public double getDistance() {
+    return data.distance;
+  }
+  public double getRadius(){
+    return data.radius;
+  }
 }

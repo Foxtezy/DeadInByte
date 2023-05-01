@@ -46,6 +46,7 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 /**
@@ -128,7 +129,7 @@ public class Factory implements EntityFactory {
         .with(view)
         .with(new CreatureComponent(creature))
         .with(new ServerControlComponent())
-        .with(new WeaponInventoryComponent(2))
+        .with(new WeaponInventoryComponent(1))
         .with(new DataComponent(EntityType.ENEMY,-1,data.get("id")));
         //.with(new HealthIntComponent(creature.getMaxHP()));
         //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))));
@@ -155,6 +156,11 @@ public class Factory implements EntityFactory {
         .viewWithBBox(iv)
         .bbox(new HitBox(BoundingShape.box(75, 20)))
         .with(new CollidableComponent(true))
+        .with(new WeaponViewComponent(
+            weapon.getType().getImgRadius(),
+            weapon.getType().getRotation(),
+            weapon.getRadius(),
+            weapon.getDistance()))
         .with(weaponComponent)
         .with(dataComponent)
         .build();

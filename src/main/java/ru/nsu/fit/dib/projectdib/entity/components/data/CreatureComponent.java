@@ -1,6 +1,8 @@
 package ru.nsu.fit.dib.projectdib.entity.components.data;
 
 import com.almasb.fxgl.entity.component.Component;
+import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 
 /**

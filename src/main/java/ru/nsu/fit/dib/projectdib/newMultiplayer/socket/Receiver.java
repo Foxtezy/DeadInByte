@@ -45,6 +45,9 @@ public class Receiver {
       case SPAWN -> {
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }
+      case WEAPON -> {
+        return new Pair<>(MessageType.WEAPON,FBSDeserializer.deserializeWeaponAction(byteBuffer));
+      }
       default -> {
         throw new IllegalArgumentException("Illegal packet type");
       }

@@ -30,6 +30,10 @@ public class WeaponComponent extends Component {
   public Entity getUser() {
     return user;
   }
+
+  public boolean hasUser() {
+    return getUser()!=null;
+  }
   /*
   public void attack() {
 

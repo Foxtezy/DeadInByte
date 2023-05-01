@@ -8,7 +8,7 @@ public enum MessageType {
   ERROR((byte) 0),
   UPDATE((byte) 1),
   SPAWN((byte) 2),
-  ACTION((byte) 3),
+  WEAPON((byte) 3),
   MAP((byte) 4);
 
   private final byte id;

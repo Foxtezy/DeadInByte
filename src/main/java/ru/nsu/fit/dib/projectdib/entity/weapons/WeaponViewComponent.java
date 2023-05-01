@@ -1,10 +1,13 @@
 package ru.nsu.fit.dib.projectdib.entity.weapons;
 
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 
 public class WeaponViewComponent extends Component {
   double radius;
@@ -18,7 +21,7 @@ public class WeaponViewComponent extends Component {
 
   private Point2D rotation;
 
-  WeaponViewComponent(Double imgRadius, Double angle, double radius,double distance){
+  public WeaponViewComponent(Double imgRadius, Double angle, double radius, double distance){
     this.imgRadius=imgRadius;
     this.angle=angle;
     this.radius=radius;
@@ -39,9 +42,16 @@ public class WeaponViewComponent extends Component {
 
   @Override
   public void onUpdate(double tpf) {
-    if (getEntity().getComponent(WeaponComponent.class).getUser() != null && getEntity().getComponent(WeaponComponent.class).getUser()!=null) {
-      Point2D userPos = getEntity().getComponent(WeaponComponent.class).getUser().getPosition();
-      Point2D vectorView = getEntity().getComponent(WeaponComponent.class).getUser().getComponent(CreatureViewComponent.class).getDirectionView();
+    Entity user = getEntity().getComponent(WeaponComponent.class).getUser();
+    if (user != null) {
+      Point2D userPos = user.getPosition();
+      Point2D vectorView;
+      if (user.hasComponent(HeroViewComponent.class)) {
+        vectorView = user.getComponent(HeroViewComponent.class).getDirectionView();
+      }
+      else {
+        vectorView = user.getComponent(EnemyViewComponent.class).getDirectionView();
+      }
       rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
       getEntity().rotateToVector(rotation);

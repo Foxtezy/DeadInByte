@@ -20,10 +20,6 @@ public class TakeWeaponAction extends GameAction{
   }
   @Override
   public void run() {
-    Entity hero = MCClient.getClientState().getIdHashTable().get(heroId);
-    if (hero==null) throw new IllegalArgumentException("Hero with id "+heroId+" not found");
-    Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponId);
-    if (weapon==null) throw new IllegalArgumentException("Weapon with id "+weaponId+" not found");
-    hero.getComponent(WeaponInventoryComponent.class).takeWeapon(weapon);
+
   }
 }
