@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.utils.CircularLinkedList;
 
 public class WeaponInventoryComponent extends Component {
@@ -35,15 +36,11 @@ public class WeaponInventoryComponent extends Component {
     Entity last = inventory.getCurrent();
     Entity curr = inventory.next();
     if (last!=null) last.setVisible(false);
-    if (curr!=null) curr.setVisible(false);
+    if (curr!=null) curr.setVisible(true);
   }
 
   public Entity getActiveWeapon() {
     return inventory.getCurrent();
-  }
-
-  public void nextWeapon() {
-    inventory.next();
   }
 
   public List<Entity> findWeapon() {

@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.components.multiplayer;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;

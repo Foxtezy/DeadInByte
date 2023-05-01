@@ -49,9 +49,10 @@ public class NewEntity {
     else {
       owner=-1;
     }
-    System.out.println();
+    System.out.println(owner+"  "+entityType);
     switch (TypeChooser.getTypeByString(entityType)){
       case ENEMY ->{
+        System.out.println(entityType);
         Creature creature = EnemiesFactory.newEnemy(EnemyType.getByName(entityType),seed);
         return newEntity(owner, creature);
       }
@@ -62,7 +63,7 @@ public class NewEntity {
       case WEAPON->{
         Weapon weapon = WeaponFactory.getWeapon(Weapons.getByName(entityType));
         Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getActiveWeapon(),owner);
-        MCClient.getClientState().getIdHashTable().put(state.getId(), weaponEntity);
+        MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
       }
       default -> throw new IllegalArgumentException("Entity type not found");
     }
@@ -73,7 +74,9 @@ public class NewEntity {
   private Entity newEntity(int owner, Creature creature) {
     Weapon weapon = WeaponFactory.getWeapon(creature.getStandardWeapon());
     Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner);
-    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1);
+    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),owner);
+    System.out.println(state.getActiveWeapon()+" - "+weaponEntity.getType());
+    System.out.println(state.getId()+" - "+creatureEntity.getType());
     MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
     MCClient.getClientState().getIdHashTable().put(state.getId(), creatureEntity);
     return creatureEntity;

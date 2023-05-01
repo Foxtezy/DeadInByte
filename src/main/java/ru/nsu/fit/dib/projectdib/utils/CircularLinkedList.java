@@ -18,8 +18,8 @@ public class CircularLinkedList<T> extends ArrayList<T> {
     return super.get(position);
   }
   public T next(){
-    if (position==capacity-1) position=0;
-    return super.get(position);
+    if (position==capacity-1) position=-1;
+    return super.get(++position);
   }
   public T previous(){
     if (position==0) position=capacity-1;

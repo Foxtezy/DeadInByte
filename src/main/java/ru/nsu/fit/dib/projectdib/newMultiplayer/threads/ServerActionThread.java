@@ -42,7 +42,7 @@ public class ServerActionThread extends Thread {
     SpawnAction sa = new SpawnAction(new NewEntity(Weapons.Staff.getName(), 1,
         new EntityState(-1, new Point2D(8000, 8000), new Point2D(0, 0), 23)));
     SpawnAction sad = new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123,
-        new EntityState(12, new Point2D(8000, 8000), new Point2D(0, 0), 24)));
+        new EntityState(30, new Point2D(8000, 8000), new Point2D(0, 0), 24)));
     actionQueue.add(new Pair<>(MessageType.SPAWN, sa));
     actionQueue.add(new Pair<>(MessageType.SPAWN, sad));
     //Для теста
@@ -58,7 +58,7 @@ public class ServerActionThread extends Thread {
         case WEAPON -> {
           WeaponAction weaponAction = (WeaponAction) inPacket.getValue();
           Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponAction.getWeapon());
-          if (weaponAction.getAction() == WeaponActionType.TAKE && weapon.getComponent(WeaponComponent.class).hasUser()) {
+          if (weaponAction.getAction() == WeaponActionType.TAKE && weapon!=null && weapon.getComponent(WeaponComponent.class).hasUser()) {
             yield new Pair<>(MessageType.WEAPON, null);
           } else {
             yield new Pair<>(MessageType.WEAPON, weaponAction);

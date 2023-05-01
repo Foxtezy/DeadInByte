@@ -30,7 +30,7 @@ public class WeaponAction extends GameAction{
           while(hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon()!=weapon
               && k<=hero.getComponent(WeaponInventoryComponent.class).size()){
             k++;
-            hero.getComponent(WeaponInventoryComponent.class).nextWeapon();
+            hero.getComponent(WeaponInventoryComponent.class).swapWeapon();
           }
           hero.getComponent(WeaponInventoryComponent.class).throwWeapon();
         }

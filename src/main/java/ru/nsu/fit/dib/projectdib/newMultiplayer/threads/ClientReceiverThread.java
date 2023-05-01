@@ -17,7 +17,7 @@ public class ClientReceiverThread extends Thread {
         case UPDATE -> {
           MCClient.getClientState().updateEntities((List<EntityState>) inPacket.getValue());
         }
-        default -> {
+        case SPAWN, WEAPON -> {
           GameAction gameAction = (GameAction) inPacket.getValue();
           gameAction.run();
         }

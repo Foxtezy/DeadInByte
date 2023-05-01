@@ -38,6 +38,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
@@ -54,11 +55,11 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
  */
 public class Factory implements EntityFactory {
 
-  public static Entity spawnCreature(Creature creature, Point2D position,Integer id,Integer owner) {
+  public static Entity spawnCreature(Creature creature, Point2D position,Integer id,Integer ownerID) {
     SpawnData sd = new SpawnData(position);
     sd.put("creature", creature);
     sd.put("id",id);
-    sd.put("owner",owner);
+    sd.put("owner",ownerID);
     Entity enemy = spawn(creature.getEntityType().getName(), sd);
     enemy.setScaleUniform(0.75);
     return enemy;
@@ -121,7 +122,7 @@ public class Factory implements EntityFactory {
     EnemyType type = (EnemyType) creature.getType();
     EntityBuilder builder = creatureBuilder();
 
-    CreatureViewComponent view =new HeroViewComponent(type.getID());
+    CreatureViewComponent view =new EnemyViewComponent(type.getID());
     view.bindDirectionView(entity -> new Point2D(0, 0));
     builder
         .from(data)
@@ -130,7 +131,7 @@ public class Factory implements EntityFactory {
         .with(new CreatureComponent(creature))
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
-        .with(new DataComponent(EntityType.ENEMY,-1,data.get("id")));
+        .with(new DataComponent(EntityType.ENEMY,data.get("owner"),data.get("id")));
         //.with(new HealthIntComponent(creature.getMaxHP()));
         //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))));
    // if (MCClient.getClientId()==0) builder.with(new CellMoveComponent(160, 160, 300).allowRotation(true));

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -67,7 +66,7 @@ public class EntityState {
 
         Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
         if (weapon!=null && !weapon.getComponent(WeaponComponent.class).isActive()) {
-          entity.getComponent(WeaponInventoryComponent.class).nextWeapon();
+          entity.getComponent(WeaponInventoryComponent.class).swapWeapon();
         }
 
 

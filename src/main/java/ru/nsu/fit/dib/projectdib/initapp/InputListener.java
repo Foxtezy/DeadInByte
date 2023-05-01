@@ -19,7 +19,6 @@ import javafx.scene.input.MouseButton;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
-import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
@@ -59,7 +58,9 @@ public class InputListener {
     onKey(Controls.DOWN, "Down", () -> player.getComponent(PlayerControlComponent.class).down());
     onKey(Controls.RIGHT, "Right", () -> player.getComponent(PlayerControlComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
-      Creature hero = player.getComponent(HeroComponent.class).getCreature();
+      System.out.println("--------------");
+      MCClient.getClientState().getIdHashTable().forEach((k,v)->{System.out.println("["+k+"-"+v.getComponent(DataComponent.class).getId()+"] ["+v.getComponent(DataComponent.class).getOwnerID()+"] "+v.getType());});
+      //Creature hero = player.getComponent(HeroComponent.class).getCreature();
       //hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
       //hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().yProperty().unbind();
     });
@@ -104,7 +105,7 @@ public class InputListener {
       addAction(new UserAction("Swap weapons") {
         @Override
         protected void onActionBegin () {
-          player.getComponent(WeaponInventoryComponent.class).nextWeapon();
+          player.getComponent(WeaponInventoryComponent.class).swapWeapon();
         }
       },Controls.CHANGE_WEAPON,VirtualButton.B);
     }

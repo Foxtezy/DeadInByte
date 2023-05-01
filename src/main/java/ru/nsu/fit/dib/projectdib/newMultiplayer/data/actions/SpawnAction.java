@@ -1,6 +1,7 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
 import javafx.application.Platform;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class SpawnAction extends GameAction {
 
