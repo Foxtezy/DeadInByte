@@ -64,9 +64,6 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
-    // TODO: 01.05.2023 надо делать в gameInitializer
-    MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
-    multiplayerInitializer.run();
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());

@@ -51,6 +51,9 @@ public class Receiver {
       case END_INIT -> {
         return new Pair<>(MessageType.END_INIT, null);
       }
+      case MAP_SEED -> {
+        return new Pair<>(MessageType.MAP_SEED, byteBuffer.getInt());
+      }
       default -> {
         throw new IllegalArgumentException("Illegal packet type");
       }

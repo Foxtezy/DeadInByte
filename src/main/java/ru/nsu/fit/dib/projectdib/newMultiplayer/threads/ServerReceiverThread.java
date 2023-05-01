@@ -35,6 +35,10 @@ public class ServerReceiverThread extends Thread {
               .forEach(a -> sender.send(receiver.getSocket(), new Pair<>(MessageType.ACTION, a)));
           sender.send(receiver.getSocket(), new Pair<>(MessageType.END_INIT, null));
         }
+        case MAP_SEED -> {
+          Sender sender = new Sender();
+          sender.send(receiver.getSocket(), new Pair<>(MessageType.MAP_SEED, MCServer.getServerState().getMapSeed()));
+        }
         default -> {
           MCServer.getActionThread().addActionTask(inPacket);
         }

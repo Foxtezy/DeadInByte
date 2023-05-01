@@ -41,9 +41,12 @@ public class GameInitializer {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
-    Level lvl = new Level(12345, 64, 64, 1, 15);
-    String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
-    LevelSetter.setLevelFromMap(levelName, getGameWorld());
+    // мультиплейерная часть
+    MapInitializer mapInitializer = new MapInitializer();
+    Level lvl = mapInitializer.run();
+    MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
+    multiplayerInitializer.run();
+    // мультиплейерная часть
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print()
     grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, 160, 160, (type) -> {
@@ -51,7 +54,6 @@ public class GameInitializer {
         return CellState.NOT_WALKABLE;
       return CellState.WALKABLE;
     });
-
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
