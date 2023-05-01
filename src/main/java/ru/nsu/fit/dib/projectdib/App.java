@@ -8,6 +8,7 @@ import java.util.List;
 import javafx.scene.Node;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
+import ru.nsu.fit.dib.projectdib.initapp.MultiplayerInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 
@@ -59,18 +60,13 @@ public class App extends GameApplication {
   }
 
   /**
-   * Инициализация мультиплейера.
-   */
-  @Override
-  protected void onPreInit() {
-
-  }
-
-  /**
    * Инициализация игры.
    */
   @Override
   protected void initGame() {
+    // TODO: 01.05.2023 надо делать в gameInitializer
+    MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
+    multiplayerInitializer.run();
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());

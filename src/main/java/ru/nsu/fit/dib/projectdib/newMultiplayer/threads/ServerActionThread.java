@@ -29,17 +29,6 @@ public class ServerActionThread extends Thread {
 
   @Override
   public void run() {
-    //Для теста
-    try {
-      actionQueue.add(actionQueue.take());//Костыль для ожидания соощения от клиента
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-    SpawnAction sa =  new SpawnAction(new NewEntity(Weapons.Staff.getName(), 1,new EntityState(-1,new Point2D(8000,8000),new Point2D(0,0),23)));
-    SpawnAction sad = new SpawnAction(new NewEntity(EnemyType.Devil.getName(),123,new EntityState(12,new Point2D(8000,8000),new Point2D(0,0),24)));
-    actionQueue.add(new Pair<>(MessageType.SPAWN,sa));
-    actionQueue.add(new Pair<>(MessageType.SPAWN,sad));
-    //Для теста
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
@@ -52,6 +41,7 @@ public class ServerActionThread extends Thread {
         case SPAWN -> {
           SpawnAction spawnAction = (SpawnAction) inPacket.getValue();
           spawnAction.getNewEntity().setWeaponId(nextEntityId++);
+          MCServer.getServerState().addSpawnAction(spawnAction);
           yield new Pair<>(MessageType.SPAWN, spawnAction);
         }
         default -> null;

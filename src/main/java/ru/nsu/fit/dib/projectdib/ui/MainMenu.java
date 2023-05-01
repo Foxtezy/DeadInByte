@@ -249,6 +249,7 @@ public class MainMenu extends FXGLMenu {
       MCServer.getClientSockets().values().forEach(s -> {
         try {
           s.getOutputStream().write(1);
+          MCClient.getClientSocket().getInputStream().read();
         } catch (IOException ex) {
           throw new RuntimeException(ex);
         }

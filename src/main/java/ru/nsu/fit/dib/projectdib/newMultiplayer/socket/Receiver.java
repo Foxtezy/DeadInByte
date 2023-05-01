@@ -45,6 +45,12 @@ public class Receiver {
       case SPAWN -> {
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }
+      case START_INIT -> {
+        return new Pair<>(MessageType.START_INIT, null);
+      }
+      case END_INIT -> {
+        return new Pair<>(MessageType.END_INIT, null);
+      }
       default -> {
         throw new IllegalArgumentException("Illegal packet type");
       }

@@ -15,8 +15,6 @@ public final class ClientConfig {
 
   public static void init() {
     MCClient.addBean(EMCClient.CLIENT_STATE, new ClientState());
-    addClientSenderThread(new ClientSenderThread());
-    addClientReceiverThread(new ClientReceiverThread());
   }
 
   public static void addClientId(Integer id) {
