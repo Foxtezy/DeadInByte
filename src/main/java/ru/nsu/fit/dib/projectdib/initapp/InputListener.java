@@ -20,6 +20,7 @@ import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
@@ -64,8 +65,8 @@ public class InputListener {
       //hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
       //hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().yProperty().unbind();
     });
-    onBtn(MouseButton.PRIMARY, "shoot", () -> {
-    });//player.getComponent(HeroComponent.class).attack());
+    onBtn(MouseButton.PRIMARY, "shoot", () -> { player.getComponent(ShootAttackComponent.class).shoot();});
+    //player.getComponent(HeroComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
       @Override
       protected void onActionBegin() {

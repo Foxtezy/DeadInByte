@@ -35,6 +35,8 @@ import ru.nsu.fit.dib.projectdib.entity.components.*;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.MeleeAttackComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
@@ -109,6 +111,8 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.PLAYER)
         .with(view)
+        .with(new ShootAttackComponent())
+        .with(new MeleeAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
@@ -128,6 +132,8 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.ENEMY)
         .with(view)
+        .with(new ShootAttackComponent())
+        .with(new MeleeAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
@@ -283,15 +289,19 @@ public class Factory implements EntityFactory {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
     Point2D direction = getInput().getMousePositionWorld()
         .subtract(player.getCenter().subtract(new Point2D(60, 90)));
-    Projectiles projectile = data.get("typeProj");
-    return entityBuilder()
+    Projectiles projectile = data.get("projectileType");
+    AnimatedTexture texture = new AnimatedTexture(projectile.getAnimation());
+    texture.play();
+    Entity entity =  entityBuilder()
         .from(data)
         .type(EntityType.PROJECTILE)
-        .viewWithBBox(texture("projectile_" + projectile.getName() + ".png", 40, 15))
+        .viewWithBBox(texture)
         .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())
         .collidable()
         .build();
+    entity.setScaleUniform(0.75);
+    return entity;
   }
 
   /*

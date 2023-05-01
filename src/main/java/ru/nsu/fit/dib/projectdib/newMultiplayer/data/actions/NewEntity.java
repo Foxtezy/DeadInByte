@@ -75,8 +75,6 @@ public class NewEntity {
     Weapon weapon = WeaponFactory.getWeapon(creature.getStandardWeapon());
     Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner);
     Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),owner);
-    System.out.println(state.getActiveWeapon()+" - "+weaponEntity.getType());
-    System.out.println(state.getId()+" - "+creatureEntity.getType());
     MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
     MCClient.getClientState().getIdHashTable().put(state.getId(), creatureEntity);
     return creatureEntity;
