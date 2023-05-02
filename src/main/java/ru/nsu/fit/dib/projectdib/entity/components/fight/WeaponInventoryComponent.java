@@ -52,6 +52,15 @@ public class WeaponInventoryComponent extends Component {
     inventory.forEach(list::remove);
     return list;
   }
+  public boolean hasWeapon(){
+    return !inventory.isEmpty();
+  }
+
+
+  public boolean hasRangedWeapon(){
+  //TODO implementation of hasRangedWeapon()
+    return false;
+  }
 
   public int size() {
     return inventory.size();
