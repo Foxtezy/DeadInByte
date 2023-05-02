@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.entity.components;
+package ru.nsu.fit.dib.projectdib.entity.components.view;
 
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;

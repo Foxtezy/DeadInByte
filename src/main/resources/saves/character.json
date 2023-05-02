@@ -1,0 +1,23 @@
+{
+  "type": "elf",
+  "weapon": "sword",
+  "MaxHP": 10,
+  "HP": 8,
+  "maxMana": 6,
+  "Mana": 3,
+  "specs": [
+    8,
+    20,
+    16,
+    4,
+    4,
+    6
+  ],
+  "skills": [
+    0,
+    4,
+    0,
+    0,
+    0
+  ]
+}

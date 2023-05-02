@@ -17,7 +17,6 @@ import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
  * Основной класс игры.
  */
 public class App extends GameApplication {
-
   Entity player;
   InputListener inputListener;
 

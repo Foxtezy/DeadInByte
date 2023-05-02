@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
-import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
@@ -60,7 +59,7 @@ public class GameInitializer {
     try {
       System.out.println(HeroType.Elf.getName());
       player = EntitySpawner.spawn(new NewEntity(HeroType.Elf.getName(),123,position,null)).get();
-      System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
+      //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }

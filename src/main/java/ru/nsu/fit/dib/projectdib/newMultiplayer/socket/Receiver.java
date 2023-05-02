@@ -45,6 +45,9 @@ public class Receiver {
       case SPAWN -> {
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }
+      case WEAPON -> {
+        return new Pair<>(MessageType.WEAPON,FBSDeserializer.deserializeWeaponAction(byteBuffer));
+      }
       case START_INIT -> {
         return new Pair<>(MessageType.START_INIT, null);
       }
