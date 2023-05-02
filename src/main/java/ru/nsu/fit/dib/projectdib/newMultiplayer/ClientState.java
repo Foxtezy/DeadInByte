@@ -27,7 +27,6 @@ public class ClientState {
     Utils.delay();
     entityStates.forEach(entityState -> {
       if (!idHashTable.containsKey(entityState.getId())) {
-        // TODO: 14.03.2023 вызов метода отправки пакета ошибки
         return;
       }
       if (!MCClient.getClientState().getIdHashTable().get(entityState.getId()).hasComponent(DataComponent.class)){

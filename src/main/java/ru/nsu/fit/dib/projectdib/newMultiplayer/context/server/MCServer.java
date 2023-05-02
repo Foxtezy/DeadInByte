@@ -4,6 +4,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.ServerState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.ContextException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
@@ -17,12 +19,11 @@ public final class MCServer {
     throw new UnsupportedOperationException();
   }
 
-  private static final HashMap<EMCServer, Object> context = new HashMap<>();
+  private static final Map<EMCServer, Object> context = new ConcurrentHashMap<>();
 
   public static void addBean(EMCServer emcServer, Object bean) {
     context.put(emcServer, bean);
   }
-
 
 
   public static Map<Integer, Socket> getClientSockets() {
@@ -44,6 +45,14 @@ public final class MCServer {
   public static ServerUpdaterThread getUpdaterThread() {
     if (context.get(EMCServer.SERVER_UPDATER_THREAD) instanceof ServerUpdaterThread t) {
       return t;
+    } else {
+      throw new ContextException();
+    }
+  }
+
+  public static ServerState getServerState() {
+    if (context.get(EMCServer.SERVER_STATE) instanceof ServerState s) {
+      return s;
     } else {
       throw new ContextException();
     }

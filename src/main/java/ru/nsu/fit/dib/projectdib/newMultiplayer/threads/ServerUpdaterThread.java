@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.ContextException;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
@@ -26,7 +27,12 @@ public class ServerUpdaterThread extends Thread {
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       Utils.delay();
-      List<EntityState> outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
+      List<EntityState> outList;
+      try {
+        outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
+      } catch (ContextException e) {
+        continue;
+      }
       // TODO: 19.04.2023 Сделать нормальную проверку на наличие данных для передачи
       //  (пока что сервер все складывает в outList и проверяет на 0)
       while (outList.size() == 0) {

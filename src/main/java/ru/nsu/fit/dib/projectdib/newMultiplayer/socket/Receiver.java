@@ -48,6 +48,15 @@ public class Receiver {
       case WEAPON -> {
         return new Pair<>(MessageType.WEAPON,FBSDeserializer.deserializeWeaponAction(byteBuffer));
       }
+      case START_INIT -> {
+        return new Pair<>(MessageType.START_INIT, null);
+      }
+      case END_INIT -> {
+        return new Pair<>(MessageType.END_INIT, null);
+      }
+      case MAP_SEED -> {
+        return new Pair<>(MessageType.MAP_SEED, byteBuffer.getInt());
+      }
       default -> {
         throw new IllegalArgumentException("Illegal packet type");
       }

@@ -19,6 +19,8 @@ public class Sender {
       case WEAPON -> FBSSerializer.serialize((WeaponAction) message.getValue());
       case SPAWN-> FBSSerializer.serialize((SpawnAction) message.getValue());
       case UPDATE -> FBSSerializer.serialize((List<EntityState>) message.getValue());
+      case START_INIT, END_INIT -> ByteBuffer.wrap(new byte[]{});
+      case MAP_SEED -> ByteBuffer.allocate(4).putInt((int) message.getValue());
       default -> throw new IllegalArgumentException("Illegal type of message");
     };
 

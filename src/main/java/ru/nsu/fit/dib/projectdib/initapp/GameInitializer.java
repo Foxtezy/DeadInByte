@@ -16,6 +16,8 @@ import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
+import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
+import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
@@ -38,9 +40,12 @@ public class GameInitializer {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
-    Level lvl = new Level(12345, 64, 64, 1, 15);
-    String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
-    LevelSetter.setLevelFromMap(levelName, getGameWorld());
+    // мультиплейерная часть
+    MapInitializer mapInitializer = new MapInitializer();
+    Level lvl = mapInitializer.run();
+    MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
+    multiplayerInitializer.run();
+    // мультиплейерная часть
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print()
     grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, 160, 160, (type) -> {
@@ -48,7 +53,6 @@ public class GameInitializer {
         return CellState.NOT_WALKABLE;
       return CellState.WALKABLE;
     });
-
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
@@ -60,7 +64,7 @@ public class GameInitializer {
       throw new RuntimeException(e);
     }
     System.out.println("e");
-    //player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
+    player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
     //sd2.put("creature", RandomCharacterSystem.NewCharacter());

@@ -21,6 +21,7 @@ public class ClientConnectionTask implements Supplier<Socket> {
    */
   @Override
   public Socket get() {
+    ClientConfig.init();
     Socket socket = new Socket();
     ClientConfig.addClientSocket(socket);
     try {
@@ -29,7 +30,6 @@ public class ClientConnectionTask implements Supplier<Socket> {
     } catch (Exception e) {
       return null;
     }
-    ClientConfig.init();
     return socket;
   }
 }

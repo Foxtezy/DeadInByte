@@ -9,7 +9,10 @@ public enum MessageType {
   UPDATE((byte) 1),
   SPAWN((byte) 2),
   WEAPON((byte) 3),
-  MAP((byte) 4);
+  ACTION((byte) 4),
+  MAP_SEED((byte) 5),
+  START_INIT((byte) 6),
+  END_INIT((byte) 7);
 
   private final byte id;
   private static final Map<Byte, MessageType> map = Arrays.stream(MessageType.values())
