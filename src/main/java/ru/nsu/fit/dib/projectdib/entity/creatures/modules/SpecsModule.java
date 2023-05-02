@@ -1,8 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.creatures.modules;
 
-import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-
-public class SpecsModule extends CreatureModule {
+public class SpecsModule {
   private final int strength;               // Сила
 
   public int getAgility() {

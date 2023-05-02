@@ -1,4 +1,4 @@
-package ru.nsu.fit.dib.projectdib.entity.components;
+package ru.nsu.fit.dib.projectdib.entity.components.control;
 
 public interface Moving {
 

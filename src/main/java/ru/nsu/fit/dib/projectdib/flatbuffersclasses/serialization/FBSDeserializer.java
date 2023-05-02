@@ -8,9 +8,12 @@ import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.EntityStateData;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.EntityStateDataList;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.NewEntityData;
 import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.SpawnActionData;
+import ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated.WeaponActionData;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.WeaponAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.WeaponAction.WeaponActionType;
 
 public class FBSDeserializer {
 
@@ -26,6 +29,10 @@ public class FBSDeserializer {
   public static SpawnAction deserializeSpawnAction(ByteBuffer buffer) {
     SpawnActionData spawnActionData = SpawnActionData.getRootAsSpawnActionData(buffer);
     return new SpawnAction(deserializeNewEntity(spawnActionData.data()));
+  }
+  public static WeaponAction deserializeWeaponAction(ByteBuffer buffer){
+    WeaponActionData weaponActionData = WeaponActionData.getRootAsWeaponActionData(buffer);
+    return new WeaponAction(WeaponActionType.getByID(weaponActionData.action()),weaponActionData.user(),weaponActionData.weapon());
   }
 
   private static NewEntity deserializeNewEntity(NewEntityData newEntityData) {

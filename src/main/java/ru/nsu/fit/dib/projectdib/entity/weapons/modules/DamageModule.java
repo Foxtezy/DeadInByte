@@ -1,9 +1,8 @@
-package ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules;
+package ru.nsu.fit.dib.projectdib.entity.weapons.modules;
 
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.modules.SpecsModule;
-import ru.nsu.fit.dib.projectdib.entity.creatures.modules.WeaponSkillsModule;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
@@ -28,7 +27,7 @@ public class DamageModule extends WeaponModule {
 
   public int getAttack() {
     // TODO: 26.04.2023  заглушка 
-    if (true) return 0;
+/*    if (true) return 0;
     return RandomSystem.d(20) + user.getModule(WeaponSkillsModule.class).getSkills(weaponType) +
         switch (weaponType) {
           case melee -> user.getModule(SpecsModule.class).getStrengthModifier();
@@ -38,17 +37,19 @@ public class DamageModule extends WeaponModule {
           case fencing, throwing ->
               Math.max(user.getModule(SpecsModule.class).getStrengthModifier(),
                   user.getModule(SpecsModule.class).getAgilityModifier());
-        };
+        };*/
+    return 1;
   }
 
   public int getDamage() {
-    return RandomSystem.getRandInt(minDamage, maxDamage) + switch (weaponType) {
+    return 1;
+/*    return RandomSystem.getRandInt(minDamage, maxDamage) + switch (weaponType) {
       case melee, shooting -> user.getModule(SpecsModule.class).getStrengthModifier();
       case fencing, throwing -> Math.max(user.getModule(SpecsModule.class).getStrengthModifier(),
           user.getModule(SpecsModule.class).getAgilityModifier());
       case magic -> Math.max(user.getModule(SpecsModule.class).getWisdomModifier(),
           user.getModule(SpecsModule.class).getIntelligenceModifier());
-    };
+    };*/
   }
 
   protected WeaponType getWeaponType() {

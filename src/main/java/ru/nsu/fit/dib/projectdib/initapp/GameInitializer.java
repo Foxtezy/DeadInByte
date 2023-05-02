@@ -13,12 +13,9 @@ import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
-import ru.nsu.fit.dib.projectdib.entity.components.HeroComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
-import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
-import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
@@ -58,12 +55,12 @@ public class GameInitializer {
     try {
       System.out.println(HeroType.Elf.getName());
       player = EntitySpawner.spawn(new NewEntity(HeroType.Elf.getName(),123,position,null)).get();
-      System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
+      //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
     System.out.println("e");
-    player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
+    //player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
     //sd2.put("creature", RandomCharacterSystem.NewCharacter());

@@ -1,77 +1,38 @@
 package ru.nsu.fit.dib.projectdib.entity.components;
 
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 import static java.lang.Math.abs;
 
-import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.EntityType;
-import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
-import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
-import ru.nsu.fit.dib.projectdib.entity.creatures.modules.CreatureWeaponModule;
-import ru.nsu.fit.dib.projectdib.entity.creatures.modules.JFXModule;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
-import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.SquareDamageModule;
-import ru.nsu.fit.dib.projectdib.entity.weapons.enums.modules.TextureModule;
 
 public class WeaponComponent extends Component {
-
-  private final Weapon weapon;
-  double radius;
-  double distance;
-  Double imgRadius;
-  Double angle;
-  Point2D rotatedPoint;
-  Point2D rotation;
-  Point2D lastVectorView = new Point2D(0, 0);
+  private Weapon weapon;
+  private Entity user;
 
   public WeaponComponent(Weapon weapon) {
     this.weapon = weapon;
   }
-
-  @Override
-  public void onAdded() {
-    super.onAdded();
-    getEntity().setScaleX(0.75);
-    getEntity().setScaleY(0.75);
-    getEntity().setRotation(90);
-    imgRadius = weapon.getModule(TextureModule.class).getImageRadius();
-    angle = weapon.getModule(TextureModule.class).getAngle();
-    rotatedPoint = getEntity().getPosition().add(new Point2D(0, 20));
-    radius = weapon.getModule(SquareDamageModule.class).getRadius();
-    distance = weapon.getModule(SquareDamageModule.class).getDistance();
-  }
-
   public Weapon getWeapon() {
     return weapon;
   }
 
-  @Override
-  public void onUpdate(double tpf) {
-    if (weapon.getUser() != null && weapon.getUser().getModule(JFXModule.class).getComponent().getEntity()!=null) {
-      Point2D userPos = weapon.getUser().getModule(JFXModule.class).getComponent().getEntity().getPosition();
-      Point2D vectorView = weapon.getUser().getModule(JFXModule.class).getComponent().getDirectionView();
-      rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
-      Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
-      getEntity().rotateToVector(rotation);
-
-      getEntity().setX(position.getX());
-      getEntity().setY(position.getY());
-    }
-  }
-  public Point2D getRotation(){
-    return rotation;
-  }
-  public boolean hasUser(){
-    return weapon.getUser()!=null;
-  }
-
   public boolean isActive() {
-    if (getWeapon().getUser()==null) return false;
-    return (getWeapon().getUser().getModule(CreatureWeaponModule.class).getActiveWeapon()==getWeapon());
+    if (user==null) return false;
+    return (user.getComponent(WeaponInventoryComponent.class).getActiveWeapon()==getEntity());
+  }
+
+  public void setUser(Entity o) {
+    user = o;
+  }
+
+  public Entity getUser() {
+    return user;
+  }
+
+  public boolean hasUser() {
+    return getUser()!=null;
   }
   /*
   public void attack() {

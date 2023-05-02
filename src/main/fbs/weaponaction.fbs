@@ -1,0 +1,10 @@
+//Данные для обновления состояния объектов
+namespace ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
+
+table WeaponActionData {
+  action:int;
+  user:int;
+  weapon:int;
+}
+
+root_type WeaponActionData;
