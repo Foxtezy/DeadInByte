@@ -58,8 +58,7 @@ public class WeaponInventoryComponent extends Component {
 
 
   public boolean hasRangedWeapon(){
-  //TODO implementation of hasRangedWeapon()
-    return false;
+    return inventory.stream().anyMatch(wp -> wp.getComponent(WeaponComponent.class).getWeapon().isLongRange());
   }
 
   public int size() {

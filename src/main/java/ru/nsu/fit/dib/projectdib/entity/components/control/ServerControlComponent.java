@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 import java.util.List;
@@ -24,9 +25,7 @@ public class ServerControlComponent extends Component {
   private static final double ERROR_RATE = 4;
   private Point2D newPosition;
   private PhysicsComponent physics;
-  private Map<Integer, Entity> gameEntities = MCClient.getClientState().getIdHashTable();
-  private Entity currentEntity = getEntity();
-  private List<Entity> heroList;
+
 
   public ServerControlComponent() {}
 
@@ -53,56 +52,6 @@ public class ServerControlComponent extends Component {
     if (newPosition.add(getEntity().getPosition().multiply(-1)).magnitude() < ERROR_RATE) {
       physics.setLinearVelocity(0, 0);
     }
-    // Список всех героев
-    heroList =
-        gameEntities.values().stream()
-            .filter(v -> v.hasComponent(HeroViewComponent.class))
-            .toList();
-    // ==================
-
-    // Если героев нет на карте
-    if (heroList.isEmpty()) {
-      return;
-    }
-    // =========================
-    // Нахождение ближайшего игрока nearestHero and distToNearest
-    Entity nearestHero = heroList.get(0);
-    double distToNearest =
-        sqrt(
-            nearestHero.getPosition().getX() * nearestHero.getPosition().getX()
-                + nearestHero.getPosition().getY() * nearestHero.getPosition().getY());
-    for (Entity heroes : heroList) {
-      double dist =
-          sqrt(
-              heroes.getPosition().getX() * heroes.getPosition().getX()
-                  + heroes.getPosition().getY() * heroes.getPosition().getY());
-      if (dist < distToNearest) {
-        nearestHero = heroes;
-        distToNearest = dist;
-      }
-    }
-    // ============================
-
-    // Если осталось меньше 15% hp, тогда убегает от героев
-    int hp = 15; // TODO entity.getComponent(HealthDoubleComponent.class). ... .getHP();
-    int maxHp = 200;
-
-    if (hp <= maxHp * 0.15) {
-      // TODO RUNNING AWAY
-      return;
-    }
-    // Если нет оружия, тогда ищет упавшее оружие и подбирает
-    if (!entity.getComponent(WeaponInventoryComponent.class).hasWeapon()) {
-      // TODO SEARCHING DROPPED WEAPON
-    }
-    //TODO Видел героя ? идёт на то место : стоит
-
-    //TODO Видит героя ? дерётся и запоминает последнее его место : стоит
-
-    // Драка. Если герой в прямой видимости на большом расстоянии и есть огнесрел -> используем его. Иначе ближной бой
-    if ()
-
-
     physics.setLinearVelocity(physics.getLinearVelocity().multiply(Math.pow(1000, (-1) * tpf)));
   }
 
