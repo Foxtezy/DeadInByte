@@ -10,6 +10,8 @@ import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponen
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class EntityState {
@@ -62,8 +64,12 @@ public class EntityState {
           // TODO: 21.04.2023 проверка HeroComponent
           entity.getComponent(ServerControlComponent.class).moveToPoint(position);
         }
-        entity.getComponent(CreatureViewComponent.class).bindDirectionView(e -> rotation);
-
+        if (entity.hasComponent(HeroViewComponent.class)){
+          entity.getComponent(HeroViewComponent.class).bindDirectionView(e -> rotation);
+        }
+        else if (entity.hasComponent(EnemyViewComponent.class)){
+          entity.getComponent(EnemyViewComponent.class).bindDirectionView(e -> rotation);
+        }
         Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
         if (weapon!=null && !weapon.getComponent(WeaponComponent.class).isActive()) {
           entity.getComponent(WeaponInventoryComponent.class).swapWeapon();

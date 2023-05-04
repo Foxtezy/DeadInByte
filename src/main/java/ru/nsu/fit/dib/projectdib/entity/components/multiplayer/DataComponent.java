@@ -7,6 +7,8 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
@@ -37,8 +39,11 @@ public class DataComponent extends Component {
         }
       }
       case PLAYER, ENEMY -> {
-        if (getEntity().hasComponent(CreatureViewComponent.class)) {
-          rotation = getEntity().getComponent(CreatureViewComponent.class).getDirectionView();
+        if (getEntity().hasComponent(HeroViewComponent.class)) {
+          rotation = getEntity().getComponent(HeroViewComponent.class).getDirectionView();
+        }
+        else if (getEntity().hasComponent(EnemyViewComponent.class)) {
+          rotation = getEntity().getComponent(EnemyViewComponent.class).getDirectionView();
         }
       }
       default -> throw new RuntimeException("Unexpected entity with type:" + entityType);
@@ -47,11 +52,11 @@ public class DataComponent extends Component {
   }
 
   public Integer getBindedEntity() {
-    if (getEntity().hasComponent(WeaponInventoryComponent.class)) {
-      return getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()
-          .getComponent(DataComponent.class).getId();
-    }
-    return null;
+    if (!getEntity().hasComponent(WeaponInventoryComponent.class)
+    || getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null
+    || getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(DataComponent.class)==null) return -1;
+    return getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()
+        .getComponent(DataComponent.class).getId();
   }
 
   public Integer getId() {
