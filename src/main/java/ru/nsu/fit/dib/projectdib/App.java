@@ -8,7 +8,6 @@ import java.util.List;
 import javafx.scene.Node;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
-import ru.nsu.fit.dib.projectdib.initapp.MultiplayerInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 
