@@ -249,11 +249,15 @@ public class MainMenu extends FXGLMenu {
       MCServer.getClientSockets().values().forEach(s -> {
         try {
           s.getOutputStream().write(1);
-          MCClient.getClientSocket().getInputStream().read();
         } catch (IOException ex) {
           throw new RuntimeException(ex);
         }
       });
+      try {
+        MCClient.getClientSocket().getInputStream().read();
+      } catch (IOException ex) {
+        throw new RuntimeException(ex);
+      }
       FXGL.getGameController().startNewGame();
     });
 
@@ -315,16 +319,10 @@ public class MainMenu extends FXGLMenu {
           tree.changeActiveNode(authentication);
           tree.addNodes(authentication, List.of(loadingBox));
           ui.getChildren().add(loadingBox);
-          CompletableFuture.runAsync(() -> {
-            try {
-              MCClient.getClientSocket().getInputStream().read();
-              FXGL.getGameController().startNewGame();
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
-          });
+          MCClient.getClientSocket().getInputStream().read();
+          FXGL.getGameController().startNewGame();
         }
-      } catch (InterruptedException | ExecutionException e) {
+      } catch (InterruptedException | ExecutionException | IOException e) {
         throw new RuntimeException(e);
       }
     });

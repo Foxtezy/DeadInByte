@@ -9,7 +9,6 @@ public enum MessageType {
   UPDATE((byte) 1),
   SPAWN((byte) 2),
   WEAPON((byte) 3),
-  ACTION((byte) 4),
   MAP_SEED((byte) 5),
   START_INIT((byte) 6),
   END_INIT((byte) 7);

@@ -32,7 +32,7 @@ public class ServerReceiverThread extends Thread {
           //отправка иниц пакетов
           Sender sender = new Sender();
           MCServer.getServerState().getSpawnActionList()
-              .forEach(a -> sender.send(receiver.getSocket(), new Pair<>(MessageType.ACTION, a)));
+              .forEach(a -> sender.send(receiver.getSocket(), new Pair<>(MessageType.SPAWN, a)));
           sender.send(receiver.getSocket(), new Pair<>(MessageType.END_INIT, null));
         }
         case MAP_SEED -> {

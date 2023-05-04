@@ -21,7 +21,10 @@ public class Sender {
       case UPDATE -> FBSSerializer.serialize((List<EntityState>) message.getValue());
       case START_INIT, END_INIT -> ByteBuffer.wrap(new byte[]{});
       case MAP_SEED -> ByteBuffer.allocate(4).putInt((int) message.getValue());
-      default -> throw new IllegalArgumentException("Illegal type of message");
+      default -> {
+        System.out.println(message.getKey());
+        throw new IllegalArgumentException("Illegal type of message");
+      }
     };
 
     //System.out.println(message.getKey().toString()+" sended");
