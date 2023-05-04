@@ -1,10 +1,15 @@
 package ru.nsu.fit.dib.projectdib.entity.components.enemyAI;
 
+import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.google.javascript.jscomp.jarjar.javax.annotation.CheckForNull;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
@@ -14,55 +19,68 @@ import java.util.List;
 import java.util.Map;
 
 import static com.almasb.fxgl.core.math.FXGLMath.sqrt;
+import static com.almasb.fxgl.dsl.FXGL.geto;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class EnemyAiComponent extends Component {
+  AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
 
   private Map<Integer, Entity> gameMapOfEntities = MCClient.getClientState().getIdHashTable();
   private Entity currentEnemy;
   private List<Entity> heroList;
   private List<Point2D> memoryOfLastHeroesPositions;
 
+  PlayerChaseComponent chase;
   @Override
   public void onAdded() {
     currentEnemy = getEntity();
+    currentEnemy.addComponent(aStar);
+    chase = new PlayerChaseComponent(aStar);
   }
 
   @Override
   public void onUpdate(double tpf) {
-
-    int hp = 15; // TODO entity.getComponent(HealthDoubleComponent.class). ... .getHP();
-    int maxHp = 200;
-
-    if (hp <= maxHp * 0.15) {
-      // TODO RUNNING AWAY
-      return;
-    }
     Entity target = findNearestHero();
-    if (target == null) {
-      return;
-    } else {
-      // move(target.getPosition())
-      // attack();
+    if(target == null){
+      throw new NullPointerException("no hero in EnemyAiComponent in onUpdate()");
     }
+    chase.move(target);
+//    chase.move(target);
+//    currentEnemy.getComponent(PlayerChaseComponent.class).move(target);
 
-    // Если нет оружия, тогда ищет упавшее оружие в зоне видимости и подбирает
-    if (!entity.getComponent(WeaponInventoryComponent.class).hasWeapon()) {
-      Entity droppedWeapon = findNearestDroppedWeapon();
-      // TODO SEARCHING DROPPED WEAPON
-      // move(dropped.Weapon.getPosition);
-      // take();
-    }
+//    int hp = 15; // TODO entity.getComponent(HealthDoubleComponent.class). ... .getHP();
+//    int maxHp = 200;
+//
+//    if (hp <= maxHp * 0.15) {
+//      // TODO RUNNING AWAY
+//      return;
+//    }
+//    Entity target = findNearestHero();
+//    if (target == null) {
+//      return;
+//    } else {
+//      // move(target.getPosition())
+//      // attack();
+//    }
+//
+//    // Если нет оружия, тогда ищет упавшее оружие в зоне видимости и подбирает
+//    if (!entity.getComponent(WeaponInventoryComponent.class).hasWeapon()) {
+//      Entity droppedWeapon = findNearestDroppedWeapon();
+//      // TODO SEARCHING DROPPED WEAPON
+//      // move(dropped.Weapon.getPosition);
+//      // take();
+//    }
   }
 
   @CheckForNull
   private Entity findNearestHero() {
-    List<Entity> heroList =
+    return FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
+    /*List<Entity> heroList =
         gameMapOfEntities.values().stream()
             .filter(entities -> entities.hasComponent(HeroViewComponent.class))
-            .filter(heroes -> distanceBetweenEntities(currentEnemy, heroes) < 500)
+          //  .filter(heroes -> distanceBetweenEntities(currentEnemy, heroes) < 1555500)
             .toList();
-
+    System.out.println();
     if (heroList.isEmpty()) {
       return null;
     }
@@ -79,7 +97,7 @@ public class EnemyAiComponent extends Component {
         nearestHeroDist = dist;
       }
     }
-    return nearestHero;
+    return nearestHero;*/
   }
 
   @CheckForNull

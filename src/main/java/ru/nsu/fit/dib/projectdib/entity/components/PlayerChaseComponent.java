@@ -19,7 +19,7 @@ public class PlayerChaseComponent extends Component {
 //            }
 //            return CellState.WALKABLE;
 //          }));
-  public PlayerChaseComponent(AStarMoveComponent enemy) {
+ public PlayerChaseComponent(AStarMoveComponent enemy) {
     this.enemy = enemy;
   }
 
