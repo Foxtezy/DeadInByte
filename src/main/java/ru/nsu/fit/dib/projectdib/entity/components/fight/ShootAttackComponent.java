@@ -19,7 +19,10 @@ public class ShootAttackComponent extends Component {
   int rollback = 0;
 
   public void shoot() {
-    if (!getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(
+
+    if (!getEntity().hasComponent(WeaponInventoryComponent.class) ||
+        getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null ||
+        !getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(
         WeaponComponent.class).getWeapon().isLongRange()) {
       return;
     }

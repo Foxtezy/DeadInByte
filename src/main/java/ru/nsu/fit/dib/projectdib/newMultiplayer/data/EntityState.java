@@ -71,11 +71,9 @@ public class EntityState {
           entity.getComponent(EnemyViewComponent.class).bindDirectionView(e -> rotation);
         }
         Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
-        if (weapon!=null && !weapon.getComponent(WeaponComponent.class).isActive()) {
+        while (entity.getComponent(WeaponInventoryComponent.class).getActiveWeapon()!=weapon) {
           entity.getComponent(WeaponInventoryComponent.class).swapWeapon();
         }
-
-
       }
     }
   }
