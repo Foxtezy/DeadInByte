@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
@@ -53,6 +54,9 @@ public class ServerActionThread extends Thread {
         }
         case SPAWN -> {
           SpawnAction spawnAction = (SpawnAction) inPacket.getValue();
+          if (Projectiles.getByName(spawnAction.getNewEntity().getEntityType())!=null){
+            spawnAction.getNewEntity().getState().setID(nextEntityId++);
+          }
           spawnAction.getNewEntity().setWeaponId(nextEntityId++);
           MCServer.getServerState().addSpawnAction(spawnAction);
           yield new Pair<>(MessageType.SPAWN, spawnAction);

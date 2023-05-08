@@ -11,7 +11,13 @@ import java.util.Map;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
 public class ShootAttackComponent extends Component {
 
@@ -31,9 +37,13 @@ public class ShootAttackComponent extends Component {
       return;
     }
     rollback = weapon.getComponent(WeaponComponent.class).getWeapon().getRollbackTime();
-    SpawnData sd = new SpawnData(getEntity().getPosition().getX() + 20, getEntity().getPosition().getY() + 30);
-    sd.put("projectileType",projectileMap.get(weapon.getComponent(WeaponComponent.class).getWeapon().getType()));
-    spawn("projectile", sd);
+
+    int attack=0;
+    int damage=0;
+    EntitySpawner.spawn(new NewEntity(projectileMap.get(weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
+        attack*1000+damage/1000, new EntityState(-1, getEntity().getPosition(), getEntity().getComponent(
+        HeroViewComponent.class).getDirectionView(),
+        getEntity().getComponent(DataComponent.class).getId())));
     shootTimer.capture();
   }
 

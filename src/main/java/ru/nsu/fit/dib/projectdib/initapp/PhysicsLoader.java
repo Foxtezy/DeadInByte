@@ -3,11 +3,16 @@ package ru.nsu.fit.dib.projectdib.initapp;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
+import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import java.util.List;
 import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.entity.components.DataProjectileComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 
 /**
  * Загразчик физики.
@@ -17,11 +22,13 @@ public class PhysicsLoader {
   public PhysicsLoader() {
 
   }
+
   public void run() {
     getPhysicsWorld().setGravity(0, 0);
-    addProjectileCollisionsWithEntityWithHP(List.of(EntityType.PLAYER,EntityType.ENEMY,EntityType.BOX));
+    addProjectileCollisionsWithEntityWithHP(
+        List.of(EntityType.PLAYER, EntityType.ENEMY, EntityType.BOX));
     addProjectileCollisionsWithStaticObjects(List.of(EntityType.WALL));
-    
+
     getPhysicsWorld().addCollisionHandler(
         new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
           @Override
@@ -58,27 +65,38 @@ public class PhysicsLoader {
 
   private void addProjectileCollisionsWithEntityWithHP(List<EntityType> list) {
     // TODO: 08.05.2023 add box HealthIntComponent 
-    list.forEach(type ->{
+    list.forEach(type -> {
       getPhysicsWorld().addCollisionHandler(
           new CollisionHandler(EntityType.PROJECTILE, type) {
             @Override
-            protected void onCollisionBegin(Entity projectile,Entity creature) {
+            protected void onCollisionBegin(Entity projectile, Entity creature) {
+              var attack = projectile.getComponent(DataProjectileComponent.class).getAttack();
+              var damage = projectile.getComponent(DataProjectileComponent.class).getDamage();
+              var defence = 0;
+              if (creature.hasComponent(CreatureComponent.class)) {
+                defence = creature.getComponent(CreatureComponent.class).getCreature()
+                    .getArmorCoefficient();
+              }
               var hp = creature.getComponent(HealthIntComponent.class);
-              if (hp.getValue() > 1) {
-                projectile.removeFromWorld();
-                hp.damage(1);
-                return;
+              if (attack>defence){
+                hp.damage(damage);
               }
               projectile.removeFromWorld();
-              creature.removeFromWorld();
-              projectile.removeFromWorld();
+              if (hp.isZero()) {
+                if (type==EntityType.PLAYER && creature.hasComponent(PlayerControlComponent.class)) {
+                  //FXGL.getGameController().exit();// TODO: 08.05.2023 изменить
+                  return;
+                }
+                creature.removeFromWorld();
+              }
+
             }
           });
     });
   }
 
   private void addProjectileCollisionsWithStaticObjects(List<EntityType> list) {
-    list.forEach(type ->{
+    list.forEach(type -> {
       getPhysicsWorld().addCollisionHandler(
           new CollisionHandler(EntityType.PROJECTILE, type) {
             @Override

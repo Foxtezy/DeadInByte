@@ -286,15 +286,24 @@ public class Factory implements EntityFactory {
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction = getInput().getMousePositionWorld()
-        .subtract(player.getCenter().subtract(new Point2D(60, 90)));
+    int ownerID = data.get("owner");
+    Point2D direction = data.get("direction");
+    int attack = data.get("attack");
+    int damage = data.get("damage");
+    int id = data.get("id");
+
     Projectiles projectile = data.get("projectileType");
     AnimatedTexture texture = new AnimatedTexture(projectile.getAnimation());
+    texture.setScaleX(0.75);
+    texture.setScaleY(0.75);
     texture.play();
     Entity entity =  entityBuilder()
         .from(data)
         .type(EntityType.PROJECTILE)
-        .viewWithBBox(texture)
+        .view(texture)
+        .bbox(projectile.getHitbox())
+        .with(new DataProjectileComponent(attack,damage))
+        .with(new DataComponent(EntityType.PROJECTILE,ownerID,id))
         .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())
         .collidable()

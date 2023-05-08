@@ -1,10 +1,17 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import java.util.Objects;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
+import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
@@ -29,6 +36,7 @@ public class NewEntity {
 
   private final String entityType;
   private final int seed;
+  private int owner;
 
   public NewEntity(String entityType, Integer seed, @NotNull Point2D position,Integer weaponId) {
     this.entityType = entityType;
@@ -41,6 +49,7 @@ public class NewEntity {
     this.state = state;
   }
 
+
   public Entity spawn() {
     int owner;
     if (state.getId()>0 && state.getId()<4){
@@ -49,7 +58,6 @@ public class NewEntity {
     else {
       owner=-1;
     }
-    System.out.println(owner+"  "+entityType);
     switch (TypeChooser.getTypeByString(entityType)){
       case ENEMY ->{
         System.out.println(entityType);
@@ -64,6 +72,16 @@ public class NewEntity {
         Weapon weapon = WeaponFactory.getWeapon(Weapons.getByName(entityType));
         Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getActiveWeapon(),owner);
         MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
+      }
+      case PROJECTILE ->{
+        SpawnData sd = new SpawnData(state.getPosition());
+        sd.put("owner",state.getActiveWeapon());
+        sd.put("direction",state.getRotation());
+        sd.put("attack",seed/1000);
+        sd.put("damage",seed%1000);
+        sd.put("id",state.getId());
+        sd.put("projectileType",Projectiles.getByName(entityType));
+        FXGL.spawn("projectile",sd);
       }
       default -> throw new IllegalArgumentException("Entity type not found");
     }
