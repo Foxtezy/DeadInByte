@@ -6,6 +6,7 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
+import java.util.List;
 import ru.nsu.fit.dib.projectdib.EntityType;
 
 /**
@@ -17,34 +18,10 @@ public class PhysicsLoader {
 
   }
   public void run() {
-
     getPhysicsWorld().setGravity(0, 0);
-    getPhysicsWorld().addCollisionHandler(
-        new CollisionHandler(EntityType.BOX, EntityType.PROJECTILE) {
-          @Override
-          protected void onCollisionBegin(Entity box, Entity arrow) {
-            spawn("coin", box.getCenter());
-            box.removeFromWorld();
-            arrow.removeFromWorld();
-          }
-        });
-
-    getPhysicsWorld().addCollisionHandler(
-        new CollisionHandler(EntityType.ENEMY, EntityType.PROJECTILE) {
-          @Override
-          protected void onCollisionBegin(Entity enemy, Entity projectile) {
-            var hp = enemy.getComponent(HealthIntComponent.class);
-            if (hp.getValue() > 1) {
-              projectile.removeFromWorld();
-              hp.damage(1);
-              return;
-            }
-            projectile.removeFromWorld();
-            enemy.removeFromWorld();
-            projectile.removeFromWorld();
-          }
-        });
-
+    addProjectileCollisionsWithEntityWithHP(List.of(EntityType.PLAYER,EntityType.ENEMY,EntityType.BOX));
+    addProjectileCollisionsWithStaticObjects(List.of(EntityType.WALL));
+    
     getPhysicsWorld().addCollisionHandler(
         new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
           @Override
@@ -61,13 +38,6 @@ public class PhysicsLoader {
             projectile.removeFromWorld();
           }
 
-        });
-    getPhysicsWorld().addCollisionHandler(
-        new CollisionHandler(EntityType.PROJECTILE, EntityType.WALL) {
-          @Override
-          protected void onCollisionBegin(Entity arrow, Entity wall) {
-            arrow.removeFromWorld();
-          }
         });
 
     getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.PLAYER, EntityType.COIN) {
@@ -86,4 +56,36 @@ public class PhysicsLoader {
         });
   }
 
+  private void addProjectileCollisionsWithEntityWithHP(List<EntityType> list) {
+    // TODO: 08.05.2023 add box HealthIntComponent 
+    list.forEach(type ->{
+      getPhysicsWorld().addCollisionHandler(
+          new CollisionHandler(EntityType.PROJECTILE, type) {
+            @Override
+            protected void onCollisionBegin(Entity projectile,Entity creature) {
+              var hp = creature.getComponent(HealthIntComponent.class);
+              if (hp.getValue() > 1) {
+                projectile.removeFromWorld();
+                hp.damage(1);
+                return;
+              }
+              projectile.removeFromWorld();
+              creature.removeFromWorld();
+              projectile.removeFromWorld();
+            }
+          });
+    });
+  }
+
+  private void addProjectileCollisionsWithStaticObjects(List<EntityType> list) {
+    list.forEach(type ->{
+      getPhysicsWorld().addCollisionHandler(
+          new CollisionHandler(EntityType.PROJECTILE, type) {
+            @Override
+            protected void onCollisionBegin(Entity arrow, Entity wall) {
+              arrow.removeFromWorld();
+            }
+          });
+    });
+  }
 }

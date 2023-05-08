@@ -161,7 +161,6 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.WEAPON)
         .viewWithBBox(iv)
-        .bbox(new HitBox(BoundingShape.box(75, 20)))
         .with(new CollidableComponent(true))
         .with(new WeaponViewComponent(
             weapon.getType().getImgRadius(),
