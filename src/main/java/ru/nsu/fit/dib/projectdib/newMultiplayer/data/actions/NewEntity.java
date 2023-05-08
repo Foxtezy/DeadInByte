@@ -58,9 +58,10 @@ public class NewEntity {
     else {
       owner=-1;
     }
+    System.out.println("["+state.getId()+"] "+entityType);
     switch (TypeChooser.getTypeByString(entityType)){
       case ENEMY ->{
-        System.out.println(entityType);
+
         Creature creature = EnemiesFactory.newEnemy(EnemyType.getByName(entityType),seed);
         return newEntity(owner, creature);
       }

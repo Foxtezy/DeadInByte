@@ -2,7 +2,6 @@ package ru.nsu.fit.dib.projectdib;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.EntityBuilder;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
@@ -12,8 +11,6 @@ import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.*;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
@@ -22,7 +19,6 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
-import java.util.Objects;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -45,9 +41,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
-import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
-import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -155,12 +149,12 @@ public class Factory implements EntityFactory {
         weapon.getType().getSize().getHeight(),
         ProjectConfig._WEAPON_COLUMNS);
     WeaponComponent weaponComponent = new WeaponComponent(weapon);
-    DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"),
-        data.get("id"));
+    DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"), data.get("id"));
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WEAPON)
         .viewWithBBox(iv)
+        .with(new DataDamageComponent())
         .with(new CollidableComponent(true))
         .with(new WeaponViewComponent(
             weapon.getType().getImgRadius(),
@@ -302,7 +296,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.PROJECTILE)
         .view(texture)
         .bbox(projectile.getHitbox())
-        .with(new DataProjectileComponent(attack,damage))
+        .with(new DataDamageComponent(attack,damage))
         .with(new DataComponent(EntityType.PROJECTILE,ownerID,id))
         .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())
