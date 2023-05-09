@@ -31,7 +31,6 @@ import ru.nsu.fit.dib.projectdib.entity.components.*;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.fight.MeleeAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
@@ -107,7 +106,6 @@ public class Factory implements EntityFactory {
         .with(view)
         .anchorFromCenter()
         .with(new ShootAttackComponent())
-        .with(new MeleeAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
@@ -123,14 +121,13 @@ public class Factory implements EntityFactory {
 
     CreatureViewComponent view =new EnemyViewComponent(type.getID());
     view.bindDirectionView(entity -> new Point2D(0, 0));
-    System.out.println(type.getName()+" with ["+"HP: "+creature.getMaxHP()+"] spawned");
+    System.out.println(type.getName()+" with ["+"HP: "+creature.getMaxHP()+", defense:"+creature.getArmorCoefficient()+"] spawned");
     builder
         .from(data)
         .type(EntityType.ENEMY)
         .with(view)
         .anchorFromCenter()
         .with(new ShootAttackComponent())
-        .with(new MeleeAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
@@ -158,7 +155,7 @@ public class Factory implements EntityFactory {
         .type(EntityType.WEAPON)
         .viewWithBBox(iv)
         .anchorFromCenter()
-        .with(new DataDamageComponent())
+        .with(new DataAttackComponent())
         .with(new CollidableComponent(true))
         .with(new WeaponViewComponent(
             weapon.getType().getImgRadius(),
@@ -301,7 +298,7 @@ public class Factory implements EntityFactory {
         .view(texture)
         .anchorFromCenter()
         .bbox(projectile.getHitbox())
-        .with(new DataDamageComponent(attack,damage))
+        .with(new DataAttackComponent(attack,damage))
         .with(new DataComponent(EntityType.PROJECTILE,ownerID,id))
         .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())

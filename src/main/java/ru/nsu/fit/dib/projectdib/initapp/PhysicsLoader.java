@@ -10,9 +10,8 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import java.util.List;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.EntityType;
-import ru.nsu.fit.dib.projectdib.entity.components.DataDamageComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.HPAction;
@@ -81,8 +80,8 @@ public class PhysicsLoader {
                     HealthIntComponent.class)) {
                   return;
                 }
-                var attack = projectile.getComponent(DataDamageComponent.class).getAttack();
-                var damage = projectile.getComponent(DataDamageComponent.class).getDamage();
+                var attack = projectile.getComponent(DataAttackComponent.class).getAttack();
+                var damage = projectile.getComponent(DataAttackComponent.class).getDamage();
                 var defence = 0;
                 if (creature.hasComponent(CreatureComponent.class)) {
                   defence = creature.getComponent(CreatureComponent.class).getCreature()
@@ -98,7 +97,7 @@ public class PhysicsLoader {
                     return;
                   }
                 }
-                System.out.println("attack with ["+"damage:"+damage+"]");
+                System.out.println("attack with ["+"attack:"+attack+", damage:"+damage+"]");
                 if (attack > defence) {
                   var value = hp.getValue()-damage;
                   HPAction action = new HPAction(projectile.getComponent(DataComponent.class).getId(),

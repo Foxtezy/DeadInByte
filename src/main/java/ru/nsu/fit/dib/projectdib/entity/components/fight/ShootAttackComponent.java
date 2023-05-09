@@ -1,21 +1,17 @@
 package ru.nsu.fit.dib.projectdib.entity.components.fight;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.newLocalTimer;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.time.LocalTimer;
 import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
+import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent.Side;
-import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
-import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
@@ -27,7 +23,6 @@ public class ShootAttackComponent extends Component {
   int rollback = 0;
 
   public void shoot() {
-
     if (!getEntity().hasComponent(WeaponInventoryComponent.class) ||
         getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null ||
         !getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(
@@ -41,8 +36,8 @@ public class ShootAttackComponent extends Component {
     Point2D rotation = getEntity().getComponent(DataComponent.class).getRotation();
     Point2D offsetVector = new Point2D(rotation.getY(),-rotation.getX()).normalize().multiply(40).add(-80,80);
     rollback = weapon.getComponent(WeaponComponent.class).getWeapon().getRollbackTime();
-    int attack=20;
-    int damage=3;
+    int attack=weapon.getComponent(DataAttackComponent.class).getAttack();
+    int damage=weapon.getComponent(DataAttackComponent.class).getDamage();
     EntitySpawner.spawn(new NewEntity(projectileMap.get(
         weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
         attack*1000+damage, new EntityState(-1,

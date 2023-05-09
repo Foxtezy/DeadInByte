@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.entity.weapons;
 
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
@@ -11,6 +12,9 @@ public class Weapon {
 
   public Weapons getType() {
     return data.weapon;
+  }
+  public Pair<Integer,Integer> getDamageBounds(){
+    return new Pair<>(data.minDamage,data.maxDamage);
   }
 
   public double getDistance() {
