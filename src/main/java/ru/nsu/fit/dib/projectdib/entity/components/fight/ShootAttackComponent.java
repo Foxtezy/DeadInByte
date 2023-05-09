@@ -8,10 +8,12 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.time.LocalTimer;
 import java.util.Map;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent.Side;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
@@ -36,13 +38,16 @@ public class ShootAttackComponent extends Component {
     if (!shootTimer.elapsed(Duration.millis(rollback))) {
       return;
     }
+    Point2D rotation = getEntity().getComponent(DataComponent.class).getRotation();
+    Point2D offsetVector = new Point2D(rotation.getY(),-rotation.getX()).normalize().multiply(40).add(-80,80);
     rollback = weapon.getComponent(WeaponComponent.class).getWeapon().getRollbackTime();
-
     int attack=0;
     int damage=0;
-    EntitySpawner.spawn(new NewEntity(projectileMap.get(weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
-        attack*1000+damage/1000, new EntityState(-1, getEntity().getPosition(), getEntity().getComponent(
-        HeroViewComponent.class).getDirectionView(),
+    EntitySpawner.spawn(new NewEntity(projectileMap.get(
+        weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
+        attack*1000+damage/1000, new EntityState(-1,
+        getEntity().getAnchoredPosition().add(offsetVector),
+        getEntity().getComponent(DataComponent.class).getRotation(),
         getEntity().getComponent(DataComponent.class).getId())));
     shootTimer.capture();
   }
