@@ -71,4 +71,16 @@ public class WeaponAction extends GameAction{
       return id;
     }
   }
+
+  public int getHeroId() {
+    return heroId;
+  }
+
+  public int getWeaponId() {
+    return weaponId;
+  }
+
+  public WeaponActionType getType() {
+    return type;
+  }
 }

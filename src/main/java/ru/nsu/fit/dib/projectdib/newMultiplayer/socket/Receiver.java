@@ -42,6 +42,9 @@ public class Receiver {
       case UPDATE -> {
         return new Pair<>(MessageType.UPDATE, FBSDeserializer.deserializeEntityStateList(byteBuffer));
       }
+      case HP -> {
+        return new Pair<>(MessageType.HP, FBSDeserializer.deserializeHPAction(byteBuffer));
+      }
       case SPAWN -> {
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }

@@ -41,11 +41,11 @@ public class ShootAttackComponent extends Component {
     Point2D rotation = getEntity().getComponent(DataComponent.class).getRotation();
     Point2D offsetVector = new Point2D(rotation.getY(),-rotation.getX()).normalize().multiply(40).add(-80,80);
     rollback = weapon.getComponent(WeaponComponent.class).getWeapon().getRollbackTime();
-    int attack=0;
-    int damage=0;
+    int attack=20;
+    int damage=3;
     EntitySpawner.spawn(new NewEntity(projectileMap.get(
         weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
-        attack*1000+damage/1000, new EntityState(-1,
+        attack*1000+damage, new EntityState(-1,
         getEntity().getAnchoredPosition().add(offsetVector),
         getEntity().getComponent(DataComponent.class).getRotation(),
         getEntity().getComponent(DataComponent.class).getId())));

@@ -123,6 +123,7 @@ public class Factory implements EntityFactory {
 
     CreatureViewComponent view =new EnemyViewComponent(type.getID());
     view.bindDirectionView(entity -> new Point2D(0, 0));
+    System.out.println(type.getName()+" with ["+"HP: "+creature.getMaxHP()+"] spawned");
     builder
         .from(data)
         .type(EntityType.ENEMY)
@@ -133,8 +134,8 @@ public class Factory implements EntityFactory {
         .with(new CreatureComponent(creature))
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
-        .with(new DataComponent(EntityType.ENEMY,data.get("owner"),data.get("id")));
-        //.with(new HealthIntComponent(creature.getMaxHP()));
+        .with(new DataComponent(EntityType.ENEMY,data.get("owner"),data.get("id")))
+        .with(new HealthIntComponent(creature.getMaxHP()));
         //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))));
    // if (MCClient.getClientId()==0) builder.with(new CellMoveComponent(160, 160, 300).allowRotation(true));
     // TODO: 29.04.2023 AIComponent
@@ -288,8 +289,8 @@ public class Factory implements EntityFactory {
     int attack = data.get("attack");
     int damage = data.get("damage");
     int id = data.get("id");
-
     Projectiles projectile = data.get("projectileType");
+    System.out.println(projectile.getName()+" with [attack: "+attack+", damage: "+damage+"] spawned");
     AnimatedTexture texture = new AnimatedTexture(projectile.getAnimation());
     texture.setScaleX(0.75);
     texture.setScaleY(0.75);
