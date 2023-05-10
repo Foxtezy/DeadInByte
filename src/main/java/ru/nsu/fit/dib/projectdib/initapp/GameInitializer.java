@@ -2,7 +2,9 @@ package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
@@ -10,18 +12,17 @@ import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import com.almasb.fxgl.physics.PhysicsComponent;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
-import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
-import ru.nsu.fit.dib.projectdib.environment.tmxbuilder.LevelToTmx;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
@@ -72,6 +73,7 @@ public class GameInitializer {
               });
       set("grid", grid);
       Entity enemy = EntitySpawner.spawn(new NewEntity(EnemiesFactory.EnemyType.Devil.getName(), 456, position.subtract(new Point2D(160, 320)), null)).get();
+      enemy.getComponent(PhysicsComponent.class).setLinearVelocity(100, 100);
       //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);

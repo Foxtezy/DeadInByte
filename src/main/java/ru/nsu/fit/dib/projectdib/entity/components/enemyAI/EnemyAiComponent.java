@@ -1,37 +1,36 @@
 package ru.nsu.fit.dib.projectdib.entity.components.enemyAI;
 
+import static com.almasb.fxgl.core.math.FXGLMath.sqrt;
+import static com.almasb.fxgl.dsl.FXGL.geto;
+
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.pathfinding.astar.AStarCell;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
-import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.google.javascript.jscomp.jarjar.javax.annotation.CheckForNull;
+import java.util.List;
+import java.util.Map;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
-import java.util.List;
-import java.util.Map;
-
-import static com.almasb.fxgl.core.math.FXGLMath.sqrt;
-import static com.almasb.fxgl.dsl.FXGL.geto;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
-
 public class EnemyAiComponent extends Component {
-  AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
 
+  AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
+  AStarPathfinder path = new AStarPathfinder(geto("grid"));
   private Map<Integer, Entity> gameMapOfEntities = MCClient.getClientState().getIdHashTable();
   private Entity currentEnemy;
   private List<Entity> heroList;
   private List<Point2D> memoryOfLastHeroesPositions;
 
   PlayerChaseComponent chase;
+
   @Override
   public void onAdded() {
     currentEnemy = getEntity();
@@ -42,11 +41,17 @@ public class EnemyAiComponent extends Component {
   @Override
   public void onUpdate(double tpf) {
     Entity target = findNearestHero();
-    if(target == null){
+    if (target == null) {
       throw new NullPointerException("no hero in EnemyAiComponent in onUpdate()");
     }
-    //chase.move(target);
-    currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(target.getPosition());
+    List<AStarCell> cells = path.findPath((int) currentEnemy.getPosition().getX() / 16,
+        (int) currentEnemy.getPosition().getY() / 16,
+        (int) target.getPosition().getX() / 16, (int) target.getPosition().getY() / 16);
+    int x = cells.get(1).getX() / 16;
+    int y = cells.get(1).getY() / 16;
+    Point2D position = new Point2D(x, y);
+    currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(position);
+    // chase.move(target);
 //    chase.move(target);
 //    currentEnemy.getComponent(PlayerChaseComponent.class).move(target);
 

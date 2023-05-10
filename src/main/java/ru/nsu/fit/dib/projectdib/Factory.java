@@ -1,16 +1,23 @@
 package ru.nsu.fit.dib.projectdib;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.geto;
+import static com.almasb.fxgl.dsl.FXGL.image;
+import static com.almasb.fxgl.dsl.FXGL.spawn;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.EntityBuilder;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
-
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.entity.*;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.EntityFactory;
+import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
@@ -22,7 +29,6 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
-import java.util.Objects;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -31,7 +37,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
-import ru.nsu.fit.dib.projectdib.entity.components.*;
+import ru.nsu.fit.dib.projectdib.data.Projectiles;
+import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
@@ -44,11 +52,8 @@ import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
-import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
-import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
-import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -145,7 +150,7 @@ public class Factory implements EntityFactory {
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
         .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
-        .with(new CellMoveComponent(16, 16, 150))
+        .with(new CellMoveComponent(16, 16, 250))
         //.with(aStar)
         //.with(new PlayerChaseComponent(aStar))
         .with(new EnemyAiComponent());
