@@ -10,6 +10,7 @@ import com.google.javascript.jscomp.jarjar.javax.annotation.CheckForNull;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
@@ -44,7 +45,8 @@ public class EnemyAiComponent extends Component {
     if(target == null){
       throw new NullPointerException("no hero in EnemyAiComponent in onUpdate()");
     }
-    chase.move(target);
+    //chase.move(target);
+    currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(target.getPosition());
 //    chase.move(target);
 //    currentEnemy.getComponent(PlayerChaseComponent.class).move(target);
 

@@ -145,7 +145,7 @@ public class Factory implements EntityFactory {
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
         .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
-        .with(new CellMoveComponent(16, 16, 250))
+        .with(new CellMoveComponent(16, 16, 150))
         //.with(aStar)
         //.with(new PlayerChaseComponent(aStar))
         .with(new EnemyAiComponent());

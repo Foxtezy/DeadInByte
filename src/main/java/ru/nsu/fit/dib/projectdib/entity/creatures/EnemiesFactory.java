@@ -14,6 +14,7 @@ import java.util.List;
 public class EnemiesFactory {
 	public static Creature newEnemy(EnemyType enemyType, Integer seed){
 		List<Integer> specsList = RandomSystem.generateCreatureSpecs(123);
+		specsList = specsList.stream().map(i->i-4).toList();
 		return switch (enemyType) {
 			case Isaac -> new CreatureBuilder("Isaac",enemyType)
 					.setHP(RandomSystem.d(10))
