@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -41,9 +42,11 @@ public class ServerActionThread extends Thread {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
-    Point2D start = new Point2D(GameInitializer.lvl.start.getCentrePoint().x*160,GameInitializer.lvl.start.getCentrePoint().y*160);
-    actionQueue.add(new Pair<>(MessageType.SPAWN,new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123, new EntityState(1231,
-        start,new Point2D(0,0),-1)))));
+    Point2D start = new Point2D(GameInitializer.lvl.start.getCentrePoint().x * 160,
+        GameInitializer.lvl.start.getCentrePoint().y * 160);
+    actionQueue.add(new Pair<>(MessageType.SPAWN,
+        new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123, new EntityState(1231,
+            start, new Point2D(0, 0), -1)))));
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
@@ -56,7 +59,8 @@ public class ServerActionThread extends Thread {
         case WEAPON -> {
           WeaponAction weaponAction = (WeaponAction) inPacket.getValue();
           Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponAction.getWeapon());
-          if (weaponAction.getAction() == WeaponActionType.TAKE && weapon!=null && weapon.getComponent(WeaponComponent.class).hasUser()) {
+          if (weaponAction.getAction() == WeaponActionType.TAKE && weapon != null
+              && weapon.getComponent(WeaponComponent.class).hasUser()) {
             yield new Pair<>(MessageType.WEAPON, null);
           } else {
             yield new Pair<>(MessageType.WEAPON, weaponAction);
@@ -64,15 +68,22 @@ public class ServerActionThread extends Thread {
         }
         case HP -> {
           HPAction action = (HPAction) inPacket.getValue();
-          if (MCClient.getClientState().getIdHashTable().get(action.getAttackedID())==null) yield null;
-          yield inPacket;
+          Entity attackedEntity = MCClient.getClientState().getIdHashTable()
+              .get(action.getAttackedID());
+          if (attackedEntity == null) {
+            yield null;
+          }
+          HPAction hpAction = (HPAction) inPacket.getValue();
+          attackedEntity.getComponent(HealthIntComponent.class).damage(hpAction.getAttackedHP());
+          yield new Pair<>(MessageType.HP,
+              new HPAction(hpAction.getAttackingID(), hpAction.getAttackedID(),
+                  attackedEntity.getComponent(HealthIntComponent.class).getValue()));
         }
         case SPAWN -> {
           SpawnAction spawnAction = (SpawnAction) inPacket.getValue();
-          if (Projectiles.getByName(spawnAction.getNewEntity().getEntityType())!=null){
+          if (Projectiles.getByName(spawnAction.getNewEntity().getEntityType()) != null) {
             spawnAction.getNewEntity().getState().setID(nextEntityId++);
-          }
-          else {
+          } else {
             spawnAction.getNewEntity().setWeaponId(nextEntityId++);
           }
           MCServer.getServerState().addSpawnAction(spawnAction);

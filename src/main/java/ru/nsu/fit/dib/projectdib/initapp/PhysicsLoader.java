@@ -99,9 +99,8 @@ public class PhysicsLoader {
                 }
                 System.out.println("attack with ["+"attack:"+attack+", damage:"+damage+"]");
                 if (attack > defence) {
-                  var value = hp.getValue()-damage;
                   HPAction action = new HPAction(projectile.getComponent(DataComponent.class).getId(),
-                      creature.getComponent(DataComponent.class).getId(),value);
+                      creature.getComponent(DataComponent.class).getId(),damage);
                   doAction(new Pair<>(MessageType.HP,action));
                 }
               }
