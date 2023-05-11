@@ -15,6 +15,7 @@ public class ClientReceiverThread extends Thread {
     while (!Thread.currentThread().isInterrupted()) {
       Receiver receiver = new Receiver(MCClient.getClientSocket());
       var inPacket = receiver.receive();
+      //System.out.println("reciever works");
       switch (inPacket.getKey()) {
         case UPDATE -> {
           MCClient.getClientState().updateEntities((List<EntityState>) inPacket.getValue());

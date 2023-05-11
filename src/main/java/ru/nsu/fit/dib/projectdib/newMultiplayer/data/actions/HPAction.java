@@ -23,13 +23,14 @@ public class HPAction extends GameAction {
     Entity attacked = table.get(attackedID);
     var HPComponent = attacked.getComponent(HealthIntComponent.class);
     HPComponent.setValue(attackedHP);
+    System.out.println(attacked.getType()+" HP:"+HPComponent.getValue());
     if (HPComponent.isZero()){
-      table.remove(attackedID);
       Platform.runLater(()->{
         if (attacked.getType() == EntityType.PLAYER) {
           // TODO: 09.05.2023 game over
           return;
         }
+        table.remove(attackedID);
         attacked.removeFromWorld();
       });
     }

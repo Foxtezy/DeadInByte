@@ -26,9 +26,11 @@ public class ClientSenderThread extends Thread {
       Sender sender = new Sender();
       if (!entityStates.isEmpty()) {
         sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.UPDATE, entityStates));
+        //System.out.println(entityStates);
       }
       while (!actionQueue.isEmpty()){
         Pair<MessageType, Object> pair = actionQueue.poll();
+        System.out.println(pair);
         sender.send(MCClient.getClientSocket(),pair);
       }
     }

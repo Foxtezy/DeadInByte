@@ -287,7 +287,7 @@ public class Factory implements EntityFactory {
     int damage = data.get("damage");
     int id = data.get("id");
     Projectiles projectile = data.get("projectileType");
-    System.out.println(projectile.getName()+" with [attack: "+attack+", damage: "+damage+"] spawned");
+    //System.out.println(projectile.getName()+" with [attack: "+attack+", damage: "+damage+"] spawned");
     AnimatedTexture texture = new AnimatedTexture(projectile.getAnimation());
     texture.setScaleX(0.75);
     texture.setScaleY(0.75);

@@ -1,13 +1,24 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
 import com.almasb.fxgl.entity.Entity;
+import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class WeaponAction extends GameAction{
   private final int heroId;
   private final int weaponId;
   private final WeaponActionType type;
+
+  @Override
+  public String toString() {
+    return "WeaponAction{" +
+        "heroId=" + heroId +
+        ", weaponId=" + weaponId +
+        ", type=" + type +
+        '}';
+  }
 
   public WeaponAction(WeaponActionType type,int heroId,int weaponId){
     super();
@@ -17,13 +28,17 @@ public class WeaponAction extends GameAction{
   }
   @Override
   public void run() {
+    System.out.println(this);
     switch (type){
       case THROW -> {
         Entity hero = MCClient.getClientState().getIdHashTable().get(heroId);
         Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponId);
         if (hero==null) throw new IllegalArgumentException("Hero with id "+heroId+" not found");
+        if (weapon==null) throw new IllegalArgumentException("Weapon with id "+weaponId+" not found");
         if (hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon()==weapon) {
+          System.out.println(hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon());
           hero.getComponent(WeaponInventoryComponent.class).throwWeapon();
+          System.out.println(hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon());
         }
         else {
           int k=0;

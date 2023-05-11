@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
@@ -37,7 +38,7 @@ public class ServerActionThread extends Thread {
 
   @Override
   public void run() {
-    try {
+/*    try {
       actionQueue.add(actionQueue.take());
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
@@ -46,7 +47,7 @@ public class ServerActionThread extends Thread {
         GameInitializer.lvl.start.getCentrePoint().y * 160);
     actionQueue.add(new Pair<>(MessageType.SPAWN,
         new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123, new EntityState(1231,
-            start, new Point2D(0, 0), -1)))));
+            start, new Point2D(0, 0), -1)))));*/
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
@@ -59,12 +60,26 @@ public class ServerActionThread extends Thread {
         case WEAPON -> {
           WeaponAction weaponAction = (WeaponAction) inPacket.getValue();
           Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponAction.getWeapon());
-          if (weaponAction.getAction() == WeaponActionType.TAKE && weapon != null
-              && weapon.getComponent(WeaponComponent.class).hasUser()) {
-            yield new Pair<>(MessageType.WEAPON, null);
-          } else {
-            yield new Pair<>(MessageType.WEAPON, weaponAction);
+          Entity user = weapon.getComponent(WeaponComponent.class).getUser();
+          if (weapon==null) yield null;
+          if (weaponAction.getAction() == WeaponActionType.TAKE) {
+            if (user!=null) {
+              yield null;
+            } else {
+              yield new Pair<>(MessageType.WEAPON, weaponAction);
+            }
           }
+          else{
+            if (weaponAction.getAction() == WeaponActionType.THROW){
+              if (user!=null && user.getComponent(DataComponent.class).getId()==weaponAction.getUser()){
+                yield new Pair<>(MessageType.WEAPON, weaponAction);
+              }
+              else {
+                yield null;
+              }
+            }
+          }
+          yield null;
         }
         case HP -> {
           HPAction action = (HPAction) inPacket.getValue();
@@ -74,7 +89,6 @@ public class ServerActionThread extends Thread {
             yield null;
           }
           HPAction hpAction = (HPAction) inPacket.getValue();
-          attackedEntity.getComponent(HealthIntComponent.class).damage(hpAction.getAttackedHP());
           yield new Pair<>(MessageType.HP,
               new HPAction(hpAction.getAttackingID(), hpAction.getAttackedID(),
                   attackedEntity.getComponent(HealthIntComponent.class).getValue()));
@@ -91,7 +105,7 @@ public class ServerActionThread extends Thread {
         }
         default -> null;
       };
-      if (outPacket.getValue() != null) {
+      if (outPacket != null) {
         Sender sender = new Sender();
         MCServer.getClientSockets().values().forEach(s -> sender.send(s, outPacket));
       }

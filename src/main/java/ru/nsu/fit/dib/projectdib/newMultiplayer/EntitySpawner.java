@@ -19,6 +19,6 @@ public final class EntitySpawner {
     return CompletableFuture.supplyAsync(() -> MCClient.getClientState().acceptedSpawn(newEntity));
   }
   public static void doAction(Pair<MessageType, Object> action) {
-    CompletableFuture.runAsync(() -> MCClient.getClientState().acceptedAction(action));
+    MCClient.getClientState().acceptedAction(action);
   }
 }

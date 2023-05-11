@@ -35,14 +35,12 @@ public class ServerUpdaterThread extends Thread {
       }
       // TODO: 19.04.2023 Сделать нормальную проверку на наличие данных для передачи
       //  (пока что сервер все складывает в outList и проверяет на 0)
-      while (outList.size() == 0) {
-        outList = MCClient.getClientState().getEntityStatesByOwnerId(SERVER_ID);
-        List<List<EntityState>> clientsStates = new ArrayList<>();
-        updaterQueue.drainTo(clientsStates);
-        clientsStates.forEach(outList::addAll);
-      }
+      List<List<EntityState>> clientsStates = new ArrayList<>();
+      updaterQueue.drainTo(clientsStates);
+      clientsStates.forEach(outList::addAll);
       Sender sender = new Sender();
       List<EntityState> finalOutList = outList;
+      if (finalOutList.isEmpty()) continue;
       MCServer.getClientSockets().values()
           .forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, finalOutList)));
     }

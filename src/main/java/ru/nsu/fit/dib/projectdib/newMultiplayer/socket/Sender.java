@@ -16,10 +16,10 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.WeaponAction;
 public class Sender {
 
   public void send(Socket address, Pair<MessageType, Object> message) {
-    ByteBuffer buffer = switch (message.getKey()){
+    ByteBuffer buffer = switch (message.getKey()) {
       case HP -> FBSSerializer.serialize((HPAction) message.getValue());
       case WEAPON -> FBSSerializer.serialize((WeaponAction) message.getValue());
-      case SPAWN-> FBSSerializer.serialize((SpawnAction) message.getValue());
+      case SPAWN -> FBSSerializer.serialize((SpawnAction) message.getValue());
       case UPDATE -> FBSSerializer.serialize((List<EntityState>) message.getValue());
       case START_INIT, END_INIT -> ByteBuffer.wrap(new byte[]{});
       case MAP_SEED -> ByteBuffer.allocate(4).putInt((int) message.getValue());
@@ -37,11 +37,11 @@ public class Sender {
     System.arraycopy(data, 0, pt, 1, data.length);
     pt[0] = message.getKey().getId();
     try {
-      synchronized (address) {
-        DataOutputStream d = new DataOutputStream(address.getOutputStream());
-        d.writeInt(pt.length);
-        address.getOutputStream().write(pt);
-      }
+
+      DataOutputStream d = new DataOutputStream(address.getOutputStream());
+      d.writeInt(pt.length);
+      address.getOutputStream().write(pt);
+
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

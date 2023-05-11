@@ -1,6 +1,7 @@
 package ru.nsu.fit.dib.projectdib.entity.components.fight;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.newLocalTimer;
+import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
@@ -8,6 +9,7 @@ import com.almasb.fxgl.time.LocalTimer;
 import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
@@ -16,6 +18,8 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 
 public class ShootAttackComponent extends Component {
 
@@ -38,12 +42,12 @@ public class ShootAttackComponent extends Component {
     rollback = weapon.getComponent(WeaponComponent.class).getWeapon().getRollbackTime();
     int attack=weapon.getComponent(DataAttackComponent.class).getAttack();
     int damage=weapon.getComponent(DataAttackComponent.class).getDamage();
-    EntitySpawner.spawn(new NewEntity(projectileMap.get(
+    EntitySpawner.doAction(new Pair<>(MessageType.SPAWN,new SpawnAction(new NewEntity(projectileMap.get(
         weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
         attack*1000+damage, new EntityState(-1,
         getEntity().getAnchoredPosition().add(offsetVector),
         getEntity().getComponent(DataComponent.class).getRotation(),
-        getEntity().getComponent(DataComponent.class).getId())));
+        getEntity().getComponent(DataComponent.class).getId())))));
     shootTimer.capture();
   }
 

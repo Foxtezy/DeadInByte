@@ -52,6 +52,7 @@ public class DataComponent extends Component {
   }
 
   public Integer getBindedEntity() {
+    if (getEntity().getType()==EntityType.WEAPON) return ownerID;
     if (!getEntity().hasComponent(WeaponInventoryComponent.class)
     || getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null
     || getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(DataComponent.class)==null) return -1;
@@ -77,5 +78,9 @@ public class DataComponent extends Component {
 
   public boolean isValid() {
     return getPosition() != null && getRotation() != null;
+  }
+
+  public void setOwnerID(Integer id) {
+    ownerID = id;
   }
 }

@@ -14,6 +14,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.HPAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 
@@ -87,8 +88,6 @@ public class PhysicsLoader {
                   defence = creature.getComponent(CreatureComponent.class).getCreature()
                       .getArmorCoefficient();
                 }
-                var hp = creature.getComponent(HealthIntComponent.class);
-
                 if (attackEntityType == EntityType.PROJECTILE) {
                   projectile.removeFromWorld();
                 }
@@ -97,7 +96,8 @@ public class PhysicsLoader {
                     return;
                   }
                 }
-                System.out.println("attack with ["+"attack:"+attack+", damage:"+damage+"]");
+                if (projectile.getComponent(DataComponent.class).getOwnerID()!= MCClient.getClientId()) return;
+                //System.out.println("attack with ["+"attack:"+attack+", damage:"+damage+"]");
                 if (attack > defence) {
                   HPAction action = new HPAction(projectile.getComponent(DataComponent.class).getId(),
                       creature.getComponent(DataComponent.class).getId(),damage);

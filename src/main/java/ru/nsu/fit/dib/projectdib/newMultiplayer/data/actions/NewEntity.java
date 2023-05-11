@@ -92,7 +92,7 @@ public class NewEntity {
   private Entity newEntity(int owner, Creature creature) {
     Weapon weapon = WeaponFactory.getWeapon(creature.getStandardWeapon());
     Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner);
-    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),owner);
+    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1);
     MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
     MCClient.getClientState().getIdHashTable().put(state.getId(), creatureEntity);
     return creatureEntity;
