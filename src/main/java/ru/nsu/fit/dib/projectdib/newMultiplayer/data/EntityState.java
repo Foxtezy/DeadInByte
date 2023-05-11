@@ -8,15 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class EntityState {
 
-  private final int id;
+  private int id;
   private Point2D position;
   private Point2D rotation;
   private int bindedEntity=-1; //для player - активное оружие
@@ -71,8 +69,10 @@ public class EntityState {
           entity.getComponent(EnemyViewComponent.class).bindDirectionView(e -> rotation);
         }
         Entity weapon = MCClient.getClientState().getIdHashTable().get(bindedEntity);
-        while (entity.getComponent(WeaponInventoryComponent.class).getActiveWeapon()!=weapon) {
-          entity.getComponent(WeaponInventoryComponent.class).swapWeapon();
+        if (entity.getComponent(WeaponInventoryComponent.class).getInventory().contains(weapon)) {
+          while (entity.getComponent(WeaponInventoryComponent.class).getActiveWeapon() != weapon) {
+            entity.getComponent(WeaponInventoryComponent.class).swapWeapon();
+          }
         }
       }
     }
@@ -94,5 +94,9 @@ public class EntityState {
         ", rotation=" + rotation +
         ", bindedEntity=" + bindedEntity +
         '}';
+  }
+
+  public void setID(int id) {
+    this.id = id;
   }
 }

@@ -35,30 +35,30 @@ public class GameInitializer {
 
   public GameInitializer() {
   }
-
+  public static Level lvl;
   public void run() {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
     // мультиплейерная часть
     MapInitializer mapInitializer = new MapInitializer();
-    Level lvl = mapInitializer.run();
+    lvl = mapInitializer.run();
     MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
     multiplayerInitializer.run();
     // мультиплейерная часть
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print()
-    grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, 160, 160, (type) -> {
+    /*grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, 160, 160, (type) -> {
       if (type == EntityType.WALL)
         return CellState.NOT_WALKABLE;
       return CellState.WALKABLE;
-    });
+    });*/
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
     try {
       System.out.println(HeroType.Elf.getName());
-      player = EntitySpawner.spawn(new NewEntity(HeroType.Elf.getName(),123,position,null)).get();
+      player = EntitySpawner.spawn(new NewEntity(HeroType.Knight.getName(),123,position,null)).get();
       //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);

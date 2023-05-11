@@ -45,13 +45,14 @@ public class WeaponViewComponent extends Component {
     Entity user = getEntity().getComponent(WeaponComponent.class).getUser();
     if (user != null) {
       Point2D userPos = user.getPosition();
-      Point2D vectorView;
+      Point2D vectorView=null;
       if (user.hasComponent(HeroViewComponent.class)) {
         vectorView = user.getComponent(HeroViewComponent.class).getDirectionView();
       }
-      else {
+      else if (user.hasComponent(EnemyViewComponent.class)) {
         vectorView = user.getComponent(EnemyViewComponent.class).getDirectionView();
       }
+      if (vectorView==null) return;
       rotation = FXGLMath.rotate(vectorView.normalize(), new Point2D(0, 0), angle);
       Point2D position = userPos.add(vectorView.normalize().multiply(imgRadius));
       getEntity().rotateToVector(rotation);

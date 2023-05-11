@@ -1,17 +1,25 @@
 package ru.nsu.fit.dib.projectdib.entity.components.fight;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.newLocalTimer;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.time.LocalTimer;
 import java.util.Map;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
+import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 
 public class ShootAttackComponent extends Component {
 
@@ -19,7 +27,6 @@ public class ShootAttackComponent extends Component {
   int rollback = 0;
 
   public void shoot() {
-
     if (!getEntity().hasComponent(WeaponInventoryComponent.class) ||
         getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null ||
         !getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(
@@ -30,10 +37,17 @@ public class ShootAttackComponent extends Component {
     if (!shootTimer.elapsed(Duration.millis(rollback))) {
       return;
     }
+    Point2D rotation = getEntity().getComponent(DataComponent.class).getRotation();
+    Point2D offsetVector = new Point2D(rotation.getY(),-rotation.getX()).normalize().multiply(40).add(-80,80);
     rollback = weapon.getComponent(WeaponComponent.class).getWeapon().getRollbackTime();
-    SpawnData sd = new SpawnData(getEntity().getPosition().getX() + 20, getEntity().getPosition().getY() + 30);
-    sd.put("projectileType",projectileMap.get(weapon.getComponent(WeaponComponent.class).getWeapon().getType()));
-    spawn("projectile", sd);
+    int attack=weapon.getComponent(DataAttackComponent.class).getAttack();
+    int damage=weapon.getComponent(DataAttackComponent.class).getDamage();
+    EntitySpawner.doAction(new Pair<>(MessageType.SPAWN,new SpawnAction(new NewEntity(projectileMap.get(
+        weapon.getComponent(WeaponComponent.class).getWeapon().getType()).getName(),
+        attack*1000+damage, new EntityState(-1,
+        getEntity().getAnchoredPosition().add(offsetVector),
+        getEntity().getComponent(DataComponent.class).getRotation(),
+        getEntity().getComponent(DataComponent.class).getId())))));
     shootTimer.capture();
   }
 

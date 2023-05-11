@@ -66,7 +66,7 @@ class FlatBurrersTest {
     Assertions.assertEquals(sa.getNewEntity().getState().getPosition(),newSA.getNewEntity().getState().getPosition());
     Assertions.assertEquals(sa.getNewEntity().getState().getRotation(),newSA.getNewEntity().getState().getRotation());
     Assertions.assertEquals(sa.getNewEntity().getState().getId(),newSA.getNewEntity().getState().getId());
-    Assertions.assertEquals(sa.getNewEntity().getState().getActiveWeapon(),newSA.getNewEntity().getState().getActiveWeapon());
+    Assertions.assertEquals(sa.getNewEntity().getState().getBindedEntity(),newSA.getNewEntity().getState().getBindedEntity());
   }
 
 }

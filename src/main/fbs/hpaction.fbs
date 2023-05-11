@@ -1,0 +1,9 @@
+namespace ru.nsu.fit.dib.projectdib.flatbuffersclasses.generated;
+
+table HPActionData {
+  attacking_id:int;
+  attacked_id:int;
+  attacked_hp:int;
+}
+
+root_type HPActionData;

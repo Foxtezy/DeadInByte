@@ -42,6 +42,9 @@ public class Receiver {
       case UPDATE -> {
         return new Pair<>(MessageType.UPDATE, FBSDeserializer.deserializeEntityStateList(byteBuffer));
       }
+      case HP -> {
+        return new Pair<>(MessageType.HP, FBSDeserializer.deserializeHPAction(byteBuffer));
+      }
       case SPAWN -> {
         return new Pair<>(MessageType.SPAWN, FBSDeserializer.deserializeSpawnAction(byteBuffer));
       }
@@ -53,6 +56,9 @@ public class Receiver {
       }
       case END_INIT -> {
         return new Pair<>(MessageType.END_INIT, null);
+      }
+      case START_GAME -> {
+        return new Pair<>(MessageType.START_GAME, null);
       }
       case MAP_SEED -> {
         return new Pair<>(MessageType.MAP_SEED, byteBuffer.getInt());

@@ -21,5 +21,12 @@ public class CreatureComponent extends Component {
     return creature;
   }
 
-  //Actions
+  public int getAttack() {
+    return 0;
+  }
+
+  public int getDamage() {
+    return 0;
+  }
+
 }
