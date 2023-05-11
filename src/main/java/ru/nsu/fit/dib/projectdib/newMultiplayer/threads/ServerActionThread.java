@@ -7,11 +7,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
+import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -100,7 +102,9 @@ public class ServerActionThread extends Thread {
           } else {
             spawnAction.getNewEntity().setWeaponId(nextEntityId++);
           }
-          MCServer.getServerState().addSpawnAction(spawnAction);
+          if (TypeChooser.getTypeByString(spawnAction.getNewEntity().getEntityType()) != EntityType.PROJECTILE) {
+            MCServer.getServerState().addSpawnAction(spawnAction);
+          }
           yield new Pair<>(MessageType.SPAWN, spawnAction);
         }
         default -> null;
