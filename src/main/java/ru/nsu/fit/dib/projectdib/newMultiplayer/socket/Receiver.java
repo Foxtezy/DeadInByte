@@ -57,6 +57,9 @@ public class Receiver {
       case END_INIT -> {
         return new Pair<>(MessageType.END_INIT, null);
       }
+      case START_GAME -> {
+        return new Pair<>(MessageType.START_GAME, null);
+      }
       case MAP_SEED -> {
         return new Pair<>(MessageType.MAP_SEED, byteBuffer.getInt());
       }
