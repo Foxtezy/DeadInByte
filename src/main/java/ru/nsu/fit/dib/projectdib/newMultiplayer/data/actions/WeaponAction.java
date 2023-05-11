@@ -36,9 +36,7 @@ public class WeaponAction extends GameAction{
         if (hero==null) throw new IllegalArgumentException("Hero with id "+heroId+" not found");
         if (weapon==null) throw new IllegalArgumentException("Weapon with id "+weaponId+" not found");
         if (hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon()==weapon) {
-          System.out.println(hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon());
           hero.getComponent(WeaponInventoryComponent.class).throwWeapon();
-          System.out.println(hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon());
         }
         else {
           int k=0;

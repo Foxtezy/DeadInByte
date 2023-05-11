@@ -37,14 +37,11 @@ public class Sender {
     System.arraycopy(data, 0, pt, 1, data.length);
     pt[0] = message.getKey().getId();
     try {
-
       DataOutputStream d = new DataOutputStream(address.getOutputStream());
       d.writeInt(pt.length);
       address.getOutputStream().write(pt);
-
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
-
 }

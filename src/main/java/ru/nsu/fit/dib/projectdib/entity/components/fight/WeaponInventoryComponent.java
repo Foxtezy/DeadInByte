@@ -14,6 +14,11 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.utils.CircularLinkedList;
 
 public class WeaponInventoryComponent extends Component {
+
+  public CircularLinkedList<Entity> getInventory() {
+    return inventory;
+  }
+
   private CircularLinkedList<Entity> inventory;
   private int activeWeapon;
   private int capacity;
