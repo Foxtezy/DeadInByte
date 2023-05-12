@@ -7,8 +7,6 @@ import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.pathfinding.astar.AStarCell;
-import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.google.javascript.jscomp.jarjar.javax.annotation.CheckForNull;
 import java.util.List;
@@ -16,14 +14,14 @@ import java.util.Map;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class EnemyAiComponent extends Component {
-
-  AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
-  AStarPathfinder path = new AStarPathfinder(geto("grid"));
+  LazyValue<AStarPathfinder> pathfinder = new LazyValue<>(() -> new AStarPathfinder(geto("grid")));
+  //AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
+  //AStarPathfinder path = new AStarPathfinder(geto("grid"));
+  AStar aStar = new AStar(new LazyValue<>(() -> geto("grid")));
   private Map<Integer, Entity> gameMapOfEntities = MCClient.getClientState().getIdHashTable();
   private Entity currentEnemy;
   private List<Entity> heroList;
@@ -35,7 +33,8 @@ public class EnemyAiComponent extends Component {
   public void onAdded() {
     currentEnemy = getEntity();
     currentEnemy.addComponent(aStar);
-    chase = new PlayerChaseComponent(aStar);
+    //currentEnemy.addComponent(aStar);
+    //chase = new PlayerChaseComponent(aStar);
   }
 
   @Override
@@ -44,13 +43,20 @@ public class EnemyAiComponent extends Component {
     if (target == null) {
       throw new NullPointerException("no hero in EnemyAiComponent in onUpdate()");
     }
-    List<AStarCell> cells = path.findPath((int) currentEnemy.getPosition().getX() / 16,
-        (int) currentEnemy.getPosition().getY() / 16,
-        (int) target.getPosition().getX() / 16, (int) target.getPosition().getY() / 16);
-    int x = cells.get(1).getX() / 16;
-    int y = cells.get(1).getY() / 16;
-    Point2D position = new Point2D(x, y);
-    currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(position);
+    int x = target.call("getCellX");
+    int y = target.call("getCellX");
+    currentEnemy.getComponent(AStar.class).moveToCell(x, y);
+    /*List<AStarCell> cells = path.findPath((int) currentEnemy.getPosition().getX(),
+        (int) currentEnemy.getPosition().getY(),
+        (int) target.getPosition().getX(), (int) target.getPosition().getY());*/
+    /*List<AStarCell> path = pathfinder.get().findPath((int) currentEnemy.getAnchoredPosition().getX() / 16,
+        (int) currentEnemy.getAnchoredPosition().getY() / 16,
+        target.call("getCellX"), target.call("getCellY"));*/
+    //int x = path.get(1).getX();
+    //int y = path.get(1).getY();
+    //Point2D position = new Point2D(x, y);
+    //currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(position);
+    //currentEnemy.getComponent(AStarMoveComponent.class).moveToCell(x, y);
     // chase.move(target);
 //    chase.move(target);
 //    currentEnemy.getComponent(PlayerChaseComponent.class).move(target);
