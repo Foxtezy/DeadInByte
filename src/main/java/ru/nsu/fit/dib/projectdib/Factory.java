@@ -19,7 +19,6 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
@@ -43,6 +42,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.CellMove;
 import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.EnemyAiComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.MeleeAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
@@ -124,7 +124,8 @@ public class Factory implements EntityFactory {
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
-        .with(new CellMoveComponent(16, 16, 250))
+        //.with(new CellMoveComponent(16, 16, 250))
+        .with(new CellMove(16, 16, 250))
         .with(new HealthIntComponent(creature.getMaxHP()))
         /*  .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with()*/
@@ -150,7 +151,8 @@ public class Factory implements EntityFactory {
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
         .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
-        .with(new CellMoveComponent(16, 16, 250))
+        //.with(new CellMoveComponent(16, 16, 250))
+        .with(new CellMove(16, 16, 250))
         //.with(aStar)
         //.with(new PlayerChaseComponent(aStar))
         .with(new EnemyAiComponent());

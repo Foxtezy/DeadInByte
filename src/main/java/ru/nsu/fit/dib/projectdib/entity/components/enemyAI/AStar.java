@@ -5,7 +5,6 @@ import com.almasb.fxgl.core.util.EmptyRunnable;
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.component.Required;
-import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarCell;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
@@ -14,13 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import javafx.beans.value.ChangeListener;
-import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 
-@Required(CellMoveComponent.class)
+@Required(CellMove.class)
 public final class AStar extends Component {
 
-  private CellMoveComponent moveComponent;
+  private CellMove moveComponent;
 
   private LazyValue<AStarPathfinder> pathfinder;
 
@@ -48,7 +45,7 @@ public final class AStar extends Component {
 
   @Override
   public void onAdded() {
-    moveComponent = entity.getComponent(CellMoveComponent.class);
+    moveComponent = entity.getComponent(CellMove.class);
 
     moveComponent.atDestinationProperty().addListener(isAtDestinationListener);
   }
@@ -163,9 +160,9 @@ public final class AStar extends Component {
     var next = path.remove(0);
 
     // move to next adjacent cell
+    //Point2D nextPosition = new Point2D(next.getX() * 16, next.getY() * 16);
+    //entity.getComponent(ServerControlComponent.class).moveToPoint(nextPosition);
     moveComponent.moveToCell(next.getX(), next.getY());
-    Point2D nextPosition = new Point2D(next.getX(), next.getY());
-    entity.getComponent(ServerControlComponent.class).moveToPoint(nextPosition);
   }
 
   @Override

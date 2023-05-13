@@ -43,8 +43,15 @@ public class EnemyAiComponent extends Component {
     if (target == null) {
       throw new NullPointerException("no hero in EnemyAiComponent in onUpdate()");
     }
-    int x = target.call("getCellX");
-    int y = target.call("getCellX");
+    //int x = (int) target.call("getCellX") / 16;
+    //int y = (int) target.call("getCellY") / 16;
+    //currentEnemy.getComponent(AStar.class).moveToCell(x, y);
+    //Point2D newPosition = new Point2D(x, y);
+    //int x = (int) target.getAnchoredPosition().getX() / 16;
+    //int y = (int) target.getAnchoredPosition().getY() / 16;
+    int x = target.getComponent(CellMove.class).getCellX();
+    int y = target.getComponent(CellMove.class).getCellY();
+    //currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(target.getAnchoredPosition());
     currentEnemy.getComponent(AStar.class).moveToCell(x, y);
     /*List<AStarCell> cells = path.findPath((int) currentEnemy.getPosition().getX(),
         (int) currentEnemy.getPosition().getY(),
