@@ -2,7 +2,7 @@ package ru.nsu.fit.dib.projectdib.data;
 
 import javafx.scene.input.KeyCode;
 
-public class Controls implements StaticJSON {
+public class Controls{
 
   public static KeyCode UP = KeyCode.W;
   public static KeyCode LEFT = KeyCode.A;

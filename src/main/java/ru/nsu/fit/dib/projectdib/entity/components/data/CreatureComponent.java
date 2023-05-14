@@ -4,6 +4,7 @@ import com.almasb.fxgl.entity.component.Component;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
+import ru.nsu.fit.dib.projectdib.ui.HPBar;
 
 /**
  * Only Data
@@ -11,7 +12,6 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 public class CreatureComponent extends Component {
 
   protected Creature creature;
-
   public CreatureComponent(Creature creature) {
     this.creature=creature;
   }
@@ -28,5 +28,4 @@ public class CreatureComponent extends Component {
   public int getDamage() {
     return 0;
   }
-
 }

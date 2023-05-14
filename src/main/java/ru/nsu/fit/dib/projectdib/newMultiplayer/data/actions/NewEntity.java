@@ -2,13 +2,16 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
+import com.almasb.fxgl.core.util.Platform;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.ui.UIController;
 import java.util.Objects;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
+import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
@@ -23,6 +26,7 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
+import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 
 public class NewEntity {
 
@@ -65,8 +69,16 @@ public class NewEntity {
         return newEntity(owner, creature);
       }
       case PLAYER ->{
-        Creature creature = HeroesFactory.newHero(HeroType.getByName(entityType),seed);
-        return newEntity(owner, creature);
+        Creature creature = HeroesFactory.newHero(HeroType.getByName(entityType),seed);;
+        Entity entity = newEntity(owner, creature);
+        synchronized (App.uiController.queue){
+          if (App.uiController == null) {
+            GameUIController.queue.add(entity);
+          } else {
+            App.uiController.addHPBar(entity);
+          }
+        }
+        return entity;
       }
       case WEAPON->{
         Weapon weapon = WeaponFactory.getWeapon(Weapons.getByName(entityType));

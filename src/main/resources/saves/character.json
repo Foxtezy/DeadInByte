@@ -1,10 +1,8 @@
 {
   "type": "elf",
   "weapon": "sword",
-  "MaxHP": 10,
+  "maxHP": 10,
   "HP": 8,
-  "maxMana": 6,
-  "Mana": 3,
   "specs": [
     8,
     20,

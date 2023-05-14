@@ -36,6 +36,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponen
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
@@ -44,6 +45,7 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.ui.HPBar;
 
 /**
  * Class Factory for making Entities.
@@ -110,6 +112,7 @@ public class Factory implements EntityFactory {
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
         .with(new HealthIntComponent(creature.getMaxHP()))
+        .with(new HPViewComponent(creature.getType(), creature.getMaxHP()))
         .build();
   }
   //        .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))

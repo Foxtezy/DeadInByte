@@ -43,7 +43,7 @@ public class SettingsLoader {
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig(_cfg);
-    JSONLoader.loadConfig(CONTROLS_PATH, Controls.class);
+    JSONLoader.load(CONTROLS_PATH, Controls.class);
     // Window mod
     switch (Config.WINDOW_MODE) {
       case "Window" -> {
