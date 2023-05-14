@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class HPAction extends GameAction {
@@ -23,6 +24,7 @@ public class HPAction extends GameAction {
     Entity attacked = table.get(attackedID);
     var HPComponent = attacked.getComponent(HealthIntComponent.class);
     HPComponent.setValue(attackedHP);
+    attacked.getComponent(HPViewComponent.class).updateHPBar();
     System.out.println(attacked.getType()+" HP:"+HPComponent.getValue());
     if (HPComponent.isZero()){
       Platform.runLater(()->{

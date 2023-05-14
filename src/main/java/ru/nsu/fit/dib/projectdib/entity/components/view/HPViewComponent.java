@@ -33,7 +33,7 @@ public class HPViewComponent extends Component {
 
   public void updateHPBar() {
     if (entityType==EntityType.PLAYER) {
-      hpBar = new HPBar(getEntity().getComponent(HealthIntComponent.class).getValue());
+      hpBar.setValue(getEntity().getComponent(HealthIntComponent.class).getValue());
     } else {
 
     }

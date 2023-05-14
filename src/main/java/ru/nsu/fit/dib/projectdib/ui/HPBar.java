@@ -18,7 +18,10 @@ public class HPBar extends HBox {
   @FXML
   public ImageView icon;
   private int persent;
+  private double maxHP;
+
   public HPBar(int maxValue){
+    maxHP=maxValue;
     persent = maxValue/100;
     FXMLLoader loader = null;
     loader = new FXMLLoader(getClass().getClassLoader().getResource("assets/ui/HPBar.fxml"));
@@ -51,5 +54,9 @@ public class HPBar extends HBox {
 
   public ProgressBar getHpBar() {
     return hpBar;
+  }
+
+  public void setValue(int value) {
+    hpBar.setProgress(maxHP - value*persent);
   }
 }
