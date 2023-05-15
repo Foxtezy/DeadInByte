@@ -61,9 +61,7 @@ public final class GameUIController implements UIController {
     });
     character = new ImageButton("character",new Image("assets/ui/elements/character_selected.png"),new Image("assets/ui/elements/character.png"));
     character.setOnMouseClicked(event -> {
-      menu.setDisable(true);
-      character.setDisable(true);
-      characterMenu.show();
+        characterMenu.show();
     });
     buttonsBox.getChildren().add(character);
     buttonsBox.getChildren().add(menu);

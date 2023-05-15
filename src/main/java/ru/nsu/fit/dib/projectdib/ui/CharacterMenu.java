@@ -1,6 +1,7 @@
 package ru.nsu.fit.dib.projectdib.ui;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.texture.AnimatedTexture;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.ImageView;
@@ -25,7 +26,6 @@ public class CharacterMenu extends AnchorPane {
 
   public CharacterMenu(Entity player, GameUIController gameUIController){
     this.player = player;
-    hero = player.getComponent(HeroViewComponent.class).getView();
     this.gameUIController = gameUIController;
     FXMLLoader loader = null;
     loader = new FXMLLoader(getClass().getClassLoader().getResource("assets/ui/charactermenu.fxml"));
@@ -38,6 +38,8 @@ public class CharacterMenu extends AnchorPane {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    hero.setImage(player.getComponent(HeroViewComponent.class).getView().getImage());
+    hero.viewportProperty().set(player.getComponent(HeroViewComponent.class).getView().getViewport());
     close.setOnMouseClicked(event -> closeWindow());
   }
 
@@ -55,8 +57,5 @@ public class CharacterMenu extends AnchorPane {
   public void closeWindow(){
     this.setVisible(false);
     this.setDisable(true);
-    gameUIController.menu.setDisable(false);
-    gameUIController.character.setDisable(false);
   }
-
 }
