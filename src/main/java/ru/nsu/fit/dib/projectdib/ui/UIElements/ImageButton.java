@@ -16,7 +16,6 @@ public class ImageButton extends StackPane {
 
   ImageView iv;
   Text text;
-
   public ImageButton(String name, Font font, String unpushedColor, String pushedColor,
       final Image pushed, final Image unpushed) {
     iv = new ImageView(unpushed);
