@@ -64,6 +64,8 @@ import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
  */
 public class MainMenu extends FXGLMenu {
 
+  private final Font font;
+
   public MainMenu(MenuType type) {
     super(type);
     Pane canvas = getContentRoot();
@@ -130,7 +132,7 @@ public class MainMenu extends FXGLMenu {
     ImageView loading = new ImageView(new Image(_loadingAnimation));
     //======================================[     Fonts     ]=======================================
     ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    Font font = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 65);
+    font = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 65);
     Font bigFont = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 140);
     Font smallFont = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 50);
     //=====================================[    GameName    ]=======================================

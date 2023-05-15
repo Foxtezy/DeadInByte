@@ -33,6 +33,7 @@ public final class GameUIController implements UIController {
   ImageButton menu;
   ImageButton character;
   CharacterMenu characterMenu;
+  QuitMenu quitMenu;
 
   public GameUIController(GameScene gameScene) {
     this.gameScene = gameScene;
@@ -51,13 +52,22 @@ public final class GameUIController implements UIController {
     characterMenu.setVisible(false);
     characterMenu.setScaleX(2.0);
     characterMenu.setScaleY(2.0);
-    mainPane.getChildren().add(characterMenu);
+    quitMenu = new QuitMenu();
+    quitMenu.initialize();
+    quitMenu.setMinHeight(gameScene.getViewport().getHeight());
+    quitMenu.setMinWidth(gameScene.getViewport().getWidth());
+    quitMenu.setVisible(false);
+    quitMenu.setDisable(true);
+    mainPane.getChildren().addAll(characterMenu,quitMenu);
   }
 
   private void addButtons() {
     menu = new ImageButton("menu",new Image("assets/ui/elements/menu_selected.png"),
         new Image("assets/ui/elements/menu.png"));
     menu.setOnMouseClicked(event->{
+      System.out.println("123123");
+      quitMenu.setDisable(false);
+      quitMenu.setVisible(true);
     });
     character = new ImageButton("character",new Image("assets/ui/elements/character_selected.png"),new Image("assets/ui/elements/character.png"));
     character.setOnMouseClicked(event -> {
