@@ -173,46 +173,53 @@ public final class CellMove extends Component {
 
     double tpfSpeed = tpf * speed;
 
-    // cell center
+    // cell center координаты середины клетки цели
     int cx = nextCellX * cellWidth + cellWidth / 2;
     int cy = nextCellY * cellHeight + cellHeight / 2;
 
     var entityAnchoredPosition = entity.getAnchoredPosition();
 
     // move in x and y per frame
+    // разность в координатах до следующей клетки
     double dx = cx - entityAnchoredPosition.getX();
     double dy = cy - entityAnchoredPosition.getY();
 
-    if (isAllowRotation)
-      updateRotation(dx, dy);
+    // повороты useless
+//    if (isAllowRotation)
+//      updateRotation(dx, dy);
 
     int offsetX = (int) (entityAnchoredPosition.getX() - entity.getX());
     int offsetY = (int) (entityAnchoredPosition.getY() - entity.getY());
-
+    double x;
+    double y;
     if (abs(dx) <= tpfSpeed) {
       isMovingLeft = false;
       isMovingRight = false;
       entity.setX(cx - offsetX);
+    //  x = cx - offsetX;
     } else {
       isMovingLeft = Math.signum(dx) < 0;
       isMovingRight = Math.signum(dx) > 0;
       entity.translateX(tpfSpeed * Math.signum(dx));
+      //x = tpfSpeed * Math.signum(dx);
     }
 
     if (abs(dy) <= tpfSpeed) {
       isMovingUp = false;
       isMovingDown = false;
       entity.setY(cy - offsetY);
+     // y = cy - offsetY;
     } else {
       isMovingUp = Math.signum(dy) < 0;
       isMovingDown = Math.signum(dy) > 0;
       entity.translateY(tpfSpeed * Math.signum(dy));
+     // y = tpfSpeed * Math.signum(dy);
     }
 
     Point2D newPosition = new Point2D(cx - offsetX, cy - offsetY);
     entity.getComponent(ServerControlComponent.class).moveToPoint(newPosition);
 
-    // get position after movement
+    // get position after movement entityAnchoredPosition = Point2D
     entityAnchoredPosition = entity.getAnchoredPosition();
 
     if ((int) entityAnchoredPosition.getX() == cx && (int) entityAnchoredPosition.getY() == cy) {

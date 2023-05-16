@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.entity.components.enemyAI;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.util.EmptyRunnable;
 import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.component.Required;
 import com.almasb.fxgl.pathfinding.astar.AStarCell;
@@ -13,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import javafx.beans.value.ChangeListener;
+import ru.nsu.fit.dib.projectdib.EntityType;
+
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.lengthOfCell;
 
 @Required(CellMove.class)
 public final class AStar extends Component {
@@ -154,10 +158,20 @@ public final class AStar extends Component {
 
   @Override
   public void onUpdate(double tpf) {
+//    System.out.println("path.isEmpty() " + path.isEmpty());
+//    System.out.println("!moveComponent.isAtDestination()" + !moveComponent.isAtDestination());
     if (path.isEmpty() || !moveComponent.isAtDestination())
       return;
 
     var next = path.remove(0);
+    //    System.out.println("CELL =" + next + " X = "+ (next.getX()*lengthOfCell+lengthOfCell/2) +
+    // " Y = " + (next.getY()*lengthOfCell+lengthOfCell/2));
+    //    System.out.println("          ENEMY = " + entity.getPosition());
+    //    System.out.println("          HERO  = " +
+    // FXGL.getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
+    //    System.out.println(" ");
+
+
 
     // move to next adjacent cell
     //Point2D nextPosition = new Point2D(next.getX() * 16, next.getY() * 16);

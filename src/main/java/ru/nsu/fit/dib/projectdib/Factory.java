@@ -6,6 +6,7 @@ import static com.almasb.fxgl.dsl.FXGL.geto;
 import static com.almasb.fxgl.dsl.FXGL.image;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.texture;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.lengthOfCell;
 
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.EntityBuilder;
@@ -88,7 +89,7 @@ public class Factory implements EntityFactory {
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
     return entityBuilder()
-        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
+        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(79, 79)))
         .anchorFromCenter()
         .with(physics)
         .collidable();
@@ -125,7 +126,7 @@ public class Factory implements EntityFactory {
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
         //.with(new CellMoveComponent(16, 16, 250))
-        .with(new CellMove(16, 16, 250))
+        .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         .with(new HealthIntComponent(creature.getMaxHP()))
         /*  .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with()*/
@@ -152,7 +153,7 @@ public class Factory implements EntityFactory {
         .with(new WeaponInventoryComponent(1))
         .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
         //.with(new CellMoveComponent(16, 16, 250))
-        .with(new CellMove(16, 16, 250))
+        .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         //.with(aStar)
         //.with(new PlayerChaseComponent(aStar))
         .with(new EnemyAiComponent());

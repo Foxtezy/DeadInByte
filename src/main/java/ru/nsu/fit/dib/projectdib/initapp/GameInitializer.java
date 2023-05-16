@@ -5,6 +5,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.lengthOfCell;
 
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
@@ -51,11 +52,14 @@ public class GameInitializer {
     // мультиплейерная часть
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map);
     //lvl.print()
-    grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, 160, 160, (type) -> {
-      if (type == EntityType.WALL)
-        return CellState.NOT_WALKABLE;
-      return CellState.WALKABLE;
-    });
+    grid = AStarGrid.fromWorld(getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), lengthOfCell, lengthOfCell,
+            (entityType) -> {
+              if (entityType == EntityType.WALL) {
+                return CellState.NOT_WALKABLE;
+              }
+              return CellState.WALKABLE;
+            });
+
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
@@ -63,15 +67,8 @@ public class GameInitializer {
       System.out.println(HeroType.Elf.getName());
       player = EntitySpawner.spawn(new NewEntity(HeroType.Knight.getName(),123,position,null)).get();
 
-      AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 16, 16,
-              (type) -> {
-                if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-                  return CellState.NOT_WALKABLE;
-                }
-
-                return CellState.WALKABLE;
-              });
       set("grid", grid);
+      System.out.println("CELLS " + grid.getCells().stream().filter(cell -> !cell.isWalkable()).toList());
       Entity enemy = EntitySpawner.spawn(new NewEntity(EnemiesFactory.EnemyType.Devil.getName(), 456, position.subtract(new Point2D(160, 320)), null)).get();
       enemy.getComponent(PhysicsComponent.class).setLinearVelocity(100, 100);
       //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());

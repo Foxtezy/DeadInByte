@@ -11,6 +11,7 @@ public interface ProjectConfig {
   //PlayerConfig
   String _player = "assets/textures/HeroesMovementSpriteSheet.png";
   String _enemy = "assets/textures/Sprite-0001-export.png";
+  int lengthOfCell = 80; //TODO
   int _enemy_numberColumns = 8;
   int _enemy_width = 160;
   int _enemy_height = 320;
