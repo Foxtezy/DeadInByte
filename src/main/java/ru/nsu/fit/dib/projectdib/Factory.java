@@ -27,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.entity.Spawner;
 import ru.nsu.fit.dib.projectdib.entity.components.*;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
@@ -55,7 +56,7 @@ public class Factory implements EntityFactory {
     sd.put("creature", creature);
     sd.put("id",id);
     sd.put("owner",ownerID);
-    Entity enemy = spawn(creature.getEntityType().getName(), sd);
+    Entity enemy = Spawner.spawn(creature.getEntityType().getName(), sd);
     enemy.setScaleUniform(0.75);
     return enemy;
   }
@@ -64,7 +65,7 @@ public class Factory implements EntityFactory {
     sd.put("id", id);
     sd.put("owner",ownerID);
     sd.put("weapon", weapon);
-    Entity entity = spawn("weapon", sd);
+    Entity entity = Spawner.spawn("weapon", sd);
     entity.setScaleUniform(0.75);
     return entity;
   }
