@@ -196,27 +196,27 @@ public final class CellMove extends Component {
       isMovingLeft = false;
       isMovingRight = false;
       entity.setX(cx - offsetX);
-    //  x = cx - offsetX;
+      x = cx - offsetX;
     } else {
       isMovingLeft = Math.signum(dx) < 0;
       isMovingRight = Math.signum(dx) > 0;
       entity.translateX(tpfSpeed * Math.signum(dx));
-      //x = tpfSpeed * Math.signum(dx);
+      x = (int) (entity.getX() + tpfSpeed * Math.signum(dx));
     }
 
     if (abs(dy) <= tpfSpeed) {
       isMovingUp = false;
       isMovingDown = false;
       entity.setY(cy - offsetY);
-     // y = cy - offsetY;
+      y = cy - offsetY;
     } else {
       isMovingUp = Math.signum(dy) < 0;
       isMovingDown = Math.signum(dy) > 0;
       entity.translateY(tpfSpeed * Math.signum(dy));
-     // y = tpfSpeed * Math.signum(dy);
+      y = (int) (entity.getY() + tpfSpeed * Math.signum(dy));
     }
 
-    Point2D newPosition = new Point2D(cx - offsetX, cy - offsetY);
+    Point2D newPosition = new Point2D(x, y);
     entity.getComponent(ServerControlComponent.class).moveToPoint(newPosition);
 
     // get position after movement entityAnchoredPosition = Point2D

@@ -164,12 +164,13 @@ public final class AStar extends Component {
       return;
 
     var next = path.remove(0);
-    //    System.out.println("CELL =" + next + " X = "+ (next.getX()*lengthOfCell+lengthOfCell/2) +
-    // " Y = " + (next.getY()*lengthOfCell+lengthOfCell/2));
-    //    System.out.println("          ENEMY = " + entity.getPosition());
-    //    System.out.println("          HERO  = " +
-    // FXGL.getGameWorld().getSingleton(EntityType.PLAYER).getPosition());
-    //    System.out.println(" ");
+ //   System.out.println(getGrid().getCells().g);
+        System.out.println("CELL =" + next + " X = "+ (next.getX()*lengthOfCell+lengthOfCell/2) +
+     " Y = " + (next.getY()*lengthOfCell+lengthOfCell/2));
+
+
+        System.out.println("          ENEMY = " + entity.getPosition());
+        System.out.println(" ");
 
 
 
