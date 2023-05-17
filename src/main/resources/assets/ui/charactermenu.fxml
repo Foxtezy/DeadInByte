@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root prefHeight="400.0" prefWidth="600.0" type="AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="2.0" scaleY="2.0">
+               <image>
+                  <Image url="@elements/character_specs.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="close" fitHeight="28.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" translateX="195.0" translateY="-115.0">
+               <image>
+                  <Image url="@elements/close.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="hero" fitHeight="150.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" translateX="-110.0" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Character cpecs" translateX="65.0" translateY="-70.0" wrappingWidth="161.07815408706665">
+               <font>
+                  <Font name="Agency FB" size="30.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="str" translateX="-18.0" translateY="-20.0">
+               <font>
+                  <Font name="Agency FB" size="20.0" />
+               </font></Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="agil" translateX="-18.0" translateY="25.0">
+               <font>
+                  <Font name="Agency FB" size="20.0" />
+               </font></Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="dur" translateX="-20.0" translateY="70.0">
+               <font>
+                  <Font name="Agency FB" size="20.0" />
+               </font></Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="int" translateX="90.0" translateY="-20.0">
+               <font>
+                  <Font name="Agency FB" size="20.0" />
+               </font></Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="wis" translateX="90.0" translateY="25.0">
+               <font>
+                  <Font name="Agency FB" size="20.0" />
+               </font></Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="char" translateX="95.0" translateY="70.0">
+               <font>
+                  <Font name="Agency FB" size="20.0" />
+               </font></Text>
+         <Text fx:id="str" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" translateX="8.0" translateY="-18.0">
+            <font>
+               <Font name="Agency FB" size="20.0" />
+            </font></Text>
+         <Text fx:id="agil" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" translateX="8.0" translateY="27.0">
+            <font>
+               <Font name="Agency FB" size="20.0" />
+            </font></Text>
+         <Text fx:id="dur" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" translateX="8.0" translateY="72.0">
+            <font>
+               <Font name="Agency FB" size="20.0" />
+            </font></Text>
+         <Text fx:id="intel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" translateX="118.0" translateY="-18.0">
+            <font>
+               <Font name="Agency FB" size="20.0" />
+            </font></Text>
+         <Text fx:id="wis" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" translateX="118.0" translateY="27.0">
+            <font>
+               <Font name="Agency FB" size="20.0" />
+            </font></Text>
+         <Text fx:id="charis" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" translateX="118.0" translateY="72.0">
+            <font>
+               <Font name="Agency FB" size="20.0" />
+            </font></Text>
+      </StackPane>
+   </children>
+</fx:root>

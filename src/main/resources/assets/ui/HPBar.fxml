@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root alignment="BOTTOM_LEFT" prefWidth="300.0" type="HBox" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="icon" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets left="20.0" right="20.0" />
+         </HBox.margin></ImageView>
+    <ProgressBar fx:id="hpBar" prefHeight="40.0" prefWidth="300.0" progress="0.0" style="-fx-accent: #5ae8a8;" />
+   </children>
+   <padding>
+      <Insets bottom="25.0" top="20.0" />
+   </padding>
+</fx:root>

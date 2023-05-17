@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class JSONLoader {
-  public static void loadConfig(String path, Class<? extends StaticJSON> loadedClass){
+  public static void load(String path, Class<?> loadedClass){
     File file = new File(path);
     try {
       if (!file.exists()) {

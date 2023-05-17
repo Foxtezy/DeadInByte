@@ -1,9 +1,9 @@
 package ru.nsu.fit.dib.projectdib.entity.components.view;
 
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_height;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_numberColumns;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._player_width;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.heroes_image;
 
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.scene.image.Image;
@@ -11,7 +11,7 @@ import javafx.util.Duration;
 
 public class HeroViewComponent extends CreatureViewComponent {
 
-  private static final Image image = new Image(_player);
+  private static final Image image = heroes_image;
 
   public HeroViewComponent(int heroNumber) {
     super(new AnimationChannel(image,

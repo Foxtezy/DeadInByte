@@ -57,10 +57,14 @@ public class CreatureBuilder {
 
   public CreatureBuilder setSpecs(int strength, int agility, int durability,
       int intelligence, int wisdom, int charisma) {
-    this.specs = new int[]{strength, agility, durability, intelligence, wisdom, charisma};
+    int[] specs = new int[]{strength, agility, durability, intelligence, wisdom, charisma};
+    setSpecs(specs);
     return this;
   }
-
+  public CreatureBuilder setSpecs(int[] specs) {
+    this.specs = specs;
+    return this;
+  }
   public CreatureBuilder setWeapon(Weapons weaponType) {
     this.weaponType = weaponType;
     return this;
