@@ -61,7 +61,7 @@ public class GameInitializer {
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
     try {
-      System.out.println(HeroType.Elf.getName());
+      System.out.println(HeroType.Knight.getName());
       player = EntitySpawner.spawn(new NewEntity(HeroType.JonnyS.getName(),123,position,null)).get();
       //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {

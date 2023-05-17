@@ -17,7 +17,7 @@ public class HPBar extends HBox {
   public ProgressBar hpBar;
   @FXML
   public ImageView icon;
-  private int persent;
+  private double persent;
   private double maxHP;
 
   public HPBar(int maxValue){
@@ -57,6 +57,6 @@ public class HPBar extends HBox {
   }
 
   public void setValue(int value) {
-    hpBar.setProgress(maxHP - value*persent);
+    hpBar.setProgress(value*persent);
   }
 }

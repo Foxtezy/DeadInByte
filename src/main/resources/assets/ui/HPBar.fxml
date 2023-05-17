@@ -11,7 +11,7 @@
          <HBox.margin>
             <Insets left="20.0" right="20.0" />
          </HBox.margin></ImageView>
-    <ProgressBar fx:id="hpBar" prefHeight="40.0" prefWidth="300.0" progress="0.0" style="-fx-background-color: #2b2944; -fx-border-color: #2b2944; -fx-accent: #2b2944;" />
+    <ProgressBar fx:id="hpBar" prefHeight="40.0" prefWidth="300.0" progress="0.0" style="-fx-background-color: #5ae8a8; -fx-border-color: #5ae8a8; -fx-accent: #5ae8a8;" />
    </children>
    <padding>
       <Insets bottom="25.0" top="20.0" />

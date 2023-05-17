@@ -16,7 +16,7 @@ public class HPViewComponent extends Component {
   private HPBar hpBar;
 
   public HPViewComponent(CreatureType type, int maxValue) {
-
+    System.out.println("player "+type+", max:"+maxValue);
     if (TypeChooser.getTypeByString(type.getName())==EntityType.PLAYER){
       hpBar = new HPBar(maxValue);
       hpBar.setIcon(heroes_image);
@@ -34,8 +34,6 @@ public class HPViewComponent extends Component {
   public void updateHPBar() {
     if (entityType==EntityType.PLAYER) {
       hpBar.setValue(getEntity().getComponent(HealthIntComponent.class).getValue());
-    } else {
-
     }
   }
 
