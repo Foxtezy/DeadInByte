@@ -13,6 +13,7 @@ public interface ProjectConfig {
   String _enemy = "assets/textures/Sprite-0001-export.png";
   int lengthOfCell = 160; //TODO
   int _enemy_numberColumns = 8;
+  double rangeOfVision = lengthOfCell * 8;
   int _enemy_width = 160;
   int _enemy_height = 320;
   int _player_numberColumns = 13;

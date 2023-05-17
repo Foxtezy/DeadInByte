@@ -43,6 +43,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.AStar;
 import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.CellMove;
 import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.EnemyAiComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.MeleeAttackComponent;
@@ -125,7 +126,7 @@ public class Factory implements EntityFactory {
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
-        //.with(new CellMoveComponent(16, 16, 250))
+        // .with(new CellMoveComponent(16, 16, 250))
         .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         .with(new HealthIntComponent(creature.getMaxHP()))
         /*  .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))

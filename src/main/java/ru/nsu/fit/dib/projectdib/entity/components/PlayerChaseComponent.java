@@ -31,7 +31,7 @@ public class PlayerChaseComponent extends Component {
   public void move(Entity entityTarget) {
 //    var player = FXGL.getGameWorld().getSingleton(EntityType.PLAYER);
 //    //var enemy = FXGL.getGameWorld().getSingleton(EntityType.ENEMY);
-//    int x = player.call("getCellX");
+//    int x =
 //    int y = player.call("getCellY");
 //   if (player.isColliding(enemy.getEntity())) {
 //      enemy.stopMovement();

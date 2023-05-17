@@ -165,13 +165,6 @@ public final class AStar extends Component {
 
     var next = path.remove(0);
  //   System.out.println(getGrid().getCells().g);
-        System.out.println("CELL =" + next + " X = "+ (next.getX()*lengthOfCell+lengthOfCell/2) +
-     " Y = " + (next.getY()*lengthOfCell+lengthOfCell/2));
-
-
-        System.out.println("          ENEMY = " + entity.getPosition());
-        System.out.println(" ");
-
 
 
     // move to next adjacent cell

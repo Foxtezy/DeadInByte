@@ -111,7 +111,7 @@ public class GameInitializer {
     //===================================
     viewport.setWidth(getAppWidth());
     viewport.setHeight(getAppHeight());
-    viewport.setZoom(0.25);
+    viewport.setZoom(0.75);
     viewport.focusOn(player);
     viewport.setBounds(0, 0, 64 * 160, 64 * 160);
     viewport.bindToEntity(player, viewport.getWidth() / 2-40, viewport.getHeight() / 2-120);
