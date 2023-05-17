@@ -56,7 +56,7 @@ public class GameInitializer {
     multiplayerInitializer.run();
     // мультиплейерная часть
     System.out.println("appHeight " + getAppHeight() + "appWidth " + getAppWidth());
-      grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, lengthOfCell, lengthOfCell,
+      grid = AStarGrid.fromWorld(getGameWorld(), 65, 65, lengthOfCell, lengthOfCell,
               (entityType) -> {
               /*    if (entityType != EntityType.WALL) {
                       return CellState.WALKABLE;
@@ -82,30 +82,6 @@ public class GameInitializer {
       List<AStarCell> nonWalkable = grid.getCells().stream().filter(cell -> !cell.isWalkable()).toList();
     System.out.println(nonWalkable);
     set("grid", grid);
-    boolean t = true;
-    for (int y = 0; y < 65; y++) {
-      for (int x = 0; x < 65; x++) {
-        char c = '.';
-        if (grid.get(y,x).isWalkable() && lvl.map[y][x] != BlockDensity.WALL.density) {
-          c = '#';
-        }
-          if (!grid.get(y,x).isWalkable() && lvl.map[y][x] == BlockDensity.WALL.density) {
-            c = '#';
-          }
-        if (grid.get(y,x).isWalkable() && lvl.map[y][x] == BlockDensity.WALL.density) {
-          c = '!';
-          t = false;
-        }
-        if (!grid.get(y,x).isWalkable() && lvl.map[y][x] != BlockDensity.WALL.density) {
-          c = '&';
-          t = false;
-        }
-
-        System.out.printf("%2c", c);
-      }
-      System.out.println();
-    }
-    System.out.println("t = " + t);
 
     System.out.println("CELLS IN GRID = " + grid.getCells().size());
     System.out.println("COUNT of NON_WALKABLE: " + nonWalkable.size());
