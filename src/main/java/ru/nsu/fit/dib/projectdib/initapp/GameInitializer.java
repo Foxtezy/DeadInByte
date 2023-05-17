@@ -11,6 +11,7 @@ import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.ui.UI;
 import com.almasb.fxgl.ui.UIController;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;

@@ -61,10 +61,9 @@ public class Level implements Serializable {
     //проверка на возможность входа во все комнаты и выбор старта и финиша + список комнат,
     // которые посетит игрок при минимальном пути.
     checkingEntrance();
-    //print();
+    print();
     //Здесь будет вызываться RoomGenerator
   }
-
   private void checkingEntrance() {
     FindWay best = null;
 

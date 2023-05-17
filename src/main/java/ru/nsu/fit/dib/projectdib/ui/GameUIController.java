@@ -65,7 +65,6 @@ public final class GameUIController implements UIController {
     menu = new ImageButton("menu",new Image("assets/ui/elements/menu_selected.png"),
         new Image("assets/ui/elements/menu.png"));
     menu.setOnMouseClicked(event->{
-      System.out.println("123123");
       quitMenu.setDisable(false);
       quitMenu.setVisible(true);
     });

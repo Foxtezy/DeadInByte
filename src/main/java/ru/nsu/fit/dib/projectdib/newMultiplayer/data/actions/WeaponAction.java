@@ -33,25 +33,25 @@ public class WeaponAction extends GameAction{
       case THROW -> {
         Entity hero = MCClient.getClientState().getIdHashTable().get(heroId);
         Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponId);
-        if (hero==null) throw new IllegalArgumentException("Hero with id "+heroId+" not found");
-        if (weapon==null) throw new IllegalArgumentException("Weapon with id "+weaponId+" not found");
+        if (hero==null) return;
+        if (weapon==null) return;
         if (hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon()==weapon) {
           hero.getComponent(WeaponInventoryComponent.class).throwWeapon();
         }
         else {
           int k=0;
-          while(hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon()!=weapon
-              && k<=hero.getComponent(WeaponInventoryComponent.class).size()){
-            k++;
-            hero.getComponent(WeaponInventoryComponent.class).swapWeapon();
+          if (hero.getComponent(WeaponInventoryComponent.class).getInventory().contains(weapon)) {
+            while (hero.getComponent(WeaponInventoryComponent.class).getActiveWeapon() != weapon) {
+              hero.getComponent(WeaponInventoryComponent.class).swapWeapon();
+            }
           }
           hero.getComponent(WeaponInventoryComponent.class).throwWeapon();
         }
       }
       case TAKE -> {    Entity hero = MCClient.getClientState().getIdHashTable().get(heroId);
-        if (hero==null) throw new IllegalArgumentException("Hero with id "+heroId+" not found");
+        if (hero==null) return;
         Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponId);
-        if (weapon==null) throw new IllegalArgumentException("Weapon with id "+weaponId+" not found");
+        if (weapon==null) return;
         hero.getComponent(WeaponInventoryComponent.class).takeWeapon(weapon);}
     }
   }

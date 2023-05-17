@@ -212,6 +212,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Create server===
     VBox serverBox = new VBox();
+    serverBox.setStyle("-fx-padding: 40;");
     serverBox.getChildren().addAll(update, startMultiplayer, serverID);
     ScrollPane scrollPane = new ScrollPane();
     final Future<Map<Integer, Socket>>[] future = new Future[]{null};
