@@ -4,27 +4,16 @@ import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
-import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.lengthOfCell;
 
 import com.almasb.fxgl.app.scene.Viewport;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarCell;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.physics.PhysicsComponent;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
-import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
-import ru.nsu.fit.dib.projectdib.environment.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
@@ -55,38 +44,22 @@ public class GameInitializer {
     MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
     multiplayerInitializer.run();
     // мультиплейерная часть
-    System.out.println("appHeight " + getAppHeight() + "appWidth " + getAppWidth());
-      grid = AStarGrid.fromWorld(getGameWorld(), 66, 66, lengthOfCell, lengthOfCell,
-              (entityType) -> {
-              /*    if (entityType != EntityType.WALL) {
-                      return CellState.WALKABLE;
-                  }*/
-                  return CellState.NOT_WALKABLE;
-              });
+    //System.out.println("appHeight " + getAppHeight() + "appWidth " + getAppWidth());
+
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map, grid);
-    System.out.println("lvl.map.length " + lvl.map.length + "lvl.map[0].length" +  lvl.map[0].length);
+    GridCreator gridCreator = new GridCreator(lvl.map);
+    gridCreator.run();
+    //System.out.println("lvl.map.length " + lvl.map.length + "lvl.map[0].length" +  lvl.map[0].length);
     int counter = 0;
     int counterOFANY = 0;
-    for(int x = 0; x < lvl.map.length ; x++){
-      for(int y = 1; y < lvl.map[x].length; y++){
-        if(lvl.map[x][y] != BlockDensity.WALL.density) {
-          counter++;
-          grid.set(x,y-1, new AStarCell(x,y-1,CellState.WALKABLE));
 
-        }
+      //List<AStarCell> nonWalkable = grid.getCells().stream().filter(cell -> !cell.isWalkable()).toList();
+    //System.out.println(nonWalkable);
 
-        counterOFANY++;
-      }
-    }
-
-      List<AStarCell> nonWalkable = grid.getCells().stream().filter(cell -> !cell.isWalkable()).toList();
-    System.out.println(nonWalkable);
-    set("grid", grid);
-
-    System.out.println("CELLS IN GRID = " + grid.getCells().size());
-    System.out.println("COUNT of NON_WALKABLE: " + nonWalkable.size());
-    System.out.println("COUNTER OF WALLS: "+ counter);
-    System.out.println("COUNTER ALL in LVL.map: " + counterOFANY);
+    //System.out.println("CELLS IN GRID = " + grid.getCells().size());
+    //System.out.println("COUNT of NON_WALKABLE: " + nonWalkable.size());
+    //System.out.println("COUNTER OF WALLS: "+ counter);
+    //System.out.println("COUNTER ALL in LVL.map: " + counterOFANY);
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);

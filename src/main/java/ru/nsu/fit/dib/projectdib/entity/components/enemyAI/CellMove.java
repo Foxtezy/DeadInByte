@@ -218,6 +218,7 @@ public final class CellMove extends Component {
 
     Point2D newPosition = new Point2D(x, y);
     entity.getComponent(ServerControlComponent.class).moveToPoint(newPosition);
+    //entity.getComponent(PhysicsComponent.class).setLinearVelocity(x, y);
 
     // get position after movement entityAnchoredPosition = Point2D
     entityAnchoredPosition = entity.getAnchoredPosition();

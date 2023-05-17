@@ -8,17 +8,13 @@ import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.pathfinding.astar.AStarCell;
 import com.almasb.fxgl.pathfinding.astar.AStarPathfinder;
 import com.google.javascript.jscomp.jarjar.javax.annotation.CheckForNull;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.PlayerChaseComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
@@ -51,6 +47,53 @@ public class EnemyAiComponent extends Component {
     }else{
       currentEnemy.getComponent(AStar.class).moveToCell(target.call("getCellX"), target.call("getCellY"));
     }
+    //int x = (int) target.call("getCellX") / 16;
+    //int y = (int) target.call("getCellY") / 16;
+    //currentEnemy.getComponent(AStar.class).moveToCell(x, y);
+    //Point2D newPosition = new Point2D(x, y);
+    //int x = (int) target.getAnchoredPosition().getX() / 16;
+    //int y = (int) target.getAnchoredPosition().getY() / 16;
+    int x = target.getComponent(CellMove.class).getCellX();
+    int y = target.getComponent(CellMove.class).getCellY();
+    //currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(target.getAnchoredPosition());
+    currentEnemy.getComponent(AStar.class).moveToCell(x, y);
+    /*List<AStarCell> cells = path.findPath((int) currentEnemy.getPosition().getX(),
+        (int) currentEnemy.getPosition().getY(),
+        (int) target.getPosition().getX(), (int) target.getPosition().getY());*/
+    /*List<AStarCell> path = pathfinder.get().findPath((int) currentEnemy.getAnchoredPosition().getX() / 16,
+        (int) currentEnemy.getAnchoredPosition().getY() / 16,
+        target.call("getCellX"), target.call("getCellY"));*/
+    //int x = path.get(1).getX();
+    //int y = path.get(1).getY();
+    //Point2D position = new Point2D(x, y);
+    //currentEnemy.getComponent(ServerControlComponent.class).moveToPoint(position);
+    //currentEnemy.getComponent(AStarMoveComponent.class).moveToCell(x, y);
+    // chase.move(target);
+//    chase.move(target);
+//    currentEnemy.getComponent(PlayerChaseComponent.class).move(target);
+
+//    int hp = 15; // TODO entity.getComponent(HealthDoubleComponent.class). ... .getHP();
+//    int maxHp = 200;
+//
+//    if (hp <= maxHp * 0.15) {
+//      // TODO RUNNING AWAY
+//      return;
+//    }
+//    Entity target = findNearestHero();
+//    if (target == null) {
+//      return;
+//    } else {
+//      // move(target.getPosition())
+//      // attack();
+//    }
+//
+//    // Если нет оружия, тогда ищет упавшее оружие в зоне видимости и подбирает
+//    if (!entity.getComponent(WeaponInventoryComponent.class).hasWeapon()) {
+//      Entity droppedWeapon = findNearestDroppedWeapon();
+//      // TODO SEARCHING DROPPED WEAPON
+//      // move(dropped.Weapon.getPosition);
+//      // take();
+//    }
   }
 
   @CheckForNull
@@ -87,4 +130,50 @@ public class EnemyAiComponent extends Component {
     }
     return nearestHero;
   }
+
+  @CheckForNull
+  private Entity findNearestDroppedWeapon() {
+    List<Entity> droppedWp =
+        gameMapOfEntities.values().stream()
+            .filter(x -> x.hasComponent(WeaponViewComponent.class))
+            .filter(weapon -> distanceBetweenEntities(currentEnemy, weapon) < 500)
+            .toList();
+    if (droppedWp.isEmpty()) {
+      return null;
+    }
+    double nearestWpDist = Double.MAX_VALUE;
+    Entity nearestWp = droppedWp.get(0);
+    for (Entity ent : droppedWp) {
+      double dist =
+          sqrt(
+              ent.getPosition().getX() * ent.getPosition().getX()
+                  + ent.getPosition().getY() * ent.getPosition().getY());
+      if (dist < nearestWpDist) {
+        nearestWp = ent;
+        nearestWpDist = dist;
+      }
+    }
+    return nearestWp;
+  }
+
+  private void takeNearestDroppedWeapon() {
+    Entity nearestWp = findNearestDroppedWeapon();
+    if (nearestWp == null) {
+      // running away
+    }
+    // move to nearestWp.getPosition;
+    // collidable ? take : move()
+  }
+
+  private double distanceBetweenEntities(Entity a, Entity b) {
+    double Xa = a.getPosition().getX();
+    double Ya = a.getPosition().getY();
+    double Xb = b.getPosition().getX();
+    double Yb = b.getPosition().getY();
+    return sqrt((Xa - Xb) * (Xa - Xb) + (Ya - Yb) * (Ya - Yb));
+  }
+
+  // TODO  No lasers?
+  //    private List<Entity> heroesInFieldOfView(List<Entity> heroesInRangeOfVisibility){
+  //    }
 }
