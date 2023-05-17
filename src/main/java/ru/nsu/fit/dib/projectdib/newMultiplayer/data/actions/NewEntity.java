@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
+import ru.nsu.fit.dib.projectdib.entity.Spawner;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
@@ -81,7 +82,7 @@ public class NewEntity {
         sd.put("damage",seed%1000);
         sd.put("id",state.getId());
         sd.put("projectileType",Projectiles.getByName(entityType));
-        FXGL.spawn("projectile",sd);
+        Spawner.spawn("projectile",sd);
       }
       default -> throw new IllegalArgumentException("Entity type not found");
     }

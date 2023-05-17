@@ -252,7 +252,8 @@ public class MainMenu extends FXGLMenu {
     startMultiplayer.setOnMouseClicked(e -> {
       // шлём инициализационный пакет клиентам
       Sender sender = new Sender();
-      MCServer.getClientSockets().values().forEach(s -> sender.send(s, new Pair<>(MessageType.START_GAME, null)));
+      MCServer.getClientSockets().values()
+          .forEach(s -> sender.send(s, new Pair<>(MessageType.START_GAME, null)));
       serverConnectionTask.startGame();
       // читаем у локального клиента
       Receiver receiver = new Receiver(MCClient.getClientSocket());
@@ -333,7 +334,17 @@ public class MainMenu extends FXGLMenu {
     });
 
     //===Start===
-    start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
+    start.setOnMouseClicked(event -> {
+          ServerConnectionTask serverConnection = new ServerConnectionTask();
+          CompletableFuture.supplyAsync(serverConnection);
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+          }
+          FXGL.getGameController().startNewGame();
+        }
+    );
 
     //===Settings===
     settings.setOnMouseClicked(event -> {
