@@ -56,7 +56,7 @@ public class GameInitializer {
     multiplayerInitializer.run();
     // мультиплейерная часть
     System.out.println("appHeight " + getAppHeight() + "appWidth " + getAppWidth());
-      grid = AStarGrid.fromWorld(getGameWorld(), 64, 64, lengthOfCell, lengthOfCell,
+      grid = AStarGrid.fromWorld(getGameWorld(), 66, 66, lengthOfCell, lengthOfCell,
               (entityType) -> {
               /*    if (entityType != EntityType.WALL) {
                       return CellState.WALKABLE;
@@ -68,10 +68,10 @@ public class GameInitializer {
     int counter = 0;
     int counterOFANY = 0;
     for(int x = 0; x < lvl.map.length ; x++){
-      for(int y = 0; y < lvl.map[x].length; y++){
+      for(int y = 1; y < lvl.map[x].length; y++){
         if(lvl.map[x][y] != BlockDensity.WALL.density) {
           counter++;
-          grid.set(x,y, new AStarCell(x,y,CellState.WALKABLE));
+          grid.set(x,y-1, new AStarCell(x,y-1,CellState.WALKABLE));
 
         }
 
