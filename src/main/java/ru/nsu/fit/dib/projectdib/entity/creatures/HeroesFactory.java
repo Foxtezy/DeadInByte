@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javafx.geometry.Rectangle2D;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
@@ -50,12 +51,13 @@ public class HeroesFactory {
   }
 
   public enum HeroType implements CreatureType{
-    Elf(CreatureRarity.mediocre, "elf",0),
-    Knight(CreatureRarity.ordinary, "knight",1),
-    Wizard(CreatureRarity.special, "wizard",2),
-    JonnyS(CreatureRarity.masterful, "jonnys",3);
+    Elf(CreatureRarity.mediocre, "elf",0,new Rectangle2D(0,130,160,120)),
+    Knight(CreatureRarity.ordinary, "knight",1,new Rectangle2D(0,130+320,160,120)),
+    Wizard(CreatureRarity.special, "wizard",2,new Rectangle2D(0,130+320*2,160,120)),
+    JonnyS(CreatureRarity.masterful, "jonnys",3,new Rectangle2D(0,130+320*3,160,120));
     private final CreatureRarity creatureRarity;
     private final int imageID;
+    private final Rectangle2D icon;
 
     public String getName() {
       return name;
@@ -66,10 +68,11 @@ public class HeroesFactory {
         .collect(
             Collectors.toMap(orderStatus -> orderStatus.name, orderStatus -> orderStatus));
 
-    HeroType(CreatureRarity creatureRarity, String name, int imageID) {
+    HeroType(CreatureRarity creatureRarity, String name, int imageID, Rectangle2D icon) {
       this.creatureRarity = creatureRarity;
       this.name = name;
       this.imageID = imageID;
+      this.icon = icon;
     }
 
     public static HeroType getByName(String findingName) {
@@ -97,6 +100,10 @@ public class HeroesFactory {
     @Override
     public String getSubclass() {
       return "player";
+    }
+
+    public Rectangle2D getIcon() {
+      return icon;
     }
   }
 }

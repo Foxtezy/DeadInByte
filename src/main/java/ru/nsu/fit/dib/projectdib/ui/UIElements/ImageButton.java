@@ -16,7 +16,6 @@ public class ImageButton extends StackPane {
 
   ImageView iv;
   Text text;
-
   public ImageButton(String name, Font font, String unpushedColor, String pushedColor,
       final Image pushed, final Image unpushed) {
     iv = new ImageView(unpushed);
@@ -51,11 +50,28 @@ public class ImageButton extends StackPane {
     super.setAlignment(Pos.CENTER);
     super.getChildren().addAll(iv, text);
   }
+  public ImageButton(String buttonName,final Image pushed, final Image unpushed) {
+    iv = new ImageView(unpushed);
+    iv.autosize();
+    iv.setPreserveRatio(true);
+    text = new Text(buttonName);
+    this.setOnMouseEntered(event -> {
+      iv.setImage(pushed);
+      iv.setStyle("-fx-scale-x: 1.1;"
+          + "-fx-scale-y: 1.1;"
+          + "-fx-scale-z: 1.1;");
+    });
+    this.setOnMouseExited(event -> {
+      iv.setImage(unpushed);
+      iv.setStyle("-fx-scale-x: 1.0;"
+          + "-fx-scale-y: 1.0;"
+          + "-fx-scale-z: 1.0;");
+    });
 
-  private void setImage(Image image) {
-    iv.setImage(image);
+    super.setCenterShape(true);
+    super.setAlignment(Pos.CENTER);
+    super.getChildren().add(iv);
   }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {

@@ -10,9 +10,15 @@ import java.util.List;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.utils.CircularLinkedList;
 
 public class WeaponInventoryComponent extends Component {
+
+  public CircularLinkedList<Entity> getInventory() {
+    return inventory;
+  }
+
   private CircularLinkedList<Entity> inventory;
   private int activeWeapon;
   private int capacity;
@@ -22,13 +28,18 @@ public class WeaponInventoryComponent extends Component {
   }
   public Entity takeWeapon(Entity weapon) {
     Entity thrownWeapon = inventory.replaceCurrent(weapon);
-    if (thrownWeapon!=null) thrownWeapon.getComponent(WeaponComponent.class).setUser(null);
+    if (thrownWeapon!=null) {
+      thrownWeapon.getComponent(DataComponent.class).setOwnerID(-1);
+      thrownWeapon.getComponent(WeaponComponent.class).setUser(null);
+    }
     weapon.getComponent(WeaponComponent.class).setUser(getEntity());
+    weapon.getComponent(DataComponent.class).setOwnerID(getEntity().getComponent(DataComponent.class).getOwnerID());
     return thrownWeapon;
   }
 
   public void throwWeapon() {
     Entity thrownWeapon = inventory.replaceCurrent();
+    thrownWeapon.getComponent(DataComponent.class).setOwnerID(-1);
     thrownWeapon.getComponent(WeaponComponent.class).setUser(null);
   }
 

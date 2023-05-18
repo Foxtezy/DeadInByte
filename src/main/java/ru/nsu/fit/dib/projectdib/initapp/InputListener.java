@@ -61,12 +61,18 @@ public class InputListener {
     onKey(Controls.RIGHT, "Right", () -> player.getComponent(PlayerControlComponent.class).right());
     onKey(KeyCode.R, "Unbind", () -> {
       System.out.println("--------------");
-      MCClient.getClientState().getIdHashTable().forEach((k,v)->{System.out.println("["+k+"-"+v.getComponent(DataComponent.class).getId()+"] ["+v.getComponent(DataComponent.class).getOwnerID()+"] "+v.getType());});
+      MCClient.getClientState().getIdHashTable().forEach((k, v) -> {
+        System.out.println(
+            "[" + k + "-" + v.getComponent(DataComponent.class).getId() + "] [" + v.getComponent(
+                DataComponent.class).getOwnerID() + "] " + v.getType());
+      });
       //Creature hero = player.getComponent(HeroComponent.class).getCreature();
       //hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().xProperty().unbind();
       //hero.getModule(CreatureWeaponModule.class).getActiveWeapon().getModule(TextureModule.class).getComponent().getEntity().yProperty().unbind();
     });
-    onBtn(MouseButton.PRIMARY, "shoot", () -> { player.getComponent(ShootAttackComponent.class).shoot();});
+    onBtn(MouseButton.PRIMARY, "shoot", () -> {
+      player.getComponent(ShootAttackComponent.class).shoot();
+    });
     //player.getComponent(HeroComponent.class).attack());
     getInput().addAction(new UserAction("Use") {
       @Override
@@ -99,10 +105,11 @@ public class InputListener {
         List<Entity> list = player.getComponent(WeaponInventoryComponent.class).findWeapon();
         if (list.size() >= 1) {
           doAction(new Pair<>(MessageType.WEAPON,
-              new WeaponAction(WeaponActionType.TAKE,player.getComponent(DataComponent.class).getId(),
+              new WeaponAction(WeaponActionType.TAKE,
+                  player.getComponent(DataComponent.class).getId(),
                   list.get(0).getComponent(DataComponent.class).getId())));
         } else {
-          if (player.getComponent(WeaponInventoryComponent.class).getActiveWeapon()!=null) {
+          if (player.getComponent(WeaponInventoryComponent.class).getActiveWeapon() != null) {
             doAction(new Pair<>(MessageType.WEAPON,
                 new WeaponAction(WeaponActionType.THROW,
                     player.getComponent(DataComponent.class).getId(),
@@ -110,15 +117,15 @@ public class InputListener {
                         .getComponent(DataComponent.class).getId())));
           }
         }
-        }
-      },Controls.TAKE_THROW_WEAPON,VirtualButton.X);
-      getInput().
+      }
+    }, Controls.TAKE_THROW_WEAPON, VirtualButton.X);
+    getInput().
 
-      addAction(new UserAction("Swap weapons") {
-        @Override
-        protected void onActionBegin () {
-          player.getComponent(WeaponInventoryComponent.class).swapWeapon();
-        }
-      },Controls.CHANGE_WEAPON,VirtualButton.B);
-    }
+        addAction(new UserAction("Swap weapons") {
+          @Override
+          protected void onActionBegin() {
+            player.getComponent(WeaponInventoryComponent.class).swapWeapon();
+          }
+        }, Controls.CHANGE_WEAPON, VirtualButton.B);
   }
+}

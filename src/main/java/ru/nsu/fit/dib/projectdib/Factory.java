@@ -8,7 +8,6 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.lengthOfCell;
 
-import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.EntityBuilder;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
@@ -40,6 +39,8 @@ import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.BoxMovingComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.Spawner;
+import ru.nsu.fit.dib.projectdib.entity.components.*;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
@@ -52,6 +53,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponen
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
@@ -59,6 +61,7 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.Weapon;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.ui.HPBar;
 
 /** Class Factory for making Entities. */
 public class Factory implements EntityFactory {
@@ -67,9 +70,9 @@ public class Factory implements EntityFactory {
       Creature creature, Point2D position, Integer id, Integer ownerID) {
     SpawnData sd = new SpawnData(position);
     sd.put("creature", creature);
-    sd.put("id", id);
-    sd.put("owner", ownerID);
-    Entity enemy = spawn(creature.getEntityType().getName(), sd);
+    sd.put("id",id);
+    sd.put("owner",ownerID);
+    Entity enemy = Spawner.spawn(creature.getEntityType().getName(), sd);
     enemy.setScaleUniform(0.75);
     return enemy;
   }
@@ -79,7 +82,7 @@ public class Factory implements EntityFactory {
     sd.put("id", id);
     sd.put("owner", ownerID);
     sd.put("weapon", weapon);
-    Entity entity = spawn("weapon", sd);
+    Entity entity = Spawner.spawn("weapon", sd);
     entity.setScaleUniform(0.75);
     return entity;
   }
@@ -90,7 +93,7 @@ public class Factory implements EntityFactory {
     physics.setFixtureDef(new FixtureDef().friction(0.3f));
 
     return entityBuilder()
-        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(79, 79)))
+        .bbox(new HitBox(new Point2D(30, 220), BoundingShape.box(100, 100)))
         .anchorFromCenter()
         .with(physics)
         .collidable();
@@ -121,14 +124,15 @@ public class Factory implements EntityFactory {
         .from(data)
         .type(EntityType.PLAYER)
         .with(view)
+        .anchorFromCenter()
         .with(new ShootAttackComponent())
-        .with(new MeleeAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
         // .with(new CellMoveComponent(16, 16, 250))
         .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         .with(new HealthIntComponent(creature.getMaxHP()))
+        .with(new HPViewComponent(creature.getType(), creature.getMaxHP()))
         /*  .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
         .with()*/
         .build();
@@ -142,17 +146,21 @@ public class Factory implements EntityFactory {
 
     CreatureViewComponent view = new EnemyViewComponent(type.getID());
     view.bindDirectionView(entity -> new Point2D(0, 0));
+    System.out.println(type.getName()+" with ["+"HP: "+creature.getMaxHP()+", defense:"+creature.getArmorCoefficient()+"] spawned");
     AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
     builder
         .from(data)
         .type(EntityType.ENEMY)
         .with(view)
+        .anchorFromCenter()
         .with(new ShootAttackComponent())
-        .with(new MeleeAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new ServerControlComponent())
         .with(new WeaponInventoryComponent(1))
-        .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
+        .with(new DataComponent(EntityType.ENEMY,data.get("owner"),data.get("id")))
+        .with(new HealthIntComponent(creature.getMaxHP()))
+        //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))));
+   // if (MCClient.getClientId()==0) builder.with(new CellMoveComponent(160, 160, 300).allowRotation(true));
         //.with(new CellMoveComponent(16, 16, 250))
         .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         //.with(aStar)
@@ -170,28 +178,25 @@ public class Factory implements EntityFactory {
   @Spawns("weapon")
   public Entity Weapon(SpawnData data) {
     Weapon weapon = data.get("weapon");
-    ImageView iv =
-        imageViewFromSpriteSheet(
-            weapon.getType().getSize().getImage(),
-            weapon.getType().getId(),
-            weapon.getType().getSize().getWidth(),
-            weapon.getType().getSize().getHeight(),
-            ProjectConfig._WEAPON_COLUMNS);
+    ImageView iv = imageViewFromSpriteSheet(weapon.getType().getSize().getImage(),
+        weapon.getType().getId(),
+        weapon.getType().getSize().getWidth(),
+        weapon.getType().getSize().getHeight(),
+        ProjectConfig._WEAPON_COLUMNS);
     WeaponComponent weaponComponent = new WeaponComponent(weapon);
-    DataComponent dataComponent =
-        new DataComponent(EntityType.WEAPON, data.get("owner"), data.get("id"));
+    DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"), data.get("id"));
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WEAPON)
         .viewWithBBox(iv)
-        .bbox(new HitBox(BoundingShape.box(75, 20)))
+        .anchorFromCenter()
+        .with(new DataAttackComponent())
         .with(new CollidableComponent(true))
-        .with(
-            new WeaponViewComponent(
-                weapon.getType().getImgRadius(),
-                weapon.getType().getRotation(),
-                weapon.getRadius(),
-                weapon.getDistance()))
+        .with(new WeaponViewComponent(
+            weapon.getType().getImgRadius(),
+            weapon.getType().getRotation(),
+            weapon.getRadius(),
+            weapon.getDistance()))
         .with(weaponComponent)
         .with(dataComponent)
         .build();
@@ -310,22 +315,29 @@ public class Factory implements EntityFactory {
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
     Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
-    Point2D direction =
-        getInput()
-            .getMousePositionWorld()
-            .subtract(player.getCenter().subtract(new Point2D(60, 90)));
+    int ownerID = data.get("owner");
+    Point2D direction = data.get("direction");
+    int attack = data.get("attack");
+    int damage = data.get("damage");
+    int id = data.get("id");
     Projectiles projectile = data.get("projectileType");
+    //System.out.println(projectile.getName()+" with [attack: "+attack+", damage: "+damage+"] spawned");
     AnimatedTexture texture = new AnimatedTexture(projectile.getAnimation());
+    texture.setScaleX(0.75);
+    texture.setScaleY(0.75);
     texture.play();
-    Entity entity =
-        entityBuilder()
-            .from(data)
-            .type(EntityType.PROJECTILE)
-            .viewWithBBox(texture)
-            .with(new ProjectileComponent(direction, projectile.getSpeed()))
-            .with(new OffscreenCleanComponent())
-            .collidable()
-            .build();
+    Entity entity =  entityBuilder()
+        .from(data)
+        .type(EntityType.PROJECTILE)
+        .view(texture)
+        .anchorFromCenter()
+        .bbox(projectile.getHitbox())
+        .with(new DataAttackComponent(attack,damage))
+        .with(new DataComponent(EntityType.PROJECTILE,ownerID,id))
+        .with(new ProjectileComponent(direction, projectile.getSpeed()))
+        .with(new OffscreenCleanComponent())
+        .collidable()
+        .build();
     entity.setScaleUniform(0.75);
     return entity;
   }
@@ -342,15 +354,12 @@ public class Factory implements EntityFactory {
         .build();
   }*/
 
-  ImageView imageViewFromSpriteSheet(
-      Image img, int number, int spriteWidth, int spriteHeight, int columns) {
+  ImageView imageViewFromSpriteSheet(Image img, int number, int spriteWidth, int spriteHeight,
+      int columns) {
     ImageView iv = new ImageView(img);
     iv.setViewport(
-        new Rectangle2D(
-            spriteWidth * (number % columns),
-            spriteHeight * (number / columns),
-            spriteWidth,
-            spriteHeight));
+        new Rectangle2D(spriteWidth * (number % columns), spriteHeight * (number / columns),
+            spriteWidth, spriteHeight));
     return iv;
   }
 
@@ -368,9 +377,9 @@ public class Factory implements EntityFactory {
   @Spawns("explosion")
   public Entity newExplosion(SpawnData data) {
     Image image = image("explosion.png");
-    AnimatedTexture texture =
-        new AnimatedTexture(
-            new AnimationChannel(image, 4, 960 / 5, 768 / 4, Duration.seconds(0.66), 0, 3));
+    AnimatedTexture texture = new AnimatedTexture(
+        new AnimationChannel(image, 4, 960 / 5, 768 / 4, Duration.seconds(0.66),
+            0, 3));
     return entityBuilder()
         .from(data)
         .type(EntityType.EXPLOSION)

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
@@ -43,7 +44,8 @@ public class ClientState {
 
   public List<EntityState> getEntityStatesByOwnerId(Integer id) {
     return idHashTable.entrySet().stream()
-        .filter(e->e.getValue().hasComponent(DataComponent.class))
+        .filter(e -> e.getValue().getType() == EntityType.PLAYER || e.getValue().getType() == EntityType.ENEMY)
+        .filter(e -> e.getValue().hasComponent(DataComponent.class))
         .filter(e -> e.getValue().getComponent(DataComponent.class).getOwnerID() == id)
         .filter(e -> e.getValue().getComponent(DataComponent.class).isValid())
         .map(e -> new EntityState(e.getKey(),

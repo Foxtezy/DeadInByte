@@ -1,10 +1,14 @@
 package ru.nsu.fit.dib.projectdib;
 
+import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.ui.UI;
 import java.util.List;
 
 import com.almasb.fxgl.pathfinding.CellState;
@@ -14,6 +18,7 @@ import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
+import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
@@ -23,8 +28,10 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
  * Основной класс игры.
  */
 public class App extends GameApplication {
-  Entity player;
+
+  public static Entity player;
   InputListener inputListener;
+  public static GameUIController uiController;
 
   /**
    * Main-метод.
@@ -55,6 +62,13 @@ public class App extends GameApplication {
     inputListener.run();
   }
 
+  @Override
+  protected void initUI() {
+    uiController = new GameUIController(getGameScene());
+    UI ui =  getAssetLoader().loadUI("main.fxml", uiController);
+    FXGL.getGameScene().addUI(ui);
+  }
+
   /**
    * Инициализация физики игры.
    */
@@ -74,12 +88,13 @@ public class App extends GameApplication {
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
     player=gameInitializer.getPlayer();
-
   }
+
   @Override
-  protected void onUpdate(double tpf){
-    List<Entity> list = FXGL.getGameScene().getGameWorld().getEntitiesByType(EntityType.PLAYER,EntityType.ENEMY,EntityType.WEAPON);
-    list.sort((e1,e2)-> (int) (e1.getY()-e2.getY()));
-    list.stream().map(entity ->entity.getViewComponent().getParent()).forEach(Node::toFront);
+  protected void onUpdate(double tpf) {
+    List<Entity> list = FXGL.getGameScene().getGameWorld()
+        .getEntitiesByType(EntityType.PLAYER, EntityType.ENEMY, EntityType.WEAPON);
+    list.sort((e1, e2) -> (int) (e1.getY() - e2.getY()));
+    list.stream().map(entity -> entity.getViewComponent().getParent()).forEach(Node::toFront);
   }
 }

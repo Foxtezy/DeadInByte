@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.entity.creatures;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.DamageType;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 /**
  * Data
@@ -58,10 +59,13 @@ public final class Creature {
   }
 
   public int getMaxHP() {
-    return data.hp;
+    return data.hp+15;
   }
 
   public Weapons getStandardWeapon() {
     return data.weaponType;
+  }
+  public Integer getWeaponLevel(WeaponType type){
+    return data.skills.get(type);
   }
 }

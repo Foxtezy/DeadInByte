@@ -11,7 +11,9 @@ public enum MessageType {
   WEAPON((byte) 3),
   MAP_SEED((byte) 5),
   START_INIT((byte) 6),
-  END_INIT((byte) 7);
+  END_INIT((byte) 7),
+  HP((byte) 8),
+  START_GAME((byte) 9);
 
   private final byte id;
   private static final Map<Byte, MessageType> map = Arrays.stream(MessageType.values())

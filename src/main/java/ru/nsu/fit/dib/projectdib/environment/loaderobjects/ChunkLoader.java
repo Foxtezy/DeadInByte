@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Duration;
+import ru.nsu.fit.dib.projectdib.entity.Spawner;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.PhysicalObject;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 
@@ -37,7 +38,7 @@ public class ChunkLoader {
     return chunkSize;
   }
 
-  public void updateChunks(Chunk currChunk) {
+  public synchronized void updateChunks(Chunk currChunk) {
 
     List<Chunk> newLoadedChunks = currChunk.neighboringChunks();
     List<Chunk> copyLoadedChunks = new ArrayList<>(loadedChunks);
@@ -62,14 +63,14 @@ public class ChunkLoader {
     addChunks.forEach(this::addChunk);
   }
 
-  private void addChunk(Chunk chunk) {
+  private synchronized void addChunk(Chunk chunk) {
     if (!walls.containsKey(chunk)) {
       return;
     }
     loadedWalls.put(chunk, new ArrayList<>());
     List<PhysicalObject> objectsList = walls.get(chunk);
     for (PhysicalObject object : objectsList) {
-      Entity e = FXGL.spawn(object.type().getName(),
+      Entity e = Spawner.spawn(object.type().getName(),
           new SpawnData(object.x(), object.y()).put("width", object.width())
               .put("height", object.height()));
       loadedWalls.get(chunk).add(e);

@@ -14,6 +14,7 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -45,11 +46,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
@@ -58,6 +63,8 @@ import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
  * Главное меню.
  */
 public class MainMenu extends FXGLMenu {
+
+  private final Font font;
 
   public MainMenu(MenuType type) {
     super(type);
@@ -125,7 +132,7 @@ public class MainMenu extends FXGLMenu {
     ImageView loading = new ImageView(new Image(_loadingAnimation));
     //======================================[     Fonts     ]=======================================
     ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    Font font = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 65);
+    font = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 65);
     Font bigFont = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 140);
     Font smallFont = Font.loadFont(classloader.getResourceAsStream(_fontDustyPro), 50);
     //=====================================[    GameName    ]=======================================
@@ -205,6 +212,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Create server===
     VBox serverBox = new VBox();
+    serverBox.setStyle("-fx-padding: 40;");
     serverBox.getChildren().addAll(update, startMultiplayer, serverID);
     ScrollPane scrollPane = new ScrollPane();
     final Future<Map<Integer, Socket>>[] future = new Future[]{null};
@@ -245,19 +253,14 @@ public class MainMenu extends FXGLMenu {
 
     //===Start Multiplayer===
     startMultiplayer.setOnMouseClicked(e -> {
-      // TODO: 24.04.2023 шлём инициализационный пакет клиентам
-      MCServer.getClientSockets().values().forEach(s -> {
-        try {
-          s.getOutputStream().write(1);
-        } catch (IOException ex) {
-          throw new RuntimeException(ex);
-        }
-      });
-      try {
-        MCClient.getClientSocket().getInputStream().read();
-      } catch (IOException ex) {
-        throw new RuntimeException(ex);
-      }
+      // шлём инициализационный пакет клиентам
+      Sender sender = new Sender();
+      MCServer.getClientSockets().values()
+          .forEach(s -> sender.send(s, new Pair<>(MessageType.START_GAME, null)));
+      serverConnectionTask.startGame();
+      // читаем у локального клиента
+      Receiver receiver = new Receiver(MCClient.getClientSocket());
+      receiver.receive();
       FXGL.getGameController().startNewGame();
     });
 
@@ -319,16 +322,32 @@ public class MainMenu extends FXGLMenu {
           tree.changeActiveNode(authentication);
           tree.addNodes(authentication, List.of(loadingBox));
           ui.getChildren().add(loadingBox);
-          MCClient.getClientSocket().getInputStream().read();
+          Receiver receiver = new Receiver(MCClient.getClientSocket());
+          while (true) {
+            MessageType startGame = receiver.receive().getKey();
+            if (startGame == MessageType.START_GAME) {
+              break;
+            }
+          }
           FXGL.getGameController().startNewGame();
         }
-      } catch (InterruptedException | ExecutionException | IOException e) {
+      } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
       }
     });
 
     //===Start===
-    start.setOnMouseClicked(event -> FXGL.getGameController().startNewGame());
+    start.setOnMouseClicked(event -> {
+          ServerConnectionTask serverConnection = new ServerConnectionTask();
+          CompletableFuture.supplyAsync(serverConnection);
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+          }
+          FXGL.getGameController().startNewGame();
+        }
+    );
 
     //===Settings===
     settings.setOnMouseClicked(event -> {
