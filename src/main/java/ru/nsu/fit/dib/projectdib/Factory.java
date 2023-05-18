@@ -47,7 +47,6 @@ import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.AStar;
 import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.CellMove;
 import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.EnemyAiComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.fight.MeleeAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
@@ -147,7 +146,6 @@ public class Factory implements EntityFactory {
     CreatureViewComponent view = new EnemyViewComponent(type.getID());
     view.bindDirectionView(entity -> new Point2D(0, 0));
     System.out.println(type.getName()+" with ["+"HP: "+creature.getMaxHP()+", defense:"+creature.getArmorCoefficient()+"] spawned");
-    AStarMoveComponent aStar = new AStarMoveComponent(new LazyValue<>(() -> geto("grid")));
     builder
         .from(data)
         .type(EntityType.ENEMY)
