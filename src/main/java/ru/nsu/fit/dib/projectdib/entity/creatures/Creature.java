@@ -33,7 +33,7 @@ public final class Creature {
   }
 
   public Double getSpeed() {
-    return (double) 400 + getStat("agility") * 20;
+    return (double) 150 + getStat("agility") * 30;
   }
 
   public int getModifier(String stat) {

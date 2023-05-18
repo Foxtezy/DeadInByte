@@ -9,6 +9,7 @@ import static com.almasb.fxgl.dsl.FXGL.onKeyUp;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
@@ -87,7 +88,17 @@ public class InputListener {
             });
       }
     }, KeyCode.E, VirtualButton.B);
-
+    getInput().addAction(new UserAction("Viewport") {
+      @Override
+      protected void onActionBegin(){
+        if (FXGL.getGameScene().getViewport().getZoom()==0.75){
+          FXGL.getGameScene().getViewport().setZoom(0.25);
+        }
+        else {
+          FXGL.getGameScene().getViewport().setZoom(0.75);
+        }
+        }
+      },KeyCode.V,VirtualButton.X);
     getInput().addAction(new UserAction("Take/Throw") {
       @Override
       protected void onActionBegin() {

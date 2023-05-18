@@ -63,6 +63,14 @@ public class WeaponInventoryComponent extends Component {
     inventory.forEach(list::remove);
     return list;
   }
+  public boolean hasWeapon(){
+    return !inventory.isEmpty();
+  }
+
+
+  public boolean hasRangedWeapon(){
+    return inventory.stream().anyMatch(wp -> wp.getComponent(WeaponComponent.class).getWeapon().isLongRange());
+  }
 
   public int size() {
     return inventory.size();

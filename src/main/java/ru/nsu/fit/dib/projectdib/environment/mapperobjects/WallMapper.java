@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarCell;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
+import javafx.scene.control.Cell;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.BlockDensity;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.Chunk;
@@ -13,7 +18,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.Chunk;
  */
 public class WallMapper {
 
-
+  public int[][] nonInvertedMap;
   private static final int WALL = BlockDensity.WALL.density + 1;
   private static final int FLOOR = BlockDensity.FLOOR.density;
   private static final int BOUND = BlockDensity.WALL.density;
@@ -22,19 +27,22 @@ public class WallMapper {
   private Map<Chunk, List<PhysicalObject>> walls = new HashMap<>();
   private int[][] wallMap;
   private int lastId = 0;
-
+  private AStarGrid grid;
   /**
    * Makes list of entities (walls).
    *
    * @param map generated map (with bounds on the edges) _ _ _ _ _ |* * * * *| |*       *| |* *| |*
    *            * * * *| |_ _ _ _ _| EDGES ARE NOT WALLS!!!!!
    */
-  public WallMapper(int chunkSize, int tileSize, int[][] map) {
+  public WallMapper(int chunkSize, int tileSize, int[][] map, AStarGrid grid) {
+    this.grid = grid;
+    this.nonInvertedMap = map;
     this.chunkSize = chunkSize;
     this.tileSize = tileSize;
     wallMap = invert(map);
     markWalls();
     makeWall();
+
   }
 
   private int[][] invert(int[][] map) {
@@ -70,6 +78,7 @@ public class WallMapper {
       for (int j = 0; j < wallMap[i].length; j++) {
         if (isWall(i, j)) {
           wallMap[i][j] = WALL;
+  //        grid.set(i,j, new AStarCell(i,j, CellState.NOT_WALKABLE));
         }
       }
     }

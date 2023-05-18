@@ -12,8 +12,10 @@ public interface ProjectConfig {
   String _player = "assets/textures/HeroesMovementSpriteSheet.png";
   Image heroes_image = new Image(_player);
   String _enemy = "assets/textures/Sprite-0001-export.png";
+  int lengthOfCell = 160; //TODO
   Image enemies_image = new Image(_enemy);
   int _enemy_numberColumns = 8;
+  double rangeOfVision = lengthOfCell * 8;
   int _enemy_width = 160;
   int _enemy_height = 320;
   int _player_numberColumns = 13;

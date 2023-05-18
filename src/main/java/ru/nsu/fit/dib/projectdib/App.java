@@ -6,16 +6,22 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.UI;
 import java.util.List;
+
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import javafx.scene.Node;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
-import ru.nsu.fit.dib.projectdib.initapp.MultiplayerInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 
 /**
@@ -81,15 +87,7 @@ public class App extends GameApplication {
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
-/*    AStarGrid grid = AStarGrid.fromWorld(FXGL.getGameWorld(), FXGLForKtKt.getAppWidth(), getAppHeight(), 160, 160,
-            (type) -> {
-              if (type == EntityType.WALL || type == EntityType.CLOSED_DOOR) {
-                return CellState.NOT_WALKABLE;
-              }
-
-              return CellState.WALKABLE;
-            });
-    set("grid", grid);*/
+    player=gameInitializer.getPlayer();
   }
 
   @Override
