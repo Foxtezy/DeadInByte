@@ -17,12 +17,7 @@ public class GridCreator {
 
   public void run(){
     AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 66, 66, lengthOfCell, lengthOfCell,
-        (entityType) -> {
-              /*    if (entityType != EntityType.WALL) {
-                      return CellState.WALKABLE;
-                  }*/
-          return CellState.NOT_WALKABLE;
-        });
+        entityType -> CellState.NOT_WALKABLE);
     for(int x = 0; x < map.length ; x++){
       for(int y = 1; y < map[x].length; y++){
         if(map[x][y] != BlockDensity.WALL.density) {

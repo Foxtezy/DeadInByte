@@ -23,19 +23,8 @@ public class MapInitializer {
     ClientConfig.addClientReceiverThread(new ClientReceiverThread());
     while (mapSeed == null);
     Level lvl = new Level(mapSeed, 64, 64, 1, 15);
-    lvl.print();
     String levelName = "levels/" + LevelToTmx.levelToTmx(lvl);
     LevelSetter.setLevelFromMap(levelName, getGameWorld());
-  /* AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 65, 65, lengthOfCell, lengthOfCell,
-            (entityType) -> {
-              if (entityType == EntityType.WALL) {
-                return CellState.NOT_WALKABLE;
-              }
-              return CellState.WALKABLE;
-            });
-    set("grid", grid);
-    System.out.println("CELLS: " + grid.getCells().stream().filter(cell -> cell.isWalkable()).toList());
-*/
     return lvl;
   }
 

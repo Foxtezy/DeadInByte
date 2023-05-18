@@ -38,28 +38,13 @@ public class GameInitializer {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
-    // мультиплейерная часть
     MapInitializer mapInitializer = new MapInitializer();
     Level lvl = mapInitializer.run();
     MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
     multiplayerInitializer.run();
-    // мультиплейерная часть
-    //System.out.println("appHeight " + getAppHeight() + "appWidth " + getAppWidth());
-
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map, grid);
     GridCreator gridCreator = new GridCreator(lvl.map);
     gridCreator.run();
-    //System.out.println("lvl.map.length " + lvl.map.length + "lvl.map[0].length" +  lvl.map[0].length);
-    int counter = 0;
-    int counterOFANY = 0;
-
-      //List<AStarCell> nonWalkable = grid.getCells().stream().filter(cell -> !cell.isWalkable()).toList();
-    //System.out.println(nonWalkable);
-
-    //System.out.println("CELLS IN GRID = " + grid.getCells().size());
-    //System.out.println("COUNT of NON_WALKABLE: " + nonWalkable.size());
-    //System.out.println("COUNTER OF WALLS: "+ counter);
-    //System.out.println("COUNTER ALL in LVL.map: " + counterOFANY);
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     Point2D position = new Point2D(x,y);
