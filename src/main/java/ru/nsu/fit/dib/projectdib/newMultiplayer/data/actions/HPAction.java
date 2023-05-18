@@ -23,8 +23,10 @@ public class HPAction extends GameAction {
     var table = MCClient.getClientState().getIdHashTable();
     Entity attacked = table.get(attackedID);
     var HPComponent = attacked.getComponent(HealthIntComponent.class);
-    HPComponent.setValue(attackedHP);
-    attacked.getComponent(HPViewComponent.class).updateHPBar();
+    if (MCClient.getClientId() != 1) HPComponent.setValue(attackedHP);
+    if (MCClient.getClientState().getIdHashTable().get(attackedID).getType() == EntityType.PLAYER) {
+      attacked.getComponent(HPViewComponent.class).updateHPBar();
+    }
     System.out.println(attacked.getType()+" HP:"+HPComponent.getValue());
     if (HPComponent.isZero()){
       Platform.runLater(()->{

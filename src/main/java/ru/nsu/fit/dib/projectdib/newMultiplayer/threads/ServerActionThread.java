@@ -40,7 +40,7 @@ public class ServerActionThread extends Thread {
 
   @Override
   public void run() {
-/*    try {
+    try {
       actionQueue.add(actionQueue.take());
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
@@ -49,7 +49,7 @@ public class ServerActionThread extends Thread {
         GameInitializer.lvl.start.getCentrePoint().y * 160);
     actionQueue.add(new Pair<>(MessageType.SPAWN,
         new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123, new EntityState(1231,
-            start, new Point2D(0, 0), -1)))));*/
+            start, new Point2D(0, 0), -1)))));
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
@@ -91,9 +91,10 @@ public class ServerActionThread extends Thread {
             yield null;
           }
           HPAction hpAction = (HPAction) inPacket.getValue();
+          int newHP = attackedEntity.getComponent(HealthIntComponent.class).getValue()-hpAction.getAttackedHP();
+          attackedEntity.getComponent(HealthIntComponent.class).setValue(newHP);
           yield new Pair<>(MessageType.HP,
-              new HPAction(hpAction.getAttackingID(), hpAction.getAttackedID(),
-                  attackedEntity.getComponent(HealthIntComponent.class).getValue()));
+              new HPAction(hpAction.getAttackingID(), hpAction.getAttackedID(),newHP));
         }
         case SPAWN -> {
           SpawnAction spawnAction = (SpawnAction) inPacket.getValue();

@@ -14,6 +14,7 @@ import com.almasb.fxgl.ui.UIController;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
@@ -23,6 +24,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 
 /**
@@ -55,9 +57,6 @@ public class GameInitializer {
     try {
       System.out.println(HeroType.Elf.getName());
       player = EntitySpawner.spawn(new NewEntity(HeroType.Knight.getName(),123,position,null)).get();
-      Entity enemy = EntitySpawner.spawn(new NewEntity(EnemiesFactory.EnemyType.Devil.getName(), 456, position.subtract(new Point2D(160, 320)), null)).get();
-      //enemy.getComponent(PhysicsComponent.class).setLinearVelocity(100, 100);
-      //System.out.println(player.getComponent(HeroComponent.class).getCreature().getSpeed());
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }

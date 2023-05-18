@@ -57,7 +57,7 @@ public class EntityState {
     // TODO: 12.04.2023 тут свич надо дописать
     // TODO: 21.04.2023 иногда выскакивает DataComponent not found
     switch (entity.getComponent(DataComponent.class).getEntityType()) {
-      case PLAYER -> {
+      case PLAYER, ENEMY-> {
         if (position != null) {
           // TODO: 21.04.2023 проверка HeroComponent
           entity.getComponent(ServerControlComponent.class).moveToPoint(position);

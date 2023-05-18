@@ -128,12 +128,9 @@ public class Factory implements EntityFactory {
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
         .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
-        // .with(new CellMoveComponent(16, 16, 250))
         .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         .with(new HealthIntComponent(creature.getMaxHP()))
         .with(new HPViewComponent(creature.getType(), creature.getMaxHP()))
-        /*  .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
-        .with()*/
         .build();
   }
 
@@ -142,34 +139,36 @@ public class Factory implements EntityFactory {
     Creature creature = data.get("creature");
     EnemyType type = (EnemyType) creature.getType();
     EntityBuilder builder = creatureBuilder();
-
     CreatureViewComponent view = new EnemyViewComponent(type.getID());
     view.bindDirectionView(entity -> new Point2D(0, 0));
     System.out.println(type.getName()+" with ["+"HP: "+creature.getMaxHP()+", defense:"+creature.getArmorCoefficient()+"] spawned");
-    builder
-        .from(data)
-        .type(EntityType.ENEMY)
-        .with(view)
-        .anchorFromCenter()
-        .with(new ShootAttackComponent())
-        .with(new CreatureComponent(creature))
-        .with(new ServerControlComponent())
-        .with(new WeaponInventoryComponent(1))
-        .with(new DataComponent(EntityType.ENEMY,data.get("owner"),data.get("id")))
-        .with(new HealthIntComponent(creature.getMaxHP()))
-        //.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))));
-   // if (MCClient.getClientId()==0) builder.with(new CellMoveComponent(160, 160, 300).allowRotation(true));
-        //.with(new CellMoveComponent(16, 16, 250))
-        .with(new CellMove(lengthOfCell, lengthOfCell, 250))
-        //.with(aStar)
-        //.with(new PlayerChaseComponent(aStar))
-        .with(new EnemyAiComponent());
-    // .with(new HealthIntComponent(creature.getMaxHP()));
-
-    // if (MCClient.getClientId()==0) builder.with(new CellMoveComponent(160, 160,
-    // 300).allowRotation(true));
-    // TODO: 29.04.2023 AIComponent
-    // .with(new AIComponent()); todo сделать позже
+    if (MCClient.getClientId() == 1) {
+      builder
+          .from(data)
+          .type(EntityType.ENEMY)
+          .with(view)
+          .anchorFromCenter()
+          .with(new ShootAttackComponent())
+          .with(new CreatureComponent(creature))
+          .with(new ServerControlComponent())
+          .with(new WeaponInventoryComponent(1))
+          .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
+          .with(new HealthIntComponent(creature.getMaxHP()))
+          .with(new CellMove(lengthOfCell, lengthOfCell, 250))
+          .with(new EnemyAiComponent());
+    } else {
+      builder
+          .from(data)
+          .type(EntityType.ENEMY)
+          .with(view)
+          .anchorFromCenter()
+          .with(new ShootAttackComponent())
+          .with(new CreatureComponent(creature))
+          .with(new ServerControlComponent())
+          .with(new WeaponInventoryComponent(1))
+          .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
+          .with(new HealthIntComponent(creature.getMaxHP()));
+    }
     return builder.build();
   }
 

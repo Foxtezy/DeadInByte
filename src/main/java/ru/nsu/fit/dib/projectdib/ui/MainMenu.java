@@ -345,6 +345,7 @@ public class MainMenu extends FXGLMenu {
           } catch (InterruptedException e) {
             throw new RuntimeException(e);
           }
+          serverConnection.interrupt();
           FXGL.getGameController().startNewGame();
         }
     );
