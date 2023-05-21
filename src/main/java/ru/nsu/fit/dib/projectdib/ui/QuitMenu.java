@@ -10,7 +10,10 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import ru.nsu.fit.dib.projectdib.data.Music;
+import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
+import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
 
 public class QuitMenu extends AnchorPane {
   public ImageButton resume;
@@ -39,11 +42,17 @@ public class QuitMenu extends AnchorPane {
         + "-fx-padding: 20;");
     this.getChildren().add(box);
     resume.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       this.setDisable(true);
       this.setVisible(false);
     });
     quit.setOnMouseClicked(event ->{
+      BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Music.menu);
+      FXGL.play(Sounds.select_button);
       FXGL.getGameController().gotoMainMenu();
+    });
+    settings.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
     });
   }
 }

@@ -49,7 +49,9 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
+import ru.nsu.fit.dib.projectdib.data.Music;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
@@ -58,6 +60,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.SpriteAnimation;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.WrappedImageView;
+import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
 
 /**
  * Главное меню.
@@ -68,6 +71,7 @@ public class MainMenu extends FXGLMenu {
 
   public MainMenu(MenuType type) {
     super(type);
+    BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Music.menu);
     Pane canvas = getContentRoot();
     canvas.setStyle("-fx-background-color: #121218;");
     AnchorPane globalAnchor = new AnchorPane();
@@ -203,6 +207,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Multiplayer===
     multiplayer.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       globalAnchor.getChildren().add(returnButton);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(multiplayer);
@@ -218,6 +223,7 @@ public class MainMenu extends FXGLMenu {
     final Future<Map<Integer, Socket>>[] future = new Future[]{null};
     ServerConnectionTask serverConnectionTask = new ServerConnectionTask();
     server.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       future[0] = CompletableFuture.supplyAsync(serverConnectionTask);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(server);
@@ -233,6 +239,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Update===
     update.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.removeChildren();
       var clients = serverConnectionTask.getClientSockets();
@@ -253,6 +260,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Start Multiplayer===
     startMultiplayer.setOnMouseClicked(e -> {
+      FXGL.play(Sounds.select_button);
       // шлём инициализационный пакет клиентам
       Sender sender = new Sender();
       MCServer.getClientSockets().values()
@@ -279,6 +287,7 @@ public class MainMenu extends FXGLMenu {
     authentication.getChildren().add(enter);
 
     connect.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(connect);
       tree.addNodes(connect, List.of(authentication));
@@ -299,6 +308,7 @@ public class MainMenu extends FXGLMenu {
     loadingBox.setAlignment(Pos.CENTER);
 
     enter.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       SocketAddress socketAddress;
       try {
         socketAddress = new InetSocketAddress(passwordField.getText().split(":")[0],
@@ -338,6 +348,7 @@ public class MainMenu extends FXGLMenu {
 
     //===Start===
     start.setOnMouseClicked(event -> {
+          FXGL.play(Sounds.select_button);
           ServerConnectionTask serverConnection = new ServerConnectionTask();
           CompletableFuture.supplyAsync(serverConnection);
           try {
@@ -352,10 +363,12 @@ public class MainMenu extends FXGLMenu {
 
     //===Settings===
     settings.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
     });
 
     //===Return===
     returnButton.setOnMouseClicked(event -> {
+      FXGL.play(Sounds.select_button);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.removeChildren();
       tree.changeActiveNode(tree.getParentA());

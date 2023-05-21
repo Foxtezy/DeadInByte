@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.ui.UIElements;
 
+import com.almasb.fxgl.dsl.FXGL;
 import java.util.Objects;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -7,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import ru.nsu.fit.dib.projectdib.data.Sounds;
 
 /**
  * Кнопка-картинка. Желательно конечно сделать ее более общей, однако пока что анимация наведения
@@ -26,6 +28,7 @@ public class ImageButton extends StackPane {
     text.setFont(font);
 
     this.setOnMouseEntered(event -> {
+      FXGL.play(Sounds.enter_button);
       iv.setImage(pushed);
       text.setStyle("-fx-scale-x: 1.1;"
           + "-fx-scale-y: 1.1;"
@@ -56,6 +59,7 @@ public class ImageButton extends StackPane {
     iv.setPreserveRatio(true);
     text = new Text(buttonName);
     this.setOnMouseEntered(event -> {
+      FXGL.play(Sounds.enter_button);
       iv.setImage(pushed);
       iv.setStyle("-fx-scale-x: 1.1;"
           + "-fx-scale-y: 1.1;"

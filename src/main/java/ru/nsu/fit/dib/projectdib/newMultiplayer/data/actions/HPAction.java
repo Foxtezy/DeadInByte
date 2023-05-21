@@ -1,9 +1,11 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
@@ -31,6 +33,7 @@ public class HPAction extends GameAction {
     if (HPComponent.isZero()){
       Platform.runLater(()->{
         if (attacked.getType() == EntityType.PLAYER) {
+          FXGL.play(Sounds.death);
           // TODO: 09.05.2023 game over
           return;
         }

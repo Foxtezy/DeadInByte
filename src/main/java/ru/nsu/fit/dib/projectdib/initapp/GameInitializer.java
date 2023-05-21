@@ -56,7 +56,7 @@ public class GameInitializer {
     Point2D position = new Point2D(x,y);
     try {
       System.out.println(HeroType.Elf.getName());
-      player = EntitySpawner.spawn(new NewEntity(HeroType.Knight.getName(),123,position,null)).get();
+      player = EntitySpawner.spawn(new NewEntity(HeroType.Wizard.getName(),123,position,null)).get();
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }

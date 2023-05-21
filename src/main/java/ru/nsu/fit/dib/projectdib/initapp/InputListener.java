@@ -20,6 +20,7 @@ import javafx.scene.input.MouseButton;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Controls;
+import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.entity.components.control.PlayerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
@@ -102,6 +103,7 @@ public class InputListener {
     getInput().addAction(new UserAction("Take/Throw") {
       @Override
       protected void onActionBegin() {
+        FXGL.play(Sounds.pickup_weapon);
         List<Entity> list = player.getComponent(WeaponInventoryComponent.class).findWeapon();
         if (list.size() >= 1) {
           doAction(new Pair<>(MessageType.WEAPON,
@@ -124,6 +126,7 @@ public class InputListener {
         addAction(new UserAction("Swap weapons") {
           @Override
           protected void onActionBegin() {
+            FXGL.play(Sounds.swap_weapon);
             player.getComponent(WeaponInventoryComponent.class).swapWeapon();
           }
         }, Controls.CHANGE_WEAPON, VirtualButton.B);

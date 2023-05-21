@@ -14,11 +14,13 @@ import java.util.List;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import javafx.scene.Node;
+import ru.nsu.fit.dib.projectdib.data.Music;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
+import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
@@ -88,6 +90,7 @@ public class App extends GameApplication {
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
     player=gameInitializer.getPlayer();
+    BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Music.first_music);
   }
 
   @Override
