@@ -25,7 +25,7 @@ import ru.nsu.fit.dib.projectdib.utils.SoundsController;
  * не так...
  */
 public final class GameUIController implements UIController {
-
+  private static GameUIController controller;
   @FXML
   public AnchorPane mainPane;
   @FXML
@@ -38,13 +38,17 @@ public final class GameUIController implements UIController {
   ImageButton character;
   CharacterMenu characterMenu;
   QuitMenu quitMenu;
+  public static DeathMenu deathMenu;
 
   public GameUIController(GameScene gameScene) {
     this.gameScene = gameScene;
   }
-
+  public static GameUIController getGameUIController(){
+    return controller;
+  }
   @Override
   public void init() {
+    controller=this;
     mainPane.setMinHeight(gameScene.getViewport().getHeight());
     mainPane.setMinWidth(gameScene.getViewport().getWidth());
     addHPBars();
@@ -62,7 +66,13 @@ public final class GameUIController implements UIController {
     quitMenu.setMinWidth(gameScene.getViewport().getWidth());
     quitMenu.setVisible(false);
     quitMenu.setDisable(true);
-    mainPane.getChildren().addAll(characterMenu, quitMenu);
+    deathMenu = new DeathMenu();
+    deathMenu.initialize();
+    deathMenu.setMinHeight(gameScene.getViewport().getHeight());
+    deathMenu.setMinWidth(gameScene.getViewport().getWidth());
+    deathMenu.setDisable(true);
+    deathMenu.setVisible(false);
+    mainPane.getChildren().addAll(characterMenu, quitMenu,deathMenu);
   }
 
   private void addButtons() {
@@ -103,6 +113,6 @@ public final class GameUIController implements UIController {
   public volatile static BlockingQueue<Entity> queue = new LinkedBlockingQueue<>();
 
   public void removeHPBar(Entity entity) {
-    healthBarBox.getChildren().add(entity.getComponent(HPViewComponent.class).getHPBar());
+    healthBarBox.getChildren().remove(entity.getComponent(HPViewComponent.class).getHPBar());
   }
 }

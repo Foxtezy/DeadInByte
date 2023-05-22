@@ -83,7 +83,6 @@ public class App extends GameApplication {
 
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
-    inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
     BackgroundMusicController.getBackgroundMusicControlleroller().setPlaylist(List.of(Musics.first_music,Musics.second_music,Musics.third_music));
   }

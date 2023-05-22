@@ -32,6 +32,7 @@ public class QuitMenu extends AnchorPane {
     settings = new ImageButton("settings",font,"#5ae8a8", "#2b2944",pushed,unpushed);
     box = new VBox();
     box.setAlignment(Pos.CENTER);
+    box.setSpacing(40);
     box.getChildren().addAll(resume,settings,quit);
     AnchorPane.setBottomAnchor(box,20.0);
     AnchorPane.setLeftAnchor(box,20.0);
@@ -51,6 +52,7 @@ public class QuitMenu extends AnchorPane {
     this.getChildren().add(box);
     settingsMenu.setPrefSize(this.getPrefWidth(),this.getPrefHeight());
     this.getChildren().add(settingsMenu);
+
     settingsMenu.setCloseEvent(()->{
       box.setVisible(true);
       box.setDisable(false);

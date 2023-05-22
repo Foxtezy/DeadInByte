@@ -21,7 +21,7 @@ public class BackgroundMusicController {
   private BackgroundMusicController() {
   }
 
-  public double fadeVolume = 1;
+  public double fadeVolume = Config.MUSIC;
   Music currentMusic;
 
   public static BackgroundMusicController getBackgroundMusicControlleroller() {
@@ -77,18 +77,19 @@ public class BackgroundMusicController {
         nextMusic = getAssetLoader().loadMusic(playlist.get(current++));
       }
     }
-    if (fadeVolume <= 0) {
-      getAudioPlayer().stopMusic(currentMusic);
-      fadeVolume = Config.MUSIC;
-      currentMusic = nextMusic;
-      getAudioPlayer().loopMusic(currentMusic);
-      currentMusic.getAudio$fxgl_core().setVolume(fadeVolume);
-      nextMusic = null;
-      time=0;
-    } else if (nextMusic != null) {
-      fadeVolume -= 0.0005;
-      System.out.println(fadeVolume);
-      currentMusic.getAudio$fxgl_core().setVolume(fadeVolume);
+    if (nextMusic!=null) {
+      if (fadeVolume <= 0) {
+        getAudioPlayer().stopMusic(currentMusic);
+        fadeVolume = Config.MUSIC;
+        currentMusic = nextMusic;
+        getAudioPlayer().loopMusic(currentMusic);
+        currentMusic.getAudio$fxgl_core().setVolume(fadeVolume);
+        nextMusic = null;
+        time = 0;
+      } else if (nextMusic != null) {
+        fadeVolume -= 0.0005;
+        currentMusic.getAudio$fxgl_core().setVolume(fadeVolume);
+      }
     }
   }
 }

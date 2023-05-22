@@ -1,6 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data;
 
 public interface Sounds {
+  String attack = "weapon/attack/melee/long/mixkit-sword-blade-attack-in-medieval-battle-2762.wav";
   String death = "player/death/mixkit-arcade-retro-game-over-213.wav";
   String connect = "player/connect/Retro Event Acute 08.wav";
   String bow_shot = "weapon/attack/shoot/puschennaya-strela-iz-luka-24091.wav";

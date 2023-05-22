@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.context.client;
 
+import com.almasb.fxgl.entity.Entity;
 import java.net.Socket;
 import java.util.HashMap;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.ClientState;
@@ -62,5 +63,9 @@ public final class MCClient {
     } else {
       throw new ContextException();
     }
+  }
+
+  public static Entity getClientEntity() {
+    return getClientState().getIdHashTable().get(getClientId());
   }
 }
