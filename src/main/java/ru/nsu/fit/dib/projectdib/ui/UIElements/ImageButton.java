@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
+import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 
 /**
  * Кнопка-картинка. Желательно конечно сделать ее более общей, однако пока что анимация наведения
@@ -28,7 +29,7 @@ public class ImageButton extends StackPane {
     text.setFont(font);
 
     this.setOnMouseEntered(event -> {
-      FXGL.play(Sounds.enter_button);
+      SoundsController.getSoundsController().play(Sounds.enter_button);
       iv.setImage(pushed);
       text.setStyle("-fx-scale-x: 1.1;"
           + "-fx-scale-y: 1.1;"
@@ -59,7 +60,7 @@ public class ImageButton extends StackPane {
     iv.setPreserveRatio(true);
     text = new Text(buttonName);
     this.setOnMouseEntered(event -> {
-      FXGL.play(Sounds.enter_button);
+      SoundsController.getSoundsController().play(Sounds.enter_button);
       iv.setImage(pushed);
       iv.setStyle("-fx-scale-x: 1.1;"
           + "-fx-scale-y: 1.1;"

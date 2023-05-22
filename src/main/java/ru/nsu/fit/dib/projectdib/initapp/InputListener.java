@@ -30,6 +30,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.WeaponAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.WeaponAction.WeaponActionType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
+import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 
 /**
  * Инициализатор действий со входными данными (например, с клавиатуры)
@@ -103,7 +104,7 @@ public class InputListener {
     getInput().addAction(new UserAction("Take/Throw") {
       @Override
       protected void onActionBegin() {
-        FXGL.play(Sounds.pickup_weapon);
+        SoundsController.getSoundsController().play(Sounds.pickup_weapon);
         List<Entity> list = player.getComponent(WeaponInventoryComponent.class).findWeapon();
         if (list.size() >= 1) {
           doAction(new Pair<>(MessageType.WEAPON,
@@ -126,7 +127,7 @@ public class InputListener {
         addAction(new UserAction("Swap weapons") {
           @Override
           protected void onActionBegin() {
-            FXGL.play(Sounds.swap_weapon);
+            SoundsController.getSoundsController().play(Sounds.swap_weapon);
             player.getComponent(WeaponInventoryComponent.class).swapWeapon();
           }
         }, Controls.CHANGE_WEAPON, VirtualButton.B);

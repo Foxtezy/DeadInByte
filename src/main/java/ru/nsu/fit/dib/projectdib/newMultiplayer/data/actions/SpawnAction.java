@@ -7,6 +7,7 @@ import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 
 public class SpawnAction extends GameAction {
 
@@ -28,15 +29,15 @@ public class SpawnAction extends GameAction {
         if (projectile!=null)
         {
           switch (projectile) {
-            case ARROW -> FXGL.play(Sounds.bow_shot);
-            case BULLET -> FXGL.play(Sounds.bullet_shot);
-            case FIREBALL -> FXGL.play(Sounds.fireball);
+            case ARROW -> SoundsController.getSoundsController().play(Sounds.bow_shot);
+            case BULLET -> SoundsController.getSoundsController().play(Sounds.bullet_shot);
+            case FIREBALL -> SoundsController.getSoundsController().play(Sounds.fireball);
           }
         }
       }
       case PLAYER -> {
         if (!Objects.equals(newEntity.getID(), MCClient.getClientId())) {
-          FXGL.play(Sounds.connect);
+          SoundsController.getSoundsController().play(Sounds.connect);
         }
       }
       default -> {}

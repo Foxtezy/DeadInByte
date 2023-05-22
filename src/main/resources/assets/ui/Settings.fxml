@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane layoutX="80.0" prefHeight="480.0" prefWidth="880.0" translateY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox minHeight="150.0" minWidth="200.0" prefHeight="150.0" prefWidth="200.0" />
+            <ImageView pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@elements/settings_pane.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="close" pickOnBounds="true" preserveRatio="true" translateX="400.0" translateY="-240.0">
+               <image>
+                  <Image url="@elements/close.png" />
+               </image>
+            </ImageView>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Music" translateX="-280.0" translateY="-160.0" wrappingWidth="134.0">
+               <font>
+                  <Font name="Agency FB" size="65.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Movement" textAlignment="CENTER" wrappingWidth="213.15576171875">
+               <font>
+                  <Font name="Agency FB" size="65.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Sounds" translateX="-270.0" translateY="-80.0">
+               <font>
+                  <Font name="Agency FB" size="65.0" />
+               </font>
+            </Text>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="150.0" minWidth="200.0" prefHeight="504.0" prefWidth="737.0">
+               <children>
+                                 <Slider fx:id="musicSlider" prefHeight="14.0" prefWidth="855.0" AnchorPane.leftAnchor="240.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="80.0" />
+                  <Slider fx:id="soundsSlider" prefHeight="14.0" prefWidth="737.0" AnchorPane.leftAnchor="240.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="160.0" />
+                  <StackPane prefHeight="200.0" prefWidth="827.0" scaleX="0.75" scaleY="0.75" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateX="-300.0" translateY="-50.0">
+                           <image>
+                              <Image url="@elements/button.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="W" textAlignment="CENTER" translateX="-301.0" translateY="-55.0" wrappingWidth="35.392578125">
+                           <font>
+                              <Font name="Agency FB" size="50.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateX="-190.0" translateY="35.0">
+                           <image>
+                              <Image url="@elements/button.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="D" translateX="-190.0" translateY="30.0">
+                           <font>
+                              <Font name="Agency FB" size="50.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateX="-280.0" translateY="35.0">
+                           <image>
+                              <Image url="@elements/button.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="S" translateX="-280.0" translateY="30.0">
+                           <font>
+                              <Font name="Agency FB" size="50.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateX="-370.0" translateY="35.0">
+                           <image>
+                              <Image url="@elements/button.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="A" translateX="-370.0" translateY="30.0">
+                           <font>
+                               <Font name="Agency FB" size="50.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateY="-50.0">
+                           <image>
+                              <Image url="@elements/button.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Q    swap weapon" translateX="170.0" translateY="-55.0" wrappingWidth="361.392578125">
+                           <font>
+                              <Font name="Agency FB" size="50.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateX="10.0" translateY="35.0">
+                           <image>
+                              <Image url="@elements/button.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="F    take/throw weapon" translateX="185.0" translateY="30.0">
+                           <font>
+                              <Font name="Agency FB" size="50.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+               </children></AnchorPane>
+         </children>
+      </StackPane>
+   </children>
+</fx:root>

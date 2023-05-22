@@ -3,27 +3,22 @@ package ru.nsu.fit.dib.projectdib;
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.UI;
 import java.util.List;
 
-import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import javafx.scene.Node;
-import ru.nsu.fit.dib.projectdib.data.Music;
+import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.set;
 
 
 /**
@@ -85,12 +80,12 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
+
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
-    player=gameInitializer.getPlayer();
-    BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Music.first_music);
+    BackgroundMusicController.getBackgroundMusicControlleroller().setPlaylist(List.of(Musics.first_music,Musics.second_music,Musics.third_music));
   }
 
   @Override
@@ -99,5 +94,6 @@ public class App extends GameApplication {
         .getEntitiesByType(EntityType.PLAYER, EntityType.ENEMY, EntityType.WEAPON);
     list.sort((e1, e2) -> (int) (e1.getY() - e2.getY()));
     list.stream().map(entity -> entity.getViewComponent().getParent()).forEach(Node::toFront);
+    BackgroundMusicController.getBackgroundMusicControlleroller().onUpdate();
   }
 }

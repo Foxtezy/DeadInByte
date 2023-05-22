@@ -8,6 +8,7 @@ import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 
 public class HPAction extends GameAction {
   private final int attackingID;
@@ -33,7 +34,7 @@ public class HPAction extends GameAction {
     if (HPComponent.isZero()){
       Platform.runLater(()->{
         if (attacked.getType() == EntityType.PLAYER) {
-          FXGL.play(Sounds.death);
+          SoundsController.getSoundsController().play(Sounds.death);
           // TODO: 09.05.2023 game over
           return;
         }

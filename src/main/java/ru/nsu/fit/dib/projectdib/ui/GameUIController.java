@@ -18,6 +18,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
+import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 
 /**
  * Пока не знаю зачем, но пусть будет. По идее нужен для обработки событий кнопок. Но что-то пошло
@@ -68,14 +69,14 @@ public final class GameUIController implements UIController {
     menu = new ImageButton("menu", new Image("assets/ui/elements/menu_selected.png"),
         new Image("assets/ui/elements/menu.png"));
     menu.setOnMouseClicked(event -> {
-      FXGL.play(Sounds.select_button);
+      SoundsController.getSoundsController().play(Sounds.select_button);
       quitMenu.setDisable(false);
       quitMenu.setVisible(true);
     });
     character = new ImageButton("character", new Image("assets/ui/elements/character_selected.png"),
         new Image("assets/ui/elements/character.png"));
     character.setOnMouseClicked(event -> {
-      FXGL.play(Sounds.select_button);
+      SoundsController.getSoundsController().play(Sounds.select_button);
       characterMenu.show();
     });
     buttonsBox.getChildren().add(character);
