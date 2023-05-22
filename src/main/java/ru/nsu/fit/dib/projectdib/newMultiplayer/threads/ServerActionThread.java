@@ -99,6 +99,7 @@ public class ServerActionThread extends Thread {
         case SPAWN -> {
           SpawnAction spawnAction = (SpawnAction) inPacket.getValue();
           if (Projectiles.getByName(spawnAction.getNewEntity().getEntityType()) != null) {
+            System.out.println(spawnAction.getNewEntity().getEntityType());
             spawnAction.getNewEntity().getState().setID(nextEntityId++);
           } else {
             spawnAction.getNewEntity().setWeaponId(nextEntityId++);

@@ -1,5 +1,7 @@
 package ru.nsu.fit.dib.projectdib.data;
 
+import java.io.FileWriter;
+import java.util.Objects;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
@@ -18,8 +20,13 @@ public class Config {
   public static int WINDOW_WIDTH;
   public static String WINDOW_MODE;
   public static Integer KARMA;
+  public static Double MUSIC;
+  public static Double SOUNDS;
+  public static Properties props;
+  public static String path;
   public static void setConfig(String filepath) {
-    Properties props = new Properties();
+    props = new Properties();
+    path = filepath;
     try {
       props.load(new FileInputStream(filepath));
 
@@ -27,6 +34,19 @@ public class Config {
       WINDOW_HEIGHT = Integer.parseInt(props.getProperty("WINDOW_HEIGHT", "720"));
       WINDOW_MODE = props.getProperty("WINDOW_MODE", "Window");
       KARMA = Integer.parseInt(props.getProperty("KARMA", "0"));
+      MUSIC = Double.parseDouble(props.getProperty("MUSIC","0.5"));
+      SOUNDS = Double.parseDouble(props.getProperty("SOUNDS","0.5"));
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  public static void addProperty(String key, Object value){
+    props.put(key, value.toString());
+  }
+  public static void saveSettings(){
+    try {
+      props.store(new FileWriter(path),"" );
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

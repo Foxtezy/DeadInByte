@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
+import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.core.util.Platform;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
@@ -78,6 +79,11 @@ public class NewEntity {
           } else {
             App.uiController.addHPBar(entity);
           }
+        }
+        if (MCClient.getClientId()==state.getId()) {
+          Viewport viewport = FXGL.getGameScene().getViewport();
+          viewport.focusOn(entity);
+          viewport.bindToEntity(entity, viewport.getWidth() / 2-40, viewport.getHeight() / 2-120);
         }
         return entity;
       }
