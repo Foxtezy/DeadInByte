@@ -40,4 +40,7 @@ public class HPViewComponent extends Component {
   public Node getHPBar() {
     return hpBar;
   }
+
+  public void removeHPBar() {
+  }
 }

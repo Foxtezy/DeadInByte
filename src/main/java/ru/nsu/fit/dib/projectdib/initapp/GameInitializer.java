@@ -36,6 +36,7 @@ public class GameInitializer {
   private Viewport viewport;
   private Entity player;
   public static AStarGrid grid;
+  public static Point2D start;
 
   public GameInitializer() {
   }
@@ -53,10 +54,10 @@ public class GameInitializer {
     gridCreator.run();
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
-    Point2D position = new Point2D(x,y);
+    start = new Point2D(x,y);
     try {
       System.out.println(HeroType.Elf.getName());
-      player = EntitySpawner.spawn(new NewEntity(HeroType.Knight.getName(),123,position,null)).get();
+      player = EntitySpawner.spawn(new NewEntity(HeroType.Wizard.getName(),123,start,null)).get();
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }

@@ -10,13 +10,16 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import java.util.List;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.EntityType;
+import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.HPAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
+import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 
 /**
  * Загразчик физики.
@@ -92,6 +95,9 @@ public class PhysicsLoader {
                   projectile.removeFromWorld();
                 }
                 if (attackEntityType == EntityType.WEAPON) {
+                  if (projectile.getComponent(WeaponComponent.class).getWeapon().getType().getWeaponType()== WeaponType.melee) {
+                    SoundsController.getSoundsController().play(Sounds.attack);
+                  }
                   if (projectile.getComponent(WeaponComponent.class).getWeapon().isLongRange()) {
                     return;
                   }

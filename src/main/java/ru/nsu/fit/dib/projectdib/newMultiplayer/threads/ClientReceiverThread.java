@@ -9,6 +9,7 @@ import ru.nsu.fit.dib.projectdib.initapp.MultiplayerInitializer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.GameAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Receiver;
 
