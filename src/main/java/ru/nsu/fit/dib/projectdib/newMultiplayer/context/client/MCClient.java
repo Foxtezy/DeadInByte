@@ -21,6 +21,10 @@ public final class MCClient {
 
   private static final HashMap<EMCClient, Object> context = new HashMap<>();
 
+  public static void clearContext() {
+    context.clear();
+  }
+
   public static void addBean(EMCClient emcClient, Object bean) {
     context.put(emcClient, bean);
   }

@@ -13,11 +13,11 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.style;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -45,10 +45,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
+import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionThread;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
@@ -225,11 +228,9 @@ public class MainMenu extends FXGLMenu {
     serverBox.setStyle("-fx-padding: 40;");
     serverBox.getChildren().addAll(update, startMultiplayer, serverID);
     ScrollPane scrollPane = new ScrollPane();
-    final Future<Map<Integer, Socket>>[] future = new Future[]{null};
-    ServerConnectionTask serverConnectionTask = new ServerConnectionTask();
     server.setOnMouseClicked(event -> {
       SoundsController.getSoundsController().play(Sounds.select_button);
-      future[0] = CompletableFuture.supplyAsync(serverConnectionTask);
+      ServerConfig.addServerConnectionThread(new ServerConnectionThread());
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(server);
       scrollPane.setPrefViewportHeight(600);
@@ -247,7 +248,7 @@ public class MainMenu extends FXGLMenu {
       SoundsController.getSoundsController().play(Sounds.select_button);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.removeChildren();
-      var clients = serverConnectionTask.getClientSockets();
+      var clients = MCServer.getConnectionThread().getClientSockets();
       for (Entry<Integer, Socket> s : clients.entrySet()) {
         ImageButton newClient = new ImageButton(
             s.getValue().getInetAddress().toString().replaceFirst("/", ""), font, "#5ae8a8",
@@ -269,11 +270,20 @@ public class MainMenu extends FXGLMenu {
       // шлём инициализационный пакет клиентам
       Sender sender = new Sender();
       MCServer.getClientSockets().values()
-          .forEach(s -> sender.send(s, new Pair<>(MessageType.START_GAME, null)));
-      serverConnectionTask.startGame();
+          .forEach(s -> {
+            try {
+              sender.send(s, new Pair<>(MessageType.START_GAME, null));
+            } catch (IOException ex) {
+            }
+          });
+      MCServer.getConnectionThread().startGame();
       // читаем у локального клиента
       Receiver receiver = new Receiver(MCClient.getClientSocket());
-      receiver.receive();
+      try {
+        receiver.receive();
+      } catch (IOException ex) {
+        App.stop();
+      }
       FXGL.getGameController().startNewGame();
     });
 
@@ -348,6 +358,8 @@ public class MainMenu extends FXGLMenu {
         }
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
+      } catch (IOException e) {
+        App.stop();
       }
     });
 
@@ -370,15 +382,14 @@ public class MainMenu extends FXGLMenu {
 
     //===Start===
     start.setOnMouseClicked(event -> {
-          SoundsController.getSoundsController().play(Sounds.select_button);
-          ServerConnectionTask serverConnection = new ServerConnectionTask();
-          CompletableFuture.supplyAsync(serverConnection);
+      SoundsController.getSoundsController().play(Sounds.select_button);
+          ServerConfig.addServerConnectionThread(new ServerConnectionThread());
           try {
             Thread.sleep(500);
           } catch (InterruptedException e) {
             throw new RuntimeException(e);
           }
-          serverConnection.interrupt();
+          MCServer.getConnectionThread().interrupt();
           FXGL.getGameController().startNewGame();
         }
     );

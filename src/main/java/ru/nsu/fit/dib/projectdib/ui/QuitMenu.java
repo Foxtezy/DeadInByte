@@ -10,8 +10,13 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
+import ru.nsu.fit.dib.projectdib.App;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
 import ru.nsu.fit.dib.projectdib.utils.SoundsController;
@@ -65,7 +70,7 @@ public class QuitMenu extends AnchorPane {
     quit.setOnMouseClicked(event ->{
       BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
       SoundsController.getSoundsController().play(Sounds.select_button);
-      FXGL.getGameController().gotoMainMenu();
+      App.stop();
     });
     settings.setOnMouseClicked(event -> {
       SoundsController.getSoundsController().play(Sounds.select_button);

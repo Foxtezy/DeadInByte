@@ -60,4 +60,13 @@ public class HPAction extends GameAction {
   public int getAttackedHP() {
     return attackedHP;
   }
+
+  @Override
+  public String toString() {
+    return "HPAction{" +
+        "attackingID=" + attackingID +
+        ", attackedID=" + attackedID +
+        ", attackedHP=" + attackedHP +
+        '}';
+  }
 }
