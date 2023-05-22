@@ -21,17 +21,13 @@ public class Receiver {
     return socket;
   }
 
-  public Pair<MessageType, Object> receive() {
+  public Pair<MessageType, Object> receive() throws IOException{
     byte[] byteArray;
     //Получаем что то
-    try {
       DataInputStream dis = new DataInputStream(socket.getInputStream());
       int len = dis.readInt();
       byteArray = new byte[len];
       dis.readFully(byteArray);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
     //Передаем в буфер
     byte[] data = new byte[byteArray.length - 1];
     System.arraycopy(byteArray, 1, data, 0, data.length);

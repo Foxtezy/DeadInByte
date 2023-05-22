@@ -9,6 +9,8 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.UI;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
 
 import com.almasb.fxgl.pathfinding.CellState;
@@ -18,6 +20,8 @@ import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
 import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
@@ -83,11 +87,47 @@ public class App extends GameApplication {
    */
   @Override
   protected void initGame() {
+    System.out.println("game");
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
     inputListener.initialize(gameInitializer.getPlayer());
     player = gameInitializer.getPlayer();
     player=gameInitializer.getPlayer();
+  }
+
+  public static void stop() {
+    MCClient.getClientSenderThread().interrupt();
+    MCClient.getClientReceiverThread().interrupt();
+    try {
+      MCClient.getClientSocket().close();
+      MCClient.getClientSenderThread().join();
+      MCClient.getClientReceiverThread().join();
+    } catch (InterruptedException e) {
+    } catch (IOException e) {
+    }
+    if (MCClient.getClientId() == 1) {
+      MCServer.getUpdaterThread().interrupt();
+      MCServer.getActionThread().interrupt();
+      MCServer.getReceiverThreads().forEach(Thread::interrupt);
+      MCServer.getConnectionThread().interrupt();
+      try {
+        MCServer.getUpdaterThread().join();
+        MCServer.getActionThread().join();
+        for (Socket socket : MCServer.getClientSockets().values()) {
+          socket.close();
+        }
+        for (Thread t : MCServer.getReceiverThreads()) {
+          t.join();
+        }
+      } catch (InterruptedException e) {
+      } catch (IOException e) {
+      }
+    }
+    MCServer.clearContext();
+    MCClient.clearContext();
+    GameUIController.queue.clear();
+    App.uiController = null;
+    FXGL.getGameController().gotoMainMenu();
   }
 
   @Override

@@ -79,6 +79,7 @@ public final class GameUIController implements UIController {
   private synchronized void addHPBars() {
     healthBarBox.getChildren().clear();
     List<Entity> entities = new java.util.ArrayList<>(queue.stream().toList());
+    System.out.println(entities);
     Entity client = entities.stream().filter(e->e.getComponent(DataComponent.class).getId()==MCClient.getClientId()).findFirst().get();
     entities.remove(client);
     healthBarBox.getChildren().add(client.getComponent(HPViewComponent.class).getHPBar());

@@ -15,7 +15,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.WeaponAction;
 
 public class Sender {
 
-  public void send(Socket address, Pair<MessageType, Object> message) {
+  public void send(Socket address, Pair<MessageType, Object> message) throws IOException{
     ByteBuffer buffer = switch (message.getKey()) {
       case HP -> FBSSerializer.serialize((HPAction) message.getValue());
       case WEAPON -> FBSSerializer.serialize((WeaponAction) message.getValue());
@@ -36,12 +36,8 @@ public class Sender {
     byte[] pt = new byte[data.length + 1];
     System.arraycopy(data, 0, pt, 1, data.length);
     pt[0] = message.getKey().getId();
-    try {
       DataOutputStream d = new DataOutputStream(address.getOutputStream());
       d.writeInt(pt.length);
       address.getOutputStream().write(pt);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
   }
 }
