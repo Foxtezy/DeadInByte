@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -56,6 +57,7 @@ public class ServerActionThread extends Thread {
         inPacket = actionQueue.take();
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
+        break;
       }
       assert inPacket != null;
       Pair<MessageType, Object> outPacket = switch (inPacket.getKey()) {
@@ -112,7 +114,13 @@ public class ServerActionThread extends Thread {
       };
       if (outPacket != null) {
         Sender sender = new Sender();
-        MCServer.getClientSockets().values().forEach(s -> sender.send(s, outPacket));
+        MCServer.getClientSockets().values().forEach(s -> {
+          try {
+            sender.send(s, outPacket);
+          } catch (IOException e) {
+
+          }
+        });
       }
     }
   }

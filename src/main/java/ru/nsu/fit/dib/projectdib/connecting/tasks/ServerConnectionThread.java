@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
@@ -22,9 +21,7 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.threads.ServerReceiverThread;
  * Задание которое должно выполняться в CompletableFuture
  * Используется собственный interrupt для завершения
  */
-public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
-
-  private volatile boolean interrupt = false;
+public class ServerConnectionThread extends Thread {
 
   private int lastClientId = 1;
 
@@ -36,16 +33,12 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
     return clientSockets;
   }
 
-  public void interrupt() {
-    this.interrupt = true;
-  }
-
   public void startGame() {
     this.gameStarted = true;
   }
 
   @Override
-  public Map<Integer, Socket> get() {
+  public void run() {
     ServerSocket serverSocket;
     try {
       serverSocket = new ServerSocket(ProjectConfig.SERVER_PORT);
@@ -56,14 +49,16 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
     CompletableFuture.supplyAsync(
         new ClientConnectionTask(new InetSocketAddress("localhost", ProjectConfig.SERVER_PORT)));
     ServerConfig.init();
-    while (!interrupt) {
+    while (!Thread.currentThread().isInterrupted()) {
       try {
         Socket client = serverSocket.accept();
         //отправляем клиенту его id
         client.getOutputStream().write(lastClientId);
         clientSockets.put(lastClientId, client);
         MCServer.getClientSockets().put(lastClientId++, client);
-        new ServerReceiverThread(client).start();
+        ServerReceiverThread t = new ServerReceiverThread(client);
+        t.start();
+        MCServer.getReceiverThreads().add(t);
         if (gameStarted) {
           new Sender().send(client, new Pair<>(MessageType.START_GAME, null));
         }
@@ -73,6 +68,10 @@ public class ServerConnectionTask implements Supplier<Map<Integer, Socket>> {
         throw new RuntimeException(e);
       }
     }
-    return clientSockets;
+    try {
+      serverSocket.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

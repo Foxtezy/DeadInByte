@@ -10,6 +10,10 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import ru.nsu.fit.dib.projectdib.App;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.EMCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.ui.UIElements.ImageButton;
 
 public class QuitMenu extends AnchorPane {
@@ -42,8 +46,6 @@ public class QuitMenu extends AnchorPane {
       this.setDisable(true);
       this.setVisible(false);
     });
-    quit.setOnMouseClicked(event ->{
-      FXGL.getGameController().gotoMainMenu();
-    });
+    quit.setOnMouseClicked(event -> App.stop());
   }
 }

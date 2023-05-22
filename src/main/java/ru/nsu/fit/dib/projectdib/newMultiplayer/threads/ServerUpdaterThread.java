@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -42,7 +43,12 @@ public class ServerUpdaterThread extends Thread {
       List<EntityState> finalOutList = outList;
       if (finalOutList.isEmpty()) continue;
       MCServer.getClientSockets().values()
-          .forEach(s -> sender.send(s, new Pair<>(MessageType.UPDATE, finalOutList)));
+          .forEach(s -> {
+            try {
+              sender.send(s, new Pair<>(MessageType.UPDATE, finalOutList));
+            } catch (IOException e) {
+            }
+          });
     }
   }
 }
