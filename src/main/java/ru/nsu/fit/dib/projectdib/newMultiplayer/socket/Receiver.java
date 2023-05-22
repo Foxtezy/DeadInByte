@@ -60,7 +60,7 @@ public class Receiver {
         return new Pair<>(MessageType.MAP_SEED, byteBuffer.getInt());
       }
       default -> {
-        throw new IllegalArgumentException("Illegal packet type");
+        return new Pair<>(MessageType.ERROR, null);
       }
     }
   }

@@ -311,7 +311,6 @@ public class Factory implements EntityFactory {
    */
   @Spawns("projectile")
   public Entity newProjectile(SpawnData data) {
-    Entity player = FXGLForKtKt.getGameWorld().getSingleton(EntityType.PLAYER);
     int ownerID = data.get("owner");
     Point2D direction = data.get("direction");
     int attack = data.get("attack");
