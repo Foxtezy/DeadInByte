@@ -22,7 +22,7 @@ public class ClientReceiverThread extends Thread {
       try {
         inPacket = receiver.receive();
       } catch (IOException e) {
-
+        continue;
       }
       //System.out.println("reciever works");
       switch (inPacket.getKey()) {

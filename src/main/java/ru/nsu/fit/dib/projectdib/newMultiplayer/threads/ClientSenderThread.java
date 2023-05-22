@@ -30,7 +30,7 @@ public class ClientSenderThread extends Thread {
         try {
           sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.UPDATE, entityStates));
         } catch (IOException e) {
-
+          continue;
         }
         //System.out.println(entityStates);
       }
@@ -40,7 +40,7 @@ public class ClientSenderThread extends Thread {
         try {
           sender.send(MCClient.getClientSocket(),pair);
         } catch (IOException e) {
-
+          continue;
         }
       }
     }
