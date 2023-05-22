@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
@@ -64,7 +65,7 @@ public class DeathMenu extends AnchorPane {
     quit.setOnMouseClicked(event -> {
       BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
       SoundsController.getSoundsController().play(Sounds.select_button);
-      FXGL.getGameController().gotoMainMenu();
+      App.stop();
       this.setVisible(false);
       this.setDisable(true);
     });
