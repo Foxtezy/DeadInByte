@@ -70,6 +70,7 @@ public class DeathMenu extends AnchorPane {
     quit.setOnMouseClicked(event -> {
       BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
       SoundsController.getSoundsController().play(Sounds.select_button);
+      MainMenu.getMainMenu().returnBack();
       App.stop();
       this.setVisible(false);
       this.setDisable(true);
