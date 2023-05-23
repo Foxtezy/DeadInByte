@@ -80,6 +80,7 @@ public class MainMenu extends FXGLMenu {
 
   public MainMenu(MenuType type) {
     super(type);
+
     BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
     Pane canvas = getContentRoot();
     canvas.setStyle("-fx-background-color: #121218;");

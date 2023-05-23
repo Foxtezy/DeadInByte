@@ -24,6 +24,7 @@ public interface ProjectConfig {
 
   //UIConfig
   String _fontDustyPro = "assets/ui/fonts/DustyPro.ttf";
+  String _fontAgencyFB = "assets/ui/fonts/agency-fb.ttf";
   String _forestAnimationUI = "assets/ui/elements/forest1k.png";
   String _campfireAnimationUI = "assets/ui/elements/campfire1k.png";
   String _menuButton = "assets/ui/elements/menu_button1k.png";
