@@ -7,32 +7,21 @@ import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.entity.weapons.enums.WeaponType;
 
 public class HeroData {
-  private final HeroType type;
-  private final Weapons weapon;
-  private final int maxHP;
-  private final int hp;
-  private final int[] specs;
-  private final int[] skills;
 
-  public HeroData(HeroType type, Weapons weapon,int MaxHP,int HP, int[] specs, int[] skills) {
-    this.type = type;
-    this.weapon = weapon;
-    maxHP = MaxHP;
-    hp = HP;
-    this.specs = specs;
-    this.skills = skills;
+  public HeroType getType() {
+    return type;
   }
-  public Creature toCreature(){
-    return new CreatureBuilder(type.getName(),type)
-        .setHP(maxHP)
-        .setCurrentHP(hp)
-        .setSpecs(specs)
-        .setWeapon(weapon)
-        .setSkill(WeaponType.throwing,skills[0])
-        .setSkill(WeaponType.shooting,skills[1])
-        .setSkill(WeaponType.fencing,skills[2])
-        .setSkill(WeaponType.melee,skills[3])
-        .setSkill(WeaponType.magic,skills[4])
-        .build();
+
+  public Integer getSeed() {
+    return seed;
+  }
+
+  private final HeroType type;
+
+  private final Integer seed;
+
+  public HeroData(HeroType type, Integer seed) {
+    this.type = type;
+    this.seed=seed;
   }
 }

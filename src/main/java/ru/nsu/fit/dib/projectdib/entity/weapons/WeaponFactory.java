@@ -23,7 +23,7 @@ public class WeaponFactory {
           .setTime(500, 200)
           .build();
       case AK47 -> new WeaponBuilder("ak47", Weapons.AK47)
-          .setDamage( 1, 4)
+          .setDamage( 1, 2)
           .setScope(1000, 1)
           .setTime(100, 500)
           .build();
@@ -33,7 +33,7 @@ public class WeaponFactory {
           .setTime(600, 300)
           .build();
       case Sword -> new WeaponBuilder("sword", Weapons.Sword)
-          .setDamage( 3, 4)
+          .setDamage( 2, 4)
           .setScope(50, 120)
           .setTime(200, 100)
           .build();
@@ -50,7 +50,7 @@ public class WeaponFactory {
     Hand("hand",WeaponRarity.mediocre,WeaponType.shooting, DamageType.PIERCING, 24, WeaponSize.MEDIUM, 0d, 0d),
     Rapier("rapier",WeaponRarity.ordinary,WeaponType.fencing, DamageType.PIERCING,8, WeaponSize.MEDIUM, 90d, 150d),
     Sword("sword",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 2, WeaponSize.MEDIUM, 90d, 150d),
-    AK47("ak47",WeaponRarity.special,WeaponType.shooting, DamageType.PIERCING,17, WeaponSize.MEDIUM, 90d, 150d),
+    AK47("ak47",WeaponRarity.special,WeaponType.shooting, DamageType.PIERCING,17, WeaponSize.MEDIUM, 90d, 60d),
     Bow("bow",WeaponRarity.ordinary,WeaponType.shooting, DamageType.PIERCING,23, WeaponSize.MEDIUM, 0d, 40d),
     Staff("staff",WeaponRarity.ordinary,WeaponType.magic, DamageType.PIERCING,21, WeaponSize.MEDIUM, 80d, 40d);
     private static final Map<String, Weapons> map = Arrays.stream(values())

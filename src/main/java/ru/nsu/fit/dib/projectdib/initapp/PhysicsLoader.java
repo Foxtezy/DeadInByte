@@ -95,7 +95,7 @@ public class PhysicsLoader {
                   projectile.removeFromWorld();
                 }
                 if (attackEntityType == EntityType.WEAPON) {
-                  if (projectile.getComponent(WeaponComponent.class).getWeapon().getType().getWeaponType()== WeaponType.melee) {
+                  if (projectile.getComponent(WeaponComponent.class).getWeapon().getType().getWeaponType()== WeaponType.melee && projectile.getComponent(DataComponent.class).getOwnerID()!=-1) {
                     SoundsController.getSoundsController().play(Sounds.attack);
                   }
                   if (projectile.getComponent(WeaponComponent.class).getWeapon().isLongRange()) {
@@ -106,7 +106,7 @@ public class PhysicsLoader {
                 //System.out.println("attack with ["+"attack:"+attack+", damage:"+damage+"]");
                 if (attack > defence) {
                   HPAction action = new HPAction(projectile.getComponent(DataComponent.class).getId(),
-                      creature.getComponent(DataComponent.class).getId(),damage);
+                      creature.getComponent(DataComponent.class).getId(),damage-(int)(defence*0.30));
                   doAction(new Pair<>(MessageType.HP,action));
                 }
               }

@@ -29,8 +29,6 @@ import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
  * Основной класс игры.
  */
 public class App extends GameApplication {
-
-  public static Entity player;
   InputListener inputListener;
   public static GameUIController uiController;
 
@@ -87,7 +85,6 @@ public class App extends GameApplication {
 
     GameInitializer gameInitializer = new GameInitializer();
     gameInitializer.run();
-    player = gameInitializer.getPlayer();
     BackgroundMusicController.getBackgroundMusicControlleroller().setPlaylist(List.of(Musics.first_music,Musics.second_music,Musics.third_music));
   }
 

@@ -1,8 +1,12 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._character_file;
+
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
+import java.io.FileWriter;
+import java.io.IOException;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
@@ -26,6 +30,7 @@ public class HPAction extends GameAction {
   public void run() {
     var table = MCClient.getClientState().getIdHashTable();
     Entity attacked = table.get(attackedID);
+    if (attacked==null) return;
     var HPComponent = attacked.getComponent(HealthIntComponent.class);
     if (MCClient.getClientId() != 1) HPComponent.setValue(attackedHP);
     if (MCClient.getClientState().getIdHashTable().get(attackedID).getType() == EntityType.PLAYER) {
@@ -36,13 +41,16 @@ public class HPAction extends GameAction {
       Platform.runLater(()->{
         if (attacked.getType() == EntityType.PLAYER) {
           SoundsController.getSoundsController().play(Sounds.death);
-          // TODO: 09.05.2023 game over
-          GameUIController.deathMenu.setDisable(false);
-          GameUIController.deathMenu.setVisible(true);
-          GameUIController.getGameUIController().removeHPBar(attacked);
-          table.remove(attackedID);
-          attacked.removeFromWorld();
-          return;
+          if (attackedID==MCClient.getClientId()) {
+            GameUIController.deathMenu.setDisable(false);
+            GameUIController.deathMenu.setVisible(true);
+            GameUIController.getGameUIController().removeHPBar(attacked);
+            try(FileWriter writer = new FileWriter(_character_file)){
+              writer.write("");
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+          }
         }
         table.remove(attackedID);
         attacked.removeFromWorld();
