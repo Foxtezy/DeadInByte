@@ -39,7 +39,6 @@ public class SettingsLoader {
     settings.setManualResizeEnabled(true);
     settings.setPreserveResizeRatio(true);
     settings.setSceneFactory(new ScenesFactory());
-    settings.setCSSList(    List.of("style.css"));
     settings.setMainMenuEnabled(true);
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
