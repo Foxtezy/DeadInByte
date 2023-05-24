@@ -22,7 +22,7 @@ public class HPBar extends HBox {
 
   public HPBar(int maxValue){
     maxHP=maxValue;
-    persent = maxValue/100;
+    persent = (double) maxValue/100;
     FXMLLoader loader = null;
     loader = new FXMLLoader(getClass().getClassLoader().getResource("assets/ui/HPBar.fxml"));
 
@@ -57,6 +57,6 @@ public class HPBar extends HBox {
   }
 
   public void setValue(int value) {
-    hpBar.setProgress(value*persent);
+    hpBar.setProgress(((double)value*persent)/10);
   }
 }

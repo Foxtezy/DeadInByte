@@ -39,6 +39,7 @@ public interface ProjectConfig {
   String _mediumWeapon = "assets/textures/MediumWeapon.png";
   String _bigWeapon = "assets/textures/BigWeapon.png";
   String _projectile_path = "assets/textures/projectile.png";
+  String _character_file = "src/main/resources/saves/character.json";
   Image _projectile_img = new Image(_projectile_path);
   //================================================================================================
   String CONTROLS_PATH = "src/main/resources/config/controls.json";

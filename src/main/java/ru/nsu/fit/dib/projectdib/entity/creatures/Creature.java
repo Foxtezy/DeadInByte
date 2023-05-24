@@ -59,7 +59,7 @@ public final class Creature {
   }
 
   public int getMaxHP() {
-    return data.hp+15;
+    return data.hp;
   }
 
   public Weapons getStandardWeapon() {

@@ -4,6 +4,7 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.heroes_image;
 
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.component.Component;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.CreatureType;
@@ -33,14 +34,13 @@ public class HPViewComponent extends Component {
 
   public void updateHPBar() {
     if (entityType==EntityType.PLAYER) {
-      hpBar.setValue(getEntity().getComponent(HealthIntComponent.class).getValue());
+      Platform.runLater(()->{
+        hpBar.setValue(getEntity().getComponent(HealthIntComponent.class).getValue());
+      });
     }
   }
 
   public Node getHPBar() {
     return hpBar;
-  }
-
-  public void removeHPBar() {
   }
 }

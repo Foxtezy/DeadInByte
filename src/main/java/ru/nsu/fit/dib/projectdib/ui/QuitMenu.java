@@ -70,6 +70,8 @@ public class QuitMenu extends AnchorPane {
     quit.setOnMouseClicked(event ->{
       BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
       SoundsController.getSoundsController().play(Sounds.select_button);
+      MainMenu.getMainMenu().returnBack();
+      MainMenu.getMainMenu().returnBack();
       App.stop();
     });
     settings.setOnMouseClicked(event -> {
