@@ -17,7 +17,7 @@ public class HeroesFactory {
       case Elf -> new CreatureBuilder( "GigaElf",heroType)
           .setHP(RandomSystem.d(10)+20)
           .setSpecs(
-              specsList.get(3), specsList.get(0), specsList.get(2),
+              specsList.get(3), specsList.get(0)+3, specsList.get(2),
               specsList.get(5), specsList.get(4), specsList.get(1))
           .setWeapon(Weapons.Bow)
           .setSkill(WeaponType.shooting, 2)
@@ -25,14 +25,14 @@ public class HeroesFactory {
       case JonnyS -> new CreatureBuilder("Jonny",heroType)
           .setHP(RandomSystem.d(10)+20)
           .setSpecs(
-              specsList.get(4), specsList.get(0), specsList.get(1),
+              specsList.get(4), specsList.get(0)+3, specsList.get(1),
               specsList.get(3), specsList.get(5), specsList.get(2))
           .setWeapon(Weapons.AK47)
           .setSkill(WeaponType.shooting, 2).build();
       case Knight -> new CreatureBuilder( "Knight",heroType)
           .setHP(RandomSystem.d(10)+20)
           .setSpecs(
-              specsList.get(1), specsList.get(2), specsList.get(0),
+              specsList.get(1), specsList.get(2)+3, specsList.get(0),
               specsList.get(5), specsList.get(4), specsList.get(3))
           .setWeapon(Weapons.Sword)
           .setSkill(WeaponType.melee, 2)
@@ -40,7 +40,7 @@ public class HeroesFactory {
       case Wizard -> new CreatureBuilder("Wizard",heroType)
           .setHP(RandomSystem.d(6)+20)
           .setSpecs(
-              specsList.get(3), specsList.get(0), specsList.get(2),
+              specsList.get(3), specsList.get(0)+3, specsList.get(2),
               specsList.get(5), specsList.get(4), specsList.get(1)
           )
           .setWeapon(Weapons.Staff)
