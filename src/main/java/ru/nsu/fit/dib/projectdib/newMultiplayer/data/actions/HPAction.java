@@ -10,6 +10,7 @@ import java.io.IOException;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
@@ -52,6 +53,7 @@ public class HPAction extends GameAction {
             }
           }
         }
+        attacked.getComponent(WeaponInventoryComponent.class).throwAllWeapon();
         table.remove(attackedID);
         attacked.removeFromWorld();
       });
