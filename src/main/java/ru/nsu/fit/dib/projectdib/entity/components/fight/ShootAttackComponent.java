@@ -62,8 +62,8 @@ public class ShootAttackComponent extends Component {
                     WeaponComponent.class).getWeapon().isLongRange()) {
       return;
     }
-    double frequency = 0.8e-8;
-    offset = new Point2D(vectorToTarget.getY() * -1 * sin(System.nanoTime()*frequency), vectorToTarget.getX() *sin(System.nanoTime()*frequency));
+    double frequency = 0.8e-2;
+    offset = new Point2D(vectorToTarget.getY() * -1 * sin(System.currentTimeMillis() *frequency), vectorToTarget.getX() *sin(System.currentTimeMillis()*frequency));
     //offset = offset.normalize();
     getEntity().getComponent(EnemyViewComponent.class).bindDirectionView(entity -> vectorToTarget.add(offset));
   }
