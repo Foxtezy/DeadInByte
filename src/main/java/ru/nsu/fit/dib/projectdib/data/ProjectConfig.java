@@ -24,6 +24,7 @@ public interface ProjectConfig {
 
   //UIConfig
   String _fontDustyPro = "assets/ui/fonts/DustyPro.ttf";
+  String _fontAgencyFB = "assets/ui/fonts/agency-fb.ttf";
   String _forestAnimationUI = "assets/ui/elements/forest1k.png";
   String _campfireAnimationUI = "assets/ui/elements/campfire1k.png";
   String _menuButton = "assets/ui/elements/menu_button1k.png";
@@ -38,6 +39,7 @@ public interface ProjectConfig {
   String _mediumWeapon = "assets/textures/MediumWeapon.png";
   String _bigWeapon = "assets/textures/BigWeapon.png";
   String _projectile_path = "assets/textures/projectile.png";
+  String _character_file = "src/main/resources/saves/character.json";
   Image _projectile_img = new Image(_projectile_path);
   //================================================================================================
   String CONTROLS_PATH = "src/main/resources/config/controls.json";

@@ -4,29 +4,27 @@ import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._character_file;
 
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.ui.UI;
-import com.almasb.fxgl.ui.UIController;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
-import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
+import ru.nsu.fit.dib.projectdib.RandomSystem;
+import ru.nsu.fit.dib.projectdib.data.HeroData;
+import ru.nsu.fit.dib.projectdib.data.JSONController;
+import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
-import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
-import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 
 /**
  * Инициализатор игры.
@@ -56,9 +54,13 @@ public class GameInitializer {
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     start = new Point2D(x,y);
+    HeroData data = JSONController.<HeroData>load("src/main/resources/saves/character.json",HeroData.class);
+    if (data==null || data.getType()==null || data.getSeed()==null) {
+      data = new HeroData(RandomCharacterSystem.NewCharacter(), RandomSystem.getRandInt(10000));
+      JSONController.save(_character_file,data);
+    }
     try {
-      System.out.println(HeroType.Elf.getName());
-      player = EntitySpawner.spawn(new NewEntity(RandomCharacterSystem.NewCharacter().getName(),123,start,null)).get();
+      player = EntitySpawner.spawn(new NewEntity(data.getType().getName(),data.getSeed(),start,null)).get();
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -72,9 +74,7 @@ public class GameInitializer {
     viewport.setWidth(getAppWidth());
     viewport.setHeight(getAppHeight());
     viewport.setZoom(0.75);
-    viewport.focusOn(player);
-    viewport.setBounds(0, 0, 64 * 160, 64 * 160);
-    viewport.bindToEntity(player, viewport.getWidth() / 2-40, viewport.getHeight() / 2-120);
+    viewport.setBounds(0, 0, 65 * 160, 65 * 160);
     viewport.setLazy(true);
   }
 
