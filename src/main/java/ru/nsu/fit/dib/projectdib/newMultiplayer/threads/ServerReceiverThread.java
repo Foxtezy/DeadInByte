@@ -59,6 +59,9 @@ public class ServerReceiverThread extends Thread {
             throw new RuntimeException(e);
           }
         }
+        case ERROR -> {
+          continue;
+        }
         default -> {
           MCServer.getActionThread().addActionTask(inPacket);
         }

@@ -17,6 +17,7 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
 import ru.nsu.fit.dib.projectdib.entity.creatures.TypeChooser;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
+import ru.nsu.fit.dib.projectdib.initapp.SpawnEnemiesInit;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
@@ -46,11 +47,7 @@ public class ServerActionThread extends Thread {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
-    Point2D start = new Point2D(GameInitializer.lvl.start.getCentrePoint().x * 160,
-        GameInitializer.lvl.start.getCentrePoint().y * 160);
-    actionQueue.add(new Pair<>(MessageType.SPAWN,
-        new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123, new EntityState(1231,
-            start, new Point2D(0, 0), -1)))));
+    new SpawnEnemiesInit().run(actionQueue);
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {

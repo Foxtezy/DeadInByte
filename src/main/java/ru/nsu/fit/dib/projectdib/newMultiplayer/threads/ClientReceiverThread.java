@@ -36,6 +36,9 @@ public class ClientReceiverThread extends Thread {
         case MAP_SEED -> {
           MapInitializer.mapSeed = (int) inPacket.getValue();
         }
+        case ERROR -> {
+          continue;
+        }
         default -> {
           GameAction gameAction = (GameAction) inPacket.getValue();
           gameAction.run();
