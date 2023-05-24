@@ -1,10 +1,13 @@
 package ru.nsu.fit.dib.projectdib.entity.components.fight;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.newLocalTimer;
+import static java.lang.Math.*;
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.lengthOfCell;
 import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.time.LocalTimer;
 import java.util.Map;
 import javafx.geometry.Point2D;
@@ -14,6 +17,7 @@ import ru.nsu.fit.dib.projectdib.data.Projectiles;
 import ru.nsu.fit.dib.projectdib.entity.components.DataAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponFactory.Weapons;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
@@ -25,7 +29,8 @@ public class ShootAttackComponent extends Component {
 
   private LocalTimer shootTimer = newLocalTimer();
   int rollback = 0;
-
+  private Point2D offset;
+  private double rectifier;
   public void shoot() {
     if (!getEntity().hasComponent(WeaponInventoryComponent.class) ||
         getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null ||
@@ -50,7 +55,19 @@ public class ShootAttackComponent extends Component {
         getEntity().getComponent(DataComponent.class).getId())))));
     shootTimer.capture();
   }
-
+  public void attack(Point2D vectorToTarget){
+    if (!getEntity().hasComponent(WeaponInventoryComponent.class) ||
+            getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon()==null ||
+            getEntity().getComponent(WeaponInventoryComponent.class).getActiveWeapon().getComponent(
+                    WeaponComponent.class).getWeapon().isLongRange()) {
+      return;
+    }
+    double frequency = 0.8e-8;
+    offset = new Point2D(vectorToTarget.getY() * -1 * sin(System.nanoTime()*frequency), vectorToTarget.getX() *sin(System.nanoTime()*frequency));
+    //offset = offset.normalize();
+    getEntity().getComponent(EnemyViewComponent.class).bindDirectionView(entity -> vectorToTarget.add(offset));
+  }
+  //  currentEnemy.getComponent(EnemyViewComponent.class).bindDirectionView(entity -> vectorView);
   private static final Map<Weapons, Projectiles> projectileMap = Map.of(
       Weapons.Bow, Projectiles.ARROW,
       Weapons.AK47, Projectiles.BULLET,

@@ -69,7 +69,6 @@ public class CreatureBuilder {
     this.weaponType = weaponType;
     return this;
   }
-
   public Creature build() {
     return new Creature(this);
   }

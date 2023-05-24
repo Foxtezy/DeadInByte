@@ -47,9 +47,14 @@ public class ServerActionThread extends Thread {
     }
     Point2D start = new Point2D(GameInitializer.lvl.start.getCentrePoint().x * 160,
         GameInitializer.lvl.start.getCentrePoint().y * 160);
-    actionQueue.add(new Pair<>(MessageType.SPAWN,
-        new SpawnAction(new NewEntity(EnemyType.Devil.getName(), 123, new EntityState(1231,
-            start, new Point2D(0, 0), -1)))));
+    actionQueue.add(
+        new Pair<>(
+            MessageType.SPAWN,
+            new SpawnAction(
+                new NewEntity(
+                    EnemyType.EvilIsaac.getName(),
+                    123,
+                    new EntityState(1231, start, new Point2D(0, 0), -1)))));
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
