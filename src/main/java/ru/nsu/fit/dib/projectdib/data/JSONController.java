@@ -20,7 +20,7 @@ public class JSONController {
       BufferedReader reader = new BufferedReader(new FileReader(file));
       object = new Gson().<T>fromJson(reader, objectClass);
     } catch (IOException exception) {
-      exception.printStackTrace();
+      return  null;
     }
     return object;
   }

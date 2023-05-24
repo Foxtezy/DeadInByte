@@ -40,16 +40,17 @@ public class HPAction extends GameAction {
     System.out.println(attacked.getType()+" HP:"+HPComponent.getValue());
     if (HPComponent.isZero()){
       Platform.runLater(()->{
+
         if (attacked.getType() == EntityType.PLAYER) {
+          GameUIController.getGameUIController().removeHPBar(attacked);
           SoundsController.getSoundsController().play(Sounds.death);
           if (attackedID==MCClient.getClientId()) {
             GameUIController.deathMenu.setDisable(false);
             GameUIController.deathMenu.setVisible(true);
-            GameUIController.getGameUIController().removeHPBar(attacked);
             try(FileWriter writer = new FileWriter(_character_file)){
               writer.write("");
             } catch (IOException e) {
-              throw new RuntimeException(e);
+              return;
             }
           }
         }
