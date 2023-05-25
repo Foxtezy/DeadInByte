@@ -68,7 +68,7 @@ public class EnemyAiComponent extends Component {
         return;
       }else{
         Point2D vectorView = new Point2D(target.getPosition().getX()- currentEnemy.getPosition().getX(), target.getPosition().getY()-currentEnemy.getPosition().getY());
-        if(target.distance(currentEnemy) <= 2 * lengthOfCell){
+        if(target.distance(currentEnemy) <= 1 * lengthOfCell){
           currentEnemy.getComponent(ShootAttackComponent.class).attack(vectorView);
             if(target.distance(currentEnemy) >= lengthOfCell){
               currentEnemy.getComponent(AStar.class).moveToCell(target.call("getCellX"), target.call("getCellY"));
