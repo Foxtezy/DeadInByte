@@ -50,7 +50,7 @@ public class EnemyAiComponent extends Component {
     if(currentEnemy.getComponent(WeaponInventoryComponent.class).getActiveWeapon() == null){
       var weaponNearest = findNearestWeaponCurrentType(WeaponType.melee);
       if(weaponNearest == null){
-        currentEnemy.getComponent(AStar.class).moveToRandomCell();
+        currentEnemy.getComponent(AStar.class).stopMovement();
       }else{
         if(!currentEnemy.isColliding(weaponNearest)){
           currentEnemy.getComponent(CellMove.class).moveToCell(weaponNearest.call("getCellX"), weaponNearest.call("getCellY"));

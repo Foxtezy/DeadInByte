@@ -189,6 +189,7 @@ public class Factory implements EntityFactory {
         .anchorFromCenter()
         .with(new DataAttackComponent())
         .with(new CollidableComponent(true))
+        .with(new CellMove(lengthOfCell, lengthOfCell, 0))
         .with(new WeaponViewComponent(
             weapon.getType().getImgRadius(),
             weapon.getType().getRotation(),
