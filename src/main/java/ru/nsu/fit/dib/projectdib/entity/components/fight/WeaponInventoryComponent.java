@@ -10,6 +10,7 @@ import java.util.List;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.utils.CircularLinkedList;
 
@@ -74,5 +75,17 @@ public class WeaponInventoryComponent extends Component {
 
   public int size() {
     return inventory.size();
+  }
+
+  public void throwAllWeapon() {
+    int x = inventory.size();
+    while (x>0){
+      if (getActiveWeapon()!=null) {
+        getActiveWeapon().setVisible(true);
+        throwWeapon();
+      }
+      swapWeapon();
+      x--;
+    }
   }
 }

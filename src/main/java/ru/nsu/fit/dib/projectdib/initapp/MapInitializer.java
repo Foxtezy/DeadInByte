@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.initapp;
 
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 
+import java.io.IOException;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.environment.levelLoader.LevelSetter;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.Level;
@@ -19,7 +20,11 @@ public class MapInitializer {
 
   public Level run() {
     Sender sender = new Sender();
-    sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.MAP_SEED, 0));
+    try {
+      sender.send(MCClient.getClientSocket(), new Pair<>(MessageType.MAP_SEED, 0));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     ClientConfig.addClientReceiverThread(new ClientReceiverThread());
     while (mapSeed == null);
     Level lvl = new Level(mapSeed, 64, 64, 1, 15);

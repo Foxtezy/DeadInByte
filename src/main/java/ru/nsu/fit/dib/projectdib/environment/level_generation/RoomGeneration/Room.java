@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 
 import java.awt.Point;
 import java.io.Serializable;
+import javafx.geometry.Point2D;
 
 /**
  * Комната занимает некоторую область на карте (x2-x1)*tileX + (y2-y1)*tileY
@@ -76,6 +77,10 @@ public class Room implements Serializable {
 
   public Point getCentrePoint() {
     return centrePoint;
+  }
+
+  public Point2D getCentrePoint2D() {
+    return new Point2D(centrePoint.x, centrePoint.y);
   }
 
   public int getWeight() {

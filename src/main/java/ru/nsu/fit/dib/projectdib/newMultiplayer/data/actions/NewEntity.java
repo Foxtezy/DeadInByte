@@ -84,6 +84,7 @@ public class NewEntity {
           Viewport viewport = FXGL.getGameScene().getViewport();
           viewport.focusOn(entity);
           viewport.bindToEntity(entity, viewport.getWidth() / 2-40, viewport.getHeight() / 2-120);
+          GameUIController.newCharacterMenu();
         }
         return entity;
       }

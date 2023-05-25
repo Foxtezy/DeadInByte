@@ -13,11 +13,11 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig.style;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -45,10 +45,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
-import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionTask;
+import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionThread;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
@@ -65,10 +67,14 @@ import ru.nsu.fit.dib.projectdib.utils.SoundsController;
  * Главное меню.
  */
 public class MainMenu extends FXGLMenu {
-
+  private static MainMenu mainMenu;
   private final Font font;
   private final ImageButton settings;
   private final AnchorPane globalAnchor;
+  private final ImageButton returnButton;
+  private final VBox ui;
+  private final TreeNode<Node> tree;
+  private final ImageButton start;
 
   public static SettingsMenu getSettingsMenu() {
     return menu;
@@ -117,7 +123,7 @@ public class MainMenu extends FXGLMenu {
     }
     mainStack.getChildren().addAll(sndGrid, fstGrid);
 
-    VBox ui = new VBox();
+    ui = new VBox();
     StackPane images = new StackPane();
     {
       fstGrid.add(ui, 0, 0);
@@ -176,7 +182,7 @@ public class MainMenu extends FXGLMenu {
     Image pushedReturn = new Image(_returnSelectedButton, 132, 132, true,
         false);
     //==============================================================================================
-    ImageButton start = new ImageButton("Start", font, "#5ae8a8", "#2b2944", pushed, unpushed);
+    start = new ImageButton("Start", font, "#5ae8a8", "#2b2944", pushed, unpushed);
     ImageButton multiplayer = new ImageButton("Multiplayer", font, "#5ae8a8", "#2b2944", pushed,
         unpushed);
     settings = new ImageButton("Settings", font, "#5ae8a8", "#2b2944", pushed,
@@ -186,9 +192,6 @@ public class MainMenu extends FXGLMenu {
     ImageButton server = new ImageButton("Create server", font, "#5ae8a8", "#2b2944", pushed,
         unpushed);
     String gamePort = String.valueOf(ProjectConfig.SERVER_PORT);
-    ImageButton serverID = new ImageButton("Server: " + gamePort, smallFont, "#5ae8a8", "#2b2944",
-        pushedServer,
-        unpushedServer);
     ImageButton startMultiplayer = new ImageButton("Start", smallFont, "#5ae8a8", "#2b2944",
         pushedServer,
         unpushedServer);
@@ -198,7 +201,7 @@ public class MainMenu extends FXGLMenu {
     ImageButton enter = new ImageButton("Enter", font, "#5ae8a8", "#2b2944", pushedEnter,
         unpushedEnter);
     //==============================================================================================
-    ImageButton returnButton = new ImageButton("", font, "#5ae8a8", "#2b2944", pushedReturn,
+    returnButton = new ImageButton("", font, "#5ae8a8", "#2b2944", pushedReturn,
         unpushedReturn);
     //==============================================================================================
     ui.setAlignment(Pos.CENTER);
@@ -207,7 +210,7 @@ public class MainMenu extends FXGLMenu {
     ui.getChildren().addAll(space, start, multiplayer, settings);
     //=====================================[   Buttons Tree   ]=====================================
     ///root///
-    TreeNode<Node> tree = new TreeNode<>(null, List.of(start, multiplayer, settings));
+    tree = new TreeNode<>(null, List.of(start, multiplayer, settings));
     //=====================================[ Buttons Handlers ]=====================================
 
     //===Multiplayer===
@@ -222,14 +225,18 @@ public class MainMenu extends FXGLMenu {
 
     //===Create server===
     VBox serverBox = new VBox();
-    serverBox.setStyle("-fx-padding: 40;");
-    serverBox.getChildren().addAll(update, startMultiplayer, serverID);
+    serverBox.setStyle("-fx-padding: 100;");
+    //update.setStyle("-fx-padding: 20");
+    startMultiplayer.setStyle("-fx-padding: 20");
+    //serverID.setStyle("-fx-padding: 20");
+    Text serverid = new Text("Port: " + gamePort);
+    serverid.setStyle("-fx-fill: #5ae8a8;");
+    serverid.setFont(smallFont);
+    serverBox.getChildren().addAll(update, startMultiplayer, serverid);
     ScrollPane scrollPane = new ScrollPane();
-    final Future<Map<Integer, Socket>>[] future = new Future[]{null};
-    ServerConnectionTask serverConnectionTask = new ServerConnectionTask();
     server.setOnMouseClicked(event -> {
       SoundsController.getSoundsController().play(Sounds.select_button);
-      future[0] = CompletableFuture.supplyAsync(serverConnectionTask);
+      ServerConfig.addServerConnectionThread(new ServerConnectionThread());
       ui.getChildren().removeAll(tree.getANChildren());
       tree.changeActiveNode(server);
       scrollPane.setPrefViewportHeight(600);
@@ -247,7 +254,7 @@ public class MainMenu extends FXGLMenu {
       SoundsController.getSoundsController().play(Sounds.select_button);
       ui.getChildren().removeAll(tree.getANChildren());
       tree.removeChildren();
-      var clients = serverConnectionTask.getClientSockets();
+      var clients = MCServer.getConnectionThread().getClientSockets();
       for (Entry<Integer, Socket> s : clients.entrySet()) {
         ImageButton newClient = new ImageButton(
             s.getValue().getInetAddress().toString().replaceFirst("/", ""), font, "#5ae8a8",
@@ -269,11 +276,20 @@ public class MainMenu extends FXGLMenu {
       // шлём инициализационный пакет клиентам
       Sender sender = new Sender();
       MCServer.getClientSockets().values()
-          .forEach(s -> sender.send(s, new Pair<>(MessageType.START_GAME, null)));
-      serverConnectionTask.startGame();
+          .forEach(s -> {
+            try {
+              sender.send(s, new Pair<>(MessageType.START_GAME, null));
+            } catch (IOException ex) {
+            }
+          });
+      MCServer.getConnectionThread().startGame();
       // читаем у локального клиента
       Receiver receiver = new Receiver(MCClient.getClientSocket());
-      receiver.receive();
+      try {
+        receiver.receive();
+      } catch (IOException ex) {
+        App.stop();
+      }
       FXGL.getGameController().startNewGame();
     });
 
@@ -348,6 +364,8 @@ public class MainMenu extends FXGLMenu {
         }
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
+      } catch (IOException e) {
+        App.stop();
       }
     });
 
@@ -370,33 +388,41 @@ public class MainMenu extends FXGLMenu {
 
     //===Start===
     start.setOnMouseClicked(event -> {
-          SoundsController.getSoundsController().play(Sounds.select_button);
-          ServerConnectionTask serverConnection = new ServerConnectionTask();
-          CompletableFuture.supplyAsync(serverConnection);
+      SoundsController.getSoundsController().play(Sounds.select_button);
+          ServerConfig.addServerConnectionThread(new ServerConnectionThread());
           try {
             Thread.sleep(500);
           } catch (InterruptedException e) {
             throw new RuntimeException(e);
           }
-          serverConnection.interrupt();
+          MCServer.getConnectionThread().interrupt();
           FXGL.getGameController().startNewGame();
         }
     );
     //===Return===
     returnButton.setOnMouseClicked(event -> {
-      SoundsController.getSoundsController().play(Sounds.select_button);
-      ui.getChildren().removeAll(tree.getANChildren());
-      tree.removeChildren();
-      tree.changeActiveNode(tree.getParentA());
-      if (tree.getRoot() == tree.getParentAN()) {
-        globalAnchor.getChildren().remove(returnButton);
-      }
-      ui.getChildren().addAll(tree.getANChildren());
+      returnBack();
     });
     AnchorPane.setBottomAnchor(returnButton, 100d);
     AnchorPane.setRightAnchor(returnButton, 120d);
     //============================================================================================
 
+  }
+
+  public void returnBack() {
+    if (ui.getChildren().contains(start)) return;
+    SoundsController.getSoundsController().play(Sounds.select_button);
+    ui.getChildren().removeAll(tree.getANChildren());
+    tree.removeChildren();
+    tree.changeActiveNode(tree.getParentA());
+    if (tree.getRoot() == tree.getParentAN()) {
+      globalAnchor.getChildren().remove(returnButton);
+    }
+    ui.getChildren().addAll(tree.getANChildren());
+  }
+
+  public static MainMenu getMainMenu() {
+    return mainMenu;
   }
 
   private WrappedImageView initializeAnimationImageView(String url, double requestedWidth,
@@ -409,5 +435,9 @@ public class MainMenu extends FXGLMenu {
     animation.setCycleCount(Animation.INDEFINITE);
     animation.play();
     return view;
+  }
+
+  public void init() {
+    mainMenu = this;
   }
 }

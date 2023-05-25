@@ -17,7 +17,7 @@ public class EnemiesFactory {
 		specsList = specsList.stream().map(i->i-4).toList();
 		return switch (enemyType) {
 			case Isaac -> new CreatureBuilder("Isaac",enemyType)
-					.setHP(RandomSystem.d(10))
+					.setHP(RandomSystem.d(10)+5)
 				.setSpecs(
 					specsList.get(0), specsList.get(4), specsList.get(1),
 					specsList.get(2), specsList.get(5), specsList.get(3))
@@ -25,7 +25,7 @@ public class EnemiesFactory {
 				.setSkill(WeaponType.melee, 5)
 				.build();
 			case EvilIsaac -> new CreatureBuilder("EvilIsaac",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 				.setSpecs(
 					specsList.get(2), specsList.get(3), specsList.get(1),
 					specsList.get(4), specsList.get(5), specsList.get(5))
@@ -33,7 +33,7 @@ public class EnemiesFactory {
 				.setSkill(WeaponType.shooting, 2)
 				.build();
 			case LightMan -> new CreatureBuilder("LightMan",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 				.setSpecs(
 					specsList.get(2), specsList.get(3), specsList.get(1),
 					specsList.get(4), specsList.get(5), specsList.get(5))
@@ -41,7 +41,7 @@ public class EnemiesFactory {
 				.setSkill(WeaponType.shooting, 3)
 				.build();
 			case Mud -> new CreatureBuilder( "Mud",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -49,7 +49,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case LongHead -> new CreatureBuilder("LongHead",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -57,7 +57,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Mask -> new CreatureBuilder("Mask",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -65,7 +65,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Boar -> new CreatureBuilder("Boar",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -73,7 +73,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Shaman -> new CreatureBuilder("Shaman",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -81,7 +81,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Invisible -> new CreatureBuilder( "Invisible",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -89,7 +89,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.magic, 3)
 					.build();
 			case Chel -> new CreatureBuilder("Chel",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -97,7 +97,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Devil -> new CreatureBuilder("Devil",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -105,7 +105,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Angel -> new CreatureBuilder("Angel",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
@@ -113,7 +113,7 @@ public class EnemiesFactory {
 					.setSkill(WeaponType.magic, 3)
 					.build();
 			case GreenIsaac -> new CreatureBuilder("GreenIsaac",enemyType)
-					.setHP(RandomSystem.d(5))
+					.setHP(RandomSystem.d(5)+5)
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))

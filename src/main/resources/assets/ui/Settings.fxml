@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root stylesheets="@css/style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane layoutX="80.0" prefHeight="480.0" prefWidth="880.0" translateY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stackPane" layoutX="80.0" prefHeight="480.0" prefWidth="880.0" translateY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox minHeight="150.0" minWidth="200.0" prefHeight="150.0" prefWidth="200.0" />
             <ImageView pickOnBounds="true" preserveRatio="true">
@@ -39,7 +39,7 @@
                <children>
                                  <Slider fx:id="musicSlider" prefHeight="14.0" prefWidth="855.0" AnchorPane.leftAnchor="240.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="80.0" />
                   <Slider fx:id="soundsSlider" prefHeight="14.0" prefWidth="737.0" AnchorPane.leftAnchor="240.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="160.0" />
-                  <StackPane prefHeight="200.0" prefWidth="827.0" scaleX="0.75" scaleY="0.75" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+                  <StackPane fx:id="movementPane" prefHeight="200.0" prefWidth="827.0" scaleX="0.75" scaleY="0.75" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
                      <children>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" translateX="-300.0" translateY="-50.0">
                            <image>

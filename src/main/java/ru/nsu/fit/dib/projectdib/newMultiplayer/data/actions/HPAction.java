@@ -1,11 +1,16 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._character_file;
+
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
+import java.io.FileWriter;
+import java.io.IOException;
 import javafx.application.Platform;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
+import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
@@ -37,16 +42,21 @@ public class HPAction extends GameAction {
     System.out.println(attacked.getType()+" HP:"+HPComponent.getValue());
     if (HPComponent.isZero()){
       Platform.runLater(()->{
+
         if (attacked.getType() == EntityType.PLAYER) {
-          SoundsController.getSoundsController().play(Sounds.death);
-          // TODO: 09.05.2023 game over
-          GameUIController.deathMenu.setDisable(false);
-          GameUIController.deathMenu.setVisible(true);
           GameUIController.getGameUIController().removeHPBar(attacked);
-          table.remove(attackedID);
-          attacked.removeFromWorld();
-          return;
+          SoundsController.getSoundsController().play(Sounds.death);
+          if (attackedID==MCClient.getClientId()) {
+            GameUIController.deathMenu.setDisable(false);
+            GameUIController.deathMenu.setVisible(true);
+            try(FileWriter writer = new FileWriter(_character_file)){
+              writer.write("");
+            } catch (IOException e) {
+              return;
+            }
+          }
         }
+        attacked.getComponent(WeaponInventoryComponent.class).throwAllWeapon();
         table.remove(attackedID);
         attacked.removeFromWorld();
       });
@@ -62,5 +72,14 @@ public class HPAction extends GameAction {
 
   public int getAttackedHP() {
     return attackedHP;
+  }
+
+  @Override
+  public String toString() {
+    return "HPAction{" +
+        "attackingID=" + attackingID +
+        ", attackedID=" + attackedID +
+        ", attackedHP=" + attackedHP +
+        '}';
   }
 }

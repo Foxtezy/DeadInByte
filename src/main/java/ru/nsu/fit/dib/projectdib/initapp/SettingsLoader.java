@@ -9,16 +9,16 @@ import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameSettings;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.List;
 import ru.nsu.fit.dib.projectdib.data.Config;
 import ru.nsu.fit.dib.projectdib.data.Controls;
-import ru.nsu.fit.dib.projectdib.data.JSONLoader;
+import ru.nsu.fit.dib.projectdib.data.JSONController;
 import ru.nsu.fit.dib.projectdib.ui.ScenesFactory;
 
 /**
  * Загружает пользовательские и остальные настройки игры.
  */
 public class SettingsLoader {
-
   private final GameSettings settings;
 
   /**
@@ -43,7 +43,7 @@ public class SettingsLoader {
     settings.setDeveloperMenuEnabled(true);
     settings.setApplicationMode(ApplicationMode.DEVELOPER);
     Config.setConfig(_cfg);
-    JSONLoader.load(CONTROLS_PATH, Controls.class);
+    JSONController.<Controls>load(CONTROLS_PATH,Controls.class);
     // Window mod
     switch (Config.WINDOW_MODE) {
       case "Window" -> {

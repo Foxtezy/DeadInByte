@@ -5,7 +5,7 @@ public class Utils {
     try {
       Thread.sleep(1);
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      Thread.currentThread().interrupt();
     }
   }
 }

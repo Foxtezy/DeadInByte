@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane fx:id="mainPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane fx:id="mainPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox fx:id="healthBarBox" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-      <HBox fx:id="buttonsBox" alignment="CENTER_RIGHT" layoutX="540.0" layoutY="20.0" prefHeight="53.0" prefWidth="197.0" spacing="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0"/>
+      <HBox fx:id="buttonsBox" alignment="CENTER_RIGHT" layoutX="540.0" layoutY="20.0" prefHeight="53.0" prefWidth="197.0" spacing="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
    </children>
 </AnchorPane>

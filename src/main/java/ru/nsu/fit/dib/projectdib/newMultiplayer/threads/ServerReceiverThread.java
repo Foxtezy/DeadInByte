@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer.threads;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ClientConfig;
@@ -23,7 +24,12 @@ public class ServerReceiverThread extends Thread {
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
-      var inPacket = receiver.receive();
+      Pair<MessageType, Object> inPacket = null;
+      try {
+        inPacket = receiver.receive();
+      } catch (Exception e) {
+        break;
+      }
       switch (inPacket.getKey()) {
         case UPDATE -> {
           MCServer.getUpdaterThread().addUpdateTask((List<EntityState>) inPacket.getValue());
@@ -32,12 +38,29 @@ public class ServerReceiverThread extends Thread {
           //отправка иниц пакетов
           Sender sender = new Sender();
           MCServer.getServerState().getSpawnActionList()
-              .forEach(a -> sender.send(receiver.getSocket(), new Pair<>(MessageType.SPAWN, a)));
-          sender.send(receiver.getSocket(), new Pair<>(MessageType.END_INIT, null));
+              .forEach(a -> {
+                try {
+                  sender.send(receiver.getSocket(), new Pair<>(MessageType.SPAWN, a));
+                } catch (IOException e) {
+                  throw new RuntimeException(e);
+                }
+              });
+          try {
+            sender.send(receiver.getSocket(), new Pair<>(MessageType.END_INIT, null));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
         }
         case MAP_SEED -> {
           Sender sender = new Sender();
-          sender.send(receiver.getSocket(), new Pair<>(MessageType.MAP_SEED, MCServer.getServerState().getMapSeed()));
+          try {
+            sender.send(receiver.getSocket(), new Pair<>(MessageType.MAP_SEED, MCServer.getServerState().getMapSeed()));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }
+        case ERROR -> {
+          continue;
         }
         default -> {
           MCServer.getActionThread().addActionTask(inPacket);

@@ -1,5 +1,6 @@
 package ru.nsu.fit.dib.projectdib.ui;
 
+import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._character_file;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._fontDustyPro;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._menuButton;
 import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._menuSelectedButton;
@@ -12,7 +13,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
+import ru.nsu.fit.dib.projectdib.data.HeroData;
+import ru.nsu.fit.dib.projectdib.data.JSONController;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
@@ -56,15 +60,19 @@ public class DeathMenu extends AnchorPane {
     this.getChildren().add(box);
 
     restart.setOnMouseClicked(event -> {
+      HeroData data = new HeroData(RandomCharacterSystem.NewCharacter(), RandomSystem.getRandInt(10000));
+      JSONController.save(_character_file,data);
       doAction(new Pair<>(MessageType.SPAWN, new SpawnAction(
-          new NewEntity(RandomCharacterSystem.NewCharacter().getName(), RandomSystem.random.nextInt(), GameInitializer.start, null))));
+          new NewEntity(data.getType().getName(), data.getSeed(), GameInitializer.start, null))));
       this.setVisible(false);
       this.setDisable(true);
     });
     quit.setOnMouseClicked(event -> {
       BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
       SoundsController.getSoundsController().play(Sounds.select_button);
-      FXGL.getGameController().gotoMainMenu();
+      MainMenu.getMainMenu().returnBack();
+      MainMenu.getMainMenu().returnBack();
+      App.stop();
       this.setVisible(false);
       this.setDisable(true);
     });

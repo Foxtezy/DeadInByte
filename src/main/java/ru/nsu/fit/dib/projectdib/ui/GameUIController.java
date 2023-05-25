@@ -36,7 +36,7 @@ public final class GameUIController implements UIController {
   private final GameScene gameScene;
   ImageButton menu;
   ImageButton character;
-  CharacterMenu characterMenu;
+  static CharacterMenu characterMenu;
   QuitMenu quitMenu;
   public static DeathMenu deathMenu;
 
@@ -53,9 +53,9 @@ public final class GameUIController implements UIController {
     mainPane.setMinWidth(gameScene.getViewport().getWidth());
     addHPBars();
     addButtons();
-    characterMenu = new CharacterMenu(App.player, this);
-    characterMenu.setMinHeight(gameScene.getViewport().getHeight());
-    characterMenu.setMinWidth(gameScene.getViewport().getWidth());
+    characterMenu = new CharacterMenu(MCClient.getClientEntity(), controller);
+    characterMenu.setMinHeight(FXGL.getGameScene().getViewport().getHeight());
+    characterMenu.setMinWidth(FXGL.getGameScene().getViewport().getWidth());
     characterMenu.setDisable(true);
     characterMenu.setVisible(false);
     characterMenu.setScaleX(2.0);
@@ -72,7 +72,20 @@ public final class GameUIController implements UIController {
     deathMenu.setMinWidth(gameScene.getViewport().getWidth());
     deathMenu.setDisable(true);
     deathMenu.setVisible(false);
-    mainPane.getChildren().addAll(characterMenu, quitMenu,deathMenu);
+    mainPane.getChildren().addAll(characterMenu,quitMenu,deathMenu);
+  }
+
+  public static void newCharacterMenu() {
+    if (controller==null) return;
+    controller.mainPane.getChildren().remove(characterMenu);
+    characterMenu = new CharacterMenu(MCClient.getClientEntity(), controller);
+    characterMenu.setMinHeight(FXGL.getGameScene().getViewport().getHeight());
+    characterMenu.setMinWidth(FXGL.getGameScene().getViewport().getWidth());
+    characterMenu.setDisable(true);
+    characterMenu.setVisible(false);
+    characterMenu.setScaleX(2.0);
+    characterMenu.setScaleY(2.0);
+    controller.mainPane.getChildren().add(characterMenu);
   }
 
   private void addButtons() {
