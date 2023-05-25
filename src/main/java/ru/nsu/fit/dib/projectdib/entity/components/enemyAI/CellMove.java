@@ -32,6 +32,7 @@ public final class CellMove extends Component {
   private int cellHeight;
   private double speed;
   private boolean isAllowRotation = false;
+  private double defaultSpeed;
 
   private ReadOnlyBooleanWrapper isAtDestinationProp = new ReadOnlyBooleanWrapper(true);
 
@@ -44,7 +45,9 @@ public final class CellMove extends Component {
     this.cellWidth = cellWidth;
     this.cellHeight = cellHeight;
     this.speed = speed;
+    this.defaultSpeed = speed;
   }
+
 
   public ReadOnlyBooleanProperty atDestinationProperty() {
     return isAtDestinationProp.getReadOnlyProperty();
@@ -102,6 +105,10 @@ public final class CellMove extends Component {
 
   public void setSpeed(double speed) {
     this.speed = speed;
+  }
+  public void setDefaultSpeed(){this.speed = defaultSpeed;}
+  public Double getDefaultSpeed(){
+    return this.defaultSpeed;
   }
 
   /**
