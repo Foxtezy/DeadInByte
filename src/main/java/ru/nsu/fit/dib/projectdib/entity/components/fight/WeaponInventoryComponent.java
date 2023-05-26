@@ -34,7 +34,7 @@ public class WeaponInventoryComponent extends Component {
       thrownWeapon.getComponent(WeaponComponent.class).setUser(null);
     }
     weapon.getComponent(WeaponComponent.class).setUser(getEntity());
-    weapon.getComponent(DataComponent.class).setOwnerID(getEntity().getComponent(DataComponent.class).getOwnerID());
+    weapon.getComponent(DataComponent.class).setOwnerID(getEntity().getComponent(DataComponent.class).getId());
     return thrownWeapon;
   }
 

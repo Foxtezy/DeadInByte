@@ -54,8 +54,14 @@ public class EnemyAiComponent extends Component {
       }else{
         if(!currentEnemy.isColliding(weaponNearest)){
           currentEnemy.getComponent(CellMove.class).moveToCell(weaponNearest.call("getCellX"), weaponNearest.call("getCellY"));
+          return;
+        } else {
+          EntitySpawner.doAction(new Pair<>(MessageType.WEAPON,
+              new WeaponAction(WeaponAction.WeaponActionType.TAKE,
+                  currentEnemy.getComponent(DataComponent.class).getId(),
+                  weaponNearest.getComponent(DataComponent.class).getId())));
+          return;
         }
-        EntitySpawner.doAction(new Pair<>(MessageType.WEAPON, new WeaponAction(WeaponAction.WeaponActionType.TAKE,  currentEnemy.getComponent(DataComponent.class).getId(), weaponNearest.getComponent(DataComponent.class).getId())));
       }
     }
 
