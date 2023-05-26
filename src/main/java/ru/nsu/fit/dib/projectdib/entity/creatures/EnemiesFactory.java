@@ -21,7 +21,7 @@ public class EnemiesFactory {
 				.setSpecs(
 					specsList.get(0), specsList.get(4), specsList.get(1),
 					specsList.get(2), specsList.get(5), specsList.get(3))
-				.setWeapon(Weapons.Sword)
+				.setWeapon(Weapons.Rapier)
 				.setSkill(WeaponType.melee, 5)
 				.build();
 			case EvilIsaac -> new CreatureBuilder("EvilIsaac",enemyType)
@@ -37,7 +37,7 @@ public class EnemiesFactory {
 				.setSpecs(
 					specsList.get(2), specsList.get(3), specsList.get(1),
 					specsList.get(4), specsList.get(5), specsList.get(5))
-				.setWeapon(Weapons.Sword)
+				.setWeapon(Weapons.RustySword)
 				.setSkill(WeaponType.shooting, 3)
 				.build();
 			case Mud -> new CreatureBuilder( "Mud",enemyType)
@@ -45,7 +45,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.RustySword)
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case LongHead -> new CreatureBuilder("LongHead",enemyType)
@@ -61,7 +61,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.RustySword)
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Boar -> new CreatureBuilder("Boar",enemyType)
@@ -69,7 +69,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.Hatchet)
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Shaman -> new CreatureBuilder("Shaman",enemyType)
@@ -77,7 +77,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.BrokenStaff)
 					.setSkill(WeaponType.fencing, 3)
 					.build();
 			case Invisible -> new CreatureBuilder( "Invisible",enemyType)
@@ -85,7 +85,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.GoldSword)
 					.setSkill(WeaponType.magic, 3)
 					.build();
 			case Chel -> new CreatureBuilder("Chel",enemyType)
@@ -101,7 +101,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.Cleaver)
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			case Angel -> new CreatureBuilder("Angel",enemyType)
@@ -109,7 +109,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.GoldSword)
 					.setSkill(WeaponType.magic, 3)
 					.build();
 			case GreenIsaac -> new CreatureBuilder("GreenIsaac",enemyType)
@@ -117,7 +117,7 @@ public class EnemiesFactory {
 					.setSpecs(
 							specsList.get(2), specsList.get(3), specsList.get(1),
 							specsList.get(4), specsList.get(5), specsList.get(5))
-					.setWeapon(Weapons.Sword)
+					.setWeapon(Weapons.Hatchet)
 					.setSkill(WeaponType.melee, 3)
 					.build();
 			default -> throw new NullPointerException("Undeclared enemy type");

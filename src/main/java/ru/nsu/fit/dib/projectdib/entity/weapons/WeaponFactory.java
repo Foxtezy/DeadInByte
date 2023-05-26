@@ -18,7 +18,7 @@ public class WeaponFactory {
           .setTime(300, 200)
           .build();
       case Bow -> new WeaponBuilder("bow", Weapons.Bow)
-          .setDamage(1, 3)
+          .setDamage(1, 5)
           .setScope(1000, 5)
           .setTime(500, 200)
           .build();
@@ -37,8 +37,38 @@ public class WeaponFactory {
           .setScope(50, 120)
           .setTime(200, 100)
           .build();
+      case Cleaver -> new WeaponBuilder("cleaver", Weapons.Cleaver)
+          .setDamage( 2, 6)
+          .setScope(50, 120)
+          .setTime(200, 100)
+          .build();
+      case Hatchet -> new WeaponBuilder("hatchet", Weapons.Hatchet)
+          .setDamage( 2, 3)
+          .setScope(50, 120)
+          .setTime(200, 100)
+          .build();
       case Rapier -> new WeaponBuilder("rapier", Weapons.Rapier)
-          .setDamage( 1, 3)
+          .setDamage( 2, 3)
+          .setScope(50, 30)
+          .setTime(100, 100)
+          .build();
+      case RustySword -> new WeaponBuilder("rusty sword", Weapons.RustySword)
+          .setDamage( 2, 3)
+          .setScope(50, 120)
+          .setTime(200, 100)
+          .build();
+      case Katana -> new WeaponBuilder("katana", Weapons.Katana)
+          .setDamage( 2, 2)
+          .setScope(50, 30)
+          .setTime(100, 100)
+          .build();
+      case GoldSword -> new WeaponBuilder("gold sword", Weapons.GoldSword)
+          .setDamage( 2, 8)
+          .setScope(50, 30)
+          .setTime(100, 100)
+          .build();
+      case BrokenStaff -> new WeaponBuilder("broken staff", Weapons.GoldSword)
+          .setDamage( 1, 2)
           .setScope(50, 30)
           .setTime(100, 100)
           .build();
@@ -47,8 +77,14 @@ public class WeaponFactory {
   }
 
   public enum Weapons {
+    BrokenStaff("broken staff",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 20, WeaponSize.MEDIUM, 90d, 150d),
+    GoldSword("gold sword",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 10, WeaponSize.MEDIUM, 90d, 150d),
+    Katana("katana",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 3, WeaponSize.MEDIUM, 90d, 150d),
+    RustySword("rusty sword",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 0, WeaponSize.MEDIUM, 90d, 150d),
+    Hatchet("hatchet",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 19, WeaponSize.MEDIUM, 90d, 150d),
+    Cleaver("cleaver",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 4, WeaponSize.MEDIUM, 90d, 150d),
     Hand("hand",WeaponRarity.mediocre,WeaponType.shooting, DamageType.PIERCING, 24, WeaponSize.MEDIUM, 0d, 0d),
-    Rapier("rapier",WeaponRarity.ordinary,WeaponType.fencing, DamageType.PIERCING,8, WeaponSize.MEDIUM, 90d, 150d),
+    Rapier("rapier",WeaponRarity.ordinary,WeaponType.melee, DamageType.PIERCING,8, WeaponSize.MEDIUM, 90d, 150d),
     Sword("sword",WeaponRarity.ordinary,WeaponType.melee, DamageType.SLASHING, 2, WeaponSize.MEDIUM, 90d, 150d),
     AK47("ak47",WeaponRarity.special,WeaponType.shooting, DamageType.PIERCING,17, WeaponSize.MEDIUM, 90d, 60d),
     Bow("bow",WeaponRarity.ordinary,WeaponType.shooting, DamageType.PIERCING,23, WeaponSize.MEDIUM, 0d, 40d),

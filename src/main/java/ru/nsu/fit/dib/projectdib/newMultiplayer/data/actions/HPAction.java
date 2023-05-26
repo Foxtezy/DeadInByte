@@ -36,7 +36,7 @@ public class HPAction extends GameAction {
     }
     var HPComponent = attacked.getComponent(HealthIntComponent.class);
     if (MCClient.getClientId() != 1) HPComponent.setValue(attackedHP);
-    if (MCClient.getClientState().getIdHashTable().get(attackedID).getType() == EntityType.PLAYER) {
+    if (MCClient.getClientState().getIdHashTable().get(attackedID)!=null && MCClient.getClientState().getIdHashTable().get(attackedID).getType() == EntityType.PLAYER) {
       attacked.getComponent(HPViewComponent.class).updateHPBar();
     }
     System.out.println(attacked.getType()+" HP:"+HPComponent.getValue());
