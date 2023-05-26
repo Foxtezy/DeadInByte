@@ -24,6 +24,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoader;
 import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
 /**
@@ -51,8 +52,10 @@ public class GameInitializer {
     multiplayerInitializer.run();
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map, grid);
     chunkLoader = new ChunkLoaderComponent(new ChunkLoader(wallMapper));
-    GridCreator gridCreator = new GridCreator(lvl.map);
-    gridCreator.run();
+    if (MCClient.getClientId() == 1) {
+      GridCreator gridCreator = new GridCreator(lvl.map);
+      gridCreator.run();
+    }
     double x = (lvl.start.getCentrePoint().x) * 160;
     double y = (lvl.start.getCentrePoint().y) * 160;
     start = new Point2D(x,y);
