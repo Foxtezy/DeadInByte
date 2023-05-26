@@ -72,7 +72,7 @@ public final class GameUIController implements UIController {
     deathMenu.setMinWidth(gameScene.getViewport().getWidth());
     deathMenu.setDisable(true);
     deathMenu.setVisible(false);
-    mainPane.getChildren().addAll(characterMenu,quitMenu,deathMenu);
+    mainPane.getChildren().addAll(quitMenu,deathMenu);
   }
 
   public static void newCharacterMenu() {

@@ -1,9 +1,11 @@
 package ru.nsu.fit.dib.projectdib.entity.components.control;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthDoubleComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.World;
 import com.gluonhq.attach.lifecycle.LifecycleService;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
