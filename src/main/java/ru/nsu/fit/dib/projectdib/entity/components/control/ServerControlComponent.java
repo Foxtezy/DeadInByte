@@ -32,7 +32,7 @@ public class ServerControlComponent extends Component {
   public ServerControlComponent() {}
 
   public void moveToPoint(Point2D position) {
-    if (getEntity().getPosition().add(position.multiply(-1)).magnitude()>160*2) {
+    if (getEntity().getPosition().add(position.multiply(-1)).magnitude()>160*4) {
      getEntity().getComponent(PhysicsComponent.class).overwritePosition(position);
     }
     newPosition = position;

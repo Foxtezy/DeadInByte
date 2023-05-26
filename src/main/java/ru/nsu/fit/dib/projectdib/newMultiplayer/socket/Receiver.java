@@ -26,6 +26,10 @@ public class Receiver {
     //Получаем что то
       DataInputStream dis = new DataInputStream(socket.getInputStream());
       int len = dis.readInt();
+      if (len<0) {
+        System.out.println("error");
+        return new Pair<>(MessageType.ERROR, null);
+      }
       byteArray = new byte[len];
       dis.readFully(byteArray);
     //Передаем в буфер
