@@ -16,11 +16,11 @@ import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory.EnemyType;
  * Типы снарядов.
  */
 public enum Projectiles {
-  ARROW("arrow", 450,new AnimationChannel(_projectile_img,4,320,160, Duration.millis(200),
+  ARROW("arrow", 600,new AnimationChannel(_projectile_img,4,320,160, Duration.millis(200),
       0,0),new HitBox(new Point2D(70, 65), BoundingShape.box(140, 30))),
-  BULLET("bullet", 600,new AnimationChannel(_projectile_img,4,160,160, Duration.millis(200),
+  BULLET("bullet", 900,new AnimationChannel(_projectile_img,4,160,160, Duration.millis(200),
       4,4),new HitBox(new Point2D(60, 65), BoundingShape.box(80, 30))),
-  FIREBALL("fireball",400,new AnimationChannel(_projectile_img,4,160,160, Duration.millis(600),
+  FIREBALL("fireball",500,new AnimationChannel(_projectile_img,4,160,160, Duration.millis(600),
       8,10),new HitBox(new Point2D(60, 55), BoundingShape.box(60, 60)));
 
   private static final Map<String, Projectiles> map = Arrays.stream(values())

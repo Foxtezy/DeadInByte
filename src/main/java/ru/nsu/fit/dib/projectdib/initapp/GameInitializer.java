@@ -36,6 +36,7 @@ public class GameInitializer {
   private Entity player;
   public static AStarGrid grid;
   public static Point2D start;
+  public static ChunkLoaderComponent chunkLoader;
 
   public GameInitializer() {
   }
@@ -49,6 +50,7 @@ public class GameInitializer {
     MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();
     multiplayerInitializer.run();
     WallMapper wallMapper = new WallMapper(2560, 160, lvl.map, grid);
+    chunkLoader = new ChunkLoaderComponent(new ChunkLoader(wallMapper));
     GridCreator gridCreator = new GridCreator(lvl.map);
     gridCreator.run();
     double x = (lvl.start.getCentrePoint().x) * 160;
@@ -64,7 +66,6 @@ public class GameInitializer {
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }
-    player.addComponent(new ChunkLoaderComponent(new ChunkLoader(wallMapper)));
     //===================================
     //SpawnData sd2 = new SpawnData(x,y);
     //sd2.put("creature", RandomCharacterSystem.NewCharacter());

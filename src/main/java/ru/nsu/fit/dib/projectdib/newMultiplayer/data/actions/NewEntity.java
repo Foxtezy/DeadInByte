@@ -1,6 +1,7 @@
 package ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+import static ru.nsu.fit.dib.projectdib.initapp.GameInitializer.chunkLoader;
 
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.core.util.Platform;
@@ -81,6 +82,7 @@ public class NewEntity {
           }
         }
         if (MCClient.getClientId()==state.getId()) {
+          entity.addComponent(chunkLoader);
           Viewport viewport = FXGL.getGameScene().getViewport();
           viewport.focusOn(entity);
           viewport.bindToEntity(entity, viewport.getWidth() / 2-40, viewport.getHeight() / 2-120);

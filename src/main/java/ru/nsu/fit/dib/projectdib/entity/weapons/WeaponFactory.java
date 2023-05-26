@@ -15,7 +15,7 @@ public class WeaponFactory {
       case Hand -> new WeaponBuilder("hand", Weapons.Hand)
           .setDamage( 0, 1)
           .setScope(100, 60)
-          .setTime(300, 200)
+          .setTime(100, 200)
           .build();
       case Bow -> new WeaponBuilder("bow", Weapons.Bow)
           .setDamage(1, 5)
@@ -25,7 +25,7 @@ public class WeaponFactory {
       case AK47 -> new WeaponBuilder("ak47", Weapons.AK47)
           .setDamage( 1, 2)
           .setScope(1000, 1)
-          .setTime(100, 500)
+          .setTime(250, 500)
           .build();
       case Staff -> new WeaponBuilder("staff", Weapons.Staff)
           .setDamage( 1, 6)
