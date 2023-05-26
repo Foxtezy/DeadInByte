@@ -52,7 +52,7 @@ public class WeaponAction extends GameAction{
         if (hero==null) return;
         Entity weapon = MCClient.getClientState().getIdHashTable().get(weaponId);
         if (weapon==null) return;
-        hero.getComponent(WeaponInventoryComponent.class).takeWeapon(weapon);}
+        if (hero.hasComponent(WeaponInventoryComponent.class)) hero.getComponent(WeaponInventoryComponent.class).takeWeapon(weapon);}
     }
   }
 

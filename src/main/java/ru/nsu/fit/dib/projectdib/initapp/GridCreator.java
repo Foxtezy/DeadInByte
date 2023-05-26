@@ -10,22 +10,22 @@ import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import ru.nsu.fit.dib.projectdib.environment.level_generation.BlockDensity;
 
 public class GridCreator {
-  int [][] map;
+
+  int[][] map;
+
   public GridCreator(int[][] map) {
     this.map = map;
   }
 
-  public void run(){
-    synchronized (getGameWorld())
-    {
-      AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 66, 66, lengthOfCell, lengthOfCell,
-          entityType -> CellState.NOT_WALKABLE);
-      for (int x = 0; x < map.length; x++) {
-        for (int y = 1; y < map[x].length; y++) {
-          if (map[x][y] != BlockDensity.WALL.density) {
-            grid.set(x, y - 1, new AStarCell(x, y - 1, CellState.WALKABLE));
-          }
+  public void run() {
+    AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 66, 66, lengthOfCell, lengthOfCell,
+        entityType -> CellState.NOT_WALKABLE);
+    for (int x = 0; x < map.length; x++) {
+      for (int y = 1; y < map[x].length; y++) {
+        if (map[x][y] != BlockDensity.WALL.density) {
+          grid.set(x, y - 1, new AStarCell(x, y - 1, CellState.WALKABLE));
         }
+
       }
       set("grid", grid);
     }
