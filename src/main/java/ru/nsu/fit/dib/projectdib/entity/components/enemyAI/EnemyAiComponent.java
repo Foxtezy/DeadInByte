@@ -45,12 +45,11 @@ public class EnemyAiComponent extends Component {
 
   @Override
   public void onUpdate(double tpf) {
-    Entity target = findNearestEntity(EntityType.PLAYER);
-
     if(currentEnemy.getComponent(WeaponInventoryComponent.class).getActiveWeapon() == null){
       var weaponNearest = findNearestWeaponCurrentType(WeaponType.melee);
       if(weaponNearest == null){
         currentEnemy.getComponent(AStar.class).stopMovement();
+        return;
       }else{
         if(!currentEnemy.isColliding(weaponNearest)){
           currentEnemy.getComponent(CellMove.class).moveToCell(weaponNearest.call("getCellX"), weaponNearest.call("getCellY"));
@@ -64,6 +63,8 @@ public class EnemyAiComponent extends Component {
         }
       }
     }
+
+    Entity target = findNearestEntity(EntityType.PLAYER);
 
     if (target == null) {
       currentEnemy.getComponent(AStar.class).stopMovement();
@@ -128,7 +129,8 @@ public class EnemyAiComponent extends Component {
                       double dist = entity.distance(currentEnemy);
                       return dist <= rangeOfVision;
                     })
-            .filter(weapon -> weapon.getComponent(WeaponComponent.class).getWeapon().getType().getWeaponType() == type).toList();
+            .filter(weapon -> weapon.getComponent(WeaponComponent.class).getWeapon().getType().getWeaponType() == type).filter(w -> w.getComponent(
+            DataComponent.class).getOwnerID() == -1).toList();
     if (weaponList.isEmpty()) {
       return null;
     }

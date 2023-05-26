@@ -102,13 +102,13 @@ public class PhysicsLoader {
                     return;
                   }
                 }
-                System.out.println("boba");
                 if (!(MCClient.getClientId() == 1 && projectile.getComponent(DataComponent.class).getOwnerID() > 1000) && projectile.getComponent(DataComponent.class).getOwnerID()!= MCClient.getClientId()) {
-                  System.out.println(projectile.getComponent(DataComponent.class).getOwnerID());
+                  return;
+                }
+                if (projectile.getComponent(DataComponent.class).getOwnerID() > 1000 && creature.getType() == EntityType.ENEMY) {
                   return;
                 }
                 //System.out.println("attack with ["+"attack:"+attack+", damage:"+damage+"]");
-                System.out.println("attac");
                 if (attack > defence) {
                   HPAction action = new HPAction(projectile.getComponent(DataComponent.class).getId(),
                       creature.getComponent(DataComponent.class).getId(),damage-(int)(defence*0.30));
