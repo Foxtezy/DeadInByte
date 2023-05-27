@@ -44,4 +44,11 @@ public class SpawnAction extends GameAction {
     }
     Platform.runLater(newEntity::spawn);
   }
+
+  @Override
+  public String toString() {
+    return "SpawnAction{" +
+        "newEntity=" + newEntity +
+        '}';
+  }
 }

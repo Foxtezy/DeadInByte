@@ -36,12 +36,14 @@ public class ServerState {
 
   public List<SpawnAction> getInitSpawnList() {
     Map<Integer, Entity> state = MCClient.getClientState().getIdHashTable();
+    System.out.println(state.size());
     List<Optional<SpawnAction>> optionalEntities = state.keySet().stream().map(key -> MCClient.getClientState()
         .getSpawnAction(key)).toList();
     List<SpawnAction> spawnList = new ArrayList<>();
     for (Optional<SpawnAction> entityState : optionalEntities) {
       entityState.ifPresent(spawnList::add);
     }
+    System.out.println(spawnList);
     return spawnList;
   }
 

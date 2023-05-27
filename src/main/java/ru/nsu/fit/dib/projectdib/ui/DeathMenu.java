@@ -7,6 +7,7 @@ import static ru.nsu.fit.dib.projectdib.data.ProjectConfig._menuSelectedButton;
 import static ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner.doAction;
 
 import com.almasb.fxgl.dsl.FXGL;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -20,10 +21,13 @@ import ru.nsu.fit.dib.projectdib.data.JSONController;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
 import ru.nsu.fit.dib.projectdib.data.Sounds;
+import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
@@ -62,6 +66,8 @@ public class DeathMenu extends AnchorPane {
     restart.setOnMouseClicked(event -> {
       HeroData data = new HeroData(RandomCharacterSystem.NewCharacter(), RandomSystem.getRandInt(10000));
       JSONController.save(_character_file,data);
+      Creature creature = HeroesFactory.newHero(data.getType(),data.getSeed());
+      EntitySpawner.doAction(new Pair<>(MessageType.SPAWN, new SpawnAction(new NewEntity(creature.getStandardWeapon().getName(), data.getSeed(), new EntityState(-1, GameInitializer.start, new Point2D(0,0), -1)))));
       doAction(new Pair<>(MessageType.SPAWN, new SpawnAction(
           new NewEntity(data.getType().getName(), data.getSeed(), GameInitializer.start, null))));
       this.setVisible(false);

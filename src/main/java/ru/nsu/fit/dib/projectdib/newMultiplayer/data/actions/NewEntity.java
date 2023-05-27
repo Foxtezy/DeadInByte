@@ -114,8 +114,8 @@ public class NewEntity {
   private Entity newEntity(int owner, Creature creature) {
     Weapon weapon = WeaponFactory.getWeapon(creature.getStandardWeapon());
     Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner, seed);
-    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1, seed);
-    MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
+    //Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1, seed);
+    //MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
     MCClient.getClientState().getIdHashTable().put(state.getId(), creatureEntity);
     return creatureEntity;
   }
@@ -138,5 +138,15 @@ public class NewEntity {
 
   public EntityState getState() {
     return state;
+  }
+
+  @Override
+  public String toString() {
+    return "NewEntity{" +
+        "state=" + state +
+        ", entityType='" + entityType + '\'' +
+        ", seed=" + seed +
+        ", owner=" + owner +
+        '}';
   }
 }

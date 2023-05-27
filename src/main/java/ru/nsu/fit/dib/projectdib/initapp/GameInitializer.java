@@ -11,9 +11,12 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import java.util.concurrent.ExecutionException;
 import javafx.geometry.Point2D;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.Factory;
 import ru.nsu.fit.dib.projectdib.data.RandomCharacterSystem;
+import ru.nsu.fit.dib.projectdib.entity.creatures.Creature;
 import ru.nsu.fit.dib.projectdib.entity.creatures.EnemiesFactory;
+import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory;
 import ru.nsu.fit.dib.projectdib.entity.creatures.HeroesFactory.HeroType;
 import ru.nsu.fit.dib.projectdib.RandomSystem;
 import ru.nsu.fit.dib.projectdib.data.HeroData;
@@ -26,7 +29,10 @@ import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.EntityState;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.SpawnAction;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
 
 /**
  * Инициализатор игры.
@@ -70,6 +76,8 @@ public class GameInitializer {
       JSONController.save(_character_file,data);
     }
     try {
+      Creature creature = HeroesFactory.newHero(data.getType(),data.getSeed());
+      EntitySpawner.doAction(new Pair<>(MessageType.SPAWN, new SpawnAction(new NewEntity(creature.getStandardWeapon().getName(), data.getSeed(), new EntityState(-1, start, new Point2D(0,0), -1)))));
       player = EntitySpawner.spawn(new NewEntity(data.getType().getName(),data.getSeed(),start,null)).get();
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);

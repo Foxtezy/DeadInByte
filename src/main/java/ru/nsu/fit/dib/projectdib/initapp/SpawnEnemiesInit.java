@@ -17,9 +17,10 @@ public class SpawnEnemiesInit {
   public void run(BlockingQueue<Pair<MessageType, Object>> actionQueue) {
     List<Rectangle2D> rooms = GameInitializer.lvl.roomList.stream()
         .map(r -> new Rectangle2D(r.getFirstPoint().x * 160, r.getFirstPoint().y * 160,
-            (r.getSecondPoint().x - r.getFirstPoint().x) * 160, (r.getSecondPoint().y - r.getFirstPoint().y) * 160)).toList();
+            (r.getSecondPoint().x - r.getFirstPoint().x) * 160,
+            (r.getSecondPoint().y - r.getFirstPoint().y) * 160)).toList();
     Random rand = new Random();
-    for (int i = 0; i < rooms.size(); i++) {
+   /* for (int i = 0; i < rooms.size(); i++) {
       try {
         int x = rand.nextInt((int) rooms.get(i).getMinX(), (int) rooms.get(i).getMaxX());
         int y = rand.nextInt((int) rooms.get(i).getMinY(), (int) rooms.get(i).getMaxY());
@@ -37,5 +38,7 @@ public class SpawnEnemiesInit {
 
       }
     }
+  }
+    */
   }
 }
