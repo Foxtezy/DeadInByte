@@ -45,6 +45,11 @@ public class ServerReceiverThread extends Thread {
                   throw new RuntimeException(e);
                 }
               });
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+          }
           MCServer.getServerState().getInitHPactionList()
               .forEach(a -> {
                 try {

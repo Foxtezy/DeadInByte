@@ -66,7 +66,7 @@ public class ServerState {
     Collection<Entity> entities = MCClient.getClientState().getIdHashTable().values();
     List<WeaponAction> weaponActions = new ArrayList<>();
     for (Entity entity : entities) {
-      if (entity.hasComponent(DataComponent.class) && entity.getType() == EntityType.ENEMY && entity.getComponent(DataComponent.class).isValid()) {
+      if (entity.hasComponent(DataComponent.class) && entity.getType() == EntityType.WEAPON && entity.getComponent(DataComponent.class).isValid()) {
         if (entity.getComponent(DataComponent.class).getBindedEntity() != -1) {
           weaponActions.add(new WeaponAction(WeaponActionType.TAKE,
               entity.getComponent(DataComponent.class).getBindedEntity(),
