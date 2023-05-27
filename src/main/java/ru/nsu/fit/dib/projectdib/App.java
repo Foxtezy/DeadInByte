@@ -66,6 +66,9 @@ public class App extends GameApplication {
     uiController = new GameUIController(getGameScene());
     UI ui =  getAssetLoader().loadUI("main.fxml", uiController);
     FXGL.getGameScene().addUI(ui);
+    if (MCClient.getClientId() == 1) {
+      MCServer.getConnectionThread().startGame();
+    }
   }
 
   /**

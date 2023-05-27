@@ -275,14 +275,11 @@ public class MainMenu extends FXGLMenu {
       SoundsController.getSoundsController().play(Sounds.select_button);
       // шлём инициализационный пакет клиентам
       Sender sender = new Sender();
-      MCServer.getClientSockets().values()
-          .forEach(s -> {
-            try {
-              sender.send(s, new Pair<>(MessageType.START_GAME, null));
-            } catch (IOException ex) {
-            }
-          });
-      MCServer.getConnectionThread().startGame();
+      try {
+        sender.send(MCServer.getClientSockets().get(1), new Pair<>(MessageType.START_GAME, null));
+      } catch (IOException ex) {
+
+      }
       // читаем у локального клиента
       Receiver receiver = new Receiver(MCClient.getClientSocket());
       try {
