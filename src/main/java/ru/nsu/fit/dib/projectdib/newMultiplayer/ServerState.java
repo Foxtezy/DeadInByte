@@ -37,7 +37,7 @@ public class ServerState {
   public List<SpawnAction> getInitSpawnList() {
     Map<Integer, Entity> state = MCClient.getClientState().getIdHashTable();
     List<Optional<SpawnAction>> optionalEntities = state.keySet().stream().map(key -> MCClient.getClientState()
-        .getSpawnAction(key)).collect(Collectors.toList());
+        .getSpawnAction(key)).toList();
     List<SpawnAction> spawnList = new ArrayList<>();
     for (Optional<SpawnAction> entityState : optionalEntities) {
       entityState.ifPresent(spawnList::add);
@@ -49,7 +49,7 @@ public class ServerState {
     Collection<Entity> entities = MCClient.getClientState().getIdHashTable().values();
     List<HPAction> hpActions = new ArrayList<>();
     for (Entity entity : entities) {
-      if (entity.hasComponent(HealthIntComponent.class) && entity.hasComponent(DataComponent.class)) {
+      if (entity.hasComponent(HealthIntComponent.class) && entity.hasComponent(DataComponent.class) && entity.getComponent(DataComponent.class).isValid()) {
         if (entity.getComponent(HealthIntComponent.class).getMaxValue() > entity.getComponent(
             HealthIntComponent.class).getValue()) {
           hpActions.add(new HPAction(0, entity.getComponent(DataComponent.class).getId(), entity.getComponent(
@@ -64,7 +64,7 @@ public class ServerState {
     Collection<Entity> entities = MCClient.getClientState().getIdHashTable().values();
     List<WeaponAction> weaponActions = new ArrayList<>();
     for (Entity entity : entities) {
-      if (entity.hasComponent(DataComponent.class) && entity.getType() == EntityType.ENEMY) {
+      if (entity.hasComponent(DataComponent.class) && entity.getType() == EntityType.ENEMY && entity.getComponent(DataComponent.class).isValid()) {
         if (entity.getComponent(DataComponent.class).getBindedEntity() != -1) {
           weaponActions.add(new WeaponAction(WeaponActionType.TAKE,
               entity.getComponent(DataComponent.class).getBindedEntity(),

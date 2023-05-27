@@ -68,7 +68,7 @@ public class ClientState {
 
   public Optional<SpawnAction> getSpawnAction(Integer key) {
     List<Entity> entityList = List.of(idHashTable.get(key));
-    return entityList.stream().filter(e -> e.hasComponent(DataComponent.class))
+    return entityList.stream().filter(e -> e.hasComponent(DataComponent.class)).filter(e -> e.getComponent(DataComponent.class).isValid())
         .map(e -> new SpawnAction(new NewEntity(e.getComponent(DataComponent.class).getEntityType().getName(), e.getComponent(DataComponent.class).getSeed(), new EntityState(key,
             e.getComponent(DataComponent.class).getPosition(),
             e.getComponent(DataComponent.class).getRotation(),
