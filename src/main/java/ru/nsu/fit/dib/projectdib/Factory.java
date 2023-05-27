@@ -50,6 +50,7 @@ import ru.nsu.fit.dib.projectdib.entity.components.enemyAI.EnemyAiComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.ShootAttackComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.projectile.ProjectileCollisionComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HPViewComponent;
@@ -331,6 +332,7 @@ public class Factory implements EntityFactory {
         .view(texture)
         .anchorFromCenter()
         .bbox(projectile.getHitbox())
+        .with(new ProjectileCollisionComponent())
         .with(new DataAttackComponent(attack,damage))
         .with(new DataComponent(EntityType.PROJECTILE,ownerID,id, 0))
         .with(new ProjectileComponent(direction, projectile.getSpeed()))

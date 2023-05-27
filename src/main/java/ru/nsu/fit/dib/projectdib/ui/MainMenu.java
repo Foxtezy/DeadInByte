@@ -155,8 +155,8 @@ public class MainMenu extends FXGLMenu {
 
     AnchorPane name = new AnchorPane();
     VBox nameBox = new VBox();
-    Text gameName = new Text("Roll Dice,");
-    Text gameName2 = new Text("pls");
+    Text gameName = new Text("DEAD In ByTE");
+    Text gameName2 = new Text("LAsT DunGeon");
     gameName.setStyle("-fx-fill: #ffffff;");
     gameName2.setStyle("-fx-fill: #ffffff");
     gameName.setFont(bigFont);

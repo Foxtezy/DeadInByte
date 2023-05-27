@@ -34,7 +34,7 @@ public class PhysicsLoader {
     getPhysicsWorld().setGravity(0, 0);
     addAttackCollisionsWithEntityWithHP(List.of(EntityType.PROJECTILE, EntityType.WEAPON),
         List.of(EntityType.PLAYER, EntityType.ENEMY, EntityType.BOX));
-    addProjectileCollisionsWithStaticObjects(List.of(EntityType.WALL));
+    //addProjectileCollisionsWithStaticObjects(List.of(EntityType.WALL));
     getPhysicsWorld().addCollisionHandler(
         new CollisionHandler(EntityType.CHEST, EntityType.PROJECTILE) {
           @Override
