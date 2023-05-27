@@ -21,13 +21,15 @@ public class DataComponent extends Component {
   private EntityType entityType;
   private Integer id;
   private int ownerID;
+  private int seed;
 
-  public DataComponent(EntityType entityType, Integer ownerID, Integer id) {
+  public DataComponent(EntityType entityType, Integer ownerID, Integer id, Integer seed) {
     if (ownerID != null) {
       this.ownerID = ownerID;
     }
     this.entityType = entityType;
     this.id = id;
+    this.seed = seed;
   }
 
   public Point2D getRotation() {
@@ -68,6 +70,9 @@ public class DataComponent extends Component {
     return getEntity().getPosition();
   }
 
+  public Integer getSeed() {
+    return seed;
+  }
   public boolean isClientEntity() {
     return ownerID == MCClient.getClientId();
   }

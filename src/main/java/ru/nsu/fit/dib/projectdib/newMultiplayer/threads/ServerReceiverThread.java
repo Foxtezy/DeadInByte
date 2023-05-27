@@ -23,6 +23,7 @@ public class ServerReceiverThread extends Thread {
 
   @Override
   public void run() {
+    MCServer.getServerState().generateMapSeed();
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
@@ -37,10 +38,26 @@ public class ServerReceiverThread extends Thread {
         case START_INIT -> {
           //отправка иниц пакетов
           Sender sender = new Sender();
-          MCServer.getServerState().getSpawnActionList()
+          MCServer.getServerState().getInitSpawnList()
               .forEach(a -> {
                 try {
                   sender.send(receiver.getSocket(), new Pair<>(MessageType.SPAWN, a));
+                } catch (IOException e) {
+                  throw new RuntimeException(e);
+                }
+              });
+          MCServer.getServerState().getInitHPactionList()
+              .forEach(a -> {
+                try {
+                  sender.send(receiver.getSocket(), new Pair<>(MessageType.HP, a));
+                } catch (IOException e) {
+                  throw new RuntimeException(e);
+                }
+              });
+          MCServer.getServerState().getInitWeaponActionList()
+              .forEach(a -> {
+                try {
+                  sender.send(receiver.getSocket(), new Pair<>(MessageType.WEAPON, a));
                 } catch (IOException e) {
                   throw new RuntimeException(e);
                 }

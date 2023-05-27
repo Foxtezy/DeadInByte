@@ -3,6 +3,7 @@ package ru.nsu.fit.dib.projectdib.newMultiplayer;
 import com.almasb.fxgl.entity.Entity;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javafx.util.Pair;
@@ -54,6 +55,27 @@ public class ClientState {
             e.getValue().getComponent(DataComponent.class).getBindedEntity())
         ).collect(Collectors.toList());
   }
+
+  public Optional<EntityState> getEntityState(Integer key) {
+    List<Entity> entityList = List.of(idHashTable.get(key));
+    return entityList.stream().filter(e -> e.hasComponent(DataComponent.class))
+        .map(e -> new EntityState(key,
+            e.getComponent(DataComponent.class).getPosition(),
+            e.getComponent(DataComponent.class).getRotation(),
+            e.getComponent(DataComponent.class).getBindedEntity())).findAny();
+
+  }
+
+  public Optional<SpawnAction> getSpawnAction(Integer key) {
+    List<Entity> entityList = List.of(idHashTable.get(key));
+    return entityList.stream().filter(e -> e.hasComponent(DataComponent.class))
+        .map(e -> new SpawnAction(new NewEntity(e.getComponent(DataComponent.class).getEntityType().getName(), e.getComponent(DataComponent.class).getSeed(), new EntityState(key,
+            e.getComponent(DataComponent.class).getPosition(),
+            e.getComponent(DataComponent.class).getRotation(),
+            e.getComponent(DataComponent.class).getBindedEntity())))).findAny();
+
+  }
+
   public Entity acceptedSpawn(NewEntity newEntity) {
     acceptedAction(new Pair<>(MessageType.SPAWN, new SpawnAction(newEntity)));
     Entity player = null;

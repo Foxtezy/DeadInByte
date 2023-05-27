@@ -92,7 +92,7 @@ public class NewEntity {
       }
       case WEAPON->{
         Weapon weapon = WeaponFactory.getWeapon(Weapons.getByName(entityType));
-        Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getActiveWeapon(),owner);
+        Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getActiveWeapon(),owner, seed);
         MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
       }
       case PROJECTILE ->{
@@ -113,8 +113,8 @@ public class NewEntity {
   @NotNull
   private Entity newEntity(int owner, Creature creature) {
     Weapon weapon = WeaponFactory.getWeapon(creature.getStandardWeapon());
-    Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner);
-    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1);
+    Entity creatureEntity = Factory.spawnCreature(creature,state.getPosition(),state.getId(),owner, seed);
+    Entity weaponEntity = Factory.spawnWeapon(weapon, state.getPosition(),state.getActiveWeapon(),-1, seed);
     MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
     MCClient.getClientState().getIdHashTable().put(state.getId(), creatureEntity);
     return creatureEntity;

@@ -66,21 +66,23 @@ import ru.nsu.fit.dib.projectdib.ui.HPBar;
 public class Factory implements EntityFactory {
 
   public static Entity spawnCreature(
-      Creature creature, Point2D position, Integer id, Integer ownerID) {
+      Creature creature, Point2D position, Integer id, Integer ownerID, Integer seed) {
     SpawnData sd = new SpawnData(position);
     sd.put("creature", creature);
     sd.put("id",id);
     sd.put("owner",ownerID);
+    sd.put("seed", seed);
     Entity enemy = Spawner.spawn(creature.getEntityType().getName(), sd);
     enemy.setScaleUniform(0.75);
     return enemy;
   }
 
-  public static Entity spawnWeapon(Weapon weapon, Point2D position, Integer id, Integer ownerID) {
+  public static Entity spawnWeapon(Weapon weapon, Point2D position, Integer id, Integer ownerID, Integer seed) {
     SpawnData sd = new SpawnData(position);
     sd.put("id", id);
     sd.put("owner", ownerID);
     sd.put("weapon", weapon);
+    sd.put("seed", seed);
     Entity entity = Spawner.spawn("weapon", sd);
     entity.setScaleUniform(0.75);
     return entity;
@@ -127,7 +129,7 @@ public class Factory implements EntityFactory {
         .with(new ShootAttackComponent())
         .with(new CreatureComponent(creature))
         .with(new WeaponInventoryComponent(2))
-        .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id")))
+        .with(new DataComponent(EntityType.PLAYER, data.get("owner"), data.get("id"), data.get("seed")))
         .with(new CellMove(lengthOfCell, lengthOfCell, 250))
         .with(new HealthIntComponent(creature.getMaxHP()))
         .with(new HPViewComponent(creature.getType(), creature.getMaxHP()))
@@ -152,7 +154,7 @@ public class Factory implements EntityFactory {
           .with(new CreatureComponent(creature))
           .with(new ServerControlComponent())
           .with(new WeaponInventoryComponent(1))
-          .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
+          .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id"), data.get("seed")))
           .with(new HealthIntComponent(creature.getMaxHP()))
           .with(new CellMove(lengthOfCell, lengthOfCell, 250))
           .with(new EnemyAiComponent());
@@ -166,7 +168,7 @@ public class Factory implements EntityFactory {
           .with(new CreatureComponent(creature))
           .with(new ServerControlComponent())
           .with(new WeaponInventoryComponent(1))
-          .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id")))
+          .with(new DataComponent(EntityType.ENEMY, data.get("owner"), data.get("id"), data.get("seed")))
           .with(new HealthIntComponent(creature.getMaxHP()));
     }
     return builder.build();
@@ -181,7 +183,7 @@ public class Factory implements EntityFactory {
         weapon.getType().getSize().getHeight(),
         ProjectConfig._WEAPON_COLUMNS);
     WeaponComponent weaponComponent = new WeaponComponent(weapon);
-    DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"), data.get("id"));
+    DataComponent dataComponent = new DataComponent(EntityType.WEAPON, data.get("owner"), data.get("id"), data.get("seed"));
     return entityBuilder(data)
         .from(data)
         .type(EntityType.WEAPON)
@@ -330,7 +332,7 @@ public class Factory implements EntityFactory {
         .anchorFromCenter()
         .bbox(projectile.getHitbox())
         .with(new DataAttackComponent(attack,damage))
-        .with(new DataComponent(EntityType.PROJECTILE,ownerID,id))
+        .with(new DataComponent(EntityType.PROJECTILE,ownerID,id, 0))
         .with(new ProjectileComponent(direction, projectile.getSpeed()))
         .with(new OffscreenCleanComponent())
         .collidable()

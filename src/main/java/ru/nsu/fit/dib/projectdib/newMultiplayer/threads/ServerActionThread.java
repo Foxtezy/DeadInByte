@@ -103,9 +103,6 @@ public class ServerActionThread extends Thread {
           } else {
             spawnAction.getNewEntity().setWeaponId(nextEntityId++);
           }
-          if (TypeChooser.getTypeByString(spawnAction.getNewEntity().getEntityType()) != EntityType.PROJECTILE) {
-            MCServer.getServerState().addSpawnAction(spawnAction);
-          }
           yield new Pair<>(MessageType.SPAWN, spawnAction);
         }
         default -> null;
