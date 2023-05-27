@@ -92,8 +92,8 @@ public class NewEntity {
       }
       case WEAPON->{
         Weapon weapon = WeaponFactory.getWeapon(Weapons.getByName(entityType));
-        Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getActiveWeapon(),owner, seed);
-        MCClient.getClientState().getIdHashTable().put(state.getActiveWeapon(), weaponEntity);
+        Entity weaponEntity = Factory.spawnWeapon(weapon,state.getPosition(), state.getId(),owner, seed);
+        MCClient.getClientState().getIdHashTable().put(state.getId(), weaponEntity);
       }
       case PROJECTILE ->{
         SpawnData sd = new SpawnData(state.getPosition());

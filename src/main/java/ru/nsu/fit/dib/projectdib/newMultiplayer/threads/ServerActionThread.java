@@ -97,11 +97,15 @@ public class ServerActionThread extends Thread {
         }
         case SPAWN -> {
           SpawnAction spawnAction = (SpawnAction) inPacket.getValue();
+          switch (TypeChooser.getTypeByString(spawnAction.getNewEntity().getEntityType())){
+            case PLAYER -> {}
+            case WEAPON -> {
+              spawnAction.getNewEntity().getState().setID(nextEntityId++);
+            }
+          }
           if (Projectiles.getByName(spawnAction.getNewEntity().getEntityType()) != null) {
             System.out.println(spawnAction.getNewEntity().getEntityType());
             spawnAction.getNewEntity().getState().setID(nextEntityId++);
-          } else {
-            spawnAction.getNewEntity().setWeaponId(nextEntityId++);
           }
           yield new Pair<>(MessageType.SPAWN, spawnAction);
         }

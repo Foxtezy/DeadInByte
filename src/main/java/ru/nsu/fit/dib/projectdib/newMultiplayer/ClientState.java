@@ -67,12 +67,21 @@ public class ClientState {
   }
 
   public Optional<SpawnAction> getSpawnAction(Integer key) {
-    List<Entity> entityList = List.of(idHashTable.get(key));
-    return entityList.stream().filter(e -> e.hasComponent(DataComponent.class)).filter(e -> e.getComponent(DataComponent.class).isValid())
+    Entity entity = idHashTable.get(key);
+    if (entity.hasComponent(DataComponent.class)) {
+      System.out.println(key + ": valid");
+      return Optional.of(new SpawnAction(new NewEntity(entity.getComponent(DataComponent.class).getType(), entity.getComponent(DataComponent.class).getSeed(), new EntityState(key,
+          entity.getComponent(DataComponent.class).getPosition(),
+          entity.getComponent(DataComponent.class).getRotation(),
+          entity.getComponent(DataComponent.class).getBindedEntity()))));
+    }
+    System.out.println(key + ": INVALID");
+    return Optional.empty();
+/*    return entityList.stream().filter(e -> e.hasComponent(DataComponent.class)).filter(e -> e.getComponent(DataComponent.class).isValid())
         .map(e -> new SpawnAction(new NewEntity(e.getComponent(DataComponent.class).getType(), e.getComponent(DataComponent.class).getSeed(), new EntityState(key,
             e.getComponent(DataComponent.class).getPosition(),
             e.getComponent(DataComponent.class).getRotation(),
-            e.getComponent(DataComponent.class).getBindedEntity())))).findAny();
+            e.getComponent(DataComponent.class).getBindedEntity())))).findAny();*/
 
   }
 

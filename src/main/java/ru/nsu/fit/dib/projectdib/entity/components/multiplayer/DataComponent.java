@@ -36,7 +36,7 @@ public class DataComponent extends Component {
   }
 
   public Point2D getRotation() {
-    Point2D rotation = new Point2D(0,0);
+    Point2D rotation = null;
     switch (entityType) {
       case WEAPON -> {
         if (getEntity().hasComponent(WeaponViewComponent.class)) {
