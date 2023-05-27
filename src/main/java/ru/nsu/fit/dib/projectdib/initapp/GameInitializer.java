@@ -25,6 +25,7 @@ import ru.nsu.fit.dib.projectdib.environment.loaderobjects.ChunkLoaderComponent;
 import ru.nsu.fit.dib.projectdib.environment.mapperobjects.WallMapper;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.EntitySpawner;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.data.actions.NewEntity;
 
 /**
@@ -46,6 +47,10 @@ public class GameInitializer {
     viewport = getGameScene().getViewport();
     factory = new Factory();
     getGameWorld().addEntityFactory(factory);
+    if (MCClient.getClientId() == 1) {
+      MCServer.getServerState().generateMapSeed();
+      System.out.println("seed generated");
+    }
     MapInitializer mapInitializer = new MapInitializer();
     lvl = mapInitializer.run();
     MultiplayerInitializer multiplayerInitializer = new MultiplayerInitializer();

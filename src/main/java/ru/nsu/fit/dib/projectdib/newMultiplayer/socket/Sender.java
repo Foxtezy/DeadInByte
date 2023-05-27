@@ -36,8 +36,10 @@ public class Sender {
     byte[] pt = new byte[data.length + 1];
     System.arraycopy(data, 0, pt, 1, data.length);
     pt[0] = message.getKey().getId();
+    synchronized (address) {
       DataOutputStream d = new DataOutputStream(address.getOutputStream());
       d.writeInt(pt.length);
       address.getOutputStream().write(pt);
+    }
   }
 }

@@ -23,7 +23,6 @@ public class ServerReceiverThread extends Thread {
 
   @Override
   public void run() {
-    MCServer.getServerState().generateMapSeed();
     while (!Thread.currentThread().isInterrupted()) {
       Pair<MessageType, Object> inPacket = null;
       try {
