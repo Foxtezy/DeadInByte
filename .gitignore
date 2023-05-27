@@ -13,6 +13,8 @@ target/
 *.ipr
 .idea
 logs
+src/main/resources/saves/character.json
+src/main/resources/cfg.ini
 system
 DeadInByte/.idea
 levels/*.tmx

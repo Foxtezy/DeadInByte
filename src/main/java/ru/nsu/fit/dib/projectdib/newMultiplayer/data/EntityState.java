@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
+import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.control.ServerControlComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.multiplayer.DataComponent;
@@ -56,7 +57,7 @@ public class EntityState {
     if (entity==null) return;
     // TODO: 12.04.2023 тут свич надо дописать
     // TODO: 21.04.2023 иногда выскакивает DataComponent not found
-    switch (entity.getComponent(DataComponent.class).getEntityType()) {
+    switch ((EntityType) entity.getType()) {
       case PLAYER, ENEMY-> {
         if (position != null) {
           // TODO: 21.04.2023 проверка HeroComponent

@@ -1,12 +1,11 @@
 package ru.nsu.fit.dib.projectdib.entity.components.multiplayer;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import ru.nsu.fit.dib.projectdib.EntityType;
 import ru.nsu.fit.dib.projectdib.entity.components.WeaponComponent;
+import ru.nsu.fit.dib.projectdib.entity.components.data.CreatureComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.fight.WeaponInventoryComponent;
-import ru.nsu.fit.dib.projectdib.entity.components.view.CreatureViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.EnemyViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.components.view.HeroViewComponent;
 import ru.nsu.fit.dib.projectdib.entity.weapons.WeaponViewComponent;
@@ -14,8 +13,12 @@ import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 
 public class DataComponent extends Component {
 
-  public EntityType getEntityType() {
-    return entityType;
+  public String getType() {
+    return switch (entityType) {
+      case PLAYER, ENEMY -> getEntity().getComponent(CreatureComponent.class).getCreature().getType().getName();
+      case WEAPON -> getEntity().getComponent(WeaponComponent.class).getWeapon().getType().getName();
+      default -> "";
+    };
   }
 
   private EntityType entityType;
