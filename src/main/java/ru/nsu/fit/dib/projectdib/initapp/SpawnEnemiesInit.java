@@ -67,7 +67,7 @@ public class SpawnEnemiesInit {
           new NewEntity(creature.getStandardWeapon().getName(), seed,
               new EntityState(30080 + i + j, new Point2D(x, y), new Point2D(0, 0), -1)))));
     } catch (Exception e) {
-      e.printStackTrace();
+
     }
   }
 }

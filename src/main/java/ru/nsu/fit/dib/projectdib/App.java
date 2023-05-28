@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 
 import javafx.scene.Node;
+import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.initapp.GameInitializer;
 import ru.nsu.fit.dib.projectdib.initapp.InputListener;
@@ -21,6 +22,8 @@ import ru.nsu.fit.dib.projectdib.initapp.PhysicsLoader;
 import ru.nsu.fit.dib.projectdib.initapp.SettingsLoader;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.client.MCClient;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.MessageType;
+import ru.nsu.fit.dib.projectdib.newMultiplayer.socket.Sender;
 import ru.nsu.fit.dib.projectdib.ui.GameUIController;
 import ru.nsu.fit.dib.projectdib.utils.BackgroundMusicController;
 
@@ -67,6 +70,14 @@ public class App extends GameApplication {
     UI ui =  getAssetLoader().loadUI("main.fxml", uiController);
     FXGL.getGameScene().addUI(ui);
     if (MCClient.getClientId() == 1) {
+      Sender sender = new Sender();
+      MCServer.getClientSockets().entrySet().stream().filter(e -> e.getKey() != 1)
+          .forEach(s -> {
+            try {
+              sender.send(s.getValue(), new Pair<>(MessageType.START_GAME, null));
+            } catch (IOException ex) {
+            }
+          });
       MCServer.getConnectionThread().startGame();
     }
   }
