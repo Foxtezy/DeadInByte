@@ -32,7 +32,7 @@ public class PhysicsLoader {
 
   public void run() {
     getPhysicsWorld().setGravity(0, 0);
-    addAttackCollisionsWithEntityWithHP(List.of(EntityType.PROJECTILE, EntityType.WEAPON),
+    addAttackCollisionsWithEntityWithHP(List.of(EntityType.WEAPON),
         List.of(EntityType.PLAYER, EntityType.ENEMY, EntityType.BOX));
     //addProjectileCollisionsWithStaticObjects(List.of(EntityType.WALL));
     getPhysicsWorld().addCollisionHandler(
