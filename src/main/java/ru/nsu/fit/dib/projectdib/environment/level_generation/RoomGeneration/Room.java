@@ -5,6 +5,7 @@ import static java.lang.Math.abs;
 import java.awt.Point;
 import java.io.Serializable;
 import javafx.geometry.Point2D;
+import ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.SizeType;
 
 /**
  * Комната занимает некоторую область на карте (x2-x1)*tileX + (y2-y1)*tileY
@@ -26,16 +27,22 @@ public class Room implements Serializable {
   private final int width;
   private final int height;
   private RoomType roomType;
+  private SizeType sizeType;
 
-  public Room(Point firstPoint, Point secondPoint) {
+  public Room(Point firstPoint, Point secondPoint, SizeType sizeType) {
     this.firstPoint = firstPoint;
     this.secondPoint = secondPoint;
+    this.sizeType = sizeType;
     this.firstPointWithWalls = new Point(firstPoint.x - 1, firstPoint.y - 1);
     this.secondPointWithWalls = new Point(secondPoint.x + 1, secondPoint.y + 1);
     width = abs(firstPoint.x - secondPoint.x) + 1;
     height = abs(firstPoint.y - secondPoint.y) + 1;
     centrePoint = new Point(firstPoint.x + width / 2, firstPoint.y + height / 2);
     weight = width * height;
+  }
+
+  public SizeType getSizeType() {
+    return sizeType;
   }
 
   public Point getFirstPointWithWalls() {

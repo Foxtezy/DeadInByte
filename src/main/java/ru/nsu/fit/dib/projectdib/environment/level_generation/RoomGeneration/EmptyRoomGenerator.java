@@ -2,6 +2,7 @@ package ru.nsu.fit.dib.projectdib.environment.level_generation.RoomGeneration;
 
 import static ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.BIG;
 import static ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.MIDDLE;
+import static ru.nsu.fit.dib.projectdib.environment.level_generation.Structures.GraphAndTreeStructures.Area.SizeType.SMALL;
 
 import java.awt.Point;
 import java.util.Random;
@@ -48,7 +49,7 @@ public class EmptyRoomGenerator {
           area.getSecondPoint().x - 1 - rn.nextInt(area.getWidth() / 10 + 2),
           area.getSecondPoint().y - 1 - rn.nextInt(area.getHeight() / 10 + 2));
       level.set(BlockDensity.FLOOR, fst, snd);
-      area.setRoom(fst, snd);
+      area.setRoom(fst, snd, BIG);
     });
   }
 
@@ -66,7 +67,7 @@ public class EmptyRoomGenerator {
           area.getSecondPoint().x - 1 - rn.nextInt(area.getWidth() / 10 + 2),
           area.getSecondPoint().y - 1 - rn.nextInt(area.getHeight() / 10 + 2));
       level.set(BlockDensity.FLOOR, fst, snd);
-      area.setRoom(fst, snd);
+      area.setRoom(fst, snd, MIDDLE);
     });
   }
 
@@ -82,7 +83,7 @@ public class EmptyRoomGenerator {
       snd = new Point(area.getSecondPoint().x - 1 - rn.nextInt(2),
           area.getSecondPoint().y - 1 - rn.nextInt(2));
       level.set(BlockDensity.FLOOR, fst, snd);
-      area.setRoom(fst, snd);
+      area.setRoom(fst, snd, SMALL);
     });
   }
 }

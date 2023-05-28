@@ -63,8 +63,8 @@ public class Area implements Serializable {
     return height;
   }
 
-  public void setRoom(Point fst, Point snd) {
-    room = new Room(fst, snd);
+  public void setRoom(Point fst, Point snd, SizeType sizeType) {
+    room = new Room(fst, snd, sizeType);
   }
 
   public Room getRoom() {
