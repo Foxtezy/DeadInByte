@@ -38,7 +38,7 @@ import ru.nsu.fit.dib.projectdib.utils.SoundsController;
 public class DeathMenu extends AnchorPane {
 
   private final ImageButton restart;
-  private final ImageButton quit;
+  //private final ImageButton quit;
   private final VBox box;
 
   public DeathMenu() {
@@ -47,7 +47,7 @@ public class DeathMenu extends AnchorPane {
     Image unpushed = new Image(_menuButton, 1020, 180, true, false);
     Image pushed = new Image(_menuSelectedButton, 1020, 180, true, false);
     restart = new ImageButton("restart", font, "#5ae8a8", "#2b2944", pushed, unpushed);
-    quit = new ImageButton("quit", font, "#5ae8a8", "#2b2944", pushed, unpushed);
+    //quit = new ImageButton("quit", font, "#5ae8a8", "#2b2944", pushed, unpushed);
     box = new VBox();
     box.setAlignment(Pos.CENTER);
     box.setSpacing(40);
@@ -55,7 +55,7 @@ public class DeathMenu extends AnchorPane {
     AnchorPane.setLeftAnchor(box, 20.0);
     AnchorPane.setRightAnchor(box, 20.0);
     AnchorPane.setTopAnchor(box, 20.0);
-    box.getChildren().addAll(restart, quit);
+    box.getChildren().add(restart);
   }
 
   public void initialize() {
@@ -73,14 +73,14 @@ public class DeathMenu extends AnchorPane {
       this.setVisible(false);
       this.setDisable(true);
     });
-    quit.setOnMouseClicked(event -> {
-      BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
-      SoundsController.getSoundsController().play(Sounds.select_button);
-      MainMenu.getMainMenu().returnBack();
-      MainMenu.getMainMenu().returnBack();
-      App.stop();
-      this.setVisible(false);
-      this.setDisable(true);
-    });
+//    quit.setOnMouseClicked(event -> {
+//      BackgroundMusicController.getBackgroundMusicControlleroller().setMusic(Musics.menu);
+//      SoundsController.getSoundsController().play(Sounds.select_button);
+//      MainMenu.getMainMenu().returnBack();
+//      MainMenu.getMainMenu().returnBack();
+//      App.stop();
+//      this.setVisible(false);
+//      this.setDisable(true);
+//    });
   }
 }
