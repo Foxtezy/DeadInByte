@@ -22,11 +22,13 @@ public final class ClientConfig {
   }
 
   public static void addClientSenderThread(ClientSenderThread thread) {
+    thread.setDaemon(true);
     thread.start();
     MCClient.addBean(EMCClient.CLIENT_SENDER_THREAD, thread);
   }
 
   public static void addClientReceiverThread(ClientReceiverThread thread) {
+    thread.setDaemon(true);
     thread.start();
     MCClient.addBean(EMCClient.CLIENT_RECEIVER_THREAD, thread);
   }

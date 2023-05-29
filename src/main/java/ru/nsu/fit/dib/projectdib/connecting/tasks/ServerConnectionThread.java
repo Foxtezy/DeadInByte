@@ -57,6 +57,7 @@ public class ServerConnectionThread extends Thread {
         clientSockets.put(lastClientId, client);
         MCServer.getClientSockets().put(lastClientId++, client);
         ServerReceiverThread t = new ServerReceiverThread(client);
+        t.setDaemon(true);
         t.start();
         MCServer.getReceiverThreads().add(t);
         if (gameStarted) {

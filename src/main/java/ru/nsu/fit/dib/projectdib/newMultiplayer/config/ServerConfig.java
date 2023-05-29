@@ -33,16 +33,19 @@ public final class ServerConfig {
   }
 
   public static void addServerActionThread(ServerActionThread thread) {
+    thread.setDaemon(true);
     thread.start();
     MCServer.addBean(EMCServer.SERVER_ACTION_THREAD, thread);
   }
 
   public static void addServerUpdaterThread(ServerUpdaterThread thread) {
+    thread.setDaemon(true);
     thread.start();
     MCServer.addBean(EMCServer.SERVER_UPDATER_THREAD, thread);
   }
 
   public static void addServerConnectionThread(ServerConnectionThread t) {
+    t.setDaemon(true);
     t.start();
     MCServer.addBean(EMCServer.SERVER_CONNECTION_THREAD, t);
   }
