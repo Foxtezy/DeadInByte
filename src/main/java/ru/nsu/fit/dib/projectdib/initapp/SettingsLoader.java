@@ -35,7 +35,9 @@ public class SettingsLoader {
    */
   public void run() {
     settings.setScaleAffectedOnResize(true);
-    settings.setTitle("RDPLS-D2");
+    settings.setTitle("Dead In Byte: The Last Dungeon");
+    settings.setVersion("1.0");
+    settings.setAppIcon("dibicon.png");
     settings.setManualResizeEnabled(true);
     settings.setPreserveResizeRatio(true);
     settings.setSceneFactory(new ScenesFactory());

@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import javafx.util.Pair;
+import ru.nsu.fit.dib.projectdib.data.Config;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.context.server.MCServer;
@@ -41,13 +42,13 @@ public class ServerConnectionThread extends Thread {
   public void run() {
     ServerSocket serverSocket;
     try {
-      serverSocket = new ServerSocket(ProjectConfig.SERVER_PORT);
+      serverSocket = new ServerSocket(Config.PORT);
       serverSocket.setSoTimeout(100);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
     CompletableFuture.supplyAsync(
-        new ClientConnectionTask(new InetSocketAddress("localhost", ProjectConfig.SERVER_PORT)));
+        new ClientConnectionTask(new InetSocketAddress("localhost", Config.PORT)));
     ServerConfig.init();
     while (!Thread.currentThread().isInterrupted()) {
       try {

@@ -33,7 +33,6 @@ public interface ProjectConfig {
   String _returnSelectedButton = "assets/ui/elements/return_selected_button1k.png";
   String _loadingAnimation = "assets/ui/elements/loadingAnimation.gif";
   String style = "assets/ui/elements/style.css";
-  Integer SERVER_PORT = 8080;
   //Weapon
   String _smallWeapon = "assets/textures/SmallWeapon.png";
   String _mediumWeapon = "assets/textures/MediumWeapon.png";

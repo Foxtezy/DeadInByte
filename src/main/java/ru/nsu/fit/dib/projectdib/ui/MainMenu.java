@@ -48,6 +48,7 @@ import javafx.util.Pair;
 import ru.nsu.fit.dib.projectdib.App;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ClientConnectionTask;
 import ru.nsu.fit.dib.projectdib.connecting.tasks.ServerConnectionThread;
+import ru.nsu.fit.dib.projectdib.data.Config;
 import ru.nsu.fit.dib.projectdib.data.Musics;
 import ru.nsu.fit.dib.projectdib.data.ProjectConfig;
 import ru.nsu.fit.dib.projectdib.newMultiplayer.config.ServerConfig;
@@ -156,7 +157,7 @@ public class MainMenu extends FXGLMenu {
     AnchorPane name = new AnchorPane();
     VBox nameBox = new VBox();
     Text gameName = new Text("DEAD In ByTE");
-    Text gameName2 = new Text("LAsT DunGeon");
+    Text gameName2 = new Text("THe LAsT DunGeon");
     gameName.setStyle("-fx-fill: #ffffff;");
     gameName2.setStyle("-fx-fill: #ffffff");
     gameName.setFont(bigFont);
@@ -191,7 +192,7 @@ public class MainMenu extends FXGLMenu {
     ImageButton connect = new ImageButton("Connect", font, "#5ae8a8", "#2b2944", pushed, unpushed);
     ImageButton server = new ImageButton("Create server", font, "#5ae8a8", "#2b2944", pushed,
         unpushed);
-    String gamePort = String.valueOf(ProjectConfig.SERVER_PORT);
+    String gamePort = String.valueOf(Config.PORT);
     ImageButton startMultiplayer = new ImageButton("Start", smallFont, "#5ae8a8", "#2b2944",
         pushedServer,
         unpushedServer);

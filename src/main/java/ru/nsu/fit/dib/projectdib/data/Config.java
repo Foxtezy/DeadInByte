@@ -22,6 +22,7 @@ public class Config {
   public static Integer KARMA;
   public static Double MUSIC;
   public static Double SOUNDS;
+  public static int PORT;
   public static Properties props;
   public static String path;
   public static void setConfig(String filepath) {
@@ -36,6 +37,7 @@ public class Config {
       KARMA = Integer.parseInt(props.getProperty("KARMA", "0"));
       MUSIC = Double.parseDouble(props.getProperty("MUSIC","0.5"));
       SOUNDS = Double.parseDouble(props.getProperty("SOUNDS","0.5"));
+      PORT = Integer.parseInt(props.getProperty("PORT","8080"));
 
     } catch (IOException e) {
       throw new RuntimeException(e);
