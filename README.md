@@ -5,4 +5,7 @@ But how many of the same brave travelers has it swallowed up?
 ## Steck
 Java 11, FXGL
 ## Team
-Makhov Nikolay, Potapova Anna, Muraviev Dmitry, Vladislav Tatarincev
+Makhov Nikolay (Multiplayer and level generation),   
+Potapova Anna, (UI and map generation)    
+Muraviev Dmitry, (Enemy AI)
+Vladislav Tatarincev (Enemy AI)
